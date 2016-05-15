@@ -1,4 +1,5 @@
 var timer = null;
+var lastModule = null, lastData = null;
 
 var Tracer = function (module) {
     this.module = module;
@@ -6,6 +7,7 @@ var Tracer = function (module) {
     this.pause = false;
     this.traceOptions = null;
     this.traceIndex = -1;
+    this.lastData = null;
 };
 
 Tracer.prototype.resize = function () {
@@ -17,7 +19,12 @@ Tracer.prototype.reset = function () {
     $('#tab_trace .wrapper').empty();
 };
 
-Tracer.prototype.setData = function () {
+Tracer.prototype.setData = function (arguments) {
+    var data = JSON.stringify(arguments);
+    if (lastModule == this.module && lastData == data) return true;
+    lastModule = this.module;
+    lastData = data;
+    return false;
 };
 
 Tracer.prototype.pushStep = function (step, delay) {
