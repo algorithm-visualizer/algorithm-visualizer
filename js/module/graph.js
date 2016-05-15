@@ -1,10 +1,10 @@
-var s = null, graph = null, graphMode = "default";
+var s = null, graph = null, graphMode = null;
 
-function GraphTracer() {
-    Tracer.call(this, GraphTracer);
+GraphTracer.graphMode = "default";
 
-    if (s && graph && graphMode == "default") return;
-    initSigma();
+function GraphTracer(module) {
+    Tracer.call(this, module || GraphTracer);
+    return initGraph(this.module);
 }
 
 GraphTracer.prototype = Object.create(Tracer.prototype);
@@ -26,9 +26,8 @@ GraphTracer.prototype.reset = function () {
 
 // Override
 GraphTracer.prototype.setData = function (G) {
-    Tracer.prototype.setData.call(this, G);
+    if (Tracer.prototype.setData.call(this, arguments)) return;
 
-    this.G = G;
     graph.clear();
     var nodes = [];
     var edges = [];
@@ -73,11 +72,11 @@ Tracer.prototype.clear = function () {
 };
 
 Tracer.prototype.visit = function (targetNode, sourceNode) {
-    this.pushStep({type: 'visit', node: targetNode, parent: sourceNode}, true);
+    this.pushStep({type: 'visit', node: targetNode, Tracer: sourceNode}, true);
 };
 
 Tracer.prototype.leave = function (targetNode, sourceNode) {
-    this.pushStep({type: 'leave', node: targetNode, parent: sourceNode}, true);
+    this.pushStep({type: 'leave', node: targetNode, Tracer: sourceNode}, true);
 };
 
 GraphTracer.prototype.processStep = function (step, options) {
@@ -92,15 +91,15 @@ GraphTracer.prototype.processStep = function (step, options) {
             var node = graph.nodes(n(step.node));
             var color = visit ? graphColor.visited : graphColor.left;
             node.color = color;
-            if (step.parent !== undefined) {
-                var edgeId = e(step.parent, step.node);
+            if (step.Tracer !== undefined) {
+                var edgeId = e(step.Tracer, step.node);
                 var edge = graph.edges(edgeId);
                 edge.color = color;
                 graph.dropEdge(edgeId).addEdge(edge);
             }
-            var parent = step.parent;
-            if (parent === undefined) parent = '';
-            printTrace(visit ? parent + ' -> ' + step.node : parent + ' <- ' + step.node);
+            var Tracer = step.Tracer;
+            if (Tracer === undefined) Tracer = '';
+            printTrace(visit ? Tracer + ' -> ' + step.node : Tracer + ' <- ' + step.node);
             break;
     }
 };
@@ -187,7 +186,11 @@ var e = function (v1, v2) {
     return 'e' + v1 + '_' + v2;
 };
 
-var initSigma = function () {
+var initGraph = function (module) {
+    if (s && graph && graphMode == module.graphMode) return false;
+    graphMode = module.graphMode;
+
+    $('.visualize_container').empty();
     s = new sigma({
         renderer: {
             container: $('.visualize_container')[0],
@@ -256,4 +259,6 @@ var initSigma = function () {
         });
     };
     sigma.plugins.dragNodes(s, s.renderers[0]);
+
+    return true;
 };
