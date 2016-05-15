@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Algorithm Visualizer</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/stylesheet.css">
+</head>
+<body>
+<nav>
+    <button id="navigation">
+        <h3>
+            Algorithm Visualizer
+            <i class="fa fa-angle-right nav-arrow" aria-hidden="true"></i>
+            <span id="category"></span>
+            <i class="fa fa-angle-right nav-arrow" aria-hidden="true"></i>
+            <span id="algorithm"></span>
+            <i class="fa fa-caret-up nav-dropdown" aria-hidden="true"></i>
+        </h3>
+    </button>
+    <div class="buttons">
+        <button id="btn_run"><i class="fa fa-play" aria-hidden="true"></i> Run</button>
+        <button id="btn_prev"><i class="fa fa-chevron-left" aria-hidden="true"></i> Prev</button>
+        <button id="btn_pause"><i class="fa fa-pause" aria-hidden="true"></i> Pause</button>
+        <button id="btn_next">Next <i class="fa fa-chevron-right" aria-hidden="true"></i></button>
+    </div>
+</nav>
+<section class="sidemenu active">
+    <div id="list">
+    </div>
+</section>
+<div class="workspace">
+    <div class="viewer_container">
+        <section class="visualize_container"></section>
+        <section class="tab_container">
+            <div class="tab active" id="tab_description">
+                <div class="wrapper">
+                    <h2 id="desc_title"></h2>
+                    <p id="desc_def"></p>
+                    <hr/>
+                    <h3>Application</h3>
+                    <ul id="desc_app"></ul>
+                    <hr/>
+                    <h3>Complexity</h3>
+                    <p>
+                        <strong>Time</strong> <span id="desc_time"></span><br/>
+                        <strong>Space</strong> <span id="desc_space"></span>
+                    </p>
+                    <hr/>
+                    <h3>Reference</h3>
+                    <ul id="desc_ref"></ul>
+                </div>
+            </div>
+            <div class="tab" id="tab_trace">
+                <div class="wrapper">
+                </div>
+            </div>
+        </section>
+        <section class="tab_bar">
+            <button class="active" id="btn_description">Description</button>
+            <button id="btn_trace">Trace</button>
+        </section>
+    </div>
+    <div class="editor_container">
+        <section class="files_bar">
+        </section>
+        <section class="explanation_container">
+            <i class="fa fa-info-circle" aria-hidden="true"></i> <span id="explanation"></span>
+        </section>
+        <section class="data_container">
+            <pre id="data"></pre>
+        </section>
+        <section class="code_container">
+            <pre id="code"></pre>
+        </section>
+    </div>
+</div>
+<div class="toast_container">
+</div>
+<script src="js/jquery-2.2.3.min.js"></script>
+<script src="js/sigma/sigma.min.js"></script>
+<script src="js/sigma/plugins/sigma.plugins.dragNodes.min.js"></script>
+<script src="js/ace/ace.js"></script>
+<script src="js/tracer.js"></script>
+<script src="js/module/graph.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
