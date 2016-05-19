@@ -1,9 +1,17 @@
-for (var j = 1; j < D.length; j++) {
-    var key = D[j];
-    tracer._select(j);
-    for (var i = j - 1; (i >= 0) && (D[i] < key); i--) {
-        D[i + 1] = D[i];
+tracer._print('original array = [' + D.join(', ') + ']');
+tracer._sleep(1000);
+tracer._pace(300);
+for (var i = 1; i < D.length; i++) {
+    var key = D[i];
+    tracer._print('insert ' + key);
+    tracer._select(i);
+    var j;
+    for (j = i - 1; (j >= 0) && (D[j] > key); j--) {
+        D[j + 1] = D[j];
+        tracer._notify(j + 1);
     }
-    D[i + 1] = key;
-    tracer._change(j);
+    D[j + 1] = key;
+    tracer._notify(j + 1);
+    tracer._deselect(i);
 }
+tracer._print('sorted array = [' + D.join(', ') + ']');
