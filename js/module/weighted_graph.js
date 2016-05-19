@@ -20,6 +20,7 @@ WeightedGraphTracer.prototype.clear = function () {
 WeightedGraphTracer.prototype.createRandomData = function (N, ratio, min, max) {
     Tracer.prototype.createRandomData.call(this, arguments);
 
+    if (!N) N = 5;
     if (!ratio) ratio = .3;
     if (!min) min = 1;
     if (!max) max = 5;

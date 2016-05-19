@@ -26,6 +26,7 @@ GraphTracer.prototype.clear = function () {
 GraphTracer.prototype.createRandomData = function (N, ratio) {
     Tracer.prototype.createRandomData.call(this, arguments);
 
+    if (!N) N = 5;
     if (!ratio) ratio = .3;
     var G = [];
     for (var i = 0; i < N; i++) {
@@ -39,9 +40,51 @@ GraphTracer.prototype.createRandomData = function (N, ratio) {
     return G;
 };
 
+GraphTracer.prototype.setTreeData = function (G, root) {
+    root = root || 0;
+    var maxDepth = -1;
+
+    var chk = [];
+    for (var i = 0; i < G.length; i++) chk.push(false);
+    var getDepth = function (node, depth) {
+        if (chk[node]) throw "the given graph is not a tree because it forms a circuit";
+        chk[node] = true;
+        if (maxDepth < depth) maxDepth = depth;
+        for (var i = 0; i < G[node].length; i++) {
+            if (G[node][i]) getDepth(i, depth + 1);
+        }
+    };
+    getDepth(root, 1);
+
+    if (this.setData(G, root)) return true;
+
+    var place = function (node, x, y) {
+        var temp = graph.nodes(n(node));
+        temp.x = x;
+        temp.y = y;
+    };
+
+    var wgap = 1 / (maxDepth - 1);
+    var dfs = function (node, depth, top, bottom) {
+        place(node, depth * wgap, (top + bottom) / 2);
+        var children = 0;
+        for (var i = 0; i < G[node].length; i++) {
+            if (G[node][i]) children++;
+        }
+        var vgap = (bottom - top) / children;
+        var cnt = 0;
+        for (var i = 0; i < G[node].length; i++) {
+            if (G[node][i]) dfs(i, depth + 1, top + vgap * cnt, top + vgap * ++cnt);
+        }
+    };
+    dfs(root, 0, 0, 1);
+
+    this.refresh();
+};
+
 // Override
 GraphTracer.prototype.setData = function (G) {
-    if (Tracer.prototype.setData.call(this, arguments)) return;
+    if (Tracer.prototype.setData.call(this, arguments)) return true;
 
     graph.clear();
     var nodes = [];
@@ -82,6 +125,8 @@ GraphTracer.prototype.setData = function (G) {
         ratio: 1
     });
     this.refresh();
+
+    return false;
 };
 
 GraphTracer.prototype._clear = function () {
