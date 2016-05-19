@@ -29,7 +29,7 @@ do {
     e = Math.random() * G.length | 0;
 } while (s == e);
 var MAX_VALUE = 999;
-tracer._pace(500);
+tracer._pace(100);
 tracer._print('finding the shortest path from ' + s + ' to ' + e);
 tracer._sleep(1000);
 var minWeight = BFS(s);

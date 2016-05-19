@@ -6,7 +6,6 @@ function WeightedGraphTracer(module) {
     return false;
 }
 
-WeightedGraphTracer.graphMode = "weighted";
 WeightedGraphTracer.prototype = Object.create(GraphTracer.prototype);
 WeightedGraphTracer.prototype.constructor = WeightedGraphTracer;
 

@@ -5,5 +5,14 @@
       "dfs": "DFS",
       "bfs": "BFS"
     }
+  },
+  "sorting": {
+    "name": "Sorting",
+    "list": {
+      "insertion": "Insertion Sort",
+      "selection": "Selection Sort",
+      "bubble": "Bubble Sort",
+      "quick": "Quick Sort"
+    }
   }
 }

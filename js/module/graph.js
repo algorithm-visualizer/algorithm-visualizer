@@ -1,11 +1,13 @@
-var s = null, graph = null, graphMode = null, sigmaCanvas = null;
+var s = null, graph = null, sigmaCanvas = null;
 
 function GraphTracer(module) {
-    Tracer.call(this, module || GraphTracer);
-    return initGraph(this.module);
+    if (Tracer.call(this, module || WeightedGraphTracer)) {
+        initGraph();
+        return true;
+    }
+    return false;
 }
 
-GraphTracer.graphMode = "default";
 GraphTracer.prototype = Object.create(Tracer.prototype);
 GraphTracer.prototype.constructor = GraphTracer;
 
@@ -59,7 +61,6 @@ GraphTracer.prototype.setTreeData = function (G, root) {
     if (this.setData(G, root)) return true;
 
     var place = function (node, x, y) {
-        console.log(node);
         var temp = graph.nodes(n(node));
         temp.x = x;
         temp.y = y;
@@ -190,10 +191,7 @@ GraphTracer.prototype.prevStep = function () {
     this.step(finalIndex);
 };
 
-var initGraph = function (module) {
-    if (s && graph && graphMode == module.graphMode) return false;
-    graphMode = module.graphMode;
-
+var initGraph = function () {
     $('.visualize_container').empty();
     if (sigmaCanvas == null) {
         sigmaCanvas = $.extend(true, {}, sigma.canvas);
@@ -232,8 +230,6 @@ var initGraph = function (module) {
         drawArrow(edge, source, target, color, context, settings);
     };
     sigma.plugins.dragNodes(s, s.renderers[0]);
-
-    return true;
 };
 
 var graphColor = {

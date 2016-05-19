@@ -9,6 +9,8 @@ var Tracer = function (module) {
     this.traceOptions = null;
     this.traceIndex = -1;
     this.stepCnt = 0;
+
+    return lastModule != module;
 };
 
 Tracer.prototype.resize = function () {
@@ -30,8 +32,7 @@ Tracer.prototype.createRandomData = function (arguments) {
 
 Tracer.prototype.setData = function (arguments) {
     var data = JSON.stringify(arguments);
-    if (lastModule == this.module && lastData == data) return true;
-    lastModule = this.module;
+    if (lastData == data) return true;
     lastData = data;
     return false;
 };
