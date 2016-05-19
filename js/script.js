@@ -20,8 +20,9 @@ dataEditor.on('change', function () {
 });
 
 var loadFile = function (category, algorithm, file, explanation) {
+    lastData = null;
     $('#explanation').html(explanation);
-    dataEditor.setValue('var G = [];', -1);
+    dataEditor.setValue('');
     codeEditor.setValue('');
 
     var dir = './algorithm/' + category + '/' + algorithm + '/' + file + '/';
@@ -49,7 +50,7 @@ var loadAlgorithm = function (category, algorithm) {
     $('#desc_ref').empty();
     $('.files_bar').empty();
     $('#explanation').html('');
-    dataEditor.setValue('var G = [];', -1);
+    dataEditor.setValue('');
     codeEditor.setValue('');
 
     var dir = './algorithm/' + category + '/' + algorithm + '/';

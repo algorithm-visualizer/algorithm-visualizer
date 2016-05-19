@@ -188,14 +188,14 @@ section {
 
 .data_container {
     top: 60px;
-    bottom: 70%;
+    bottom: 60%;
     left: 0;
     right: 0;
 }
 
 .code_container {
     left: 0;
-    top: 30%;
+    top: 40%;
     right: 0;
     bottom: 0;
 }
