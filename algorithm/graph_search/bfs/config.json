@@ -17,6 +17,7 @@
     "https://en.wikipedia.org/wiki/Breadth-first_search"
   ],
   "files": {
-    "basic": "Searching a tree"
+    "basic": "Searching a tree",
+    "shortest_path": "Finding the shortest path"
   }
 }

@@ -87,6 +87,10 @@ WeightedGraphTracer.prototype.setData = function (G) {
     this.refresh();
 };
 
+GraphTracer.prototype._weight = function (target, weight, delay) {
+    this.pushStep({type: 'weight', target: target, weight: weight}, delay);
+};
+
 GraphTracer.prototype._visit = function (target, source, weight) {
     this.pushStep({type: 'visit', target: target, source: source, weight: weight}, true);
 };
@@ -99,6 +103,10 @@ GraphTracer.prototype._leave = function (target, source, weight) {
 WeightedGraphTracer.prototype.processStep = function (step, options) {
     console.log(step);
     switch (step.type) {
+        case 'weight':
+            var targetNode = graph.nodes(n(step.target));
+            if (step.weight !== undefined) targetNode.weight = step.weight;
+            break;
         case 'visit':
         case 'leave':
             var visit = step.type == 'visit';
@@ -115,10 +123,6 @@ WeightedGraphTracer.prototype.processStep = function (step, options) {
             var source = step.source;
             if (source === undefined) source = '';
             printTrace(visit ? source + ' -> ' + step.target : source + ' <- ' + step.target);
-            break;
-        case 'weight':
-            var targetNode = graph.nodes(n(step.target));
-            targetNode.weight = step.weight;
             break;
         default:
             GraphTracer.prototype.processStep.call(this, step, options);

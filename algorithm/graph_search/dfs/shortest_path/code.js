@@ -1,11 +1,3 @@
-var D = []; // D[i] indicates whether the i-th node is discovered or not
-var s = Math.random() * G.length | 0;
-var e;
-do {
-    e = Math.random() * G.length | 0;
-} while (s == e);
-var minWeight = Number.MAX_VALUE;
-
 function DFS(node, parent, weight) { // node = current node, parent = previous node
     if (minWeight < weight) return;
     if (node == e) {
@@ -29,13 +21,20 @@ function DFS(node, parent, weight) { // node = current node, parent = previous n
     tracer._leave(node, parent, 0);
 }
 
-tracer._pace(100);
+var s = Math.random() * G.length | 0; // s = start node
+var e; // e = end node
+do {
+    e = Math.random() * G.length | 0;
+} while (s == e);
+var MAX_VALUE = 999;
+var minWeight = MAX_VALUE;
+tracer._pace(500);
 tracer._print('finding the shortest path from ' + s + ' to ' + e);
 tracer._sleep(1000);
-D = [];
-for (var i = 0; i < G.length; i++) D[i] = false;
+var D = []; // D[i] indicates whether the i-th node is discovered or not
+for (var i = 0; i < G.length; i++) D.push(false);
 DFS(s, undefined, 0);
-if (minWeight == Number.MAX_VALUE) {
+if (minWeight == MAX_VALUE) {
     tracer._print('there is no path from ' + s + ' to ' + e);
 } else {
     tracer._print('the shortest path from ' + s + ' to ' + e + ' is ' + minWeight);
