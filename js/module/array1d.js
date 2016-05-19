@@ -12,63 +12,47 @@ Array1DTracer.prototype.createRandomData = function (N, min, max) {
 
 // Override
 Array1DTracer.prototype.setData = function (D) {
+    this.D = D;
     return Array2DTracer.prototype.setData.call(this, [D]);
 };
 
 // Override
-Array1DTracer.prototype._change = function (s, e) {
-    if (s instanceof Array) {
-        this.pushStep({type: 'select', indexes: s, color: tableColor.changed}, true);
-        this.pushStep({type: 'deselect', indexes: s}, false);
-    } else if (e !== undefined) {
-        this.pushStep({type: 'select', index: s, color: tableColor.changed}, true);
-        this.pushStep({type: 'deselect', index: s}, false);
-    } else {
-        this.pushStep({type: 'select', s: s, e: e, color: tableColor.changed}, true);
-        this.pushStep({type: 'deselect', s: s, e: e}, false);
-    }
+Array1DTracer.prototype._notify = function (idx) {
+    Array2DTracer.prototype._notify.call(this, 0, idx);
 };
 
 // Override
 Array1DTracer.prototype._select = function (s, e) {
-    if (s instanceof Array) {
-        this.pushStep({type: 'select', indexes: s}, true);
-    } else if (e !== undefined) {
-        this.pushStep({type: 'select', index: s}, true);
+    if (e === undefined) {
+        Array2DTracer.prototype._select.call(this, 0, s);
     } else {
-        this.pushStep({type: 'select', s: s, e: e}, true);
+        Array2DTracer.prototype._selectRow.call(this, 0, s, e);
     }
+};
+
+// Override
+Array1DTracer.prototype._selectSet = function (indexes) {
+    var coords = [];
+    indexes.forEach(function (index) {
+        coords.push({x: 0, y: index});
+    });
+    Array2DTracer.prototype._selectSet.call(this, coords);
 };
 
 // Override
 Array1DTracer.prototype._deselect = function (s, e) {
-    if (s instanceof Array) {
-        this.pushStep({type: 'deselect', indexes: s}, true);
-    } else if (e !== undefined) {
-        this.pushStep({type: 'deselect', index: s}, true);
+    if (e === undefined) {
+        Array2DTracer.prototype._deselect.call(this, 0, s);
     } else {
-        this.pushStep({type: 'deselect', s: s, e: e}, true);
+        Array2DTracer.prototype._deselectRow.call(this, 0, s, e);
     }
 };
 
 // Override
-Array1DTracer.prototype.processStep = function (step, options) {
-    switch (step.type) {
-        case 'select':
-        case 'deselect':
-            var select = step.type == 'select';
-            var color = select ? step.color !== undefined ? step.color : tableColor.selected : tableColor.default;
-            if (step.indexes) {
-                step.indexes.forEach(function (index) {
-                    paintColor(0, index, 0, index, color);
-                });
-            } else {
-                var s = step.s;
-                var e = step.e;
-                if (s === undefined) s = step.index;
-                if (e === undefined) e = step.index;
-                paintColor(0, s, 0, e, color);
-            }
-            break;
-    }
+Array1DTracer.prototype._deselectSet = function (indexes) {
+    var coords = [];
+    indexes.forEach(function (index) {
+        coords.push({x: 0, y: index});
+    });
+    Array2DTracer.prototype._deselectSet.call(this, coords);
 };

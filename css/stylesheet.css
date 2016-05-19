@@ -136,7 +136,6 @@ section {
     bottom: 50%;
     left: 0;
     right: 0;
-    text-align: center;
 }
 
 .tab_container {
@@ -250,4 +249,12 @@ pre {
     vertical-align: middle;
     text-align: center;
     background: #888;
+}
+
+.mtbl-cell.selected {
+    background: #00f;
+}
+
+.mtbl-cell.notifying {
+    background: #f00;
 }

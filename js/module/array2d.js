@@ -15,8 +15,7 @@ Array2DTracer.prototype.constructor = Array2DTracer;
 Array2DTracer.prototype.resize = function () {
     Tracer.prototype.resize.call(this);
 
-    var $parent = $table.parent();
-    $table.css('margin-top', $parent.height() / 2 - $table.height() / 2);
+    this.refresh();
 };
 
 // Override
@@ -43,6 +42,7 @@ Array2DTracer.prototype.createRandomData = function (N, M, min, max) {
 
 // Override
 Array2DTracer.prototype.setData = function (D) {
+    this.D = D;
     if (Tracer.prototype.setData.call(this, arguments)) return true;
 
     $table.empty();
@@ -59,76 +59,86 @@ Array2DTracer.prototype.setData = function (D) {
     return false;
 };
 
-Array2DTracer.prototype._change = function (sx, sy, ex, ey) {
-    if (sx instanceof Array) {
-        this.pushStep({type: 'select', coords: sx, color: tableColor.changed}, true);
-        this.pushStep({type: 'deselect', coords: sx}, false);
-    } else if (ex !== undefined && ey !== undefined) {
-        this.pushStep({type: 'select', sx: sx, sy: sy, ex: ex, ey: ey, color: tableColor.changed}, true);
-        this.pushStep({type: 'deselect', sx: sx, sy: sy, ex: ex, ey: ey}, false);
-    } else {
-        this.pushStep({type: 'select', x: sx, y: sy, color: tableColor.changed}, true);
-        this.pushStep({type: 'deselect', x: sx, y: sy}, false);
-    }
-};
-
-Array2DTracer.prototype._changeRow = function (x, sy, ey) {
-    this.pushStep({type: 'select', x: x, sy: sy, ey: ey, color: tableColor.changed}, true);
-    this.pushStep({type: 'deselect', x: x, sy: sy, ey: ey}, false);
-};
-
-Array2DTracer.prototype._changeCol = function (y, sx, ex) {
-    this.pushStep({type: 'select', y: y, sx: sx, ex: ex, color: tableColor.changed}, true);
-    this.pushStep({type: 'deselect', y: y, sx: sx, ex: ex}, false);
+Array2DTracer.prototype._notify = function (x, y) {
+    this.pushStep({type: 'notifying', x: x, y: y, value: this.D[x][y]}, true);
+    this.pushStep({type: 'notified', x: x, y: y}, false);
 };
 
 Array2DTracer.prototype._select = function (sx, sy, ex, ey) {
-    if (sx instanceof Array) {
-        this.pushStep({type: 'select', coords: sx}, true);
-    } else if (ex !== undefined && ey !== undefined) {
-        this.pushStep({type: 'select', sx: sx, sy: sy, ex: ex, ey: ey}, true);
-    } else {
-        this.pushStep({type: 'select', x: sx, y: sy}, true);
-    }
+    this.pushSelectingStep('select', null, arguments);
 };
 
 Array2DTracer.prototype._selectRow = function (x, sy, ey) {
-    this.pushStep({type: 'select', x: x, sy: sy, ey: ey}, true);
+    this.pushSelectingStep('select', 'row', arguments);
 };
 
 Array2DTracer.prototype._selectCol = function (y, sx, ex) {
-    this.pushStep({type: 'select', y: y, sx: sx, ex: ex}, true);
+    this.pushSelectingStep('select', 'col', arguments);
+};
+
+Array2DTracer.prototype._selectSet = function (coords) {
+    this.pushSelectingStep('select', 'set', arguments);
 };
 
 Array2DTracer.prototype._deselect = function (sx, sy, ex, ey) {
-    if (sx instanceof Array) {
-        this.pushStep({type: 'deselect', coords: sx}, true);
-    } else if (ex !== undefined && ey !== undefined) {
-        this.pushStep({type: 'deselect', sx: sx, sy: sy, ex: ex, ey: ey}, true);
-    } else {
-        this.pushStep({type: 'deselect', x: sx, y: sy}, true);
-    }
+    this.pushSelectingStep('deselect', null, arguments);
 };
 
 Array2DTracer.prototype._deselectRow = function (x, sy, ey) {
-    this.pushStep({type: 'deselect', x: x, sy: sy, ey: ey}, true);
+    this.pushSelectingStep('deselect', 'row', arguments);
 };
 
 Array2DTracer.prototype._deselectCol = function (y, sx, ex) {
-    this.pushStep({type: 'deselect', y: y, sx: sx, ex: ex}, true);
+    this.pushSelectingStep('deselect', 'col', arguments);
+};
+
+Array2DTracer.prototype._deselectSet = function (coords) {
+    this.pushSelectingStep('deselect', 'set', arguments);
+};
+
+Array2DTracer.prototype.pushSelectingStep = function () {
+    var args = Array.prototype.slice.call(arguments);
+    var type = args.shift();
+    var mode = args.shift();
+    args = Array.prototype.slice.call(args.shift());
+    var coord;
+    switch (mode) {
+        case 'row':
+            coord = {x: args[0], sy: args[1], ey: args[2]};
+            break;
+        case 'col':
+            coord = {y: args[0], sx: args[1], ex: args[2]};
+            break;
+        case 'set':
+            coord = {coords: args[0]};
+            break;
+        default:
+            if (args[2] === undefined && args[3] === undefined) {
+                coord = {x: args[0], y: args[1]};
+            } else {
+                coord = {sx: args[0], sy: args[1], ex: args[2], ey: args[3]};
+            }
+    }
+    var step = {type: type};
+    $.extend(step, coord);
+    this.pushStep(step, type == 'select');
 };
 
 Array2DTracer.prototype.processStep = function (step, options) {
     switch (step.type) {
+        case 'notifying':
+            var $row = $table.find('.mtbl-row').eq(step.x);
+            $row.find('.mtbl-cell').eq(step.y).text(step.value);
+        case 'notified':
         case 'select':
         case 'deselect':
-            var select = step.type == 'select';
-            var color = select ? step.color !== undefined ? step.color : tableColor.selected : tableColor.default;
+            var colorClass = step.type == 'select' || step.type == 'deselect' ? tableColorClass.selected : tableColorClass.notifying;
+            var addClass = step.type == 'select' || step.type == 'notifying';
             if (step.coords) {
                 step.coords.forEach(function (coord) {
                     var x = coord.x;
                     var y = coord.y;
-                    paintColor(x, y, x, y, color);
+                    paintColor(x, y, x, y, colorClass, addClass);
                 });
             } else {
                 var sx = step.sx;
@@ -139,10 +149,19 @@ Array2DTracer.prototype.processStep = function (step, options) {
                 if (sy === undefined) sy = step.y;
                 if (ex === undefined) ex = step.x;
                 if (ey === undefined) ey = step.y;
-                paintColor(sx, sy, ex, ey, color);
+                paintColor(sx, sy, ex, ey, colorClass, addClass);
             }
             break;
     }
+};
+
+// Override
+Array2DTracer.prototype.refresh = function () {
+    Tracer.prototype.refresh.call(this);
+
+    var $parent = $table.parent();
+    $table.css('margin-top', $parent.height() / 2 - $table.height() / 2);
+    $table.css('margin-left', $parent.width() / 2 - $table.width() / 2);
 };
 
 // Override
@@ -166,21 +185,22 @@ var initTable = function () {
     $('.module_container').append($table);
 };
 
-var tableColor = {
-    selected: '#0ff',
-    changed: '#f00',
-    default: ''
-};
-
-var paintColor = function (sx, sy, ex, ey, color) {
+var paintColor = function (sx, sy, ex, ey, colorClass, addClass) {
     for (var i = sx; i <= ex; i++) {
         var $row = $table.find('.mtbl-row').eq(i);
         for (var j = sy; j <= ey; j++) {
-            $row.find('.mtbl-cell').eq(j).css('background', color);
+            var $cell = $row.find('.mtbl-cell').eq(j);
+            if (addClass) $cell.addClass(colorClass);
+            else $cell.removeClass(colorClass);
         }
     }
 };
 
 var clearTableColor = function () {
     $table.find('.mtbl-cell').css('background', '');
+};
+
+var tableColorClass = {
+    selected: 'selected',
+    notifying: 'notifying'
 };

@@ -140,6 +140,7 @@ $('#btn_run').click(function () {
         eval(codeEditor.getValue());
         _tracer.visualize();
     } catch (err) {
+        console.error(err);
         var $toast = $('<div class="toast error">').append(err);
         $('.toast_container').append($toast);
         setTimeout(function () {
