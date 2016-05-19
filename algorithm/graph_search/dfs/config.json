@@ -22,6 +22,7 @@
   ],
   "files": {
     "sample1": "Visiting all connected nodes without making any circuit",
-    "sample2": "Going through all paths without making any circuit"
+    "sample2": "Going through all paths without making any circuit",
+    "sample3": "DFS of Weighted Graph"
   }
 }

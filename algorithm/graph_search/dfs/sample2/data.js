@@ -1,9 +1,10 @@
 var tracer = new GraphTracer();
-var G = [
-    [1,2,3,4], // connected nodes from node 0
-    [0,2,3,4],
-    [0,1,3,4],
-    [0,1,2,4],
-    [0,1,2,3]
-];
+/*var G = [ // G[i][j] indicates whether the path from the i-th node to the j-th node exists or not
+ [0, 1, 1, 1, 0],
+ [0, 0, 1, 1, 1],
+ [0, 0, 0, 0, 0],
+ [0, 0, 0, 0, 1],
+ [0, 0, 0, 0, 0]
+ ];*/
+var G = tracer.createRandomData(5, .75);
 tracer.setData(G);
