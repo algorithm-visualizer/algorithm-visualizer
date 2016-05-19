@@ -1,7 +1,7 @@
 var s = null, graph = null, sigmaCanvas = null;
 
 function GraphTracer(module) {
-    if (Tracer.call(this, module || WeightedGraphTracer)) {
+    if (Tracer.call(this, module || GraphTracer)) {
         initGraph();
         return true;
     }
@@ -25,9 +25,8 @@ GraphTracer.prototype.clear = function () {
     clearGraphColor();
 };
 
+// Override
 GraphTracer.prototype.createRandomData = function (N, ratio) {
-    Tracer.prototype.createRandomData.call(this, arguments);
-
     if (!N) N = 5;
     if (!ratio) ratio = .3;
     var G = [];
@@ -131,10 +130,6 @@ GraphTracer.prototype.setData = function (G) {
     return false;
 };
 
-GraphTracer.prototype._clear = function () {
-    this.pushStep({type: 'clear'}, true);
-};
-
 GraphTracer.prototype._visit = function (target, source) {
     this.pushStep({type: 'visit', target: target, source: source}, true);
 };
@@ -145,10 +140,6 @@ GraphTracer.prototype._leave = function (target, source) {
 
 GraphTracer.prototype.processStep = function (step, options) {
     switch (step.type) {
-        case 'clear':
-            this.clear();
-            printTrace('clear traces');
-            break;
         case 'visit':
         case 'leave':
             var visit = step.type == 'visit';
@@ -192,7 +183,7 @@ GraphTracer.prototype.prevStep = function () {
 };
 
 var initGraph = function () {
-    $('.visualize_container').empty();
+    $('.module_container').empty();
     if (sigmaCanvas == null) {
         sigmaCanvas = $.extend(true, {}, sigma.canvas);
     } else {
@@ -200,7 +191,7 @@ var initGraph = function () {
     }
     s = new sigma({
         renderer: {
-            container: $('.visualize_container')[0],
+            container: $('.module_container')[0],
             type: 'canvas'
         },
         settings: {
