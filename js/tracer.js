@@ -50,6 +50,10 @@ Tracer.prototype.pushStep = function (step, delay) {
     if (delay) this.traces.push([]);
 };
 
+Tracer.prototype._sleep = function (duration) {
+    this.pushStep({type: 'sleep', duration: duration}, true);
+};
+
 Tracer.prototype._print = function (msg, delay) {
     this.pushStep({type: 'print', msg: msg}, delay);
 };
@@ -92,8 +96,12 @@ Tracer.prototype.step = function (i, options) {
     this.traceIndex = i;
     var trace = this.traces[i];
     var tracer = this;
+    var sleepDuration = 0;
     trace.forEach(function (step) {
         switch (step.type) {
+            case 'sleep':
+                sleepDuration = step.duration;
+                break;
             case 'print':
                 printTrace(step.msg);
                 break;
@@ -111,7 +119,7 @@ Tracer.prototype.step = function (i, options) {
     if (this.pause) return;
     timer = setTimeout(function () {
         tracer.step(i + 1, options);
-    }, this.traceOptions.interval);
+    }, sleepDuration || this.traceOptions.interval);
 };
 
 Tracer.prototype.refresh = function () {
