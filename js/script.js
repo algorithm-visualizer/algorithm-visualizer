@@ -20,6 +20,7 @@ dataEditor.on('change', function () {
 });
 
 var loadFile = function (category, algorithm, file, explanation) {
+    lastModule = null;
     lastData = null;
     $('#explanation').html(explanation);
     dataEditor.setValue('');

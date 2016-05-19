@@ -1,5 +1,5 @@
 var timer = null;
-var lastData = null;
+var lastModule = null, lastData = null;
 var stepLimit = 1e6;
 
 var Tracer = function (module) {
@@ -30,7 +30,8 @@ Tracer.prototype.createRandomData = function (arguments) {
 
 Tracer.prototype.setData = function (arguments) {
     var data = JSON.stringify(arguments);
-    if (lastData == data) return true;
+    if (lastModule == this.module && lastData == data) return true;
+    lastModule = this.module;
     lastData = data;
     return false;
 };

@@ -59,6 +59,7 @@ GraphTracer.prototype.setTreeData = function (G, root) {
     if (this.setData(G, root)) return true;
 
     var place = function (node, x, y) {
+        console.log(node);
         var temp = graph.nodes(n(node));
         temp.x = x;
         temp.y = y;
