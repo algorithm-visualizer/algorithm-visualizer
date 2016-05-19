@@ -13,6 +13,7 @@ var codeEditor = initEditor('code');
 dataEditor.on('change', function () {
     try {
         eval(dataEditor.getValue());
+        lastModule = _tracer && _tracer.module;
         _tracer = tracer;
     } catch (err) {
     }
@@ -20,7 +21,6 @@ dataEditor.on('change', function () {
 });
 
 var loadFile = function (category, algorithm, file, explanation) {
-    lastModule = null;
     lastData = null;
     $('#explanation').html(explanation);
     dataEditor.setValue('');
@@ -134,6 +134,7 @@ $('#navigation').click(function () {
 $('#btn_run').click(function () {
     try {
         eval(dataEditor.getValue());
+        lastModule = _tracer && _tracer.module;
         _tracer = tracer;
         _tracer.reset();
         eval(codeEditor.getValue());
