@@ -131,11 +131,12 @@ section {
     right: 0;
 }
 
-.visualize_container {
+.module_container {
     top: 0;
     bottom: 50%;
     left: 0;
     right: 0;
+    text-align: center;
 }
 
 .tab_container {
@@ -217,7 +218,7 @@ pre {
     bottom: 0;
     right: 0;
     padding: 12px;
-    z-index: 2;
+    z-index: 4;
 }
 
 .toast {
@@ -231,4 +232,22 @@ pre {
 .toast.error {
     border-color: rgb(150, 0, 0);
     background: rgba(120, 0, 0, .8);
+}
+
+.mtbl-table {
+    display: inline-table;
+    color: white;
+    table-layout: fixed;
+}
+
+.mtbl-row {
+    display: table-row;
+}
+
+.mtbl-cell {
+    padding: 3px 6px;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    background: #888;
 }

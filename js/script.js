@@ -13,7 +13,7 @@ var codeEditor = initEditor('code');
 dataEditor.on('change', function () {
     try {
         eval(dataEditor.getValue());
-        lastModule = _tracer && _tracer.module;
+        lastModule = tracer && tracer.module;
         _tracer = tracer;
     } catch (err) {
     }
@@ -134,7 +134,7 @@ $('#navigation').click(function () {
 $('#btn_run').click(function () {
     try {
         eval(dataEditor.getValue());
-        lastModule = _tracer && _tracer.module;
+        lastModule = tracer && tracer.module;
         _tracer = tracer;
         _tracer.reset();
         eval(codeEditor.getValue());
@@ -183,7 +183,7 @@ $(window).resize(_tracer.resize);
 var dividers = [
     ['v', $('.sidemenu'), $('.workspace')],
     ['v', $('.viewer_container'), $('.editor_container')],
-    ['h', $('.visualize_container'), $('.tab_container')],
+    ['h', $('.module_container'), $('.tab_container')],
     ['h', $('.data_container'), $('.code_container')]
 ];
 for (var i = 0; i < dividers.length; i++) {

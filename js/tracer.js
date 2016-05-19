@@ -62,6 +62,10 @@ Tracer.prototype._pace = function (interval) {
     this.pushStep({type: 'pace', interval: interval}, false);
 };
 
+Tracer.prototype._clear = function () {
+    this.pushStep({type: 'clear'}, true);
+};
+
 Tracer.prototype.visualize = function (options) {
     options = options || {};
     options.interval = options.interval || 500;
@@ -107,6 +111,10 @@ Tracer.prototype.step = function (i, options) {
                 break;
             case 'pace':
                 tracer.traceOptions.interval = step.interval;
+                break;
+            case 'clear':
+                this.clear();
+                printTrace('clear traces');
                 break;
             default:
                 tracer.module.prototype.processStep.call(tracer, step, options);
