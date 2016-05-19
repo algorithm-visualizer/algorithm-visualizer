@@ -1,12 +1,11 @@
-var s = null, graph = null, graphMode = null;
-
-GraphTracer.graphMode = "default";
+var s = null, graph = null, graphMode = null, sigmaCanvas = null;
 
 function GraphTracer(module) {
     Tracer.call(this, module || GraphTracer);
     return initGraph(this.module);
 }
 
+GraphTracer.graphMode = "default";
 GraphTracer.prototype = Object.create(Tracer.prototype);
 GraphTracer.prototype.constructor = GraphTracer;
 
@@ -18,10 +17,26 @@ GraphTracer.prototype.resize = function () {
 };
 
 // Override
-GraphTracer.prototype.reset = function () {
-    Tracer.prototype.reset.call(this);
+GraphTracer.prototype.clear = function () {
+    Tracer.prototype.clear.call(this);
 
-    resetGraphColor();
+    clearGraphColor();
+};
+
+GraphTracer.prototype.createRandomData = function (N, ratio) {
+    Tracer.prototype.createRandomData.call(this, arguments);
+
+    if (!ratio) ratio = .3;
+    var G = [];
+    for (var i = 0; i < N; i++) {
+        G.push([]);
+        for (var j = 0; j < N; j++) {
+            if (i == j) G[i].push(0);
+            else G[i].push((Math.random() * (1 / ratio) | 0) == 0 ? 1 : 0);
+        }
+    }
+    console.log(G);
+    return G;
 };
 
 // Override
@@ -44,13 +59,15 @@ GraphTracer.prototype.setData = function (G) {
             color: graphColor.default
         });
         for (var j = 0; j < G[i].length; j++) {
-            edges.push({
-                id: e(i, G[i][j]),
-                source: n(i),
-                target: n(G[i][j]),
-                color: graphColor.default,
-                size: 1
-            })
+            if (G[i][j]) {
+                edges.push({
+                    id: e(i, j),
+                    source: n(i),
+                    target: n(j),
+                    color: graphColor.default,
+                    size: 1
+                });
+            }
         }
     }
 
@@ -67,39 +84,39 @@ GraphTracer.prototype.setData = function (G) {
     this.refresh();
 };
 
-Tracer.prototype.clear = function () {
+GraphTracer.prototype._clear = function () {
     this.pushStep({type: 'clear'}, true);
 };
 
-Tracer.prototype.visit = function (targetNode, sourceNode) {
-    this.pushStep({type: 'visit', node: targetNode, Tracer: sourceNode}, true);
+GraphTracer.prototype._visit = function (target, source) {
+    this.pushStep({type: 'visit', target: target, source: source}, true);
 };
 
-Tracer.prototype.leave = function (targetNode, sourceNode) {
-    this.pushStep({type: 'leave', node: targetNode, Tracer: sourceNode}, true);
+GraphTracer.prototype._leave = function (target, source) {
+    this.pushStep({type: 'leave', target: target, source: source}, true);
 };
 
 GraphTracer.prototype.processStep = function (step, options) {
     switch (step.type) {
         case 'clear':
-            resetGraphColor();
+            this.clear();
             printTrace('clear traces');
             break;
         case 'visit':
         case 'leave':
             var visit = step.type == 'visit';
-            var node = graph.nodes(n(step.node));
+            var targetNode = graph.nodes(n(step.target));
             var color = visit ? graphColor.visited : graphColor.left;
-            node.color = color;
-            if (step.Tracer !== undefined) {
-                var edgeId = e(step.Tracer, step.node);
+            targetNode.color = color;
+            if (step.source !== undefined) {
+                var edgeId = e(step.source, step.target);
                 var edge = graph.edges(edgeId);
                 edge.color = color;
                 graph.dropEdge(edgeId).addEdge(edge);
             }
-            var Tracer = step.Tracer;
-            if (Tracer === undefined) Tracer = '';
-            printTrace(visit ? Tracer + ' -> ' + step.node : Tracer + ' <- ' + step.node);
+            var source = step.source;
+            if (source === undefined) source = '';
+            printTrace(visit ? source + ' -> ' + step.target : source + ' <- ' + step.target);
             break;
     }
 };
@@ -113,7 +130,7 @@ GraphTracer.prototype.refresh = function () {
 
 // Override
 GraphTracer.prototype.prevStep = function () {
-    resetGraphColor();
+    this.clear();
     $('#tab_trace .wrapper').empty();
     var finalIndex = this.traceIndex - 1;
     if (finalIndex < 0) {
@@ -127,70 +144,16 @@ GraphTracer.prototype.prevStep = function () {
     this.step(finalIndex);
 };
 
-var drawArrow = function (edge, source, target, color, context, settings) {
-    var prefix = settings('prefix') || '',
-        size = edge[prefix + 'size'] || 1,
-        tSize = target[prefix + 'size'],
-        sX = source[prefix + 'x'],
-        sY = source[prefix + 'y'],
-        tX = target[prefix + 'x'],
-        tY = target[prefix + 'y'],
-        aSize = Math.max(size * 2.5, settings('minArrowSize')),
-        d = Math.sqrt(Math.pow(tX - sX, 2) + Math.pow(tY - sY, 2)),
-        aX = sX + (tX - sX) * (d - aSize - tSize) / d,
-        aY = sY + (tY - sY) * (d - aSize - tSize) / d,
-        vX = (tX - sX) * aSize / d,
-        vY = (tY - sY) * aSize / d;
-
-    context.strokeStyle = color;
-    context.lineWidth = size;
-    context.beginPath();
-    context.moveTo(sX, sY);
-    context.lineTo(
-        aX,
-        aY
-    );
-    context.setLineDash([5, 7]);
-    context.stroke();
-
-    context.fillStyle = color;
-    context.beginPath();
-    context.moveTo(aX + vX, aY + vY);
-    context.lineTo(aX + vY * 0.6, aY - vX * 0.6);
-    context.lineTo(aX - vY * 0.6, aY + vX * 0.6);
-    context.lineTo(aX + vX, aY + vY);
-    context.closePath();
-    context.fill();
-};
-
-var graphColor = {
-    visited: '#f00',
-    left: '#000',
-    default: '#888'
-};
-
-var resetGraphColor = function () {
-    graph.nodes().forEach(function (node) {
-        node.color = graphColor.default;
-    });
-    graph.edges().forEach(function (edge) {
-        edge.color = graphColor.default;
-    });
-};
-
-var n = function (v) {
-    return 'n' + v;
-};
-
-var e = function (v1, v2) {
-    return 'e' + v1 + '_' + v2;
-};
-
 var initGraph = function (module) {
     if (s && graph && graphMode == module.graphMode) return false;
     graphMode = module.graphMode;
 
     $('.visualize_container').empty();
+    if (sigmaCanvas == null) {
+        sigmaCanvas = $.extend(true, {}, sigma.canvas);
+    } else {
+        sigma.canvas = $.extend(true, {}, sigmaCanvas);
+    }
     s = new sigma({
         renderer: {
             container: $('.visualize_container')[0],
@@ -209,56 +172,154 @@ var initGraph = function (module) {
             minNodeSize: .5,
             maxNodeSize: 12,
             labelSize: 'proportional',
-            labelSizeRatio: 1.3
+            labelSizeRatio: 1.3,
+            edgeLabelSize: 'proportional',
+            defaultEdgeLabelSize: 20,
+            edgeLabelSizePowRatio: 0.8
         }
     });
     graph = s.graph;
-    sigma.canvas.labels.def = function (node, context, settings) { // Override labels.def to draw label on the node
-        var fontSize,
-            prefix = settings('prefix') || '',
-            size = node[prefix + 'size'];
-
-        if (size < settings('labelThreshold'))
-            return;
-
-        if (!node.label || typeof node.label !== 'string')
-            return;
-
-        fontSize = (settings('labelSize') === 'fixed') ?
-            settings('defaultLabelSize') :
-        settings('labelSizeRatio') * size;
-
-        context.font = (settings('fontStyle') ? settings('fontStyle') + ' ' : '') +
-            fontSize + 'px ' + settings('font');
-        context.fillStyle = (settings('labelColor') === 'node') ?
-            (node.color || settings('defaultNodeColor')) :
-            settings('defaultLabelColor');
-
-        context.textAlign = 'center';
-        context.fillText(
-            node.label,
-            Math.round(node[prefix + 'x']),
-            Math.round(node[prefix + 'y'] + fontSize / 3)
-        );
-    };
-    sigma.canvas.hovers.def = function (node, context, settings) {
-        var nodeIdx = node.id.substring(1);
-        graph.edges().forEach(function (edge) {
-            var ends = edge.id.substring(1).split("_");
-            if (ends[0] == nodeIdx) {
-                var color = '#0ff';
-                var source = node;
-                var target = graph.nodes('n' + ends[1]);
-                drawArrow(edge, source, target, color, context, settings);
-            } else if (ends[1] == nodeIdx) {
-                var color = '#ff0';
-                var source = graph.nodes('n' + ends[0]);
-                var target = node;
-                drawArrow(edge, source, target, color, context, settings);
-            }
-        });
+    sigma.canvas.labels.def = drawLabel;
+    sigma.canvas.hovers.def = drawOnHover;
+    sigma.canvas.edges.arrow = function (edge, source, target, context, settings) {
+        var color = getColor(edge, source, target, settings);
+        drawArrow(edge, source, target, color, context, settings);
     };
     sigma.plugins.dragNodes(s, s.renderers[0]);
 
     return true;
+};
+
+var graphColor = {
+    visited: '#f00',
+    left: '#000',
+    default: '#888'
+};
+
+var clearGraphColor = function () {
+    graph.nodes().forEach(function (node) {
+        node.color = graphColor.default;
+    });
+    graph.edges().forEach(function (edge) {
+        edge.color = graphColor.default;
+    });
+};
+
+var n = function (v) {
+    return 'n' + v;
+};
+
+var e = function (v1, v2) {
+    return 'e' + v1 + '_' + v2;
+};
+
+var getColor = function (edge, source, target, settings) {
+    var color = edge.color,
+        edgeColor = settings('edgeColor'),
+        defaultNodeColor = settings('defaultNodeColor'),
+        defaultEdgeColor = settings('defaultEdgeColor');
+    if (!color)
+        switch (edgeColor) {
+            case 'source':
+                color = source.color || defaultNodeColor;
+                break;
+            case 'target':
+                color = target.color || defaultNodeColor;
+                break;
+            default:
+                color = defaultEdgeColor;
+                break;
+        }
+    return color;
+};
+
+var drawLabel = function (node, context, settings) {
+    var fontSize,
+        prefix = settings('prefix') || '',
+        size = node[prefix + 'size'];
+
+    if (size < settings('labelThreshold'))
+        return;
+
+    if (!node.label || typeof node.label !== 'string')
+        return;
+
+    fontSize = (settings('labelSize') === 'fixed') ?
+        settings('defaultLabelSize') :
+    settings('labelSizeRatio') * size;
+
+    context.font = (settings('fontStyle') ? settings('fontStyle') + ' ' : '') +
+        fontSize + 'px ' + settings('font');
+    context.fillStyle = (settings('labelColor') === 'node') ?
+        (node.color || settings('defaultNodeColor')) :
+        settings('defaultLabelColor');
+
+    context.textAlign = 'center';
+    context.fillText(
+        node.label,
+        Math.round(node[prefix + 'x']),
+        Math.round(node[prefix + 'y'] + fontSize / 3)
+    );
+};
+
+var drawArrow = function (edge, source, target, color, context, settings) {
+    var prefix = settings('prefix') || '',
+        size = edge[prefix + 'size'] || 1,
+        tSize = target[prefix + 'size'],
+        sX = source[prefix + 'x'],
+        sY = source[prefix + 'y'],
+        tX = target[prefix + 'x'],
+        tY = target[prefix + 'y'],
+        angle = Math.atan2(tY - sY, tX - sX),
+        dist = 3;
+    sX += Math.sin(angle) * dist;
+    tX += Math.sin(angle) * dist;
+    sY += -Math.cos(angle) * dist;
+    tY += -Math.cos(angle) * dist;
+    var aSize = Math.max(size * 2.5, settings('minArrowSize')),
+        d = Math.sqrt(Math.pow(tX - sX, 2) + Math.pow(tY - sY, 2)),
+        aX = sX + (tX - sX) * (d - aSize - tSize) / d,
+        aY = sY + (tY - sY) * (d - aSize - tSize) / d,
+        vX = (tX - sX) * aSize / d,
+        vY = (tY - sY) * aSize / d;
+
+    context.strokeStyle = color;
+    context.lineWidth = size;
+    context.beginPath();
+    context.moveTo(sX, sY);
+    context.lineTo(
+        aX,
+        aY
+    );
+    context.stroke();
+
+    context.fillStyle = color;
+    context.beginPath();
+    context.moveTo(aX + vX, aY + vY);
+    context.lineTo(aX + vY * 0.6, aY - vX * 0.6);
+    context.lineTo(aX - vY * 0.6, aY + vX * 0.6);
+    context.lineTo(aX + vX, aY + vY);
+    context.closePath();
+    context.fill();
+};
+
+var drawOnHover = function (node, context, settings, next) {
+    var nodeIdx = node.id.substring(1);
+    graph.edges().forEach(function (edge) {
+        var ends = edge.id.substring(1).split("_");
+        context.setLineDash([5, 5]);
+        if (ends[0] == nodeIdx) {
+            var color = '#0ff';
+            var source = node;
+            var target = graph.nodes('n' + ends[1]);
+            drawArrow(edge, source, target, color, context, settings);
+            if (next) next(edge, source, target, color, context, settings);
+        } else if (ends[1] == nodeIdx) {
+            var color = '#ff0';
+            var source = graph.nodes('n' + ends[0]);
+            var target = node;
+            drawArrow(edge, source, target, color, context, settings);
+            if (next) next(edge, source, target, color, context, settings);
+        }
+    });
 };

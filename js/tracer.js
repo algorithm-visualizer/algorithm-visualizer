@@ -1,22 +1,32 @@
 var timer = null;
 var lastModule = null, lastData = null;
+var stepLimit = 1e6;
 
 var Tracer = function (module) {
-    this.module = module;
+    this.module = module || Tracer;
     this.traces = [];
     this.pause = false;
     this.traceOptions = null;
     this.traceIndex = -1;
-    this.lastData = null;
+    this.stepCnt = 0;
+    lastData = null;
 };
 
 Tracer.prototype.resize = function () {
 };
 
+Tracer.prototype.clear = function () {
+};
+
 Tracer.prototype.reset = function () {
     this.traces = [];
+    this.stepCnt = 0;
     if (timer) clearTimeout(timer);
     $('#tab_trace .wrapper').empty();
+    this.clear();
+};
+
+Tracer.prototype.createRandomData = function (arguments) {
 };
 
 Tracer.prototype.setData = function (arguments) {
@@ -28,6 +38,7 @@ Tracer.prototype.setData = function (arguments) {
 };
 
 Tracer.prototype.pushStep = function (step, delay) {
+    if (this.stepCnt++ > stepLimit) throw "Tracer's stack overflow";
     var len = this.traces.length;
     var last = [];
     if (len == 0) {
@@ -39,8 +50,12 @@ Tracer.prototype.pushStep = function (step, delay) {
     if (delay) this.traces.push([]);
 };
 
-Tracer.prototype.print = function (msg, delay) {
+Tracer.prototype._print = function (msg, delay) {
     this.pushStep({type: 'print', msg: msg}, delay);
+};
+
+Tracer.prototype._pace = function (interval) {
+    this.pushStep({type: 'pace', interval: interval}, false);
 };
 
 Tracer.prototype.visualize = function (options) {
@@ -77,10 +92,13 @@ Tracer.prototype.step = function (i, options) {
     this.traceIndex = i;
     var trace = this.traces[i];
     var tracer = this;
-    trace.forEach(function (step, i) {
+    trace.forEach(function (step) {
         switch (step.type) {
             case 'print':
                 printTrace(step.msg);
+                break;
+            case 'pace':
+                tracer.traceOptions.interval = step.interval;
                 break;
             default:
                 tracer.module.prototype.processStep.call(tracer, step, options);
@@ -88,7 +106,7 @@ Tracer.prototype.step = function (i, options) {
     });
     if (!options.virtual) {
         this.refresh();
-        scrollToEnd();
+        scrollToEnd(Math.min(50, this.traceOptions.interval));
     }
     if (this.pause) return;
     timer = setTimeout(function () {
@@ -111,6 +129,6 @@ var printTrace = function (message) {
     $('#tab_trace .wrapper').append($('<span>').append(message + '<br/>'));
 };
 
-var scrollToEnd = function () {
-    $('#tab_trace').animate({scrollTop: $('#tab_trace')[0].scrollHeight}, 100);
+var scrollToEnd = function (duration) {
+    $('#tab_trace').animate({scrollTop: $('#tab_trace')[0].scrollHeight}, duration);
 };

@@ -1,5 +1,3 @@
-WeightedGraphTracer.graphMode = "weighted";
-
 function WeightedGraphTracer(module) {
     if (GraphTracer.call(this, module || WeightedGraphTracer)) {
         initWeightedGraph();
@@ -8,8 +6,38 @@ function WeightedGraphTracer(module) {
     return false;
 }
 
+WeightedGraphTracer.graphMode = "weighted";
 WeightedGraphTracer.prototype = Object.create(GraphTracer.prototype);
 WeightedGraphTracer.prototype.constructor = WeightedGraphTracer;
+
+// Override
+WeightedGraphTracer.prototype.clear = function () {
+    GraphTracer.prototype.clear.call(this);
+
+    clearWeights();
+};
+
+WeightedGraphTracer.prototype.createRandomData = function (N, ratio, min, max) {
+    Tracer.prototype.createRandomData.call(this, arguments);
+
+    if (!ratio) ratio = .3;
+    if (!min) min = 1;
+    if (!max) max = 5;
+    var G = [];
+    for (var i = 0; i < N; i++) {
+        G.push([]);
+        for (var j = 0; j < N; j++) {
+            if (i == j) G[i].push(0);
+            else if ((Math.random() * (1 / ratio) | 0) == 0) {
+                G[i].push((Math.random() * (max - min + 1) | 0) + min);
+            } else {
+                G[i].push(0);
+            }
+        }
+    }
+    console.log(G);
+    return G;
+};
 
 // Override
 WeightedGraphTracer.prototype.setData = function (G) {
@@ -28,16 +56,20 @@ WeightedGraphTracer.prototype.setData = function (G) {
             x: .5 + Math.sin(currentAngle) / 2,
             y: .5 + Math.cos(currentAngle) / 2,
             size: 1,
-            color: graphColor.default
+            color: graphColor.default,
+            weight: 0
         });
         for (var j = 0; j < G[i].length; j++) {
-            edges.push({
-                id: e(i, G[i][j]),
-                source: n(i),
-                target: n(G[i][j]),
-                color: graphColor.default,
-                size: 1
-            })
+            if (G[i][j]) {
+                edges.push({
+                    id: e(i, j),
+                    source: n(i),
+                    target: n(j),
+                    color: graphColor.default,
+                    size: 1,
+                    weight: G[i][j]
+                });
+            }
         }
     }
 
@@ -54,5 +86,150 @@ WeightedGraphTracer.prototype.setData = function (G) {
     this.refresh();
 };
 
+GraphTracer.prototype._visit = function (target, source, weight) {
+    this.pushStep({type: 'visit', target: target, source: source, weight: weight}, true);
+};
+
+GraphTracer.prototype._leave = function (target, source, weight) {
+    this.pushStep({type: 'leave', target: target, source: source, weight: weight}, true);
+};
+
+//Override
+WeightedGraphTracer.prototype.processStep = function (step, options) {
+    console.log(step);
+    switch (step.type) {
+        case 'visit':
+        case 'leave':
+            var visit = step.type == 'visit';
+            var targetNode = graph.nodes(n(step.target));
+            var color = visit ? graphColor.visited : graphColor.left;
+            targetNode.color = color;
+            if (step.weight !== undefined) targetNode.weight = step.weight;
+            if (step.source !== undefined) {
+                var edgeId = e(step.source, step.target);
+                var edge = graph.edges(edgeId);
+                edge.color = color;
+                graph.dropEdge(edgeId).addEdge(edge);
+            }
+            var source = step.source;
+            if (source === undefined) source = '';
+            printTrace(visit ? source + ' -> ' + step.target : source + ' <- ' + step.target);
+            break;
+        case 'weight':
+            var targetNode = graph.nodes(n(step.target));
+            targetNode.weight = step.weight;
+            break;
+        default:
+            GraphTracer.prototype.processStep.call(this, step, options);
+    }
+};
+
+var clearWeights = function () {
+    graph.nodes().forEach(function (node) {
+        node.weight = 0;
+    });
+};
+
+var drawEdgeWeight = function (edge, source, target, color, context, settings) {
+    if (source == target)
+        return;
+
+    var prefix = settings('prefix') || '',
+        size = edge[prefix + 'size'] || 1;
+
+    if (size < settings('edgeLabelThreshold'))
+        return;
+
+    if (0 === settings('edgeLabelSizePowRatio'))
+        throw '"edgeLabelSizePowRatio" must not be 0.';
+
+    var fontSize,
+        x = (source[prefix + 'x'] + target[prefix + 'x']) / 2,
+        y = (source[prefix + 'y'] + target[prefix + 'y']) / 2,
+        dX = target[prefix + 'x'] - source[prefix + 'x'],
+        dY = target[prefix + 'y'] - source[prefix + 'y'],
+        angle = Math.atan2(dY, dX);
+
+    fontSize = (settings('edgeLabelSize') === 'fixed') ?
+        settings('defaultEdgeLabelSize') :
+    settings('defaultEdgeLabelSize') *
+    size *
+    Math.pow(size, -1 / settings('edgeLabelSizePowRatio'));
+
+    context.save();
+
+    if (edge.active) {
+        context.font = [
+            settings('activeFontStyle'),
+            fontSize + 'px',
+            settings('activeFont') || settings('font')
+        ].join(' ');
+
+        context.fillStyle = color;
+    }
+    else {
+        context.font = [
+            settings('fontStyle'),
+            fontSize + 'px',
+            settings('font')
+        ].join(' ');
+
+        context.fillStyle = color;
+    }
+
+    context.textAlign = 'center';
+    context.textBaseline = 'alphabetic';
+
+    context.translate(x, y);
+    context.rotate(angle);
+    context.fillText(
+        edge.weight,
+        0,
+        (-size / 2) - 3
+    );
+
+    context.restore();
+};
+
 var initWeightedGraph = function () {
+    sigma.canvas.edges.arrow = function (edge, source, target, context, settings) {
+        var color = getColor(edge, source, target, settings);
+        drawArrow(edge, source, target, color, context, settings);
+        drawEdgeWeight(edge, source, target, color, context, settings);
+    };
+    sigma.canvas.hovers.def = function (node, context, settings) {
+        drawOnHover(node, context, settings, function (edge, source, target, color, context, settings) {
+            drawEdgeWeight(edge, source, target, color, context, settings);
+        });
+    };
+    sigma.canvas.labels.def = function (node, context, settings) {
+        drawNodeWeight(node, context, settings);
+        drawLabel(node, context, settings);
+    }
+};
+
+var drawNodeWeight = function (node, context, settings) {
+    var fontSize,
+        prefix = settings('prefix') || '',
+        size = node[prefix + 'size'];
+
+    if (size < settings('labelThreshold'))
+        return;
+
+    fontSize = (settings('labelSize') === 'fixed') ?
+        settings('defaultLabelSize') :
+    settings('labelSizeRatio') * size;
+
+    context.font = (settings('fontStyle') ? settings('fontStyle') + ' ' : '') +
+        fontSize + 'px ' + settings('font');
+    context.fillStyle = (settings('labelColor') === 'node') ?
+        (node.color || settings('defaultNodeColor')) :
+        settings('defaultLabelColor');
+
+    context.textAlign = 'left';
+    context.fillText(
+        node.weight,
+        Math.round(node[prefix + 'x'] + size * 1.5),
+        Math.round(node[prefix + 'y'] + fontSize / 3)
+    );
 };
