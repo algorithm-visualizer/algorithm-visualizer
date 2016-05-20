@@ -182,7 +182,7 @@ GraphTracer.prototype.prevStep = function () {
 };
 
 var initGraph = function () {
-    $('.module_container').empty();
+    $module_container.empty();
     if (sigmaCanvas == null) {
         sigmaCanvas = $.extend(true, {}, sigma.canvas);
     } else {
@@ -190,7 +190,7 @@ var initGraph = function () {
     }
     s = new sigma({
         renderer: {
-            container: $('.module_container')[0],
+            container: $module_container[0],
             type: 'canvas'
         },
         settings: {
