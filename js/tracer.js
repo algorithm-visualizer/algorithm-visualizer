@@ -32,7 +32,7 @@ Tracer.prototype.createRandomData = function (arguments) {
 
 Tracer.prototype.setData = function (arguments) {
     var data = JSON.stringify(arguments);
-    if (lastData == data) return true;
+    if (lastModule == this.module && lastData == data) return true;
     lastData = data;
     return false;
 };

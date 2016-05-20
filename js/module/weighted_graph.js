@@ -34,13 +34,12 @@ WeightedGraphTracer.prototype.createRandomData = function (N, ratio, min, max) {
             }
         }
     }
-    console.log(G);
     return G;
 };
 
 // Override
 WeightedGraphTracer.prototype.setData = function (G) {
-    if (Tracer.prototype.setData.call(this, arguments)) return;
+    if (Tracer.prototype.setData.call(this, arguments)) return true;
 
     graph.clear();
     var nodes = [];
@@ -83,6 +82,8 @@ WeightedGraphTracer.prototype.setData = function (G) {
         ratio: 1
     });
     this.refresh();
+
+    return false;
 };
 
 GraphTracer.prototype._weight = function (target, weight, delay) {
@@ -99,7 +100,6 @@ GraphTracer.prototype._leave = function (target, source, weight) {
 
 //Override
 WeightedGraphTracer.prototype.processStep = function (step, options) {
-    console.log(step);
     switch (step.type) {
         case 'weight':
             var targetNode = graph.nodes(n(step.target));

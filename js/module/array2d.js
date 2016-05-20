@@ -59,9 +59,12 @@ Array2DTracer.prototype.setData = function (D) {
     return false;
 };
 
-Array2DTracer.prototype._notify = function (x, y) {
-    this.pushStep({type: 'notifying', x: x, y: y, value: this.D[x][y]}, true);
-    this.pushStep({type: 'notified', x: x, y: y}, false);
+Array2DTracer.prototype._notify = function (x1, y1, x2, y2) {
+    var second = x2 !== undefined && y2 !== undefined;
+    this.pushStep({type: 'notifying', x: x1, y: y1, value: this.D[x1][y1]}, !second);
+    if (second) this.pushStep({type: 'notifying', x: x2, y: y2, value: this.D[x2][y2]}, true);
+    this.pushStep({type: 'notified', x: x1, y: y1}, false);
+    if (second) this.pushStep({type: 'notified', x: x2, y: y2}, false);
 };
 
 Array2DTracer.prototype._select = function (sx, sy, ex, ey) {

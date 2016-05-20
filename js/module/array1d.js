@@ -17,8 +17,12 @@ Array1DTracer.prototype.setData = function (D) {
 };
 
 // Override
-Array1DTracer.prototype._notify = function (idx) {
-    Array2DTracer.prototype._notify.call(this, 0, idx);
+Array1DTracer.prototype._notify = function (idx1, idx2) {
+    if (idx2 === undefined) {
+        Array2DTracer.prototype._notify.call(this, 0, idx1);
+    } else {
+        Array2DTracer.prototype._notify.call(this, 0, idx1, 0, idx2);
+    }
 };
 
 // Override
