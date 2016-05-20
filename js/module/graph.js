@@ -25,19 +25,20 @@ GraphTracer.prototype.clear = function () {
     clearGraphColor();
 };
 
-// Override
-GraphTracer.prototype.createRandomData = function (N, ratio) {
-    if (!N) N = 5;
-    if (!ratio) ratio = .3;
-    var G = [];
-    for (var i = 0; i < N; i++) {
-        G.push([]);
-        for (var j = 0; j < N; j++) {
-            if (i == j) G[i].push(0);
-            else G[i].push((Math.random() * (1 / ratio) | 0) == 0 ? 1 : 0);
+var Graph = {
+    createRandomData: function (N, ratio) {
+        if (!N) N = 5;
+        if (!ratio) ratio = .3;
+        var G = [];
+        for (var i = 0; i < N; i++) {
+            G.push([]);
+            for (var j = 0; j < N; j++) {
+                if (i == j) G[i].push(0);
+                else G[i].push((Math.random() * (1 / ratio) | 0) == 0 ? 1 : 0);
+            }
         }
+        return G;
     }
-    return G;
 };
 
 GraphTracer.prototype.setTreeData = function (G, root) {
@@ -85,7 +86,7 @@ GraphTracer.prototype.setTreeData = function (G, root) {
 // Override
 GraphTracer.prototype.setData = function (G) {
     if (Tracer.prototype.setData.call(this, arguments)) return true;
-    
+
     graph.clear();
     var nodes = [];
     var edges = [];

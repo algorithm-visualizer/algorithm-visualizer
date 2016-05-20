@@ -10,6 +10,7 @@
   ],
   "files": {
     "fibonacci": "Fibonacci Sequence",
-    "sliding_window": "Finding the largest sum of three contiguous number"
+    "sliding_window": "Finding the largest sum of three contiguous number",
+    "max_sum_path": "Finding the maximum sum in a path from (0, 0) to (N-1, M-1) when can only move to right or down"
   }
 }

@@ -5,9 +5,10 @@ function Array1DTracer(module) {
 Array1DTracer.prototype = Object.create(Array2DTracer.prototype);
 Array1DTracer.prototype.constructor = Array1DTracer;
 
-// Override
-Array1DTracer.prototype.createRandomData = function (N, min, max) {
-    return Array2DTracer.prototype.createRandomData.call(this, 1, N, min, max)[0];
+var Array1D = {
+    createRandomData: function (N, min, max) {
+        return Array2D.createRandomData(1, N, min, max)[0];
+    }
 };
 
 // Override

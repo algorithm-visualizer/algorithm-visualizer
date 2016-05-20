@@ -16,25 +16,26 @@ WeightedGraphTracer.prototype.clear = function () {
     clearWeights();
 };
 
-// Override
-WeightedGraphTracer.prototype.createRandomData = function (N, ratio, min, max) {
-    if (!N) N = 5;
-    if (!ratio) ratio = .3;
-    if (!min) min = 1;
-    if (!max) max = 5;
-    var G = [];
-    for (var i = 0; i < N; i++) {
-        G.push([]);
-        for (var j = 0; j < N; j++) {
-            if (i == j) G[i].push(0);
-            else if ((Math.random() * (1 / ratio) | 0) == 0) {
-                G[i].push((Math.random() * (max - min + 1) | 0) + min);
-            } else {
-                G[i].push(0);
+var WeightedGraph = {
+    createRandomData: function (N, ratio, min, max) {
+        if (!N) N = 5;
+        if (!ratio) ratio = .3;
+        if (!min) min = 1;
+        if (!max) max = 5;
+        var G = [];
+        for (var i = 0; i < N; i++) {
+            G.push([]);
+            for (var j = 0; j < N; j++) {
+                if (i == j) G[i].push(0);
+                else if ((Math.random() * (1 / ratio) | 0) == 0) {
+                    G[i].push((Math.random() * (max - min + 1) | 0) + min);
+                } else {
+                    G[i].push(0);
+                }
             }
         }
+        return G;
     }
-    return G;
 };
 
 // Override
