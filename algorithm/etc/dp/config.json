@@ -9,6 +9,7 @@
     "https://en.wikipedia.org/wiki/Dynamic_programming"
   ],
   "files": {
-    "fibonacci": "Fibonacci Sequence"
+    "fibonacci": "Fibonacci Sequence",
+    "sliding_window": "Finding the largest sum of three contiguous number"
   }
 }
