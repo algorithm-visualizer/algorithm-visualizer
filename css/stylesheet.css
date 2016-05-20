@@ -43,7 +43,7 @@ button.active {
 }
 
 button.indent {
-    padding-left: 24px;
+    padding-left: 36px;
 }
 
 .divider {
@@ -232,6 +232,10 @@ pre {
 .toast.error {
     border-color: rgb(150, 0, 0);
     background: rgba(120, 0, 0, .8);
+}
+
+.github-fork-ribbon.left-bottom:before {
+    background-color: #333;
 }
 
 .mtbl-wrapper {
