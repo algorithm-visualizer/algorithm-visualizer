@@ -136,7 +136,7 @@ section {
     bottom: 50%;
     left: 0;
     right: 0;
-    overflow: scroll;
+    overflow: hidden;
 }
 
 .tab_container {
@@ -245,7 +245,6 @@ pre {
 }
 
 .mtbl-cell {
-    padding: 3px 6px;
     display: table-cell;
     vertical-align: middle;
     text-align: center;

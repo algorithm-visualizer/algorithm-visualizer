@@ -12,7 +12,6 @@ Array1DTracer.prototype.createRandomData = function (N, min, max) {
 
 // Override
 Array1DTracer.prototype.setData = function (D) {
-    this.D = D;
     return Array2DTracer.prototype.setData.call(this, [D]);
 };
 
