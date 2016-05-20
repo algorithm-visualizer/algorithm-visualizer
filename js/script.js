@@ -124,10 +124,12 @@ $('#navigation').click(function () {
     if ($sidemenu.hasClass('active')) {
         $sidemenu.css('right', (100 - sidemenu_percent) + '%');
         $workspace.css('left', sidemenu_percent + '%');
+        $('.github-fork-ribbon').css('visibility', 'visible');
     } else {
         sidemenu_percent = $workspace.position().left / $('body').width() * 100;
         $sidemenu.css('right', 0);
         $workspace.css('left', 0);
+        $('.github-fork-ribbon').css('visibility', 'hidden');
     }
     _tracer.resize();
 });
