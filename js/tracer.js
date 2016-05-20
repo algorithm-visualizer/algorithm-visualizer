@@ -30,7 +30,7 @@ Tracer.prototype.reset = function () {
 Tracer.prototype.createRandomData = function (arguments) {
 };
 
-Tracer.prototype.setData = function (arguments) {
+Tracer.prototype._setData = function (arguments) {
     var data = JSON.stringify(arguments);
     if (lastModule == this.module && lastData == data) return true;
     lastData = data;

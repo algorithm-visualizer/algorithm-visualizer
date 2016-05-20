@@ -43,14 +43,14 @@ var Array2D = {
 };
 
 // Override
-Array2DTracer.prototype.setData = function (D) {
+Array2DTracer.prototype._setData = function (D) {
     this.D = D;
     this.viewX = this.viewY = 0;
     this.paddingH = 6;
     this.paddingV = 3;
     this.fontSize = 16;
 
-    if (Tracer.prototype.setData.call(this, arguments)) {
+    if (Tracer.prototype._setData.call(this, arguments)) {
         $('.mtbl-row').each(function (i) {
             $(this).children().each(function (j) {
                 $(this).text(D[i][j]);

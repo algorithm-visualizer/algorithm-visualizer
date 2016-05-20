@@ -39,8 +39,8 @@ var WeightedGraph = {
 };
 
 // Override
-WeightedGraphTracer.prototype.setData = function (G) {
-    if (Tracer.prototype.setData.call(this, arguments)) return true;
+WeightedGraphTracer.prototype._setData = function (G) {
+    if (Tracer.prototype._setData.call(this, arguments)) return true;
 
     graph.clear();
     var nodes = [];
