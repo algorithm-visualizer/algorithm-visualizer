@@ -25,19 +25,21 @@ Array2DTracer.prototype.clear = function () {
     clearTableColor();
 };
 
-Array2DTracer.prototype.createRandomData = function (N, M, min, max) {
-    if (!N) N = 10;
-    if (!M) M = 10;
-    if (min === undefined) min = 1;
-    if (max === undefined) max = 9;
-    var D = [];
-    for (var i = 0; i < N; i++) {
-        D.push([]);
-        for (var j = 0; j < M; j++) {
-            D[i].push((Math.random() * (max - min + 1) | 0) + min);
+var Array2D = {
+    createRandomData: function (N, M, min, max) {
+        if (!N) N = 10;
+        if (!M) M = 10;
+        if (min === undefined) min = 1;
+        if (max === undefined) max = 9;
+        var D = [];
+        for (var i = 0; i < N; i++) {
+            D.push([]);
+            for (var j = 0; j < M; j++) {
+                D[i].push((Math.random() * (max - min + 1) | 0) + min);
+            }
         }
+        return D;
     }
-    return D;
 };
 
 // Override
