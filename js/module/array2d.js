@@ -3,6 +3,7 @@ var $table = null;
 function Array2DTracer(module) {
     if (Tracer.call(this, module || Array2DTracer)) {
         initTable();
+        initNavigator(this);
         return true;
     }
     return false;
@@ -45,12 +46,18 @@ Array2DTracer.prototype.setData = function (D) {
     this.D = D;
     if (Tracer.prototype.setData.call(this, arguments)) return true;
 
+    this.viewX = this.viewY = 0;
+    this.paddingH = 6;
+    this.paddingV = 3;
+    this.fontSize = 16;
     $table.empty();
     for (var i = 0; i < D.length; i++) {
         var $row = $('<div class="mtbl-row">');
         $table.append($row);
         for (var j = 0; j < D[i].length; j++) {
-            var $cell = $('<div class="mtbl-cell">').text(D[i][j]);
+            var $cell = $('<div class="mtbl-cell">')
+                .css(this.getCellCss())
+                .text(D[i][j]);
             $row.append($cell);
         }
     }
@@ -158,23 +165,22 @@ Array2DTracer.prototype.processStep = function (step, options) {
     }
 };
 
+Array2DTracer.prototype.getCellCss = function () {
+    return {
+        padding: this.paddingV + 'px ' + this.paddingH + 'px',
+        'font-size': this.fontSize
+    };
+};
+
 // Override
 Array2DTracer.prototype.refresh = function () {
     Tracer.prototype.refresh.call(this);
 
     var $parent = $table.parent();
-    var top = $parent.height() / 2 - $table.height() / 2;
-    var left = $parent.width() / 2 - $table.width() / 2;
-    if (top < 0) {
-        $table.css('margin-top', 0);
-        $parent.scrollTop(-top);
-    }
-    else $table.css('margin-top', top);
-    if (left < 0) {
-        $table.css('margin-left', 0);
-        $parent.scrollLeft(-left);
-    }
-    else $table.css('margin-left', left);
+    var top = $parent.height() / 2 - $table.height() / 2 + this.viewY;
+    var left = $parent.width() / 2 - $table.width() / 2 + this.viewX;
+    $table.css('margin-top', top);
+    $table.css('margin-left', left);
 };
 
 // Override
@@ -196,6 +202,44 @@ var initTable = function () {
     $('.module_container').empty();
     $table = $('<div class="mtbl-table">');
     $('.module_container').append($table);
+};
+
+var initNavigator = function (tracer) {
+    var x, y, dragging = false;
+    var $parent = $table.parent();
+    $parent.mousedown(function (e) {
+        x = e.pageX;
+        y = e.pageY;
+        dragging = true;
+    });
+    $parent.mousemove(function (e) {
+        if (dragging) {
+            tracer.viewX += e.pageX - x;
+            tracer.viewY += e.pageY - y;
+            x = e.pageX;
+            y = e.pageY;
+            tracer.refresh();
+        }
+    });
+    $(document).mouseup(function (e) {
+        dragging = false;
+    });
+
+    $parent.bind('DOMMouseScroll mousewheel', function (e, delta) {
+        e = e.originalEvent;
+        var delta = (e.wheelDelta !== undefined && e.wheelDelta) ||
+            (e.detail !== undefined && -e.detail);
+        var weight = 1.01;
+        var ratio = delta > 0 ? 1 / weight : weight;
+        if (tracer.fontSize < 8 && ratio < 1) return false;
+        if (tracer.fontSize > 36 && ratio > 1) return false;
+        tracer.paddingV *= ratio;
+        tracer.paddingH *= ratio;
+        tracer.fontSize *= ratio;
+        $('.mtbl-cell').css(tracer.getCellCss());
+        tracer.refresh();
+        e.preventDefault();
+    });
 };
 
 var paintColor = function (sx, sy, ex, ey, colorClass, addClass) {
