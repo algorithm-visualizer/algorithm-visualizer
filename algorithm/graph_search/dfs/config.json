@@ -14,8 +14,8 @@
     "Finding biconnectivity in graphs."
   ],
   "cpx": {
-    "time": "O(|E|)",
-    "space": "O(|V|)"
+    "time": "worst O(|E|)",
+    "space": "worst O(|V|)"
   },
   "refs": [
     "https://en.wikipedia.org/wiki/Depth-first_search"

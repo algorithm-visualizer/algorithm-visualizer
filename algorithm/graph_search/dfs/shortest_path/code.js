@@ -20,7 +20,6 @@ function DFS(node, parent, weight) { // node = current node, parent = previous n
     D[node] = false; // label current node as undiscovered
     tracer._leave(node, parent, 0);
 }
-
 var s = Math.random() * G.length | 0; // s = start node
 var e; // e = end node
 do {

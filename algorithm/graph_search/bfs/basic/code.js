@@ -12,5 +12,4 @@ function BFS(s) { // s = start node
         }
     }
 }
-
 BFS(0);

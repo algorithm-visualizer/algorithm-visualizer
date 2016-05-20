@@ -6,5 +6,4 @@ function DFS(node, parent) { // node = current node, parent = previous node
         }
     }
 }
-
 DFS(0);

@@ -22,7 +22,6 @@ function BFS() {
     }
     return W[e];
 }
-
 var s = Math.random() * G.length | 0; // s = start node
 var e; // e = start node
 do {

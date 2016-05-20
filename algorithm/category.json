@@ -12,7 +12,7 @@
       "insertion": "Insertion Sort",
       "selection": "Selection Sort",
       "bubble": "Bubble Sort",
-      "quick": "Quick Sort"
+      "quick": "Quicksort"
     }
   }
 }
