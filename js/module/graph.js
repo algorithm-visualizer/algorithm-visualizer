@@ -57,7 +57,7 @@ GraphTracer.prototype.setTreeData = function (G, root) {
     };
     getDepth(root, 1);
 
-    if (this.setData(G, root)) return true;
+    if (this._setData(G, root)) return true;
 
     var place = function (node, x, y) {
         var temp = graph.nodes(n(node));
@@ -84,8 +84,8 @@ GraphTracer.prototype.setTreeData = function (G, root) {
 };
 
 // Override
-GraphTracer.prototype.setData = function (G) {
-    if (Tracer.prototype.setData.call(this, arguments)) return true;
+GraphTracer.prototype._setData = function (G) {
+    if (Tracer.prototype._setData.call(this, arguments)) return true;
 
     graph.clear();
     var nodes = [];

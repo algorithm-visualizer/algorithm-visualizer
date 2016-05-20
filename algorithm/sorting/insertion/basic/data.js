@@ -1,3 +1,3 @@
 var tracer = new Array1DTracer();
 var D = Array1D.createRandomData(15);
-tracer.setData(D);
+tracer._setData(D);

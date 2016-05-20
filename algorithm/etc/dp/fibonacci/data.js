@@ -4,4 +4,4 @@ var D = [1, 1];
 for (var i = 2; i < index; i++) {
     D.push(0);
 }
-tracer.setData(D);
+tracer._setData(D);

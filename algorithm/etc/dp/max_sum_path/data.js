@@ -7,4 +7,4 @@ for (var i = 0; i < D.length; i++) {
         DP[i].push(999);
     }
 }
-tracer.setData(DP);
+tracer._setData(DP);

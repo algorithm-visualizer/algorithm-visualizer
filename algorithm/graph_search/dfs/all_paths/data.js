@@ -7,4 +7,4 @@ var tracer = new GraphTracer();
  [0, 0, 0, 0, 0]
  ];*/
 var G = Graph.createRandomData(5, .75);
-tracer.setData(G);
+tracer._setData(G);

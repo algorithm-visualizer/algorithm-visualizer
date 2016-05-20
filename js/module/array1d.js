@@ -12,8 +12,8 @@ var Array1D = {
 };
 
 // Override
-Array1DTracer.prototype.setData = function (D) {
-    return Array2DTracer.prototype.setData.call(this, [D]);
+Array1DTracer.prototype._setData = function (D) {
+    return Array2DTracer.prototype._setData.call(this, [D]);
 };
 
 // Override

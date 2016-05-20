@@ -7,4 +7,4 @@ var tracer = new WeightedGraphTracer();
  [0, 1, 3, 0, 0]
  ];*/
 var G = WeightedGraph.createRandomData(5, .5);
-tracer.setData(G);
+tracer._setData(G);
