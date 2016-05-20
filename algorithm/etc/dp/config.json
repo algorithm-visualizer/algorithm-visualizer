@@ -1,0 +1,14 @@
+{
+  "def": "Dynamic programming is both a mathematical optimization method and a computer programming method. In both contexts it refers to simplifying a complicated problem by breaking it down into simpler sub-problems in a recursive manner.",
+  "apps": [],
+  "cpx": {
+    "time": "varies",
+    "space": "varies"
+  },
+  "refs": [
+    "https://en.wikipedia.org/wiki/Dynamic_programming"
+  ],
+  "files": {
+    "fibonacci": "Fibonacci Sequence"
+  }
+}

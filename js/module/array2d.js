@@ -163,8 +163,18 @@ Array2DTracer.prototype.refresh = function () {
     Tracer.prototype.refresh.call(this);
 
     var $parent = $table.parent();
-    $table.css('margin-top', $parent.height() / 2 - $table.height() / 2);
-    $table.css('margin-left', $parent.width() / 2 - $table.width() / 2);
+    var top = $parent.height() / 2 - $table.height() / 2;
+    var left = $parent.width() / 2 - $table.width() / 2;
+    if (top < 0) {
+        $table.css('margin-top', 0);
+        $parent.scrollTop(-top);
+    }
+    else $table.css('margin-top', top);
+    if (left < 0) {
+        $table.css('margin-left', 0);
+        $parent.scrollLeft(-left);
+    }
+    else $table.css('margin-left', left);
 };
 
 // Override

@@ -21,7 +21,7 @@
     "https://en.wikipedia.org/wiki/Depth-first_search"
   ],
   "files": {
-    "basic": "Searching a tree",
+    "tree": "Searching a tree",
     "all_paths": "Going through all possible paths without making any circuit",
     "weighted_graph": "DFS of Weighted Graph",
     "shortest_path": "Finding the shortest path"

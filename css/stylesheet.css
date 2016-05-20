@@ -136,6 +136,7 @@ section {
     bottom: 50%;
     left: 0;
     right: 0;
+    overflow: scroll;
 }
 
 .tab_container {

@@ -14,5 +14,11 @@
       "bubble": "Bubble Sort",
       "quick": "Quicksort"
     }
+  },
+  "etc": {
+    "name": "Uncategorized",
+    "list": {
+      "dp": "Dynamic Programming"
+    }
   }
 }
