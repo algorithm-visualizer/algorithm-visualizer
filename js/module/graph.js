@@ -37,7 +37,6 @@ GraphTracer.prototype.createRandomData = function (N, ratio) {
             else G[i].push((Math.random() * (1 / ratio) | 0) == 0 ? 1 : 0);
         }
     }
-    console.log(G);
     return G;
 };
 
@@ -86,7 +85,7 @@ GraphTracer.prototype.setTreeData = function (G, root) {
 // Override
 GraphTracer.prototype.setData = function (G) {
     if (Tracer.prototype.setData.call(this, arguments)) return true;
-
+    
     graph.clear();
     var nodes = [];
     var edges = [];
