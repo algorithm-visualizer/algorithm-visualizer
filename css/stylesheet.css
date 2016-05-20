@@ -234,6 +234,11 @@ pre {
     background: rgba(120, 0, 0, .8);
 }
 
+.mtbl-wrapper {
+    width: 100%;
+    height: 100%;
+}
+
 .mtbl-table {
     display: inline-table;
     color: white;

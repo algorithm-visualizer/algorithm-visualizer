@@ -141,6 +141,18 @@ Tracer.prototype.nextStep = function () {
     this.step(this.traceIndex + 1);
 };
 
+Tracer.prototype.mousedown = function (e) {
+};
+
+Tracer.prototype.mousemove = function (e) {
+};
+
+Tracer.prototype.mouseup = function (e) {
+};
+
+Tracer.prototype.mousewheel = function (e) {
+};
+
 var printTrace = function (message) {
     $('#tab_trace .wrapper').append($('<span>').append(message + '<br/>'));
 };

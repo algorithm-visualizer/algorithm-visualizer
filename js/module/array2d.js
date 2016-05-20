@@ -3,7 +3,6 @@ var $table = null;
 function Array2DTracer(module) {
     if (Tracer.call(this, module || Array2DTracer)) {
         initTable();
-        initNavigator(this);
         return true;
     }
     return false;
@@ -44,12 +43,20 @@ Array2DTracer.prototype.createRandomData = function (N, M, min, max) {
 // Override
 Array2DTracer.prototype.setData = function (D) {
     this.D = D;
-    if (Tracer.prototype.setData.call(this, arguments)) return true;
-
     this.viewX = this.viewY = 0;
     this.paddingH = 6;
     this.paddingV = 3;
     this.fontSize = 16;
+
+    if (Tracer.prototype.setData.call(this, arguments)) {
+        $('.mtbl-row').each(function (i) {
+            $(this).children().each(function (j) {
+                $(this).text(D[i][j]);
+            });
+        });
+        return true;
+    }
+
     $table.empty();
     for (var i = 0; i < D.length; i++) {
         var $row = $('<div class="mtbl-row">');
@@ -167,8 +174,8 @@ Array2DTracer.prototype.processStep = function (step, options) {
 
 Array2DTracer.prototype.getCellCss = function () {
     return {
-        padding: this.paddingV + 'px ' + this.paddingH + 'px',
-        'font-size': this.fontSize
+        padding: this.paddingV.toFixed(1) + 'px ' + this.paddingH.toFixed(1) + 'px',
+        'font-size': this.fontSize.toFixed(1) + 'px'
     };
 };
 
@@ -198,48 +205,58 @@ Array2DTracer.prototype.prevStep = function () {
     this.step(finalIndex);
 };
 
-var initTable = function () {
-    $('.module_container').empty();
-    $table = $('<div class="mtbl-table">');
-    $('.module_container').append($table);
+// Override
+Array2DTracer.prototype.mousedown = function (e) {
+    Tracer.prototype.mousedown.call(this, e);
+
+    this.dragX = e.pageX;
+    this.dragY = e.pageY;
+    this.dragging = true;
 };
 
-var initNavigator = function (tracer) {
-    var x, y, dragging = false;
-    var $parent = $table.parent();
-    $parent.mousedown(function (e) {
-        x = e.pageX;
-        y = e.pageY;
-        dragging = true;
-    });
-    $parent.mousemove(function (e) {
-        if (dragging) {
-            tracer.viewX += e.pageX - x;
-            tracer.viewY += e.pageY - y;
-            x = e.pageX;
-            y = e.pageY;
-            tracer.refresh();
-        }
-    });
-    $(document).mouseup(function (e) {
-        dragging = false;
-    });
+// Override
+Array2DTracer.prototype.mousemove = function (e) {
+    Tracer.prototype.mousemove.call(this, e);
 
-    $parent.bind('DOMMouseScroll mousewheel', function (e, delta) {
-        e = e.originalEvent;
-        var delta = (e.wheelDelta !== undefined && e.wheelDelta) ||
-            (e.detail !== undefined && -e.detail);
-        var weight = 1.01;
-        var ratio = delta > 0 ? 1 / weight : weight;
-        if (tracer.fontSize < 8 && ratio < 1) return false;
-        if (tracer.fontSize > 36 && ratio > 1) return false;
-        tracer.paddingV *= ratio;
-        tracer.paddingH *= ratio;
-        tracer.fontSize *= ratio;
-        $('.mtbl-cell').css(tracer.getCellCss());
-        tracer.refresh();
-        e.preventDefault();
-    });
+    if (this.dragging) {
+        this.viewX += e.pageX - this.dragX;
+        this.viewY += e.pageY - this.dragY;
+        this.dragX = e.pageX;
+        this.dragY = e.pageY;
+        this.refresh();
+    }
+};
+
+// Override
+Array2DTracer.prototype.mouseup = function (e) {
+    Tracer.prototype.mouseup.call(this, e);
+
+    this.dragging = false;
+};
+
+// Override
+Array2DTracer.prototype.mousewheel = function (e) {
+    Tracer.prototype.mousewheel.call(this, e);
+
+    e.preventDefault();
+    e = e.originalEvent;
+    var delta = (e.wheelDelta !== undefined && e.wheelDelta) ||
+        (e.detail !== undefined && -e.detail);
+    var weight = 1.01;
+    var ratio = delta > 0 ? 1 / weight : weight;
+    if (this.fontSize < 4 && ratio < 1) return;
+    if (this.fontSize > 40 && ratio > 1) return;
+    this.paddingV *= ratio;
+    this.paddingH *= ratio;
+    this.fontSize *= ratio;
+    $('.mtbl-cell').css(this.getCellCss());
+    this.refresh();
+};
+
+var initTable = function () {
+    $module_container.empty();
+    $table = $('<div class="mtbl-table">');
+    $module_container.append($table);
 };
 
 var paintColor = function (sx, sy, ex, ey, colorClass, addClass) {
@@ -254,7 +271,7 @@ var paintColor = function (sx, sy, ex, ey, colorClass, addClass) {
 };
 
 var clearTableColor = function () {
-    $table.find('.mtbl-cell').css('background', '');
+    $table.find('.mtbl-cell').removeClass(Object.keys(tableColorClass).join(' '));
 };
 
 var tableColorClass = {

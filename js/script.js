@@ -1,5 +1,6 @@
 $.ajaxSetup({cache: false, dataType: "text"});
 
+var $module_container = $('.module_container');
 var _tracer = new Tracer();
 var initEditor = function (id) {
     var editor = ace.edit(id);
@@ -258,3 +259,16 @@ for (var i = 0; i < dividers.length; i++) {
         $second.append($divider);
     })(divider);
 }
+
+$module_container.mousedown(function (e) {
+    _tracer.mousedown(e);
+});
+$module_container.mousemove(function (e) {
+    _tracer.mousemove(e);
+});
+$(document).mouseup(function (e) {
+    _tracer.mouseup(e);
+});
+$module_container.bind('DOMMouseScroll mousewheel', function (e) {
+    _tracer.mousewheel(e);
+});
