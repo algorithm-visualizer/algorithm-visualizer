@@ -6,8 +6,8 @@ Array1DTracer.prototype = Object.create(Array2DTracer.prototype);
 Array1DTracer.prototype.constructor = Array1DTracer;
 
 var Array1D = {
-    createRandomData: function (N, min, max) {
-        return Array2D.createRandomData(1, N, min, max)[0];
+    random: function (N, min, max) {
+        return Array2D.random(1, N, min, max)[0];
     }
 };
 

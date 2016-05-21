@@ -6,5 +6,5 @@ var tracer = new GraphTracer();
  [0, 0, 0, 0, 1],
  [0, 0, 0, 0, 0]
  ];*/
-var G = Graph.createRandomData(5, .75);
+var G = Graph.random(5, .75);
 tracer._setData(G);

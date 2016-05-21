@@ -26,7 +26,7 @@ Array2DTracer.prototype.clear = function () {
 };
 
 var Array2D = {
-    createRandomData: function (N, M, min, max) {
+    random: function (N, M, min, max) {
         if (!N) N = 10;
         if (!M) M = 10;
         if (min === undefined) min = 1;

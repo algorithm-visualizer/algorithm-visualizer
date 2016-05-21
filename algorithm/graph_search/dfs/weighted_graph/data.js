@@ -6,5 +6,5 @@ var tracer = new WeightedGraphTracer();
  [0, 2, 0, 0, 1],
  [0, 1, 3, 0, 0]
  ];*/
-var G = WeightedGraph.createRandomData(5, .5);
+var G = WeightedGraph.random(5, .5);
 tracer._setData(G);

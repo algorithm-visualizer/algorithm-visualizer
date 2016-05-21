@@ -1,5 +1,5 @@
 var tracer = new Array2DTracer();
-var D = Array2D.createRandomData(5, 5, 1, 5);
+var D = Array2D.random(5, 5, 1, 5);
 var DP = [];
 for (var i = 0; i < D.length; i++) {
     DP.push([]);

@@ -26,7 +26,7 @@ GraphTracer.prototype.clear = function () {
 };
 
 var Graph = {
-    createRandomData: function (N, ratio) {
+    random: function (N, ratio) {
         if (!N) N = 5;
         if (!ratio) ratio = .3;
         var G = [];
