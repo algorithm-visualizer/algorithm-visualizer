@@ -42,6 +42,10 @@ button.active {
     background: rgb(44, 44, 44);
 }
 
+button.category {
+    background: rgba(0, 0, 0, .10);
+}
+
 button.indent {
     padding-left: 36px;
 }
@@ -90,7 +94,11 @@ nav h3 {
     visibility: visible;
 }
 
-#list > button {
+.sidemenu #header {
+    border-top: 2px solid rgb(44, 44, 44);
+}
+
+.sidemenu button {
     display: block;
     width: 100%;
     height: 30px;
@@ -161,6 +169,10 @@ section {
 
 .tab.active {
     visibility: visible;
+}
+
+#tab_desc > .wrapper a {
+    text-decoration: underline;
 }
 
 .tab_bar {

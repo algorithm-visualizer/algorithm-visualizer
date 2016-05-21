@@ -18,7 +18,8 @@
   "etc": {
     "name": "Uncategorized",
     "list": {
-      "dp": "Dynamic Programming"
+      "dp": "Dynamic Programming",
+      "scratch_paper": "Scratch Paper"
     }
   }
 }
