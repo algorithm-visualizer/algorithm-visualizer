@@ -17,7 +17,7 @@ WeightedGraphTracer.prototype.clear = function () {
 };
 
 var WeightedGraph = {
-    createRandomData: function (N, ratio, min, max) {
+    random: function (N, ratio, min, max) {
         if (!N) N = 5;
         if (!ratio) ratio = .3;
         if (!min) min = 1;
