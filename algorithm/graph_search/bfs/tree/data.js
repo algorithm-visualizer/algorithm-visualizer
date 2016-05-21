@@ -12,4 +12,4 @@ var G = [ // G[i][j] indicates whether the path from the i-th node to the j-th n
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
-tracer.setTreeData(G, 0);
+tracer._setTreeData(G, 0);
