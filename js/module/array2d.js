@@ -256,7 +256,6 @@ Array2DTracer.prototype.mousewheel = function (e) {
 };
 
 var initTable = function () {
-    $module_container.empty();
     $table = $('<div class="mtbl-table">');
     $module_container.append($table);
 };

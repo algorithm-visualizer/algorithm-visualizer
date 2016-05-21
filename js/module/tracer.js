@@ -10,7 +10,9 @@ var Tracer = function (module) {
     this.traceIndex = -1;
     this.stepCnt = 0;
 
-    return lastModule != module;
+    var moduleChanged = lastModule != module;
+    if (moduleChanged) $module_container.empty();
+    return moduleChanged;
 };
 
 Tracer.prototype.resize = function () {
