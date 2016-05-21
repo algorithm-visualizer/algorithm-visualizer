@@ -27,9 +27,6 @@ Tracer.prototype.reset = function () {
     this.clear();
 };
 
-Tracer.prototype.createRandomData = function (arguments) {
-};
-
 Tracer.prototype._setData = function (arguments) {
     var data = JSON.stringify(arguments);
     if (lastModule == this.module && lastData == data) return true;

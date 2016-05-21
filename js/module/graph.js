@@ -41,7 +41,7 @@ var Graph = {
     }
 };
 
-GraphTracer.prototype.setTreeData = function (G, root) {
+GraphTracer.prototype._setTreeData = function (G, root) {
     root = root || 0;
     var maxDepth = -1;
 
