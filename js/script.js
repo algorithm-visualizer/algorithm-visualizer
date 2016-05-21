@@ -56,7 +56,7 @@ var loadAlgorithm = function (category, algorithm) {
     codeEditor.setValue('');
 
     var dir = './algorithm/' + category + '/' + algorithm + '/';
-    $.getJSON(dir + 'config.json', function (data) {
+    $.getJSON(dir + 'desc.json', function (data) {
         $('#desc_def').html(data.def);
         $('#desc_app').empty();
         data.apps.forEach(function (app) {
