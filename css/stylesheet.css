@@ -32,6 +32,9 @@ button {
     background: none;
     font-size: 12px;
     outline: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 button:hover {
@@ -47,7 +50,7 @@ button.category {
 }
 
 button.indent {
-    padding-left: 36px;
+    padding-left: 28px;
 }
 
 .divider {
@@ -88,6 +91,8 @@ nav h3 {
     left: 0;
     right: 85%;
     visibility: hidden;
+    overflow: scroll;
+    padding-bottom: 120px;
 }
 
 .sidemenu.active {
@@ -244,6 +249,10 @@ pre {
 .toast.error {
     border-color: rgb(150, 0, 0);
     background: rgba(120, 0, 0, .8);
+}
+
+.github-fork-ribbon {
+    position: fixed;
 }
 
 .github-fork-ribbon.left-bottom:before {
