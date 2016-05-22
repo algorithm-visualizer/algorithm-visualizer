@@ -3,7 +3,8 @@
     "name": "Graph Search",
     "list": {
       "dfs": "DFS",
-      "bfs": "BFS"
+      "bfs": "BFS",
+      "dijkstra": "Dijkstra"
     }
   },
   "search": {
