@@ -12,6 +12,7 @@
     "<a href='https://en.wikipedia.org/wiki/Binary_search_algorithm'>Wikipedia</a>"
   ],
   "files": {
-    "recursive": "Recursively searching a sorted array"
+    "recursive": "Recursively searching a sorted array",
+    "iterative": "Iteratively searching a sorted array"
   }
 }
