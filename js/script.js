@@ -37,11 +37,14 @@ codeEditor.on('change', function () {
 });
 
 var cachedFile = {};
+var loading = false;
 var loadFile = function (category, algorithm, file, explanation) {
+    if (checkLoading()) return;
     lastData = null;
     $('#explanation').html(explanation);
 
     var dir = lastDir = './algorithm/' + category + '/' + algorithm + '/' + file + '/';
+    loading = true;
     if (cachedFile[dir] && cachedFile[dir].data !== undefined && cachedFile[dir].code !== undefined) {
         dataEditor.setValue(cachedFile[dir].data, -1);
         codeEditor.setValue(cachedFile[dir].code, -1);
@@ -49,6 +52,10 @@ var loadFile = function (category, algorithm, file, explanation) {
         cachedFile[dir] = {};
         dataEditor.setValue('');
         codeEditor.setValue('');
+        var onFail = function (jqXHR, textStatus, errorThrown) {
+            loading = false;
+            alert("AJAX call failed: " + textStatus + ", " + errorThrown);
+        };
         $.get(dir + 'data.js', function (data) {
             cachedFile[dir].data = data;
             dataEditor.setValue(data, -1);
@@ -56,13 +63,20 @@ var loadFile = function (category, algorithm, file, explanation) {
             $.get(dir + 'code.js', function (code) {
                 cachedFile[dir].code = code;
                 codeEditor.setValue(code, -1);
-            });
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert("AJAX call failed: " + textStatus + ", " + errorThrown);
-        });
+                loading = false;
+            }).fail(onFail);
+        }).fail(onFail);
     }
 };
+var checkLoading = function () {
+    if (loading) {
+        showErrorToast('Wait until completes loading of previous file.');
+        return true;
+    }
+    return false;
+};
 var loadAlgorithm = function (category, algorithm) {
+    if (checkLoading()) return;
     $('#list > button').removeClass('active');
     $('[data-category="' + category + '"][data-algorithm="' + algorithm + '"]').addClass('active');
     $('#btn_desc').click();
@@ -167,6 +181,16 @@ $('#navigation').click(function () {
     _tracer.resize();
 });
 
+var showErrorToast = function (err) {
+    var $toast = $('<div class="toast error">').append(err);
+    $('.toast_container').append($toast);
+    setTimeout(function () {
+        $toast.fadeOut(function () {
+            $toast.remove();
+        });
+    }, 3000);
+};
+
 $('#btn_run').click(function () {
     try {
         eval(dataEditor.getValue());
@@ -177,13 +201,7 @@ $('#btn_run').click(function () {
         _tracer.visualize();
     } catch (err) {
         console.error(err);
-        var $toast = $('<div class="toast error">').append(err);
-        $('.toast_container').append($toast);
-        setTimeout(function () {
-            $toast.fadeOut(function () {
-                $toast.remove();
-            });
-        }, 3000);
+        showErrorToast(err);
     }
 });
 $('#btn_pause').click(function () {
