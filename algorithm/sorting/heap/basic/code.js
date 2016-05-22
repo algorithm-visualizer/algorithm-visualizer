@@ -11,7 +11,8 @@ function heapSort(array, size) {
         temp = array[0];
         array[0] = array[j];
         array[j] = temp;
-
+        
+        tracer._notify(0, j);
         tracer._select(j);
 
         heapify(array, j, 0);
