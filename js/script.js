@@ -46,10 +46,11 @@ var loadFile = function (category, algorithm, file, explanation) {
         dataEditor.setValue(cachedFile[dir].data, -1);
         codeEditor.setValue(cachedFile[dir].code, -1);
     } else {
+        cachedFile[dir] = {};
         dataEditor.setValue('');
         codeEditor.setValue('');
         $.get(dir + 'data.js', function (data) {
-            cachedFile[dir] = {data: data};
+            cachedFile[dir].data = data;
             dataEditor.setValue(data, -1);
 
             $.get(dir + 'code.js', function (code) {
