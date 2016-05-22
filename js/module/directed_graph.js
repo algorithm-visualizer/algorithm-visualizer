@@ -1,31 +1,31 @@
 var s = null, graph = null, sigmaCanvas = null;
 
-function GraphTracer(module) {
-    if (Tracer.call(this, module || GraphTracer)) {
+function DirectedGraphTracer(module) {
+    if (Tracer.call(this, module || DirectedGraphTracer)) {
         initGraph();
         return true;
     }
     return false;
 }
 
-GraphTracer.prototype = Object.create(Tracer.prototype);
-GraphTracer.prototype.constructor = GraphTracer;
+DirectedGraphTracer.prototype = Object.create(Tracer.prototype);
+DirectedGraphTracer.prototype.constructor = DirectedGraphTracer;
 
 // Override
-GraphTracer.prototype.resize = function () {
+DirectedGraphTracer.prototype.resize = function () {
     Tracer.prototype.resize.call(this);
 
     this.refresh();
 };
 
 // Override
-GraphTracer.prototype.clear = function () {
+DirectedGraphTracer.prototype.clear = function () {
     Tracer.prototype.clear.call(this);
 
     clearGraphColor();
 };
 
-var Graph = {
+var DirectedGraph = {
     random: function (N, ratio) {
         if (!N) N = 5;
         if (!ratio) ratio = .3;
@@ -41,7 +41,7 @@ var Graph = {
     }
 };
 
-GraphTracer.prototype._setTreeData = function (G, root) {
+DirectedGraphTracer.prototype._setTreeData = function (G, root) {
     root = root || 0;
     var maxDepth = -1;
 
@@ -84,7 +84,7 @@ GraphTracer.prototype._setTreeData = function (G, root) {
 };
 
 // Override
-GraphTracer.prototype._setData = function (G) {
+DirectedGraphTracer.prototype._setData = function (G) {
     if (Tracer.prototype._setData.call(this, arguments)) return true;
 
     graph.clear();
@@ -130,15 +130,15 @@ GraphTracer.prototype._setData = function (G) {
     return false;
 };
 
-GraphTracer.prototype._visit = function (target, source) {
+DirectedGraphTracer.prototype._visit = function (target, source) {
     this.pushStep({type: 'visit', target: target, source: source}, true);
 };
 
-GraphTracer.prototype._leave = function (target, source) {
+DirectedGraphTracer.prototype._leave = function (target, source) {
     this.pushStep({type: 'leave', target: target, source: source}, true);
 };
 
-GraphTracer.prototype.processStep = function (step, options) {
+DirectedGraphTracer.prototype.processStep = function (step, options) {
     switch (step.type) {
         case 'visit':
         case 'leave':
@@ -160,14 +160,14 @@ GraphTracer.prototype.processStep = function (step, options) {
 };
 
 // Override
-GraphTracer.prototype.refresh = function () {
+DirectedGraphTracer.prototype.refresh = function () {
     Tracer.prototype.refresh.call(this);
 
     s.refresh();
 };
 
 // Override
-GraphTracer.prototype.prevStep = function () {
+DirectedGraphTracer.prototype.prevStep = function () {
     this.clear();
     $('#tab_trace .wrapper').empty();
     var finalIndex = this.traceIndex - 1;
