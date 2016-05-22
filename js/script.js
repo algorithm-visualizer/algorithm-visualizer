@@ -3,8 +3,7 @@ $.ajaxSetup({cache: false, dataType: "text"});
 $(document).on('click', 'a', function (e) {
     e.preventDefault();
 
-    var win = window.open($(this).attr('href'), '_blank');
-    if (!win) {
+    if (!window.open($(this).attr('href'), '_blank')) {
         alert('Please allow popups for this site');
     }
 });
@@ -20,32 +19,47 @@ var initEditor = function (id) {
 };
 var dataEditor = initEditor('data');
 var codeEditor = initEditor('code');
+var lastDir = null;
 dataEditor.on('change', function () {
+    var data = dataEditor.getValue();
+    if (lastDir) cachedFile[lastDir].data = data;
     try {
-        eval(dataEditor.getValue());
+        eval(data);
         lastModule = tracer && tracer.module;
         _tracer = tracer;
     } catch (err) {
     }
     _tracer.reset();
 });
+codeEditor.on('change', function () {
+    var code = codeEditor.getValue();
+    if (lastDir) cachedFile[lastDir].code = code;
+});
 
+var cachedFile = {};
 var loadFile = function (category, algorithm, file, explanation) {
     lastData = null;
     $('#explanation').html(explanation);
-    dataEditor.setValue('');
-    codeEditor.setValue('');
 
-    var dir = './algorithm/' + category + '/' + algorithm + '/' + file + '/';
-    $.get(dir + 'data.js', function (data) {
-        dataEditor.setValue(data, -1);
+    var dir = lastDir = './algorithm/' + category + '/' + algorithm + '/' + file + '/';
+    if (cachedFile[dir] && cachedFile[dir].data !== undefined && cachedFile[dir].code !== undefined) {
+        dataEditor.setValue(cachedFile[dir].data, -1);
+        codeEditor.setValue(cachedFile[dir].code, -1);
+    } else {
+        dataEditor.setValue('');
+        codeEditor.setValue('');
+        $.get(dir + 'data.js', function (data) {
+            cachedFile[dir] = {data: data};
+            dataEditor.setValue(data, -1);
 
-        $.get(dir + 'code.js', function (data) {
-            codeEditor.setValue(data, -1);
+            $.get(dir + 'code.js', function (code) {
+                cachedFile[dir].code = code;
+                codeEditor.setValue(code, -1);
+            });
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert("AJAX call failed: " + textStatus + ", " + errorThrown);
         });
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-        alert("AJAX call failed: " + textStatus + ", " + errorThrown);
-    });
+    }
 };
 var loadAlgorithm = function (category, algorithm) {
     $('#list > button').removeClass('active');
@@ -57,6 +71,7 @@ var loadAlgorithm = function (category, algorithm) {
     $('#tab_desc > .wrapper').empty();
     $('.files_bar').empty();
     $('#explanation').html('');
+    lastDir = null;
     dataEditor.setValue('');
     codeEditor.setValue('');
 
