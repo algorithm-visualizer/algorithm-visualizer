@@ -6,6 +6,12 @@
       "bfs": "BFS"
     }
   },
+  "search": {
+    "name": "Search",
+    "list": {
+      "binary_search": "Binary Search"
+    }
+  },
   "sorting": {
     "name": "Sorting",
     "list": {
