@@ -1,4 +1,9 @@
 function BinarySearch(array, element, minIndex, maxIndex) { // array = sorted array, element = element to be found, minIndex = minIndex index, maxIndex = maxIndex index
+  if (minIndex > maxIndex) {
+    tracer._print(element + ' is not found!');
+    return -1;
+  }
+
   var middleIndex = Math.floor((minIndex + maxIndex) / 2);
   var testElement = array[middleIndex];
 
