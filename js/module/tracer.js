@@ -112,7 +112,7 @@ Tracer.prototype.step = function (i, options) {
                 tracer.traceOptions.interval = step.interval;
                 break;
             case 'clear':
-                this.clear();
+                tracer.clear();
                 printTrace('clear traces');
                 break;
             default:
