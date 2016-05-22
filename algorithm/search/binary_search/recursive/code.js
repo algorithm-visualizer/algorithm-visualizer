@@ -1,4 +1,4 @@
-function BinarySearch(array, element, minIndex, maxIndex) { // array = sorted array, element = element to be found, minIndex = minIndex index, maxIndex = maxIndex index
+function BinarySearch(array, element, minIndex, maxIndex) { // array = sorted array, element = element to be found, minIndex = low index, maxIndex = high index
     if (minIndex > maxIndex) {
         tracer._print(element + ' is not found!');
         return -1;
