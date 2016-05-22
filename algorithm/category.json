@@ -4,7 +4,8 @@
     "list": {
       "dfs": "DFS",
       "bfs": "BFS",
-      "dijkstra": "Dijkstra"
+      "dijkstra": "Dijkstra",
+      "bellman_ford": "Bellman-Ford"
     }
   },
   "search": {
