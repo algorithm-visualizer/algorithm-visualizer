@@ -1,22 +1,22 @@
-function WeightedGraphTracer(module) {
-    if (GraphTracer.call(this, module || WeightedGraphTracer)) {
+function WeightedDirectedGraphTracer(module) {
+    if (DirectedGraphTracer.call(this, module || WeightedDirectedGraphTracer)) {
         initWeightedGraph();
         return true;
     }
     return false;
 }
 
-WeightedGraphTracer.prototype = Object.create(GraphTracer.prototype);
-WeightedGraphTracer.prototype.constructor = WeightedGraphTracer;
+WeightedDirectedGraphTracer.prototype = Object.create(DirectedGraphTracer.prototype);
+WeightedDirectedGraphTracer.prototype.constructor = WeightedDirectedGraphTracer;
 
 // Override
-WeightedGraphTracer.prototype.clear = function () {
-    GraphTracer.prototype.clear.call(this);
+WeightedDirectedGraphTracer.prototype.clear = function () {
+    DirectedGraphTracer.prototype.clear.call(this);
 
     clearWeights();
 };
 
-var WeightedGraph = {
+var WeightedDirectedGraph = {
     random: function (N, ratio, min, max) {
         if (!N) N = 5;
         if (!ratio) ratio = .3;
@@ -39,7 +39,7 @@ var WeightedGraph = {
 };
 
 // Override
-WeightedGraphTracer.prototype._setData = function (G) {
+WeightedDirectedGraphTracer.prototype._setData = function (G) {
     if (Tracer.prototype._setData.call(this, arguments)) return true;
 
     graph.clear();
@@ -87,20 +87,20 @@ WeightedGraphTracer.prototype._setData = function (G) {
     return false;
 };
 
-GraphTracer.prototype._weight = function (target, weight, delay) {
+DirectedGraphTracer.prototype._weight = function (target, weight, delay) {
     this.pushStep({type: 'weight', target: target, weight: weight}, delay);
 };
 
-GraphTracer.prototype._visit = function (target, source, weight) {
+DirectedGraphTracer.prototype._visit = function (target, source, weight) {
     this.pushStep({type: 'visit', target: target, source: source, weight: weight}, true);
 };
 
-GraphTracer.prototype._leave = function (target, source, weight) {
+DirectedGraphTracer.prototype._leave = function (target, source, weight) {
     this.pushStep({type: 'leave', target: target, source: source, weight: weight}, true);
 };
 
 //Override
-WeightedGraphTracer.prototype.processStep = function (step, options) {
+WeightedDirectedGraphTracer.prototype.processStep = function (step, options) {
     switch (step.type) {
         case 'weight':
             var targetNode = graph.nodes(n(step.target));
@@ -124,7 +124,7 @@ WeightedGraphTracer.prototype.processStep = function (step, options) {
             printTrace(visit ? source + ' -> ' + step.target : source + ' <- ' + step.target);
             break;
         default:
-            GraphTracer.prototype.processStep.call(this, step, options);
+            DirectedGraphTracer.prototype.processStep.call(this, step, options);
     }
 };
 
