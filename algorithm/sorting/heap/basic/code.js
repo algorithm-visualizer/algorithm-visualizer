@@ -15,7 +15,7 @@ function heapSort(array, size) {
         tracer._select(j);
 
         heapify(array, j, 0);
-        tracer._print('Swapping elemnts : ' + array[0] + ' & ' + array[j]);
+        tracer._print('Swapping elements : ' + array[0] + ' & ' + array[j]);
 
         tracer._deselect(j);
     }
@@ -43,7 +43,7 @@ function heapify(array, size, root) {
 
         tracer._notify(largest, root);
 
-        tracer._print('Swapping elemnts : ' + array[root] + ' & ' + array[largest]);
+        tracer._print('Swapping elements : ' + array[root] + ' & ' + array[largest]);
 
         heapify(array, size, largest);
     }
