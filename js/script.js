@@ -81,8 +81,8 @@ var loadAlgorithm = function (category, algorithm) {
     $('[data-category="' + category + '"][data-algorithm="' + algorithm + '"]').addClass('active');
     $('#btn_desc').click();
 
-    $('#category').text(list[category].name);
-    $('#algorithm, #desc_title').text(list[category].list[algorithm]);
+    $('#category').html(list[category].name);
+    $('#algorithm, #desc_title').html(list[category].list[algorithm]);
     $('#tab_desc > .wrapper').empty();
     $('.files_bar').empty();
     $('#explanation').html('');
