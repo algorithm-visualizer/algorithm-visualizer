@@ -44,11 +44,11 @@ var loadFile = function (category, algorithm, file, explanation) {
     $('#explanation').html(explanation);
 
     var dir = lastDir = './algorithm/' + category + '/' + algorithm + '/' + file + '/';
-    loading = true;
     if (cachedFile[dir] && cachedFile[dir].data !== undefined && cachedFile[dir].code !== undefined) {
         dataEditor.setValue(cachedFile[dir].data, -1);
         codeEditor.setValue(cachedFile[dir].code, -1);
     } else {
+        loading = true;
         cachedFile[dir] = {};
         dataEditor.setValue('');
         codeEditor.setValue('');
@@ -70,7 +70,7 @@ var loadFile = function (category, algorithm, file, explanation) {
 };
 var checkLoading = function () {
     if (loading) {
-        showErrorToast('Wait until completes loading of previous file.');
+        showErrorToast('Wait until it completes loading of previous file.');
         return true;
     }
     return false;
