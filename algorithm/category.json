@@ -5,7 +5,8 @@
       "dfs": "DFS",
       "bfs": "BFS",
       "dijkstra": "Dijkstra",
-      "bellman_ford": "Bellman-Ford"
+      "bellman_ford": "Bellman-Ford",
+      "floyd_warshall": "Floyd-Warshall"
     }
   },
   "search": {
