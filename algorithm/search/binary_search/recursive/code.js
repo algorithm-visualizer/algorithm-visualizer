@@ -8,7 +8,9 @@ function BinarySearch(array, element, minIndex, maxIndex) { // array = sorted ar
     var testElement = array[middleIndex];
 
     tracer._print('Searching at index: ' + middleIndex);
+    tracer._selectSet([minIndex, maxIndex]);
     tracer._notify(middleIndex);
+    tracer._deselectSet([minIndex, maxIndex]);
 
     if (testElement < element) {
         tracer._print('Going right.');

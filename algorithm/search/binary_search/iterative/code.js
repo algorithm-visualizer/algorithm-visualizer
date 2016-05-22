@@ -1,17 +1,17 @@
-function BinarySearch(array, element) { // array = sorted array, element = element to be found,
-
+function BinarySearch(array, element) { // array = sorted array, element = element to be found
     var minIndex = 0;
     var maxIndex = array.length - 1;
-    var currentIndex;
     var testElement;
 
     while (minIndex <= maxIndex) {
 
-        middleIndex = Math.floor((minIndex + maxIndex) / 2);
+        var middleIndex = Math.floor((minIndex + maxIndex) / 2);
         testElement = array[middleIndex];
 
         tracer._print('Searching at index: ' + middleIndex);
+        tracer._selectSet([minIndex, maxIndex]);
         tracer._notify(middleIndex);
+        tracer._deselectSet([minIndex, maxIndex]);
 
         if (testElement < element) {
 
