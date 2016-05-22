@@ -5,15 +5,6 @@ function Array1DTracer(module) {
 Array1DTracer.prototype = Object.create(Array2DTracer.prototype);
 Array1DTracer.prototype.constructor = Array1DTracer;
 
-var Array1D = {
-    random: function(N, min, max) {
-        return Array2D.random(1, N, min, max)[0];
-    },
-    randomSorted: function(N, min, max) {
-        return Array2D.randomSorted(1, N, min, max)[0];
-    }
-};
-
 // Override
 Array1DTracer.prototype._setData = function(D) {
     return Array2DTracer.prototype._setData.call(this, [D]);
@@ -68,4 +59,13 @@ Array1DTracer.prototype._deselectSet = function(indexes) {
         });
     });
     Array2DTracer.prototype._deselectSet.call(this, coords);
+};
+
+var Array1D = {
+    random: function(N, min, max) {
+        return Array2D.random(1, N, min, max)[0];
+    },
+    randomSorted: function(N, min, max) {
+        return Array2D.randomSorted(1, N, min, max)[0];
+    }
 };
