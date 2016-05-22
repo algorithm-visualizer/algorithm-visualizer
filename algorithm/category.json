@@ -19,7 +19,8 @@
       "selection": "Selection Sort",
       "bubble": "Bubble Sort",
       "quick": "Quicksort",
-      "merge": "Mergesort"
+      "merge": "Mergesort",
+      "heap" : "Heap Sort"
     }
   },
   "etc": {
