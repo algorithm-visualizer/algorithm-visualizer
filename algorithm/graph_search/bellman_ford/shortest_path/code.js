@@ -38,17 +38,19 @@ function BELLMAN_FORD (src, dest) {
 	}
 
 	//check for cycle
+	tracer._print ('checking for cycle');
 	for (currentNode = 0; currentNode < G.length; currentNode++) {
 		for (currentNodeNeighbor = 0; currentNodeNeighbor <= G.length; currentNodeNeighbor++) {
 			if (G [currentNode] [currentNodeNeighbor]) {
 				if ( weights [currentNodeNeighbor] > (weights [currentNode] + G [currentNode] [currentNodeNeighbor]) ) {
+					tracer._print ('A cycle was detected: weights [' + currentNodeNeighbor + '] > weights [' + currentNode + '] + ' + G [currentNode] [currentNodeNeighbor]);
 					return (MAX_VALUE);
 				}
 			}
 		}
 	}
 
-	tracer._print ('Final weights for the source ' + src + ' are: [' +  weights + ']');
+	tracer._print ('No cycles detected. Final weights for the source ' + src + ' are: [' +  weights + ']');
 
 	return weights [dest];
 }
