@@ -152,6 +152,8 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         this.pushStep(step, type == 'select');
     },
     processStep: function (step, options) {
+        var tracer = this;
+
         switch (step.type) {
             case 'notifying':
                 var $row = $table.find('.mtbl-row').eq(step.x);
@@ -165,7 +167,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
                     step.coords.forEach(function (coord) {
                         var x = coord.x;
                         var y = coord.y;
-                        this.paintColor(x, y, x, y, colorClass, addClass);
+                        tracer.paintColor(x, y, x, y, colorClass, addClass);
                     });
                 } else {
                     var sx = step.sx;
