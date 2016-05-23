@@ -1,5 +1,5 @@
 function Dijkstra(start, end) {
-    tracer._sleep(333);
+    tracer._sleep();
     var MAX_VALUE = Infinity;
     var minIndex, minDistance;
     var S = []; // S[i] returns the distance from node v to node start
@@ -9,7 +9,8 @@ function Dijkstra(start, end) {
         S[i] = MAX_VALUE;
     }
     S[start] = 0; // Starting node is at distance 0 from itself
-    for (var k = 0; k < G.length; k++) {
+    var k = G.length;
+    while (k--) {
         // Finding a node with the shortest distance from S[minIndex]
         minDistance = MAX_VALUE;
         for (i = 0; i < G.length; i++) {
@@ -18,26 +19,25 @@ function Dijkstra(start, end) {
                 minIndex = i;
             }
         }
-        tracer._visit(minIndex, undefined);
-        tracer._sleep(500);
+        if (minDistance == MAX_VALUE) break; // If there is no edge from current node, jump out of loop
         D[minIndex] = true;
-        if (minDistance == MAX_VALUE) { // If the distance is infinity, there is no more paths
-            tracer._print('there is no path from ' + s + ' to ' + e);
-            return false;
-        }
+        tracer._visit(minIndex);
         // For every unvisited neighbour of current node, we check
         // whether the path to it is shorter if going over the current node
         for (i = 0; i < G.length; i++) {
-            if (G[minIndex][i] && !D[i] && ( S[i] > S[minIndex] + G[minIndex][i])) {
+            if (G[minIndex][i] && S[i] > S[minIndex] + G[minIndex][i]) {
                 S[i] = S[minIndex] + G[minIndex][i];
                 tracer._visit(i, minIndex, S[i]);
-                tracer._sleep(500);
                 tracer._leave(i, minIndex, S[i]);
             }
         }
-        tracer._leave(minIndex, undefined);
+        tracer._leave(minIndex);
     }
-    tracer._print('the shortest path from ' + s + ' to ' + e + ' is ' + S[e]);
+    if (S[end] == MAX_VALUE) {
+        tracer._print('there is no path from ' + start + ' to ' + end);
+    } else {
+        tracer._print('the shortest path from ' + start + ' to ' + end + ' is ' + S[end]);
+    }
 }
 
 var s = Math.random() * G.length | 0; // s = start node
@@ -45,6 +45,6 @@ var e; // e = end node
 do {
     e = Math.random() * G.length | 0;
 } while (s == e);
-tracer._pace(100);
+tracer._pace(500);
 tracer._print('finding the shortest path from ' + s + ' to ' + e);
 Dijkstra(s, e);
