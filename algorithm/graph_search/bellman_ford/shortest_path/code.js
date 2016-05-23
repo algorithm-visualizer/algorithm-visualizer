@@ -3,10 +3,10 @@ function BELLMAN_FORD (src, dest) {
 
 	for (var i = 0; i < G.length; i++) {
 		weights [i] = MAX_VALUE;
-		tracer._weight (i, MAX_VALUE);
+        tracer._weight(i, weights[i]);
 	}
 	weights [src] = 0;
-	tracer._weight (src, 0);
+    tracer._weight(src, 0);
 
 	tracer._print ('Initializing weights to: [' +  weights + ']');
 	tracer._print ('');
@@ -21,14 +21,13 @@ function BELLMAN_FORD (src, dest) {
 			for (var currentNodeNeighbor = 0; currentNodeNeighbor <= G.length; currentNodeNeighbor++) {
 				if (G [currentNode] [currentNodeNeighbor]) {	//proceed to relax Edges only if a particular weight != 0 (0 represents no edge)
 					tracer._print ('Exploring edge from ' + currentNode + ' to ' + currentNodeNeighbor + ', weight = ' + G [currentNode] [currentNodeNeighbor]);
-					tracer._visit (currentNodeNeighbor, currentNode, undefined);
 
 					if ( weights [currentNodeNeighbor] > (weights [currentNode] + G [currentNode] [currentNodeNeighbor]) ) {
 						weights [currentNodeNeighbor] = weights [currentNode] + G [currentNode] [currentNodeNeighbor];
 						tracer._print ('weights [' + currentNodeNeighbor + '] = weights [' + currentNode + '] + ' + G [currentNode] [currentNodeNeighbor]);
 					}
-
-					tracer._leave (currentNodeNeighbor, currentNode, undefined);
+                    tracer._visit (currentNodeNeighbor, currentNode, weights [currentNodeNeighbor]);
+					tracer._leave (currentNodeNeighbor, currentNode);
 				}
 			}
 		}
@@ -55,7 +54,7 @@ function BELLMAN_FORD (src, dest) {
 	return weights [dest];
 }
 
-var src = Math.random() * G.length | 0, dest; 
+var src = Math.random() * G.length | 0, dest;
 var MAX_VALUE = Infinity;
 var minWeight;
 
