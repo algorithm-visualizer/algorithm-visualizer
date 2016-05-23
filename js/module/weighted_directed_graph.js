@@ -215,15 +215,12 @@ var WeightedDirectedGraph = {
         if (!ratio) ratio = .3;
         if (!min) min = 1;
         if (!max) max = 5;
-        var G = [];
+        var G = new Array(N);
         for (var i = 0; i < N; i++) {
-            G.push([]);
+            G[i] = new Array(N);
             for (var j = 0; j < N; j++) {
-                if (i == j) G[i].push(0);
-                else if ((Math.random() * (1 / ratio) | 0) == 0) {
-                    G[i].push((Math.random() * (max - min + 1) | 0) + min);
-                } else {
-                    G[i].push(0);
+                if (i != j && (Math.random() * (1 / ratio) | 0) == 0) {
+                    G[i][j] = (Math.random() * (max - min + 1) | 0) + min;
                 }
             }
         }
