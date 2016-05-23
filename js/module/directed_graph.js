@@ -68,8 +68,7 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
         root = root || 0;
         var maxDepth = -1;
 
-        var chk = [];
-        for (var i = 0; i < G.length; i++) chk.push(false);
+        var chk = new Array(G.length);
         var getDepth = function (node, depth) {
             if (chk[node]) throw "the given graph is not a tree because it forms a circuit";
             chk[node] = true;
@@ -233,6 +232,7 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
                     color = defaultEdgeColor;
                     break;
             }
+
         return color;
     },
     drawLabel: function (node, context, settings) {
@@ -306,10 +306,10 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
     drawOnHover: function (node, context, settings, next) {
         var tracer = this;
 
+        context.setLineDash([5, 5]);
         var nodeIdx = node.id.substring(1);
         graph.edges().forEach(function (edge) {
             var ends = edge.id.substring(1).split("_");
-            context.setLineDash([5, 5]);
             if (ends[0] == nodeIdx) {
                 var color = '#0ff';
                 var source = node;
@@ -331,12 +331,11 @@ var DirectedGraph = {
     random: function (N, ratio) {
         if (!N) N = 5;
         if (!ratio) ratio = .3;
-        var G = [];
+        var G = new Array(N);
         for (var i = 0; i < N; i++) {
-            G.push([]);
+            G[i] = new Array(N);
             for (var j = 0; j < N; j++) {
-                if (i == j) G[i].push(0);
-                else G[i].push((Math.random() * (1 / ratio) | 0) == 0 ? 1 : 0);
+                if (i != j) G[i][j] = (Math.random() * (1 / ratio) | 0) == 0 ? 1 : 0;
             }
         }
         return G;
