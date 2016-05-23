@@ -3,10 +3,8 @@ function BELLMAN_FORD (src, dest) {
 
 	for (var i = 0; i < G.length; i++) {
 		weights [i] = MAX_VALUE;
-		tracer._weight (i, MAX_VALUE);
 	}
 	weights [src] = 0;
-	tracer._weight (src, 0);
 
 	tracer._print ('Initializing weights to: [' +  weights + ']');
 	tracer._print ('');
@@ -55,7 +53,7 @@ function BELLMAN_FORD (src, dest) {
 	return weights [dest];
 }
 
-var src = Math.random() * G.length | 0, dest; 
+var src = Math.random() * G.length | 0, dest;
 var MAX_VALUE = Infinity;
 var minWeight;
 
