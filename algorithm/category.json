@@ -33,6 +33,12 @@
       "heap" : "Heap Sort"
     }
   },
+  "string": {
+   		"name": "String",
+   		"list": {
+   			"edit_distance": "Edit Distance"
+   		}
+   },
   "etc": {
     "name": "Uncategorized",
     "list": {
