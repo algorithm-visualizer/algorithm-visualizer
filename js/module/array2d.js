@@ -2,7 +2,7 @@ var $table = null;
 
 function Array2DTracer(module) {
     if (Tracer.call(this, module || Array2DTracer)) {
-        Array2D.init();
+        Array2DTracer.prototype.init.call(this);
         return true;
     }
     return false;
