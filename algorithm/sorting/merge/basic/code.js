@@ -59,7 +59,7 @@ mergeSort.merge = function(start, middle, end) {
         i++;
     }
 
-    tempArray = [];
+    var tempArray = [];
     for (i = start; i < end; i++) tempArray.push(D[i]);
     tracer._print('merged array = [' + tempArray.join(', ') + ']');
 };

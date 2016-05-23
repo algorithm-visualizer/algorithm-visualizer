@@ -25,7 +25,7 @@ var e; // e = end node
 do {
     e = Math.random() * G.length | 0;
 } while (s == e);
-var MAX_VALUE = 999;
+var MAX_VALUE = Infinity;
 var minWeight = MAX_VALUE;
 tracer._pace(100);
 tracer._print('finding the shortest path from ' + s + ' to ' + e);
