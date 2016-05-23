@@ -17,11 +17,11 @@ function partition(low, high) {
     var temp;
     
     for (var j = low; j < high; j++) {
+        tracer._notify(i, j);
         if (D[j] <= pivot) {
             temp = D[i];
             D[i] = D[j];
             D[j] = temp;
-            tracer._notify(i, j);
             i++;
         }
     }
