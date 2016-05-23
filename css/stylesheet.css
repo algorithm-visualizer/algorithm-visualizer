@@ -10,6 +10,23 @@ body {
     color: rgb(187, 187, 187);
 }
 
+*::-webkit-scrollbar {
+      width: 15px;
+} 
+*::-webkit-scrollbar-track {
+      background-color: #3C3F41;
+} 
+ 
+*::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.2); 
+} 
+*::-webkit-scrollbar-button {
+      background-color: #7c2929;
+} 
+*::-webkit-scrollbar-corner {
+      background-color: #3C3F41;
+}
+
 a {
     text-decoration: none;
 }
