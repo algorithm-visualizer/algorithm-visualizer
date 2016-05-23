@@ -123,7 +123,9 @@ var UndirectedGraph = {
         for (var i = 0; i < N; i++) G[i] = new Array(N);
         for (var i = 0; i < N; i++) {
             for (var j = 0; j < N; j++) {
-                if (i > j) G[i][j] = G[j][i] = (Math.random() * (1 / ratio) | 0) == 0 ? 1 : 0;
+                if (i > j) {
+                    G[i][j] = G[j][i] = (Math.random() * (1 / ratio) | 0) == 0 ? 1 : 0;
+                }
             }
         }
         return G;
