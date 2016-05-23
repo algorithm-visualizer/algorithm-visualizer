@@ -2,185 +2,17 @@ var s = null, graph = null, sigmaCanvas = null;
 
 function DirectedGraphTracer(module) {
     if (Tracer.call(this, module || DirectedGraphTracer)) {
-        DirectedGraph.initGraph();
+        DirectedGraphTracer.prototype.init.call(this);
         return true;
     }
     return false;
 }
 
-DirectedGraphTracer.prototype = Object.create(Tracer.prototype);
-DirectedGraphTracer.prototype.constructor = DirectedGraphTracer;
+DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
+    constructor: DirectedGraphTracer,
+    init: function () {
+        var tracer = this;
 
-// Override
-DirectedGraphTracer.prototype.resize = function () {
-    Tracer.prototype.resize.call(this);
-
-    this.refresh();
-};
-
-// Override
-DirectedGraphTracer.prototype.clear = function () {
-    Tracer.prototype.clear.call(this);
-
-    DirectedGraph.clearGraphColor();
-};
-
-DirectedGraphTracer.prototype._setTreeData = function (G, root) {
-    root = root || 0;
-    var maxDepth = -1;
-
-    var chk = [];
-    for (var i = 0; i < G.length; i++) chk.push(false);
-    var getDepth = function (node, depth) {
-        if (chk[node]) throw "the given graph is not a tree because it forms a circuit";
-        chk[node] = true;
-        if (maxDepth < depth) maxDepth = depth;
-        for (var i = 0; i < G[node].length; i++) {
-            if (G[node][i]) getDepth(i, depth + 1);
-        }
-    };
-    getDepth(root, 1);
-
-    if (this._setData(G, root)) return true;
-
-    var place = function (node, x, y) {
-        var temp = graph.nodes(DirectedGraph.n(node));
-        temp.x = x;
-        temp.y = y;
-    };
-
-    var wgap = 1 / (maxDepth - 1);
-    var dfs = function (node, depth, top, bottom) {
-        place(node, depth * wgap, (top + bottom) / 2);
-        var children = 0;
-        for (var i = 0; i < G[node].length; i++) {
-            if (G[node][i]) children++;
-        }
-        var vgap = (bottom - top) / children;
-        var cnt = 0;
-        for (var i = 0; i < G[node].length; i++) {
-            if (G[node][i]) dfs(i, depth + 1, top + vgap * cnt, top + vgap * ++cnt);
-        }
-    };
-    dfs(root, 0, 0, 1);
-
-    this.refresh();
-};
-
-// Override
-DirectedGraphTracer.prototype._setData = function (G) {
-    if (Tracer.prototype._setData.call(this, arguments)) return true;
-
-    graph.clear();
-    var nodes = [];
-    var edges = [];
-    var unitAngle = 2 * Math.PI / G.length;
-    var currentAngle = 0;
-    for (var i = 0; i < G.length; i++) {
-        currentAngle += unitAngle;
-        nodes.push({
-            id: DirectedGraph.n(i),
-            label: '' + i,
-            x: .5 + Math.sin(currentAngle) / 2,
-            y: .5 + Math.cos(currentAngle) / 2,
-            size: 1,
-            color: DirectedGraph.graphColor.default
-        });
-        for (var j = 0; j < G[i].length; j++) {
-            if (G[i][j]) {
-                edges.push({
-                    id: DirectedGraph.e(i, j),
-                    source: DirectedGraph.n(i),
-                    target: DirectedGraph.n(j),
-                    color: DirectedGraph.graphColor.default,
-                    size: 1
-                });
-            }
-        }
-    }
-
-    graph.read({
-        nodes: nodes,
-        edges: edges
-    });
-    s.camera.goTo({
-        x: 0,
-        y: 0,
-        angle: 0,
-        ratio: 1
-    });
-    this.refresh();
-
-    return false;
-};
-
-DirectedGraphTracer.prototype._visit = function (target, source) {
-    this.pushStep({type: 'visit', target: target, source: source}, true);
-};
-
-DirectedGraphTracer.prototype._leave = function (target, source) {
-    this.pushStep({type: 'leave', target: target, source: source}, true);
-};
-
-DirectedGraphTracer.prototype.processStep = function (step, options) {
-    switch (step.type) {
-        case 'visit':
-        case 'leave':
-            var visit = step.type == 'visit';
-            var targetNode = graph.nodes(DirectedGraph.n(step.target));
-            var color = visit ? DirectedGraph.graphColor.visited : DirectedGraph.graphColor.left;
-            targetNode.color = color;
-            if (step.source !== undefined) {
-                var edgeId = DirectedGraph.e(step.source, step.target);
-                var edge = graph.edges(edgeId);
-                edge.color = color;
-                graph.dropEdge(edgeId).addEdge(edge);
-            }
-            var source = step.source;
-            if (source === undefined) source = '';
-            printTrace(visit ? source + ' -> ' + step.target : source + ' <- ' + step.target);
-            break;
-    }
-};
-
-// Override
-DirectedGraphTracer.prototype.refresh = function () {
-    Tracer.prototype.refresh.call(this);
-
-    s.refresh();
-};
-
-// Override
-DirectedGraphTracer.prototype.prevStep = function () {
-    this.clear();
-    $('#tab_trace .wrapper').empty();
-    var finalIndex = this.traceIndex - 1;
-    if (finalIndex < 0) {
-        this.traceIndex = -1;
-        this.refresh();
-        return;
-    }
-    for (var i = 0; i < finalIndex; i++) {
-        this.step(i, {virtual: true});
-    }
-    this.step(finalIndex);
-};
-
-var DirectedGraph = {
-    random: function (N, ratio) {
-        if (!N) N = 5;
-        if (!ratio) ratio = .3;
-        var G = [];
-        for (var i = 0; i < N; i++) {
-            G.push([]);
-            for (var j = 0; j < N; j++) {
-                if (i == j) G[i].push(0);
-                else G[i].push((Math.random() * (1 / ratio) | 0) == 0 ? 1 : 0);
-            }
-        }
-        return G;
-    },
-    initGraph: function () {
         if (sigmaCanvas == null) {
             sigmaCanvas = $.extend(true, {}, sigma.canvas);
         } else {
@@ -204,32 +36,178 @@ var DirectedGraph = {
                 minNodeSize: .5,
                 maxNodeSize: 12,
                 labelSize: 'proportional',
-                labelSizeRatio: 1.3,
-                edgeLabelSize: 'proportional',
-                defaultEdgeLabelSize: 20,
-                edgeLabelSizePowRatio: 0.8
+                labelSizeRatio: 1.3
             }
         });
         graph = s.graph;
-        sigma.canvas.labels.def = DirectedGraph.drawLabel;
-        sigma.canvas.hovers.def = DirectedGraph.drawOnHover;
+        sigma.canvas.labels.def = function (node, context, settings) {
+            tracer.drawLabel(node, context, settings);
+        };
+        sigma.canvas.hovers.def = function (node, context, settings, next) {
+            tracer.drawOnHover(node, context, settings, next);
+        };
         sigma.canvas.edges.arrow = function (edge, source, target, context, settings) {
-            var color = DirectedGraph.getColor(edge, source, target, settings);
-            DirectedGraph.drawArrow(edge, source, target, color, context, settings);
+            var color = tracer.getColor(edge, source, target, settings);
+            tracer.drawArrow(edge, source, target, color, context, settings);
         };
         sigma.plugins.dragNodes(s, s.renderers[0]);
     },
-    graphColor: {
+    resize: function () {
+        Tracer.prototype.resize.call(this);
+
+        this.refresh();
+    },
+    clear: function () {
+        Tracer.prototype.clear.call(this);
+
+        this.clearGraphColor();
+    },
+    _setTreeData: function (G, root) {
+        var tracer = this;
+
+        root = root || 0;
+        var maxDepth = -1;
+
+        var chk = [];
+        for (var i = 0; i < G.length; i++) chk.push(false);
+        var getDepth = function (node, depth) {
+            if (chk[node]) throw "the given graph is not a tree because it forms a circuit";
+            chk[node] = true;
+            if (maxDepth < depth) maxDepth = depth;
+            for (var i = 0; i < G[node].length; i++) {
+                if (G[node][i]) getDepth(i, depth + 1);
+            }
+        };
+        getDepth(root, 1);
+
+        if (this._setData(G, root)) return true;
+
+        var place = function (node, x, y) {
+            var temp = graph.nodes(tracer.n(node));
+            temp.x = x;
+            temp.y = y;
+        };
+
+        var wgap = 1 / (maxDepth - 1);
+        var dfs = function (node, depth, top, bottom) {
+            place(node, depth * wgap, (top + bottom) / 2);
+            var children = 0;
+            for (var i = 0; i < G[node].length; i++) {
+                if (G[node][i]) children++;
+            }
+            var vgap = (bottom - top) / children;
+            var cnt = 0;
+            for (var i = 0; i < G[node].length; i++) {
+                if (G[node][i]) dfs(i, depth + 1, top + vgap * cnt, top + vgap * ++cnt);
+            }
+        };
+        dfs(root, 0, 0, 1);
+
+        this.refresh();
+    },
+    _setData: function (G) {
+        if (Tracer.prototype._setData.call(this, arguments)) return true;
+
+        graph.clear();
+        var nodes = [];
+        var edges = [];
+        var unitAngle = 2 * Math.PI / G.length;
+        var currentAngle = 0;
+        for (var i = 0; i < G.length; i++) {
+            currentAngle += unitAngle;
+            nodes.push({
+                id: this.n(i),
+                label: '' + i,
+                x: .5 + Math.sin(currentAngle) / 2,
+                y: .5 + Math.cos(currentAngle) / 2,
+                size: 1,
+                color: this.color.default
+            });
+            for (var j = 0; j < G[i].length; j++) {
+                if (G[i][j]) {
+                    edges.push({
+                        id: this.e(i, j),
+                        source: this.n(i),
+                        target: this.n(j),
+                        color: this.color.default,
+                        size: 1
+                    });
+                }
+            }
+        }
+
+        graph.read({
+            nodes: nodes,
+            edges: edges
+        });
+        s.camera.goTo({
+            x: 0,
+            y: 0,
+            angle: 0,
+            ratio: 1
+        });
+        this.refresh();
+
+        return false;
+    },
+    _visit: function (target, source) {
+        this.pushStep({type: 'visit', target: target, source: source}, true);
+    },
+    _leave: function (target, source) {
+        this.pushStep({type: 'leave', target: target, source: source}, true);
+    },
+    processStep: function (step, options) {
+        switch (step.type) {
+            case 'visit':
+            case 'leave':
+                var visit = step.type == 'visit';
+                var targetNode = graph.nodes(this.n(step.target));
+                var color = visit ? this.color.visited : this.color.left;
+                targetNode.color = color;
+                if (step.source !== undefined) {
+                    var edgeId = this.e(step.source, step.target);
+                    var edge = graph.edges(edgeId);
+                    edge.color = color;
+                    graph.dropEdge(edgeId).addEdge(edge);
+                }
+                var source = step.source;
+                if (source === undefined) source = '';
+                this.printTrace(visit ? source + ' -> ' + step.target : source + ' <- ' + step.target);
+                break;
+        }
+    },
+    refresh: function () {
+        Tracer.prototype.refresh.call(this);
+
+        s.refresh();
+    },
+    prevStep: function () {
+        this.clear();
+        $('#tab_trace .wrapper').empty();
+        var finalIndex = this.traceIndex - 1;
+        if (finalIndex < 0) {
+            this.traceIndex = -1;
+            this.refresh();
+            return;
+        }
+        for (var i = 0; i < finalIndex; i++) {
+            this.step(i, {virtual: true});
+        }
+        this.step(finalIndex);
+    },
+    color: {
         visited: '#f00',
         left: '#000',
         default: '#888'
     },
     clearGraphColor: function () {
+        var tracer = this;
+
         graph.nodes().forEach(function (node) {
-            node.color = DirectedGraph.graphColor.default;
+            node.color = tracer.color.default;
         });
         graph.edges().forEach(function (edge) {
-            edge.color = DirectedGraph.graphColor.default;
+            edge.color = tracer.color.default;
         });
     },
     n: function (v) {
@@ -326,6 +304,8 @@ var DirectedGraph = {
         context.fill();
     },
     drawOnHover: function (node, context, settings, next) {
+        var tracer = this;
+
         var nodeIdx = node.id.substring(1);
         graph.edges().forEach(function (edge) {
             var ends = edge.id.substring(1).split("_");
@@ -334,15 +314,31 @@ var DirectedGraph = {
                 var color = '#0ff';
                 var source = node;
                 var target = graph.nodes('n' + ends[1]);
-                DirectedGraph.drawArrow(edge, source, target, color, context, settings);
+                tracer.drawArrow(edge, source, target, color, context, settings);
                 if (next) next(edge, source, target, color, context, settings);
             } else if (ends[1] == nodeIdx) {
                 var color = '#ff0';
                 var source = graph.nodes('n' + ends[0]);
                 var target = node;
-                DirectedGraph.drawArrow(edge, source, target, color, context, settings);
+                tracer.drawArrow(edge, source, target, color, context, settings);
                 if (next) next(edge, source, target, color, context, settings);
             }
         });
+    }
+});
+
+var DirectedGraph = {
+    random: function (N, ratio) {
+        if (!N) N = 5;
+        if (!ratio) ratio = .3;
+        var G = [];
+        for (var i = 0; i < N; i++) {
+            G.push([]);
+            for (var j = 0; j < N; j++) {
+                if (i == j) G[i].push(0);
+                else G[i].push((Math.random() * (1 / ratio) | 0) == 0 ? 1 : 0);
+            }
+        }
+        return G;
     }
 };

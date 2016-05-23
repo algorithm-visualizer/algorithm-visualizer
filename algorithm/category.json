@@ -3,7 +3,10 @@
     "name": "Graph Search",
     "list": {
       "dfs": "DFS",
-      "bfs": "BFS"
+      "bfs": "BFS",
+      "dijkstra": "Dijkstra",
+      "bellman_ford": "Bellman-Ford",
+      "floyd_warshall": "Floyd-Warshall"
     }
   },
   "search": {
@@ -18,7 +21,9 @@
       "insertion": "Insertion Sort",
       "selection": "Selection Sort",
       "bubble": "Bubble Sort",
-      "quick": "Quicksort"
+      "quick": "Quicksort",
+      "merge": "Mergesort",
+      "heap" : "Heap Sort"
     }
   },
   "etc": {
