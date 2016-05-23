@@ -6,7 +6,8 @@
       "bfs": "BFS",
       "dijkstra": "Dijkstra",
       "bellman_ford": "Bellman-Ford",
-      "floyd_warshall": "Floyd-Warshall"
+      "floyd_warshall": "Floyd-Warshall",
+      "topological_sort": "Topological-Sort"
     }
   },
   "search": {
