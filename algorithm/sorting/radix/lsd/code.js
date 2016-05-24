@@ -8,7 +8,7 @@ function pow(base, expo){
 	}
 	return ans;
 }
-for(var exp = 0; exp < 6;exp ++){
+for(var exp = 0; exp < 1;exp ++){
 	tracer._print("Bit "+exp);
 	for(var i = 0; i < D[0].length; i++){
 		tracer._select(0, i);

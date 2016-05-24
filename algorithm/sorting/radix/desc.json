@@ -8,6 +8,6 @@
     "<a href='https://en.wikipedia.org/wiki/Radix_sort'>Wikipedia</a>"
   ],
   "files": {
-    "basic": "Basic"
+    "lsd": "LSD Radix sort"
   }
 }
