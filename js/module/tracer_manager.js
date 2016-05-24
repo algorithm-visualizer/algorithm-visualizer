@@ -1,6 +1,7 @@
 var TracerManager = function () {
     this.pause = false;
     this.capsules = [];
+    this.interval = 500;
 };
 
 TracerManager.prototype = {
@@ -28,7 +29,6 @@ TracerManager.prototype = {
                 return false;
             }
         });
-        console.log('allocated ' + selectedCapsule);
         if (selectedCapsule == null) {
             selectedCapsule = this.add(newTracer);
         }
@@ -78,5 +78,8 @@ TracerManager.prototype = {
     },
     isPause: function () {
         return this.pause;
+    },
+    setInterval: function (interval) {
+        $('#btn_interval input').val(interval);
     }
 };

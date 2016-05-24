@@ -10,6 +10,11 @@ $(document).on('click', 'a', function (e) {
 
 var tm = new TracerManager();
 
+$('#btn_interval input').on('change', function () {
+    tm.interval = Number.parseFloat($(this).val() * 1000);
+    showInfoToast('Tracing interval has been set to ' + tm.interval / 1000 + ' second(s).');
+});
+
 var $module_container = $('.module_container');
 var initEditor = function (id) {
     var editor = ace.edit(id);
@@ -185,6 +190,16 @@ $('#navigation').click(function () {
 
 var showErrorToast = function (err) {
     var $toast = $('<div class="toast error">').append(err);
+    $('.toast_container').append($toast);
+    setTimeout(function () {
+        $toast.fadeOut(function () {
+            $toast.remove();
+        });
+    }, 3000);
+};
+
+var showInfoToast = function (info) {
+    var $toast = $('<div class="toast info">').append(info);
     $('.toast_container').append($toast);
     setTimeout(function () {
         $toast.fadeOut(function () {

@@ -4,7 +4,6 @@ var stepLimit = 1e6;
 var Tracer = function (module) {
     this.module = module || Tracer;
     this.traces = [];
-    this.traceOptions = null;
     this.traceIndex = -1;
     this.stepCnt = 0;
     this.capsule = tm.allocate(this);
@@ -49,18 +48,11 @@ Tracer.prototype = {
     _print: function (msg, delay) {
         this.pushStep({type: 'print', msg: msg}, delay);
     },
-    _pace: function (interval) {
-        this.pushStep({type: 'pace', interval: interval}, false);
-    },
     _clear: function () {
         this.pushStep({type: 'clear'}, true);
     },
-    visualize: function (options) {
-        options = options || {};
-        options.interval = options.interval || 500;
-
+    visualize: function () {
         $('#btn_trace').click();
-        this.traceOptions = options;
         this.traceIndex = -1;
         this.resumeStep();
     },
@@ -92,9 +84,6 @@ Tracer.prototype = {
                 case 'print':
                     tracer.printTrace(step.msg);
                     break;
-                case 'pace':
-                    tracer.traceOptions.interval = step.interval;
-                    break;
                 case 'clear':
                     tracer.clear();
                     tracer.printTrace('clear traces');
@@ -105,12 +94,12 @@ Tracer.prototype = {
         });
         if (!options.virtual) {
             this.refresh();
-            this.scrollToEnd(Math.min(50, this.traceOptions.interval));
+            this.scrollToEnd(Math.min(50, tm.interval));
         }
         if (tm.pause) return;
         timer = setTimeout(function () {
             tracer.step(i + 1, options);
-        }, sleepDuration || this.traceOptions.interval);
+        }, sleepDuration || tm.interval);
     },
     refresh: function () {
     },
