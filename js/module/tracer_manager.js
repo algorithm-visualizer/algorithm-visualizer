@@ -120,17 +120,8 @@ TracerManager.prototype = {
 
         this.traceIndex = i;
         var trace = this.traces[i];
-        var sleepDuration = 0;
         trace.forEach(function (step) {
-            if (step.capsule == null) {
-                switch (step.type) {
-                    case 'sleep':
-                        sleepDuration = step.duration;
-                        break;
-                }
-            } else {
-                step.capsule.tracer.processStep(step, options);
-            }
+            step.capsule.tracer.processStep(step, options);
         });
         if (!options.virtual) {
             this.command('refresh');
@@ -138,7 +129,7 @@ TracerManager.prototype = {
         if (this.pause) return;
         timer = setTimeout(function () {
             tracer.step(i + 1, options);
-        }, sleepDuration || this.interval);
+        }, this.interval);
     },
     prevStep: function () {
         $('#tab_trace .wrapper').empty();
