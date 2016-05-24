@@ -13,9 +13,6 @@ Tracer.prototype = {
         this.capsule.lastData = data;
         return false;
     },
-    _sleep: function (duration) {
-        tm.pushStep(this.capsule, {type: 'sleep', duration: duration});
-    },
     _clear: function () {
         tm.pushStep(this.capsule, {type: 'clear'});
     },
