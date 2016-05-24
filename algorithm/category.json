@@ -31,7 +31,7 @@
       "quick": "Quicksort",
       "merge": "Mergesort",
       "heap" : "Heap Sort",
-      "radixlsb" : "Radix LSB sort"
+      "radixlsd" : "Radix LSD sort"
     }
   },
   "string": {
