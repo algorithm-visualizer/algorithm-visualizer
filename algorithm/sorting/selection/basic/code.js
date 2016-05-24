@@ -1,6 +1,5 @@
 tracer._print('original array = [' + D.join(', ') + ']');
 tracer._sleep(1000);
-tracer._pace(500);
 for (var i = 0; i < D.length - 1; i++) {
     var minJ = i;
     tracer._select(i);

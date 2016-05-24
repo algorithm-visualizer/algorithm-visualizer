@@ -68,7 +68,6 @@ do {
 }
 while (src === dest);
 
-tracer._pace(100);
 tracer._print('finding the shortest path from ' + src + ' to ' + dest);
 tracer._sleep(1000);
 

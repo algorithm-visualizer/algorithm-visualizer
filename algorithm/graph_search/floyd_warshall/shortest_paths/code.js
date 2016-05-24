@@ -30,6 +30,5 @@ function FloydWarshall() {
                 ' to ' + j + ' is ' + S[i][j]);
 }
 var MAX_VALUE = Infinity;
-tracer._pace(200);
 tracer._print('finding the shortest paths from and to all nodes');
 FloydWarshall();

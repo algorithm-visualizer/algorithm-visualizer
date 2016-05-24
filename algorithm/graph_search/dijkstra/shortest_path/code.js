@@ -45,6 +45,5 @@ var e; // e = end node
 do {
     e = Math.random() * G.length | 0;
 } while (s == e);
-tracer._pace(500);
 tracer._print('finding the shortest path from ' + s + ' to ' + e);
 Dijkstra(s, e);

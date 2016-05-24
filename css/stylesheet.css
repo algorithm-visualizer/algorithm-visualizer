@@ -15,13 +15,16 @@ a {
 }
 
 * {
+    color: inherit;
+}
+
+*:not(input) {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
-    color: inherit;
 }
 
 button {
@@ -83,6 +86,14 @@ nav h3 {
 .buttons {
     float: right;
     height: 100%;
+}
+
+button input {
+    outline: none;
+    background: none;
+    border: none;
+    width: 20px;
+    text-align: right;
 }
 
 .sidemenu {
@@ -250,6 +261,11 @@ pre {
 .toast.error {
     border-color: rgb(150, 0, 0);
     background: rgba(120, 0, 0, .8);
+}
+
+.toast.info {
+    border-color: rgb(0, 150, 0);
+    background: rgba(0, 120, 0, .8);
 }
 
 .github-fork-ribbon {

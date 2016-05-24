@@ -35,6 +35,5 @@ function BinarySearch(array, element, minIndex, maxIndex) { // array = sorted ar
 var element = D[Math.random() * D.length | 0];
 
 tracer._sleep(1000);
-tracer._pace(1000);
 tracer._print('Using binary search to find ' + element);
 BinarySearch(D, element, 0, D.length - 1);

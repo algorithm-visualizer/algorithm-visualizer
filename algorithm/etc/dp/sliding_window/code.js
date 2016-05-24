@@ -1,4 +1,3 @@
-tracer._pace(500);
 var sum = D[0] + D[1] + D[2];
 var max = sum;
 tracer._print('sum = ' + sum, false);

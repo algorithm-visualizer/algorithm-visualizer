@@ -12,7 +12,6 @@ function DFS(node, parent, weight) { // node = current node, parent = previous n
     tracer._leave(node, parent, 0);
 }
 var D; // D[i] indicates whether the i-th node is discovered or not
-tracer._pace(1000);
 for (var i = 0; i < G.length; i++) { // start from every node
     tracer._print('start from ' + i);
     D = [];

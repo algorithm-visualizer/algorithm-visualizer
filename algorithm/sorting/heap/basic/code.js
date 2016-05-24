@@ -51,7 +51,6 @@ function heapify(array, size, root) {
 }
 
 tracer._sleep(1000);
-tracer._pace(800);
 
 heapSort(D, 10);
 

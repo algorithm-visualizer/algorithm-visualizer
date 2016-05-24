@@ -1,6 +1,5 @@
 tracer._print('original array = [' + D.join(', ') + ']');
 tracer._sleep(1000);
-tracer._pace(500);
 
 function quicksort(low, high) {
     if (low < high) {

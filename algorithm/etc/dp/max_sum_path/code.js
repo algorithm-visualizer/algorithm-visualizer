@@ -3,7 +3,6 @@ for (var i = 0; i < D.length; i++) {
     tracer._print('&nbsp;&nbsp;&nbsp;&nbsp;[' + D[i].join(', ') + ']');
 }
 tracer._print(']');
-tracer._pace(200);
 var N = DP.length;
 var M = DP[0].length;
 for (var i = 0; i < N; i++) {

@@ -1,6 +1,5 @@
 tracer._print('original array = [' + D.join(', ') + ']');
 tracer._sleep(1000);
-tracer._pace(300);
 for (var i = 1; i < D.length; i++) {
     var key = D[i];
     tracer._print('insert ' + key);

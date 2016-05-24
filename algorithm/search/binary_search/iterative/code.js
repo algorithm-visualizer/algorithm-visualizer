@@ -39,6 +39,5 @@ function BinarySearch(array, element) { // array = sorted array, element = eleme
 var element = D[Math.random() * D.length | 0];
 
 tracer._sleep(1000);
-tracer._pace(1000);
 tracer._print('Using iterative binary search to find ' + element);
 BinarySearch(D, element, 0, D.length - 1);

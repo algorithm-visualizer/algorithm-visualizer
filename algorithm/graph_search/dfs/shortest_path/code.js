@@ -27,7 +27,6 @@ do {
 } while (s == e);
 var MAX_VALUE = Infinity;
 var minWeight = MAX_VALUE;
-tracer._pace(100);
 tracer._print('finding the shortest path from ' + s + ' to ' + e);
 tracer._sleep(1000);
 var D = []; // D[i] indicates whether the i-th node is discovered or not
