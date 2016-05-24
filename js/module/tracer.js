@@ -19,6 +19,7 @@ Tracer.prototype = {
     resize: function () {
     },
     clear: function () {
+        $('#tab_trace .wrapper').text ('');
     },
     reset: function () {
         this.traces = [];
