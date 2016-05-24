@@ -11,18 +11,18 @@ UndirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGraphTrac
     init: function () {
         var tracer = this;
 
-        s.settings({
-            defaultEdgeType: 'def'
+        this.s.settings({
+            defaultEdgeType: 'def',
+            funcEdgesDef: function (edge, source, target, context, settings) {
+                var color = tracer.getColor(edge, source, target, settings);
+                tracer.drawEdge(edge, source, target, color, context, settings);
+            }
         });
-        sigma.canvas.edges.def = function (edge, source, target, context, settings) {
-            var color = tracer.getColor(edge, source, target, settings);
-            tracer.drawEdge(edge, source, target, color, context, settings);
-        };
     },
     _setData: function (G) {
         if (Tracer.prototype._setData.call(this, arguments)) return true;
 
-        graph.clear();
+        this.graph.clear();
         var nodes = [];
         var edges = [];
         var unitAngle = 2 * Math.PI / G.length;
@@ -52,11 +52,11 @@ UndirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGraphTrac
             }
         }
 
-        graph.read({
+        this.graph.read({
             nodes: nodes,
             edges: edges
         });
-        s.camera.goTo({
+        this.s.camera.goTo({
             x: 0,
             y: 0,
             angle: 0,
@@ -79,17 +79,17 @@ UndirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGraphTrac
 
         context.setLineDash([5, 5]);
         var nodeIdx = node.id.substring(1);
-        graph.edges().forEach(function (edge) {
+        this.graph.edges().forEach(function (edge) {
             var ends = edge.id.substring(1).split("_");
             if (ends[0] == nodeIdx) {
                 var color = '#0ff';
                 var source = node;
-                var target = graph.nodes('n' + ends[1]);
+                var target = tracer.graph.nodes('n' + ends[1]);
                 tracer.drawEdge(edge, source, target, color, context, settings);
                 if (next) next(edge, source, target, color, context, settings);
             } else if (ends[1] == nodeIdx) {
                 var color = '#0ff';
-                var source = graph.nodes('n' + ends[0]);
+                var source = tracer.graph.nodes('n' + ends[0]);
                 var target = node;
                 tracer.drawEdge(edge, source, target, color, context, settings);
                 if (next) next(edge, source, target, color, context, settings);

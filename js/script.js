@@ -8,8 +8,9 @@ $(document).on('click', 'a', function (e) {
     }
 });
 
+var tm = new TracerManager();
+
 var $module_container = $('.module_container');
-var _tracer = new Tracer();
 var initEditor = function (id) {
     var editor = ace.edit(id);
     editor.setTheme("ace/theme/tomorrow_night_eighties");
@@ -24,12 +25,14 @@ dataEditor.on('change', function () {
     var data = dataEditor.getValue();
     if (lastDir) cachedFile[lastDir].data = data;
     try {
+        tm.deallocateAll();
         eval(data);
-        lastModule = tracer && tracer.module;
-        _tracer = tracer;
     } catch (err) {
+        console.error(err);
+    } finally {
+        tm.command('reset');
+        tm.removeUnallocated();
     }
-    _tracer.reset();
 });
 codeEditor.on('change', function () {
     var code = codeEditor.getValue();
@@ -40,7 +43,6 @@ var cachedFile = {};
 var loading = false;
 var loadFile = function (category, algorithm, file, explanation) {
     if (checkLoading()) return;
-    lastData = null;
     $('#explanation').html(explanation);
 
     var dir = lastDir = './algorithm/' + category + '/' + algorithm + '/' + file + '/';
@@ -178,7 +180,7 @@ $('#navigation').click(function () {
         $sidemenu.css('right', 0);
         $workspace.css('left', 0);
     }
-    _tracer.resize();
+    tm.command('resize');
 });
 
 var showErrorToast = function (err) {
@@ -193,31 +195,32 @@ var showErrorToast = function (err) {
 
 $('#btn_run').click(function () {
     try {
+        tm.deallocateAll();
         eval(dataEditor.getValue());
-        lastModule = tracer && tracer.module;
-        _tracer = tracer;
-        _tracer.reset();
+        tm.command('reset');
         eval(codeEditor.getValue());
-        _tracer.visualize();
+        tm.command('visualize');
     } catch (err) {
         console.error(err);
         showErrorToast(err);
+    } finally {
+        tm.removeUnallocated();
     }
 });
 $('#btn_pause').click(function () {
-    if (_tracer.isPause()) {
-        _tracer.resumeStep();
+    if (tm.isPause()) {
+        tm.command('resumeStep');
     } else {
-        _tracer.pauseStep();
+        tm.command('pauseStep');
     }
 });
 $('#btn_prev').click(function () {
-    _tracer.pauseStep();
-    _tracer.prevStep();
+    tm.command('pauseStep');
+    tm.command('prevStep');
 });
 $('#btn_next').click(function () {
-    _tracer.pauseStep();
-    _tracer.nextStep();
+    tm.command('pauseStep');
+    tm.command('nextStep');
 });
 
 $('#btn_desc').click(function () {
@@ -233,7 +236,9 @@ $('#btn_trace').click(function () {
     $(this).addClass('active');
 });
 
-$(window).resize(_tracer.resize);
+$(window).resize(function () {
+    tm.command('resize');
+});
 
 var dividers = [
     ['v', $('.sidemenu'), $('.workspace')],
@@ -251,6 +256,7 @@ for (var i = 0; i < dividers.length; i++) {
         var thickness = 5;
 
         var $divider = $('<div class="divider">');
+        var dragging = false;
         if (vertical) {
             $divider.addClass('vertical');
             var _left = -thickness / 2;
@@ -260,7 +266,7 @@ for (var i = 0; i < dividers.length; i++) {
                 left: _left,
                 width: thickness
             });
-            var x, dragging = false;
+            var x;
             $divider.mousedown(function (e) {
                 x = e.pageX;
                 dragging = true;
@@ -273,7 +279,7 @@ for (var i = 0; i < dividers.length; i++) {
                     $first.css('right', (100 - percent) + '%');
                     $second.css('left', percent + '%');
                     x = e.pageX;
-                    _tracer.resize();
+                    tm.command('resize');
                 }
             });
             $(document).mouseup(function (e) {
@@ -288,7 +294,7 @@ for (var i = 0; i < dividers.length; i++) {
                 left: 0,
                 right: 0
             });
-            var y, dragging = false;
+            var y;
             $divider.mousedown(function (e) {
                 y = e.pageY;
                 dragging = true;
@@ -301,7 +307,7 @@ for (var i = 0; i < dividers.length; i++) {
                     $first.css('bottom', (100 - percent) + '%');
                     $second.css('top', percent + '%');
                     y = e.pageY;
-                    _tracer.resize();
+                    tm.command('resize');
                 }
             });
             $(document).mouseup(function (e) {
@@ -314,14 +320,14 @@ for (var i = 0; i < dividers.length; i++) {
 }
 
 $module_container.mousedown(function (e) {
-    _tracer.mousedown(e);
+    tm.command('mousedown', e);
 });
 $module_container.mousemove(function (e) {
-    _tracer.mousemove(e);
+    tm.command('mousemove', e);
 });
 $(document).mouseup(function (e) {
-    _tracer.mouseup(e);
+    tm.command('mouseup', e);
 });
 $module_container.bind('DOMMouseScroll mousewheel', function (e) {
-    _tracer.mousewheel(e);
+    tm.command('mousewheel', e);
 });

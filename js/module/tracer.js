@@ -1,18 +1,16 @@
 var timer = null;
-var lastModule = null, lastData = null;
 var stepLimit = 1e6;
 
 var Tracer = function (module) {
     this.module = module || Tracer;
     this.traces = [];
-    this.pause = false;
     this.traceOptions = null;
     this.traceIndex = -1;
     this.stepCnt = 0;
+    this.capsule = tm.allocate(this);
 
-    var moduleChanged = lastModule != module;
-    if (moduleChanged) $module_container.empty();
-    return moduleChanged;
+    $.extend(this, this.capsule);
+    return this.new;
 };
 
 Tracer.prototype = {
@@ -29,8 +27,8 @@ Tracer.prototype = {
     },
     _setData: function (arguments) {
         var data = JSON.stringify(arguments);
-        if (lastModule == this.module && lastData == data) return true;
-        lastData = data;
+        if (!this.new && this.lastData == data) return true;
+        this.capsule.lastData = data;
         return false;
     },
     pushStep: function (step, delay) {
@@ -66,17 +64,14 @@ Tracer.prototype = {
         this.traceIndex = -1;
         this.resumeStep();
     },
-    isPause: function () {
-        return this.pause;
-    },
     pauseStep: function () {
         if (this.traceIndex < 0) return;
-        this.pause = true;
+        tm.pause = true;
         if (timer) clearTimeout(timer);
         $('#btn_pause').addClass('active');
     },
     resumeStep: function () {
-        this.pause = false;
+        tm.pause = false;
         this.step(this.traceIndex + 1);
         $('#btn_pause').removeClass('active');
     },
@@ -112,7 +107,7 @@ Tracer.prototype = {
             this.refresh();
             this.scrollToEnd(Math.min(50, this.traceOptions.interval));
         }
-        if (this.pause) return;
+        if (tm.pause) return;
         timer = setTimeout(function () {
             tracer.step(i + 1, options);
         }, sleepDuration || this.traceOptions.interval);

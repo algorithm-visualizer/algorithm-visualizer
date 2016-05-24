@@ -12,7 +12,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
     constructor: Array2DTracer,
     init: function () {
         $table = $('<div class="mtbl-table">');
-        $module_container.append($table);
+        this.$container.append($table);
     },
     resize: function () {
         Tracer.prototype.resize.call(this);
