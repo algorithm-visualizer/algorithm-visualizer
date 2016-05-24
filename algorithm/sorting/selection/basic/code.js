@@ -5,11 +5,12 @@ for (var i = 0; i < D.length - 1; i++) {
     var minJ = i;
     tracer._select(i);
     for (var j = i + 1; j < D.length; j++) {
+    	tracer._select(j);
         if (D[j] < D[minJ]) {
-            tracer._select(j);
+            tracer._notify(j);
             minJ = j;
-            tracer._deselect(j);
         }
+        tracer._deselect(j);
     }
     if (minJ != i) {
         tracer._print('swap ' + D[i] + ' and ' + D[minJ]);
