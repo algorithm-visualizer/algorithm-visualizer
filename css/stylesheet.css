@@ -102,8 +102,6 @@ button input {
 
 .sidemenu {
     top: 30px;
-    bottom: 0;
-    left: 0;
     right: 85%;
     visibility: hidden;
     overflow: scroll;
@@ -134,45 +132,37 @@ button input {
 }
 
 nav,
-section {
+section,
+.viewer_container,
+.editor_container {
     position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+nav,
+section {
     border: 1px solid rgb(44, 44, 44);
     box-sizing: border-box;
 }
 
-.viewer_container,
-.editor_container {
-    position: absolute;
-}
-
 .viewer_container {
-    top: 0;
-    bottom: 0;
-    left: 0;
     right: 50%;
 }
 
 .editor_container {
-    top: 0;
-    bottom: 0;
     left: 50%;
-    right: 0;
 }
 
 .module_container {
-    top: 0;
-    bottom: 50%;
-    left: 0;
-    right: 0;
     overflow: hidden;
     border: none;
 }
 
 .tab_container {
-    top: 50%;
-    bottom: 30px;
-    left: 0;
-    right: 0;
+    top: 30px;
 }
 
 .tab {
@@ -180,7 +170,7 @@ section {
     width: 100%;
     height: 100%;
     overflow: scroll;
-    display: none;
+    visibility: hidden;
 }
 
 .tab > .wrapper {
@@ -189,7 +179,12 @@ section {
 }
 
 .tab.active {
-    display: block;
+    visibility: visible;
+}
+
+.module_wrapper .wrapper {
+    padding: 16px;
+    box-sizing: border-box;
 }
 
 #tab_desc > .wrapper a {
@@ -197,22 +192,15 @@ section {
 }
 
 .tab_bar {
-    bottom: 0;
-    left: 0;
-    right: 0;
     height: 30px;
 }
 
 .files_bar {
-    left: 0;
-    right: 0;
     height: 30px;
 }
 
 .explanation_container {
     top: 30px;
-    left: 0;
-    right: 0;
     height: 30px;
     background: rgb(44, 44, 44);
     padding: 0 8px;
@@ -224,15 +212,10 @@ section {
 .data_container {
     top: 60px;
     bottom: 60%;
-    left: 0;
-    right: 0;
 }
 
 .code_container {
-    left: 0;
     top: 40%;
-    right: 0;
-    bottom: 0;
 }
 
 pre {

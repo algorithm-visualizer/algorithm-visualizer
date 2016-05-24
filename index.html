@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Tool for visualizing algorithms." />
-    <meta property="og:title" content="Algorithm Visualizer" />
-    <meta property="og:description" content="Tool for visualizing algorithms." />
-    <meta property="og:image" content="img/image.png" />
-    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="Tool for visualizing algorithms."/>
+    <meta property="og:title" content="Algorithm Visualizer"/>
+    <meta property="og:description" content="Tool for visualizing algorithms."/>
+    <meta property="og:image" content="img/image.png"/>
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon"/>
     <title>Algorithm Visualizer</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
     <link rel="stylesheet" href="css/font-awesome.min.css">
@@ -63,7 +63,10 @@
 </section>
 <div class="workspace">
     <div class="viewer_container">
-        <section class="module_container"></section>
+        <section class="tab_bar">
+            <button class="active" id="btn_desc">Description</button>
+            <button id="btn_trace">Trace</button>
+        </section>
         <section class="tab_container">
             <div class="tab active" id="tab_desc">
                 <div class="wrapper">
@@ -83,14 +86,8 @@
                     <ul id="desc_ref"></ul>
                 </div>
             </div>
-            <div class="tab" id="tab_trace">
-                <div class="wrapper">
-                </div>
+            <div class="tab module_container" id="tab_module">
             </div>
-        </section>
-        <section class="tab_bar">
-            <button class="active" id="btn_desc">Description</button>
-            <button id="btn_trace">Trace</button>
         </section>
     </div>
     <div class="editor_container">

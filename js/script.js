@@ -252,7 +252,7 @@ $('#btn_desc').click(function () {
 });
 $('#btn_trace').click(function () {
     $('.tab_container > .tab').removeClass('active');
-    $('#tab_trace').addClass('active');
+    $('#tab_module').addClass('active');
     $('.tab_bar > button').removeClass('active');
     $(this).addClass('active');
 });
