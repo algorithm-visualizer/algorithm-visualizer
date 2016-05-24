@@ -6,7 +6,14 @@
       "bfs": "BFS",
       "dijkstra": "Dijkstra",
       "bellman_ford": "Bellman-Ford",
-      "floyd_warshall": "Floyd-Warshall"
+      "floyd_warshall": "Floyd-Warshall",
+      "topological_sort": "Topological-Sort"
+    }
+  },
+  "mst": {
+    "name": "Minimum Spanning Tree",
+    "list": {
+      "prim": "Prim's Algorithm"
     }
   },
   "search": {
@@ -26,6 +33,12 @@
       "heap" : "Heap Sort"
     }
   },
+  "string": {
+   		"name": "String",
+   		"list": {
+   			"edit_distance": "Edit Distance"
+   		}
+   },
   "etc": {
     "name": "Uncategorized",
     "list": {
