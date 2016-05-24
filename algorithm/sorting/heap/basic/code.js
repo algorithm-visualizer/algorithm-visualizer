@@ -53,6 +53,6 @@ function heapify(array, size, root) {
 tracer._sleep(1000);
 tracer._pace(800);
 
-heapSort(D, 10);
+heapSort(D, D.length);
 
 tracer._print('Final array = [' + D.join(', ') + ']');
