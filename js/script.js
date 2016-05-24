@@ -263,7 +263,6 @@ $(window).resize(function () {
 var dividers = [
     ['v', $('.sidemenu'), $('.workspace')],
     ['v', $('.viewer_container'), $('.editor_container')],
-    ['h', $('.module_container'), $('.tab_container')],
     ['h', $('.data_container'), $('.code_container')]
 ];
 for (var i = 0; i < dividers.length; i++) {
