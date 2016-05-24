@@ -57,24 +57,24 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
     },
     _notify: function (x1, y1, x2, y2) {
         var second = x2 !== undefined && y2 !== undefined;
-        this.pushStep({
+        tm.pushStep(this.capsule, {
             type: 'notifying',
             x: x1,
             y: y1,
             value: this.D[x1][y1]
         }, !second);
-        if (second) this.pushStep({
+        if (second) tm.pushStep(this.capsule, {
             type: 'notifying',
             x: x2,
             y: y2,
             value: this.D[x2][y2]
-        }, true);
-        this.pushStep({
+        });
+        tm.pushStep(this.capsule, {
             type: 'notified',
             x: x1,
             y: y1
         }, false);
-        if (second) this.pushStep({
+        if (second) tm.pushStep(this.capsule, {
             type: 'notified',
             x: x2,
             y: y2
@@ -149,7 +149,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
             type: type
         };
         $.extend(step, coord);
-        this.pushStep(step, type == 'select');
+        tm.pushStep(this.capsule, step, type == 'select');
     },
     processStep: function (step, options) {
         var tracer = this;
@@ -197,21 +197,6 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         var left = $parent.width() / 2 - $table.width() / 2 + this.viewX;
         $table.css('margin-top', top);
         $table.css('margin-left', left);
-    },
-    prevStep: function () {
-        this.clear();
-        $('#tab_trace .wrapper').empty();
-        var finalIndex = this.traceIndex - 1;
-        if (finalIndex < 0) {
-            this.traceIndex = -1;
-            return;
-        }
-        for (var i = 0; i < finalIndex; i++) {
-            this.step(i, {
-                virtual: true
-            });
-        }
-        this.step(finalIndex);
     },
     mousedown: function (e) {
         Tracer.prototype.mousedown.call(this, e);

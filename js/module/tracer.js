@@ -1,11 +1,5 @@
-var timer = null;
-var stepLimit = 1e6;
-
 var Tracer = function (module) {
     this.module = module || Tracer;
-    this.traces = [];
-    this.traceIndex = -1;
-    this.stepCnt = 0;
     this.capsule = tm.allocate(this);
 
     $.extend(this, this.capsule);
@@ -13,101 +7,33 @@ var Tracer = function (module) {
 };
 
 Tracer.prototype = {
-    resize: function () {
-    },
-    clear: function () {
-    },
-    reset: function () {
-        this.traces = [];
-        this.stepCnt = 0;
-        if (timer) clearTimeout(timer);
-        $('#tab_trace .wrapper').empty();
-        this.clear();
-    },
     _setData: function (arguments) {
         var data = JSON.stringify(arguments);
         if (!this.new && this.lastData == data) return true;
         this.capsule.lastData = data;
         return false;
     },
-    pushStep: function (step, delay) {
-        if (this.stepCnt++ > stepLimit) throw "Tracer's stack overflow";
-        var len = this.traces.length;
-        var last = [];
-        if (len == 0) {
-            this.traces.push(last);
-        } else {
-            last = this.traces[len - 1];
-        }
-        last.push(step);
-        if (delay) this.traces.push([]);
-    },
     _sleep: function (duration) {
-        this.pushStep({type: 'sleep', duration: duration}, true);
-    },
-    _print: function (msg, delay) {
-        this.pushStep({type: 'print', msg: msg}, delay);
+        tm.pushStep(this.capsule, {type: 'sleep', duration: duration});
     },
     _clear: function () {
-        this.pushStep({type: 'clear'}, true);
+        tm.pushStep(this.capsule, {type: 'clear'});
     },
-    visualize: function () {
-        $('#btn_trace').click();
-        this.traceIndex = -1;
-        this.resumeStep();
+    _next: function () {
+        tm.newStep();
     },
-    pauseStep: function () {
-        if (this.traceIndex < 0) return;
-        tm.pause = true;
-        if (timer) clearTimeout(timer);
-        $('#btn_pause').addClass('active');
-    },
-    resumeStep: function () {
-        tm.pause = false;
-        this.step(this.traceIndex + 1);
-        $('#btn_pause').removeClass('active');
-    },
-    step: function (i, options) {
-        var tracer = this;
-
-        if (isNaN(i) || i >= this.traces.length || i < 0) return;
-        options = options || {};
-
-        this.traceIndex = i;
-        var trace = this.traces[i];
-        var sleepDuration = 0;
-        trace.forEach(function (step) {
-            switch (step.type) {
-                case 'sleep':
-                    sleepDuration = step.duration;
-                    break;
-                case 'print':
-                    tracer.printTrace(step.msg);
-                    break;
-                case 'clear':
-                    tracer.clear();
-                    tracer.printTrace('clear traces');
-                    break;
-                default:
-                    tracer.module.prototype.processStep.call(tracer, step, options);
-            }
-        });
-        if (!options.virtual) {
-            this.refresh();
-            this.scrollToEnd(Math.min(50, tm.interval));
+    processStep: function (step, options) {
+        switch (step.type) {
+            case 'clear':
+                this.clear();
+                break;
         }
-        if (tm.pause) return;
-        timer = setTimeout(function () {
-            tracer.step(i + 1, options);
-        }, sleepDuration || tm.interval);
+    },
+    resize: function () {
     },
     refresh: function () {
     },
-    prevStep: function () {
-        this.step(this.traceIndex - 1);
-    },
-    nextStep: function () {
-        this.step(this.traceIndex + 1);
+    clear: function () {
     },
     mousedown: function (e) {
     },
@@ -116,11 +42,5 @@ Tracer.prototype = {
     mouseup: function (e) {
     },
     mousewheel: function (e) {
-    },
-    printTrace: function (message) {
-        $('#tab_trace .wrapper').append($('<span>').append(message + '<br/>'));
-    },
-    scrollToEnd: function (duration) {
-        $('#tab_trace').animate({scrollTop: $('#tab_trace')[0].scrollHeight}, duration);
     }
 };

@@ -1,7 +1,9 @@
+var timer = null;
+var stepLimit = 1e6;
+
 var TracerManager = function () {
     this.pause = false;
     this.capsules = [];
-    this.interval = 500;
 };
 
 TracerManager.prototype = {
@@ -35,6 +37,10 @@ TracerManager.prototype = {
         return selectedCapsule;
     },
     deallocateAll: function () {
+        this.interval = 500;
+        this.traces = [];
+        this.traceIndex = -1;
+        this.stepCnt = 0;
         $.each(this.capsules, function (i, capsule) {
             capsule.allocated = false;
         });
@@ -81,5 +87,87 @@ TracerManager.prototype = {
     },
     setInterval: function (interval) {
         $('#btn_interval input').val(interval);
+    },
+    reset: function () {
+        this.traces = [];
+        this.stepCnt = 0;
+        if (timer) clearTimeout(timer);
+        $('#tab_trace .wrapper').empty();
+        this.command('clear');
+    },
+    pushStep: function (capsule, step) {
+        if (this.stepCnt++ > stepLimit) throw "Tracer's stack overflow";
+        var len = this.traces.length;
+        var last = [];
+        if (len == 0) {
+            this.traces.push(last);
+        } else {
+            last = this.traces[len - 1];
+        }
+        last.push($.extend(step, {capsule: capsule}));
+    },
+    newStep: function(){
+        this.traces.push([]);
+    },
+    pauseStep: function () {
+        if (this.traceIndex < 0) return;
+        this.pause = true;
+        if (timer) clearTimeout(timer);
+        $('#btn_pause').addClass('active');
+    },
+    resumeStep: function () {
+        this.pause = false;
+        this.step(this.traceIndex + 1);
+        $('#btn_pause').removeClass('active');
+    },
+    step: function (i, options) {
+        var tracer = this;
+
+        if (isNaN(i) || i >= this.traces.length || i < 0) return;
+        options = options || {};
+
+        this.traceIndex = i;
+        var trace = this.traces[i];
+        var sleepDuration = 0;
+        trace.forEach(function (step) {
+            if (step.capsule == null) {
+                switch (step.type) {
+                    case 'sleep':
+                        sleepDuration = step.duration;
+                        break;
+                }
+            } else {
+                step.capsule.tracer.processStep(step, options);
+            }
+        });
+        if (!options.virtual) {
+            this.command('refresh');
+        }
+        if (this.pause) return;
+        timer = setTimeout(function () {
+            tracer.step(i + 1, options);
+        }, sleepDuration || this.interval);
+    },
+    prevStep: function () {
+        $('#tab_trace .wrapper').empty();
+        this.command('clear');
+        var finalIndex = this.traceIndex - 1;
+        if (finalIndex < 0) {
+            this.traceIndex = -1;
+            this.refresh();
+            return;
+        }
+        for (var i = 0; i < finalIndex; i++) {
+            this.step(i, {virtual: true});
+        }
+        this.step(finalIndex);
+    },
+    nextStep: function () {
+        this.step(this.traceIndex + 1);
+    },
+    visualize: function () {
+        $('#btn_trace').click();
+        this.traceIndex = -1;
+        this.resumeStep();
     }
 };

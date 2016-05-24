@@ -41,7 +41,7 @@ dataEditor.on('change', function () {
     } catch (err) {
         console.error(err);
     } finally {
-        tm.command('reset');
+        tm.reset();
         tm.removeUnallocated();
     }
 });
@@ -191,7 +191,7 @@ $('#navigation').click(function () {
         $sidemenu.css('right', 0);
         $workspace.css('left', 0);
     }
-    tm.command('resize');
+    tm.resize();
 });
 
 var showErrorToast = function (err) {
@@ -218,9 +218,9 @@ $('#btn_run').click(function () {
     try {
         tm.deallocateAll();
         eval(dataEditor.getValue());
-        tm.command('reset');
+        tm.reset();
         eval(codeEditor.getValue());
-        tm.command('visualize');
+        tm.visualize();
     } catch (err) {
         console.error(err);
         showErrorToast(err);
@@ -230,18 +230,18 @@ $('#btn_run').click(function () {
 });
 $('#btn_pause').click(function () {
     if (tm.isPause()) {
-        tm.command('resumeStep');
+        tm.resumeStep();
     } else {
-        tm.command('pauseStep');
+        tm.pauseStep();
     }
 });
 $('#btn_prev').click(function () {
-    tm.command('pauseStep');
-    tm.command('prevStep');
+    tm.pauseStep();
+    tm.prevStep();
 });
 $('#btn_next').click(function () {
-    tm.command('pauseStep');
-    tm.command('nextStep');
+    tm.pauseStep();
+    tm.nextStep();
 });
 
 $('#btn_desc').click(function () {
@@ -258,7 +258,7 @@ $('#btn_trace').click(function () {
 });
 
 $(window).resize(function () {
-    tm.command('resize');
+    tm.resize();
 });
 
 var dividers = [
@@ -300,7 +300,7 @@ for (var i = 0; i < dividers.length; i++) {
                     $first.css('right', (100 - percent) + '%');
                     $second.css('left', percent + '%');
                     x = e.pageX;
-                    tm.command('resize');
+                    tm.resize();
                 }
             });
             $(document).mouseup(function (e) {
@@ -328,7 +328,7 @@ for (var i = 0; i < dividers.length; i++) {
                     $first.css('bottom', (100 - percent) + '%');
                     $second.css('top', percent + '%');
                     y = e.pageY;
-                    tm.command('resize');
+                    tm.resize();
                 }
             });
             $(document).mouseup(function (e) {

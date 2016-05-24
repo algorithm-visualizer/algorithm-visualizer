@@ -29,11 +29,6 @@ WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGra
             }
         });
     },
-    clear: function () {
-        DirectedGraphTracer.prototype.clear.call(this);
-
-        this.clearWeights();
-    },
     _setData: function (G) {
         if (Tracer.prototype._setData.call(this, arguments)) return true;
 
@@ -82,13 +77,13 @@ WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGra
         return false;
     },
     _weight: function (target, weight, delay) {
-        this.pushStep({type: 'weight', target: target, weight: weight}, delay);
+        tm.pushStep(this.capsule, {type: 'weight', target: target, weight: weight}, delay);
     },
     _visit: function (target, source, weight) {
-        this.pushStep({type: 'visit', target: target, source: source, weight: weight}, true);
+        tm.pushStep(this.capsule, {type: 'visit', target: target, source: source, weight: weight});
     },
     _leave: function (target, source, weight) {
-        this.pushStep({type: 'leave', target: target, source: source, weight: weight}, true);
+        tm.pushStep(this.capsule, {type: 'leave', target: target, source: source, weight: weight});
     },
     processStep: function (step, options) {
         switch (step.type) {
@@ -111,11 +106,15 @@ WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGra
                 }
                 var source = step.source;
                 if (source === undefined) source = '';
-                this.printTrace(visit ? source + ' -> ' + step.target : source + ' <- ' + step.target);
                 break;
             default:
                 DirectedGraphTracer.prototype.processStep.call(this, step, options);
         }
+    },
+    clear: function () {
+        DirectedGraphTracer.prototype.clear.call(this);
+
+        this.clearWeights();
     },
     clearWeights: function () {
         this.graph.nodes().forEach(function (node) {
