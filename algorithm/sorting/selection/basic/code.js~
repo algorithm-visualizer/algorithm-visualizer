@@ -7,7 +7,7 @@ for (var i = 0; i < D.length - 1; i++) {
     for (var j = i + 1; j < D.length; j++) {
     	tracer._select(j);
         if (D[j] < D[minJ]) {
-            tracer._notify(j);
+            tracer.notify(j);
             minJ = j;
         }
         tracer._deselect(j);
