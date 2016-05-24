@@ -355,8 +355,8 @@ $module_container.on('DOMMouseScroll mousewheel', '.module_wrapper', function (e
 
 // Share scratch paper
 
-var getParameterByName = function(name) {
-    url = window.location.href;
+var getParameterByName = function (name) {
+    var url = window.location.href;
     name = name.replace(/[\[\]]/g, "\\$&");
     var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
         results = regex.exec(url);
@@ -365,39 +365,30 @@ var getParameterByName = function(name) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 };
 
-
-$(document).ready(function() {
-    if(/[?&]scratch-paper=/.test(location.search)){
-        var gistID = getParameterByName('scratch-paper');
-        console.log(gistID);
-        loadScratchPaper(gistID);
-    }
-});
-
-var shareScratchPaper = function(){
-    var json = {
-        "data": dataEditor.getValue(),
-        "code": codeEditor.getValue()
-    };
+var shareScratchPaper = function () {
     var gist = {
-        "description": "Shared scratch paper",
-        "public": true,
-        "files": {
-            "scratch-paper.json": {
-                "content": JSON.stringify(json)
-            }
+        'description': 'temp',
+        'public': true,
+        'files': {
+            'code.js': {'content': dataEditor.getValue()},
+            'data.js': {'content': codeEditor.getValue()}
         }
     };
-    $.post("https://api.github.com/gists", JSON.stringify(gist), function(res) {
+    $.post('https://api.github.com/gists', JSON.stringify(gist), function (res) {
         var data = JSON.parse(res);
-        console.log(window.location.origin + "\/?scratch-paper=" + data.id);
+        console.log(location.protocol + '//' + location.host + location.pathname + '?scratch-paper=' + data.id);
     });
 };
 
 var loadScratchPaper = function (gistID) {
-    $.get("https://api.github.com/gists/" + gistID, function(res) {
+    $.get('https://api.github.com/gists/' + gistID, function (res) {
         var data = JSON.parse(res);
-        var content = data.files["scratch-paper.json"].content;
-        console.log(content);
+        console.log(data);
     });
 };
+
+if (/[?&]scratch-paper=/.test(location.search)) {
+    var gistID = getParameterByName('scratch-paper');
+    console.log(gistID);
+    loadScratchPaper(gistID);
+}
