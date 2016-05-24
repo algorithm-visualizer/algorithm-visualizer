@@ -30,7 +30,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         this.fontSize = 16;
 
         if (Tracer.prototype._setData.call(this, arguments)) {
-            $('.mtbl-row').each(function (i) {
+            this.$table.find('.mtbl-row').each(function (i) {
                 $(this).children().each(function (j) {
                     $(this).text(D[i][j]);
                 });
@@ -233,7 +233,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         this.paddingV *= ratio;
         this.paddingH *= ratio;
         this.fontSize *= ratio;
-        $('.mtbl-cell').css(this.getCellCss());
+        this.$table.find('.mtbl-cell').css(this.getCellCss());
         this.refresh();
     },
     paintColor: function (sx, sy, ex, ey, colorClass, addClass) {

@@ -340,15 +340,15 @@ for (var i = 0; i < dividers.length; i++) {
     })(divider);
 }
 
-$module_container.mousedown(function (e) {
-    tm.command('mousedown', e);
+$module_container.on('mousedown', '.module_wrapper', function (e) {
+    tm.findOwner(this).mousedown(e);
 });
-$module_container.mousemove(function (e) {
-    tm.command('mousemove', e);
+$module_container.on('mousemove', '.module_wrapper', function (e) {
+    tm.findOwner(this).mousemove(e);
 });
 $(document).mouseup(function (e) {
     tm.command('mouseup', e);
 });
-$module_container.bind('DOMMouseScroll mousewheel', function (e) {
-    tm.command('mousewheel', e);
+$module_container.on('DOMMouseScroll mousewheel', '.module_wrapper', function (e) {
+    tm.findOwner(this).mousewheel(e);
 });

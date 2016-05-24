@@ -162,5 +162,15 @@ TracerManager.prototype = {
                 capsule.tracer.module.prototype[functionName].apply(capsule.tracer, args);
             }
         });
+    },
+    findOwner: function (container) {
+        var selectedCapsule = null;
+        $.each(this.capsules, function (i, capsule) {
+            if (capsule.$container[0] == container) {
+                selectedCapsule = capsule;
+                return false;
+            }
+        });
+        return selectedCapsule.tracer;
     }
 };
