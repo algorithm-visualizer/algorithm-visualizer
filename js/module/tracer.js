@@ -1,12 +1,19 @@
-var Tracer = function (module) {
+function Tracer(module) {
     this.module = module || Tracer;
     this.capsule = tm.allocate(this);
-
     $.extend(this, this.capsule);
-    return this.new;
-};
+    if (this.new) {
+        Tracer.prototype.init.call(this);
+        return true;
+    }
+    return false;
+}
 
 Tracer.prototype = {
+    constructor: Tracer,
+    init: function () {
+        this.$container.append($('<span class="name">').text(this.name));
+    },
     _setData: function () {
         tm.pushStep(this.capsule, {type: 'setData', arguments: arguments});
     },

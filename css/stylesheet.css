@@ -182,6 +182,13 @@ section {
     visibility: visible;
 }
 
+.module_wrapper .name {
+    position: absolute;
+    padding: 4px;
+    font-size: 14px;
+    background: rgb(44, 44, 44);
+}
+
 .module_wrapper .wrapper {
     padding: 16px;
     box-sizing: border-box;

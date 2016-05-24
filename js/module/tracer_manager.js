@@ -15,6 +15,7 @@ TracerManager.prototype = {
             module: tracer.module,
             tracer: tracer,
             allocated: true,
+            name: null,
             $container: $container,
             new: true
         };
@@ -23,18 +24,25 @@ TracerManager.prototype = {
     },
     allocate: function (newTracer) {
         var selectedCapsule = null;
+        var count = 0;
         $.each(this.capsules, function (i, capsule) {
-            if (!capsule.allocated && capsule.module == newTracer.module) {
-                capsule.tracer = newTracer;
-                capsule.allocated = true;
-                capsule.new = false;
-                selectedCapsule = capsule;
-                return false;
+            if (capsule.module == newTracer.module) {
+                count++;
+                if (!capsule.allocated) {
+                    capsule.tracer = newTracer;
+                    capsule.allocated = true;
+                    capsule.new = false;
+                    selectedCapsule = capsule;
+                    return false;
+                }
             }
         });
         if (selectedCapsule == null) {
+            count++;
             selectedCapsule = this.add(newTracer);
         }
+        console.log(newTracer);
+        selectedCapsule.name = newTracer.constructor.name + count;
         return selectedCapsule;
     },
     deallocateAll: function () {
@@ -58,13 +66,13 @@ TracerManager.prototype = {
     place: function () {
         var capsules = this.capsules;
         $.each(capsules, function (i, capsule) {
-            var width = $module_container.width();
-            var height = $module_container.height() / capsules.length;
+            var width = 100;
+            var height = (100 / capsules.length);
             var top = height * i;
             capsule.$container.css({
-                top: top,
-                width: width,
-                height: height
+                top: top + '%',
+                width: width + '%',
+                height: height + '%'
             });
             capsule.tracer.resize();
         });
