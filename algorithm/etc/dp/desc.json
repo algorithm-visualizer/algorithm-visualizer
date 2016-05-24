@@ -11,6 +11,7 @@
     "fibonacci": "Fibonacci Sequence",
     "sliding_window": "Finding the largest sum of three contiguous number",
     "max_sum_path": "Finding the maximum sum in a path from (0, 0) to (N-1, M-1) when can only move to right or down",
-    "longest_increasing_subsequence": "Find the length of the longest subsequence of a given sequence such that all elements of the subsequence are sorted in increasing order"
+    "longest_increasing_subsequence": "Find the length of the longest subsequence of a given sequence such that all elements of the subsequence are sorted in increasing order",
+    "max_subarray": "Find the sum of the maximum Subarray in the given Array"
   }
 }
