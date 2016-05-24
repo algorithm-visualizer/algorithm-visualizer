@@ -16,8 +16,14 @@ $('#btn_interval input').on('change', function () {
 });
 
 var $module_container = $('.module_container');
+ace.require("ace/ext/language_tools");
 var initEditor = function (id) {
     var editor = ace.edit(id);
+    editor.setOptions({
+        enableBasicAutocompletion: true,
+        enableSnippets: true,
+        enableLiveAutocompletion: true
+    });
     editor.setTheme("ace/theme/tomorrow_night_eighties");
     editor.session.setMode("ace/mode/javascript");
     editor.$blockScrolling = Infinity;
