@@ -1,6 +1,4 @@
-tracer._pace(500);
-
-// Initialize LIS values for all indexes 
+// Initialize LIS values for all indexes
 for( var i = 0; i < 20; i++) {
 	LIS[i] = 1;
 }

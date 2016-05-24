@@ -1,4 +1,3 @@
-tracer._pace (200);
 tracer._print ('Initialized DP Table');
 tracer._print ('Y-Axis (Top to Bottom): ' + str1);
 tracer._print ('X-Axis (Left to Right): ' + str2);

@@ -27,6 +27,5 @@ function prim(){
   tracer._print("The sum of all edges is: " + sum);
 }
 
-tracer._pace(500);
 tracer._print("nodes that belong to minimum spanning tree are: ");
 prim();

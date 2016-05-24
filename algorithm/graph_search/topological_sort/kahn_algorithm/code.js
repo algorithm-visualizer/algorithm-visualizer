@@ -1,4 +1,3 @@
-tracer._pace(100);
 tracer._sleep(1000);
 
 (function topologicalSort () {
