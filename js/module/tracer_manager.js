@@ -4,6 +4,7 @@ var stepLimit = 1e6;
 var TracerManager = function () {
     this.pause = false;
     this.capsules = [];
+    this.interval = 500;
 };
 
 TracerManager.prototype = {
@@ -37,10 +38,7 @@ TracerManager.prototype = {
         return selectedCapsule;
     },
     deallocateAll: function () {
-        this.interval = 500;
-        this.traces = [];
-        this.traceIndex = -1;
-        this.stepCnt = 0;
+        this.reset();
         $.each(this.capsules, function (i, capsule) {
             capsule.allocated = false;
         });
@@ -82,9 +80,9 @@ TracerManager.prototype = {
     },
     reset: function () {
         this.traces = [];
+        this.traceIndex = -1;
         this.stepCnt = 0;
         if (timer) clearTimeout(timer);
-        $('#tab_trace .wrapper').empty();
         this.command('clear');
     },
     pushStep: function (capsule, step) {
@@ -132,12 +130,11 @@ TracerManager.prototype = {
         }, this.interval);
     },
     prevStep: function () {
-        $('#tab_trace .wrapper').empty();
         this.command('clear');
         var finalIndex = this.traceIndex - 1;
         if (finalIndex < 0) {
             this.traceIndex = -1;
-            this.refresh();
+            this.command('refresh');
             return;
         }
         for (var i = 0; i < finalIndex; i++) {

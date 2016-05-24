@@ -19,8 +19,8 @@ UndirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGraphTrac
             }
         });
     },
-    _setData: function (G) {
-        if (Tracer.prototype._setData.call(this, arguments)) return true;
+    setData: function (G) {
+        if (Tracer.prototype.setData.apply(this, arguments)) return true;
 
         this.graph.clear();
         var nodes = [];
