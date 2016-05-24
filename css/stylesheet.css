@@ -219,6 +219,7 @@ section {
     padding: 0 8px;
     line-height: 30px;
     font-size: 12px;
+    overflow-y: auto;
 }
 
 .data_container {
