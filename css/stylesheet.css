@@ -11,23 +11,7 @@ body {
 }
 
 *::-webkit-scrollbar {
-    width: 15px;
-}
-
-*::-webkit-scrollbar-track {
-    background-color: rgb(60, 60, 60);
-}
-
-*::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, .1);
-}
-
-*::-webkit-scrollbar-button {
-    background-color: rgba(0, 0, 0, .3);
-}
-
-*::-webkit-scrollbar-corner {
-    background-color: rgb(60, 60, 60);
+    display: none;
 }
 
 a {

@@ -45,17 +45,6 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
         sigma.plugins.dragNodes(this.s, this.s.renderers[0]);
         this.graph = this.capsule.graph = this.s.graph;
     },
-    resize: function () {
-        Tracer.prototype.resize.call(this);
-
-        this.s.renderers[0].resize();
-        this.refresh();
-    },
-    clear: function () {
-        Tracer.prototype.clear.call(this);
-
-        this.clearGraphColor();
-    },
     _setTreeData: function (G, root) {
         var tracer = this;
 
@@ -144,10 +133,10 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
         return false;
     },
     _visit: function (target, source) {
-        this.pushStep({type: 'visit', target: target, source: source}, true);
+        tm.pushStep(this.capsule, {type: 'visit', target: target, source: source});
     },
     _leave: function (target, source) {
-        this.pushStep({type: 'leave', target: target, source: source}, true);
+        tm.pushStep(this.capsule, {type: 'leave', target: target, source: source});
     },
     processStep: function (step, options) {
         switch (step.type) {
@@ -165,28 +154,24 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
                 }
                 var source = step.source;
                 if (source === undefined) source = '';
-                this.printTrace(visit ? source + ' -> ' + step.target : source + ' <- ' + step.target);
                 break;
         }
+    },
+    resize: function () {
+        Tracer.prototype.resize.call(this);
+
+        this.s.renderers[0].resize();
+        this.refresh();
     },
     refresh: function () {
         Tracer.prototype.refresh.call(this);
 
         this.s.refresh();
     },
-    prevStep: function () {
-        this.clear();
-        $('#tab_trace .wrapper').empty();
-        var finalIndex = this.traceIndex - 1;
-        if (finalIndex < 0) {
-            this.traceIndex = -1;
-            this.refresh();
-            return;
-        }
-        for (var i = 0; i < finalIndex; i++) {
-            this.step(i, {virtual: true});
-        }
-        this.step(finalIndex);
+    clear: function () {
+        Tracer.prototype.clear.call(this);
+
+        this.clearGraphColor();
     },
     color: {
         visited: '#f00',
