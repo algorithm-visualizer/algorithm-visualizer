@@ -8,8 +8,8 @@ function pow(base, expo){
 	}
 	return ans;
 }
-for(var exp = 0; exp < 6;exp ++){
-	tracer._print("Bit "+exp);
+for(var exp = 0; exp < 3;exp ++){
+	tracer._print("Digit: "+exp);
 	for(var i = 0; i < D[0].length; i++){
 		tracer._select(0, i);
 		D[2][ parseInt( D[0][i] / pow(10, exp)  % 10) ] += 1;
