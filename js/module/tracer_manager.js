@@ -60,27 +60,19 @@ TracerManager.prototype = {
     place: function () {
         var capsules = this.capsules;
         $.each(capsules, function (i, capsule) {
-            var width = $module_container.width() / capsules.length;
-            var height = $module_container.height();
-            var left = width * i;
+            var width = $module_container.width();
+            var height = $module_container.height() / capsules.length;
+            var top = height * i;
             capsule.$container.css({
-                top: 0,
-                left: left,
+                top: top,
                 width: width,
                 height: height
             });
             capsule.tracer.resize();
         });
     },
-    command: function () {
-        var args = Array.prototype.slice.call(arguments);
-
-        var functionName = args.shift();
-        $.each(this.capsules, function (i, capsule) {
-            if (capsule.allocated) {
-                capsule.tracer.module.prototype[functionName].apply(capsule.tracer, args);
-            }
-        });
+    resize: function () {
+        this.command('resize');
     },
     isPause: function () {
         return this.pause;
@@ -106,7 +98,7 @@ TracerManager.prototype = {
         }
         last.push($.extend(step, {capsule: capsule}));
     },
-    newStep: function(){
+    newStep: function () {
         this.traces.push([]);
     },
     pauseStep: function () {
@@ -169,5 +161,15 @@ TracerManager.prototype = {
         $('#btn_trace').click();
         this.traceIndex = -1;
         this.resumeStep();
+    },
+    command: function () {
+        var args = Array.prototype.slice.call(arguments);
+
+        var functionName = args.shift();
+        $.each(this.capsules, function (i, capsule) {
+            if (capsule.allocated) {
+                capsule.tracer.module.prototype[functionName].apply(capsule.tracer, args);
+            }
+        });
     }
 };

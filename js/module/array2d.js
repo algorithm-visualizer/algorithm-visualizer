@@ -1,5 +1,3 @@
-var $table = null;
-
 function Array2DTracer(module) {
     if (Tracer.call(this, module || Array2DTracer)) {
         Array2DTracer.prototype.init.call(this);
@@ -11,8 +9,8 @@ function Array2DTracer(module) {
 Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
     constructor: Array2DTracer,
     init: function () {
-        $table = $('<div class="mtbl-table">');
-        this.$container.append($table);
+        this.$table = this.capsule.$table = $('<div class="mtbl-table">');
+        this.$container.append(this.$table);
     },
     resize: function () {
         Tracer.prototype.resize.call(this);
@@ -40,10 +38,10 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
             return true;
         }
 
-        $table.empty();
+        this.$table.empty();
         for (var i = 0; i < D.length; i++) {
             var $row = $('<div class="mtbl-row">');
-            $table.append($row);
+            this.$table.append($row);
             for (var j = 0; j < D[i].length; j++) {
                 var $cell = $('<div class="mtbl-cell">')
                     .css(this.getCellCss())
@@ -156,7 +154,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
 
         switch (step.type) {
             case 'notifying':
-                var $row = $table.find('.mtbl-row').eq(step.x);
+                var $row = this.$table.find('.mtbl-row').eq(step.x);
                 $row.find('.mtbl-cell').eq(step.y).text(step.value);
             case 'notified':
             case 'select':
@@ -192,11 +190,11 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
     refresh: function () {
         Tracer.prototype.refresh.call(this);
 
-        var $parent = $table.parent();
-        var top = $parent.height() / 2 - $table.height() / 2 + this.viewY;
-        var left = $parent.width() / 2 - $table.width() / 2 + this.viewX;
-        $table.css('margin-top', top);
-        $table.css('margin-left', left);
+        var $parent = this.$table.parent();
+        var top = $parent.height() / 2 - this.$table.height() / 2 + this.viewY;
+        var left = $parent.width() / 2 - this.$table.width() / 2 + this.viewX;
+        this.$table.css('margin-top', top);
+        this.$table.css('margin-left', left);
     },
     mousedown: function (e) {
         Tracer.prototype.mousedown.call(this, e);
@@ -240,7 +238,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
     },
     paintColor: function (sx, sy, ex, ey, colorClass, addClass) {
         for (var i = sx; i <= ex; i++) {
-            var $row = $table.find('.mtbl-row').eq(i);
+            var $row = this.$table.find('.mtbl-row').eq(i);
             for (var j = sy; j <= ey; j++) {
                 var $cell = $row.find('.mtbl-cell').eq(j);
                 if (addClass) $cell.addClass(colorClass);
@@ -249,7 +247,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         }
     },
     clearColor: function () {
-        $table.find('.mtbl-cell').removeClass(Object.keys(this.colorClass).join(' '));
+        this.$table.find('.mtbl-cell').removeClass(Object.keys(this.colorClass).join(' '));
     },
     colorClass: {
         selected: 'selected',
