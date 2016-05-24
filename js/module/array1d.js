@@ -4,9 +4,6 @@ function Array1DTracer(module) {
 
 Array1DTracer.prototype = $.extend(true, Object.create(Array2DTracer.prototype), {
     constructor: Array1DTracer,
-    _setData: function (D) {
-        return Array2DTracer.prototype._setData.call(this, [D]);
-    },
     _notify: function (idx1, idx2) {
         if (idx2 === undefined) {
             Array2DTracer.prototype._notify.call(this, 0, idx1);
@@ -47,6 +44,9 @@ Array1DTracer.prototype = $.extend(true, Object.create(Array2DTracer.prototype),
             });
         });
         Array2DTracer.prototype._deselectSet.call(this, coords);
+    },
+    setData: function (D) {
+        return Array2DTracer.prototype.setData.call(this, [D]);
     }
 });
 

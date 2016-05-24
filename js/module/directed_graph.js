@@ -46,6 +46,39 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
         this.graph = this.capsule.graph = this.s.graph;
     },
     _setTreeData: function (G, root) {
+        tm.pushStep(this.capsule, {type: 'setTreeData', arguments: arguments});
+    },
+    _visit: function (target, source) {
+        tm.pushStep(this.capsule, {type: 'visit', target: target, source: source});
+    },
+    _leave: function (target, source) {
+        tm.pushStep(this.capsule, {type: 'leave', target: target, source: source});
+    },
+    processStep: function (step, options) {
+        switch (step.type) {
+            case 'setTreeData':
+                this.setTreeData.apply(this, step.arguments);
+                break;
+            case 'visit':
+            case 'leave':
+                var visit = step.type == 'visit';
+                var targetNode = this.graph.nodes(this.n(step.target));
+                var color = visit ? this.color.visited : this.color.left;
+                targetNode.color = color;
+                if (step.source !== undefined) {
+                    var edgeId = this.e(step.source, step.target);
+                    var edge = this.graph.edges(edgeId);
+                    edge.color = color;
+                    this.graph.dropEdge(edgeId).addEdge(edge);
+                }
+                var source = step.source;
+                if (source === undefined) source = '';
+                break;
+            default:
+                Tracer.prototype.processStep.call(this, step, options);
+        }
+    },
+    setTreeData: function (G, root) {
         var tracer = this;
 
         root = root || 0;
@@ -62,7 +95,7 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
         };
         getDepth(root, 1);
 
-        if (this._setData(G, root)) return true;
+        if (this.setData.apply(this, arguments)) return true;
 
         var place = function (node, x, y) {
             var temp = tracer.graph.nodes(tracer.n(node));
@@ -87,8 +120,8 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
 
         this.refresh();
     },
-    _setData: function (G) {
-        if (Tracer.prototype._setData.call(this, arguments)) return true;
+    setData: function (G) {
+        if (Tracer.prototype.setData.apply(this, arguments)) return true;
 
         this.graph.clear();
         var nodes = [];
@@ -131,31 +164,6 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
         this.refresh();
 
         return false;
-    },
-    _visit: function (target, source) {
-        tm.pushStep(this.capsule, {type: 'visit', target: target, source: source});
-    },
-    _leave: function (target, source) {
-        tm.pushStep(this.capsule, {type: 'leave', target: target, source: source});
-    },
-    processStep: function (step, options) {
-        switch (step.type) {
-            case 'visit':
-            case 'leave':
-                var visit = step.type == 'visit';
-                var targetNode = this.graph.nodes(this.n(step.target));
-                var color = visit ? this.color.visited : this.color.left;
-                targetNode.color = color;
-                if (step.source !== undefined) {
-                    var edgeId = this.e(step.source, step.target);
-                    var edge = this.graph.edges(edgeId);
-                    edge.color = color;
-                    this.graph.dropEdge(edgeId).addEdge(edge);
-                }
-                var source = step.source;
-                if (source === undefined) source = '';
-                break;
-        }
     },
     resize: function () {
         Tracer.prototype.resize.call(this);

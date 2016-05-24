@@ -41,7 +41,7 @@ dataEditor.on('change', function () {
     } catch (err) {
         console.error(err);
     } finally {
-        tm.reset();
+        tm.visualize();
         tm.removeUnallocated();
     }
 });
@@ -218,7 +218,6 @@ $('#btn_run').click(function () {
     try {
         tm.deallocateAll();
         eval(dataEditor.getValue());
-        tm.reset();
         eval(codeEditor.getValue());
         tm.visualize();
     } catch (err) {

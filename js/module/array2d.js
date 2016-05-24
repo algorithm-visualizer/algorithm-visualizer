@@ -12,47 +12,6 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         this.$table = this.capsule.$table = $('<div class="mtbl-table">');
         this.$container.append(this.$table);
     },
-    resize: function () {
-        Tracer.prototype.resize.call(this);
-
-        this.refresh();
-    },
-    clear: function () {
-        Tracer.prototype.clear.call(this);
-
-        this.clearColor();
-    },
-    _setData: function (D) {
-        this.D = D;
-        this.viewX = this.viewY = 0;
-        this.paddingH = 6;
-        this.paddingV = 3;
-        this.fontSize = 16;
-
-        if (Tracer.prototype._setData.call(this, arguments)) {
-            this.$table.find('.mtbl-row').each(function (i) {
-                $(this).children().each(function (j) {
-                    $(this).text(D[i][j]);
-                });
-            });
-            return true;
-        }
-
-        this.$table.empty();
-        for (var i = 0; i < D.length; i++) {
-            var $row = $('<div class="mtbl-row">');
-            this.$table.append($row);
-            for (var j = 0; j < D[i].length; j++) {
-                var $cell = $('<div class="mtbl-cell">')
-                    .css(this.getCellCss())
-                    .text(D[i][j]);
-                $row.append($cell);
-            }
-        }
-        this.resize();
-
-        return false;
-    },
     _notify: function (x1, y1, x2, y2) {
         var second = x2 !== undefined && y2 !== undefined;
         tm.pushStep(this.capsule, {
@@ -179,7 +138,50 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
                     this.paintColor(sx, sy, ex, ey, colorClass, addClass);
                 }
                 break;
+            default:
+                Tracer.prototype.processStep.call(this, step, options);
         }
+    },
+    setData: function (D) {
+        this.D = D;
+        this.viewX = this.viewY = 0;
+        this.paddingH = 6;
+        this.paddingV = 3;
+        this.fontSize = 16;
+
+        if (Tracer.prototype.setData.apply(this, arguments)) {
+            this.$table.find('.mtbl-row').each(function (i) {
+                $(this).children().each(function (j) {
+                    $(this).text(D[i][j]);
+                });
+            });
+            return true;
+        }
+
+        this.$table.empty();
+        for (var i = 0; i < D.length; i++) {
+            var $row = $('<div class="mtbl-row">');
+            this.$table.append($row);
+            for (var j = 0; j < D[i].length; j++) {
+                var $cell = $('<div class="mtbl-cell">')
+                    .css(this.getCellCss())
+                    .text(D[i][j]);
+                $row.append($cell);
+            }
+        }
+        this.resize();
+
+        return false;
+    },
+    resize: function () {
+        Tracer.prototype.resize.call(this);
+
+        this.refresh();
+    },
+    clear: function () {
+        Tracer.prototype.clear.call(this);
+
+        this.clearColor();
     },
     getCellCss: function () {
         return {
