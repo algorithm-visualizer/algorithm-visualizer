@@ -10,6 +10,12 @@
       "topological_sort": "Topological-Sort"
     }
   },
+  "mst": {
+    "name": "Minimum Spanning Tree",
+    "list": {
+      "prim": "Prim's Algorithm"
+    }
+  },
   "search": {
     "name": "Search",
     "list": {
