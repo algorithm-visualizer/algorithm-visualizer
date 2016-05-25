@@ -1,18 +1,16 @@
-function Array1DTracer(module) {
-    return Array2DTracer.call(this, module || Array1DTracer);
+function Array1DTracer() {
+    return Array2DTracer.apply(this, arguments);
 }
 
 Array1DTracer.prototype = $.extend(true, Object.create(Array2DTracer.prototype), {
     constructor: Array1DTracer,
-    _setData: function (D) {
-        return Array2DTracer.prototype._setData.call(this, [D]);
+    _notify: function (idx, v) {
+        Array2DTracer.prototype._notify.call(this, 0, idx, v);
+        return this;
     },
-    _notify: function (idx1, idx2) {
-        if (idx2 === undefined) {
-            Array2DTracer.prototype._notify.call(this, 0, idx1);
-        } else {
-            Array2DTracer.prototype._notify.call(this, 0, idx1, 0, idx2);
-        }
+    _denotify: function (idx) {
+        Array2DTracer.prototype._denotify.call(this, 0, idx);
+        return this;
     },
     _select: function (s, e) {
         if (e === undefined) {
@@ -20,16 +18,7 @@ Array1DTracer.prototype = $.extend(true, Object.create(Array2DTracer.prototype),
         } else {
             Array2DTracer.prototype._selectRow.call(this, 0, s, e);
         }
-    },
-    _selectSet: function (indexes) {
-        var coords = [];
-        indexes.forEach(function (index) {
-            coords.push({
-                x: 0,
-                y: index
-            });
-        });
-        Array2DTracer.prototype._selectSet.call(this, coords);
+        return this;
     },
     _deselect: function (s, e) {
         if (e === undefined) {
@@ -37,16 +26,10 @@ Array1DTracer.prototype = $.extend(true, Object.create(Array2DTracer.prototype),
         } else {
             Array2DTracer.prototype._deselectRow.call(this, 0, s, e);
         }
+        return this;
     },
-    _deselectSet: function (indexes) {
-        var coords = [];
-        indexes.forEach(function (index) {
-            coords.push({
-                x: 0,
-                y: index
-            });
-        });
-        Array2DTracer.prototype._deselectSet.call(this, coords);
+    setData: function (D) {
+        return Array2DTracer.prototype.setData.call(this, [D]);
     }
 });
 

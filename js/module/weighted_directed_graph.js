@@ -1,5 +1,5 @@
-function WeightedDirectedGraphTracer(module) {
-    if (DirectedGraphTracer.call(this, module || WeightedDirectedGraphTracer)) {
+function WeightedDirectedGraphTracer() {
+    if (DirectedGraphTracer.apply(this, arguments)) {
         WeightedDirectedGraphTracer.prototype.init.call(this);
         return true;
     }
@@ -11,33 +11,69 @@ WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGra
     init: function () {
         var tracer = this;
 
-        s.settings({
+        this.s.settings({
             edgeLabelSize: 'proportional',
             defaultEdgeLabelSize: 20,
-            edgeLabelSizePowRatio: 0.8
+            edgeLabelSizePowRatio: 0.8,
+            funcLabelsDef: function (node, context, settings) {
+                tracer.drawNodeWeight(node, context, settings);
+                tracer.drawLabel(node, context, settings);
+            },
+            funcHoversDef: function (node, context, settings) {
+                tracer.drawOnHover(node, context, settings, tracer.drawEdgeWeight);
+            },
+            funcEdgesArrow: function (edge, source, target, context, settings) {
+                var color = tracer.getColor(edge, source, target, settings);
+                tracer.drawArrow(edge, source, target, color, context, settings);
+                tracer.drawEdgeWeight(edge, source, target, color, context, settings);
+            }
         });
-        sigma.canvas.edges.arrow = function (edge, source, target, context, settings) {
-            var color = tracer.getColor(edge, source, target, settings);
-            tracer.drawArrow(edge, source, target, color, context, settings);
-            tracer.drawEdgeWeight(edge, source, target, color, context, settings);
-        };
-        sigma.canvas.hovers.def = function (node, context, settings) {
-            tracer.drawOnHover(node, context, settings, tracer.drawEdgeWeight);
-        };
-        sigma.canvas.labels.def = function (node, context, settings) {
-            tracer.drawNodeWeight(node, context, settings);
-            tracer.drawLabel(node, context, settings);
+    },
+    _weight: function (target, weight) {
+        tm.pushStep(this.capsule, {type: 'weight', target: target, weight: weight});
+        return this;
+    },
+    _visit: function (target, source, weight) {
+        tm.pushStep(this.capsule, {type: 'visit', target: target, source: source, weight: weight});
+        return this;
+    },
+    _leave: function (target, source, weight) {
+        tm.pushStep(this.capsule, {type: 'leave', target: target, source: source, weight: weight});
+        return this;
+    },
+    processStep: function (step, options) {
+        switch (step.type) {
+            case 'weight':
+                var targetNode = this.graph.nodes(this.n(step.target));
+                if (step.weight !== undefined) targetNode.weight = refineNumber(step.weight);
+                break;
+            case 'visit':
+            case 'leave':
+                var visit = step.type == 'visit';
+                var targetNode = this.graph.nodes(this.n(step.target));
+                var color = visit ? this.color.visited : this.color.left;
+                targetNode.color = color;
+                if (step.weight !== undefined) targetNode.weight = refineNumber(step.weight);
+                if (step.source !== undefined) {
+                    var edgeId = this.e(step.source, step.target);
+                    var edge = this.graph.edges(edgeId);
+                    edge.color = color;
+                    this.graph.dropEdge(edgeId).addEdge(edge);
+                }
+                if (this.logTracer) {
+                    var source = step.source;
+                    if (source === undefined) source = '';
+                    this.logTracer.print(visit ? source + ' -> ' + step.target : source + ' <- ' + step.target);
+                }
+                break;
+            default:
+                DirectedGraphTracer.prototype.processStep.call(this, step, options);
         }
     },
-    clear: function () {
-        DirectedGraphTracer.prototype.clear.call(this);
+    setData: function (G) {
+        if (Tracer.prototype.setData.apply(this, arguments)) return true;
 
-        this.clearWeights();
-    },
-    _setData: function (G) {
-        if (Tracer.prototype._setData.call(this, arguments)) return true;
-
-        graph.clear();
+        this.graph.clear();
         var nodes = [];
         var edges = [];
         var unitAngle = 2 * Math.PI / G.length;
@@ -61,17 +97,17 @@ WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGra
                         target: this.n(j),
                         color: this.color.default,
                         size: 1,
-                        weight: G[i][j]
+                        weight: refineNumber(G[i][j])
                     });
                 }
             }
         }
 
-        graph.read({
+        this.graph.read({
             nodes: nodes,
             edges: edges
         });
-        s.camera.goTo({
+        this.s.camera.goTo({
             x: 0,
             y: 0,
             angle: 0,
@@ -81,44 +117,13 @@ WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGra
 
         return false;
     },
-    _weight: function (target, weight, delay) {
-        this.pushStep({type: 'weight', target: target, weight: weight}, delay);
-    },
-    _visit: function (target, source, weight) {
-        this.pushStep({type: 'visit', target: target, source: source, weight: weight}, true);
-    },
-    _leave: function (target, source, weight) {
-        this.pushStep({type: 'leave', target: target, source: source, weight: weight}, true);
-    },
-    processStep: function (step, options) {
-        switch (step.type) {
-            case 'weight':
-                var targetNode = graph.nodes(this.n(step.target));
-                if (step.weight !== undefined) targetNode.weight = step.weight;
-                break;
-            case 'visit':
-            case 'leave':
-                var visit = step.type == 'visit';
-                var targetNode = graph.nodes(this.n(step.target));
-                var color = visit ? this.color.visited : this.color.left;
-                targetNode.color = color;
-                if (step.weight !== undefined) targetNode.weight = step.weight;
-                if (step.source !== undefined) {
-                    var edgeId = this.e(step.source, step.target);
-                    var edge = graph.edges(edgeId);
-                    edge.color = color;
-                    graph.dropEdge(edgeId).addEdge(edge);
-                }
-                var source = step.source;
-                if (source === undefined) source = '';
-                this.printTrace(visit ? source + ' -> ' + step.target : source + ' <- ' + step.target);
-                break;
-            default:
-                DirectedGraphTracer.prototype.processStep.call(this, step, options);
-        }
+    clear: function () {
+        DirectedGraphTracer.prototype.clear.call(this);
+
+        this.clearWeights();
     },
     clearWeights: function () {
-        graph.nodes().forEach(function (node) {
+        this.graph.nodes().forEach(function (node) {
             node.weight = 0;
         });
     },

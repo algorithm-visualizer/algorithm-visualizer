@@ -1,5 +1,5 @@
-function WeightedUndirectedGraphTracer(module) {
-    if (WeightedDirectedGraphTracer.call(this, module || WeightedUndirectedGraphTracer)) {
+function WeightedUndirectedGraphTracer() {
+    if (WeightedDirectedGraphTracer.apply(this, arguments)) {
         WeightedUndirectedGraphTracer.prototype.init.call(this);
         return true;
     }
@@ -11,19 +11,19 @@ WeightedUndirectedGraphTracer.prototype = $.extend(true, Object.create(WeightedD
     init: function () {
         var tracer = this;
 
-        s.settings({
-            defaultEdgeType: 'def'
+        this.s.settings({
+            defaultEdgeType: 'def',
+            funcEdgesDef: function (edge, source, target, context, settings) {
+                var color = tracer.getColor(edge, source, target, settings);
+                tracer.drawEdge(edge, source, target, color, context, settings);
+                tracer.drawEdgeWeight(edge, source, target, color, context, settings);
+            }
         });
-        sigma.canvas.edges.def = function (edge, source, target, context, settings) {
-            var color = tracer.getColor(edge, source, target, settings);
-            tracer.drawEdge(edge, source, target, color, context, settings);
-            tracer.drawEdgeWeight(edge, source, target, color, context, settings);
-        };
     },
-    _setData: function (G) {
-        if (Tracer.prototype._setData.call(this, arguments)) return true;
+    setData: function (G) {
+        if (Tracer.prototype.setData.apply(this, arguments)) return true;
 
-        graph.clear();
+        this.graph.clear();
         var nodes = [];
         var edges = [];
         var unitAngle = 2 * Math.PI / G.length;
@@ -55,11 +55,11 @@ WeightedUndirectedGraphTracer.prototype = $.extend(true, Object.create(WeightedD
             }
         }
 
-        graph.read({
+        this.graph.read({
             nodes: nodes,
             edges: edges
         });
-        s.camera.goTo({
+        this.s.camera.goTo({
             x: 0,
             y: 0,
             angle: 0,
@@ -79,8 +79,6 @@ WeightedUndirectedGraphTracer.prototype = $.extend(true, Object.create(WeightedD
             source = target;
             target = temp;
         }
-        console.log(source);
-        console.log(target);
         WeightedDirectedGraphTracer.prototype.drawEdgeWeight.call(this, edge, source, target, color, context, settings);
     }
 });
