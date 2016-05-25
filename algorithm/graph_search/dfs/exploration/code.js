@@ -11,8 +11,8 @@ function DFSExplore (graph, source) {
 			visited [node] = true;
 			logger._print (node);
 
-			if (prev !== undefined && graph [node] [prev]) { tracer._visit (node, prev)._wait (200); console.log ('tracer ' + prev + ', ' + node); }
-			else { tracer._visit (node)._wait (200); console.log ('tracer ' + node); }
+			if (prev !== undefined && graph [node] [prev]) { tracer._visit (node, prev)._wait (); console.log ('tracer ' + prev + ', ' + node); }
+			else { tracer._visit (node)._wait (); console.log ('tracer ' + node); }
 
 			for (i = 0; i < graph.length; i++) {
 				if (graph [node] [i]) {
