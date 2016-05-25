@@ -130,6 +130,17 @@ var loadAlgorithm = function (category, algorithm) {
         }
 
         $('.files_bar').empty();
+
+        var $nextButton = $('<button>').append ('<b>Next&gt;</b>').addClass ('files_bar_right_button').click (function () {
+        	//scroll forward
+        });
+        $ ('.files_bar').append ($nextButton);
+
+        var $prevButton = $('<button>').append ('<b>&lt;Previous</b>').addClass ('files_bar_left_button').click (function () {
+        	//scroll backward
+        });
+        $ ('.files_bar').append ($prevButton);
+
         var init = false;
         for (var file in files) {
             (function (file, explanation) {
