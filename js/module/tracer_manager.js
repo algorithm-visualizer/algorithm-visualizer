@@ -153,7 +153,6 @@ TracerManager.prototype = {
         this.step(this.traceIndex + 1);
     },
     visualize: function () {
-        $('#btn_trace').click();
         this.traceIndex = -1;
         this.resumeStep();
     },

@@ -12,33 +12,20 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         this.$table = this.capsule.$table = $('<div class="mtbl-table">');
         this.$container.append(this.$table);
     },
-    _notify: function (x1, y1, v1, x2, y2, v2) {
-        var second = x2 !== undefined && y2 !== undefined;
+    _notify: function (x, y, v) {
         tm.pushStep(this.capsule, {
             type: 'notify',
-            x: x1,
-            y: y1,
-            v: v1
-        }, !second);
-        if (second) tm.pushStep(this.capsule, {
-            type: 'notify',
-            x: x2,
-            y: y2,
-            v: v2
+            x: x,
+            y: y,
+            v: v
         });
         return this;
     },
-    _denotify: function (x1, y1, x2, y2) {
-        var second = x2 !== undefined && y2 !== undefined;
+    _denotify: function (x, y) {
         tm.pushStep(this.capsule, {
             type: 'denotify',
-            x: x1,
-            y: y1
-        });
-        if (second) tm.pushStep(this.capsule, {
-            type: 'denotify',
-            x: x2,
-            y: y2
+            x: x,
+            y: y
         });
         return this;
     },
