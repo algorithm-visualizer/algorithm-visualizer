@@ -31,10 +31,10 @@ var initEditor = function (id) {
 };
 var dataEditor = initEditor('data');
 var codeEditor = initEditor('code');
-var lastDir = null;
+var lastFile = null;
 dataEditor.on('change', function () {
     var data = dataEditor.getValue();
-    if (lastDir) cachedFile[lastDir].data = data;
+    if (lastFile) cachedFile[lastFile].data = data;
     try {
         tm.deallocateAll();
         eval(data);
@@ -46,16 +46,28 @@ dataEditor.on('change', function () {
 });
 codeEditor.on('change', function () {
     var code = codeEditor.getValue();
-    if (lastDir) cachedFile[lastDir].code = code;
+    if (lastFile) cachedFile[lastFile].code = code;
 });
 
 var cachedFile = {};
 var loading = false;
+var isScratchPaper = function (category, algorithm) {
+    return category == null && algorithm == 'scratch_paper';
+};
+var getAlgorithmDir = function (category, algorithm) {
+    if (isScratchPaper(category, algorithm)) return './algorithm/scratch_paper/';
+    return './algorithm/' + category + '/' + algorithm + '/';
+};
+var getFileDir = function (category, algorithm, file) {
+    if (isScratchPaper(category, algorithm)) return './algorithm/scratch_paper/';
+    return './algorithm/' + category + '/' + algorithm + '/' + file + '/';
+};
 var loadFile = function (category, algorithm, file, explanation) {
     if (checkLoading()) return;
     $('#explanation').html(explanation);
 
-    var dir = lastDir = './algorithm/' + category + '/' + algorithm + '/' + file + '/';
+    var dir = lastFile = getFileDir(category, algorithm, file);
+
     if (cachedFile[dir] && cachedFile[dir].data !== undefined && cachedFile[dir].code !== undefined) {
         dataEditor.setValue(cachedFile[dir].data, -1);
         codeEditor.setValue(cachedFile[dir].code, -1);
@@ -87,64 +99,85 @@ var checkLoading = function () {
     }
     return false;
 };
-var loadAlgorithm = function (category, algorithm) {
-    if (checkLoading()) return;
-    $('#list > button').removeClass('active');
-    $('[data-category="' + category + '"][data-algorithm="' + algorithm + '"]').addClass('active');
+var showDescription = function (data) {
+    var $container = $('#tab_desc > .wrapper');
+    $container.empty();
+    for (var key in data) {
+        if (key) $container.append($('<h3>').html(key));
+        var value = data[key];
+        if (typeof value === "string") {
+            $container.append($('<p>').html(value));
+        } else if (Array.isArray(value)) {
+            var $ul = $('<ul>');
+            $container.append($ul);
+            value.forEach(function (li) {
+                $ul.append($('<li>').html(li));
+            });
+        } else if (typeof value === "object") {
+            var $ul = $('<ul>');
+            $container.append($ul);
+            for (var prop in value) {
+                $ul.append($('<li>').append($('<strong>').html(prop)).append(' ' + value[prop]));
+            }
+        }
+    }
+};
+var showAlgorithm = function (category, algorithm) {
+    var $menu;
+    var category_name;
+    var algorithm_name;
+    if (isScratchPaper(category, algorithm)) {
+        $menu = $('#scratch-paper');
+        category_name = '';
+        algorithm_name = 'Scratch Paper';
+    } else {
+        $menu = $('[data-category="' + category + '"][data-algorithm="' + algorithm + '"]');
+        category_name = list[category].name;
+        algorithm_name = list[category].list[algorithm];
+    }
+    $('.sidemenu button').removeClass('active');
+    $menu.addClass('active');
     $('#btn_desc').click();
 
-    $('#category').html(list[category].name);
-    $('#algorithm, #desc_title').html(list[category].list[algorithm]);
+    $('#category').html(category_name);
+    $('#algorithm').html(algorithm_name);
     $('#tab_desc > .wrapper').empty();
     $('.files_bar').empty();
     $('#explanation').html('');
-    lastDir = null;
+    lastFile = null;
     dataEditor.setValue('');
     codeEditor.setValue('');
+};
+var showFiles = function (category, algorithm, files) {
+    $('.files_bar').empty();
+    var init = false;
+    for (var file in files) {
+        (function (file, explanation) {
+            var $file = $('<button>').append(file).click(function () {
+                loadFile(category, algorithm, file, explanation);
+                $('.files_bar > button').removeClass('active');
+                $(this).addClass('active');
+            });
+            $('.files_bar').append($file);
+            if (!init) {
+                init = true;
+                $file.click();
+            }
+        })(file, files[file]);
+    }
+};
+var loadAlgorithm = function (category, algorithm) {
+    if (checkLoading()) return;
+    showAlgorithm(category, algorithm);
 
-    var dir = './algorithm/' + category + '/' + algorithm + '/';
+    var dir = getAlgorithmDir(category, algorithm);
+
     $.getJSON(dir + 'desc.json', function (data) {
         var files = data.files;
         delete data.files;
 
-        var $container = $('#tab_desc > .wrapper');
-        $container.empty();
-        for (var key in data) {
-            if (key) $container.append($('<h3>').html(key));
-            var value = data[key];
-            if (typeof value === "string") {
-                $container.append($('<p>').html(value));
-            } else if (Array.isArray(value)) {
-                var $ul = $('<ul>');
-                $container.append($ul);
-                value.forEach(function (li) {
-                    $ul.append($('<li>').html(li));
-                });
-            } else if (typeof value === "object") {
-                var $ul = $('<ul>');
-                $container.append($ul);
-                for (var prop in value) {
-                    $ul.append($('<li>').append($('<strong>').html(prop)).append(' ' + value[prop]));
-                }
-            }
-        }
-
-        $('.files_bar').empty();
-        var init = false;
-        for (var file in files) {
-            (function (file, explanation) {
-                var $file = $('<button>').append(file).click(function () {
-                    loadFile(category, algorithm, file, explanation);
-                    $('.files_bar > button').removeClass('active');
-                    $(this).addClass('active');
-                });
-                $('.files_bar').append($file);
-                if (!init) {
-                    init = true;
-                    $file.click();
-                }
-            })(file, files[file]);
-        }
+        showDescription(data);
+        showFiles(category, algorithm, files);
     });
 };
 var list = {};
@@ -180,6 +213,9 @@ $.getJSON('./algorithm/category.json', function (data) {
 });
 $('#powered-by').click(function () {
     $('#powered-by-list button').toggleClass('collapse');
+});
+$('#scratch-paper').click(function () {
+    loadAlgorithm(null, 'scratch_paper');
 });
 
 var sidemenu_percent;

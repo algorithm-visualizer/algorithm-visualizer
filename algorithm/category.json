@@ -45,8 +45,7 @@
   "etc": {
     "name": "Uncategorized",
     "list": {
-      "dp": "Dynamic Programming",
-      "scratch_paper": "<i class='fa fa-code'></i> Scratch Paper"
+      "dp": "Dynamic Programming"
     }
   }
 }
