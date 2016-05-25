@@ -43,6 +43,7 @@
   "etc": {
     "name": "Uncategorized",
     "list": {
+      "recursion_and_backtracking": "Recursion and Bactracking",
       "dp": "Dynamic Programming",
       "scratch_paper": "<i class='fa fa-code'></i> Scratch Paper"
     }

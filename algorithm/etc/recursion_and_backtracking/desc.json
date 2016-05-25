@@ -1,0 +1,15 @@
+{
+	"Recursion": "Recursion in computer science is a method where the solution to a problem depends on solutions to smaller instances of the same problem (as opposed to iteration).",
+	"Bactracking": "Backtracking is a general algorithm for finding all (or some) solutions to some computational problems, notably constraint satisfaction problems, that incrementally builds candidates to the solutions, and abandons each partial candidate c (backtracks) as soon as it determines that c cannot possibly be completed to a valid solution.",
+	"Complexity": {
+		"time": "varies",
+		"space": "varies"
+	},
+	"References": [
+		"<a href='https://en.wikipedia.org/wiki/Recursion_(computer_science)'>Recursion-Wikipedia</a>",
+		"<a href='https://en.wikipedia.org/wiki/Backtracking'>Backtracking-Wikipedia</a>"
+	],
+	"files": {
+		"string_permutations": "Given a string of length n find all the n! permutations of the string"
+	}
+}
