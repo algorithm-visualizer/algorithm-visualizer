@@ -19,6 +19,9 @@ Tracer.prototype = {
         tm.pushStep(this.capsule, {type: 'setData', args: toJSON(args)});
         return this;
     },
+    _setName: function(name) {
+        this.$container.find($('span.name')).text(name);
+    },
     _clear: function () {
         tm.pushStep(this.capsule, {type: 'clear'});
         return this;
