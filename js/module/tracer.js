@@ -1,5 +1,5 @@
-function Tracer(module) {
-    this.module = module || Tracer;
+function Tracer() {
+    this.module = this.constructor;
     this.capsule = tm.allocate(this);
     $.extend(this, this.capsule);
     if (this.new) {

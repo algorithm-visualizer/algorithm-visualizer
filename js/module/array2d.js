@@ -1,5 +1,5 @@
 function Array2DTracer(module) {
-    if (Tracer.call(this, module || Array2DTracer)) {
+    if (Tracer.call(this)) {
         Array2DTracer.prototype.init.call(this);
         return true;
     }
