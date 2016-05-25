@@ -23,7 +23,7 @@ Tracer.prototype = {
         tm.pushStep(this.capsule, {type: 'clear'});
         return this;
     },
-    _next: function () {
+    _wait: function () {
         tm.newStep();
         return this;
     },
