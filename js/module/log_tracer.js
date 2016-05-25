@@ -12,8 +12,8 @@ LogTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         this.$wrapper = this.capsule.$wrapper = $('<div class="wrapper">');
         this.$container.append(this.$wrapper);
     },
-    _print: function (msg, delay) {
-        tm.pushStep(this.capsule, {type: 'print', msg: msg}, delay);
+    _print: function (msg) {
+        tm.pushStep(this.capsule, {type: 'print', msg: msg});
         return this;
     },
     processStep: function (step, options) {

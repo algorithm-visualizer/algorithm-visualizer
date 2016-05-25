@@ -14,7 +14,7 @@ Tracer.prototype = {
     init: function () {
         this.$container.append($('<span class="name">').text(this.name));
     },
-    _setData: function (a) {
+    _setData: function () {
         var args = Array.prototype.slice.call(arguments);
         tm.pushStep(this.capsule, {type: 'setData', args: toJSON(args)});
         return this;

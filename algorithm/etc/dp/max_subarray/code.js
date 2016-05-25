@@ -1,29 +1,30 @@
-var maxSubarraySum = (function maxSubarray (array) {
-	var maxSoFar = 0,
-		maxEndingHere = 0;
+var maxSubarraySum = (function maxSubarray(array) {
+    var maxSoFar = 0,
+        maxEndingHere = 0;
 
-	tracer._print ('Initializing maxSoFar = 0 & maxEndingHere = 0');
+    logger._print('Initializing maxSoFar = 0 & maxEndingHere = 0');
 
-	for (var i = 0; i < array.length; i++) {
-		tracer._select (i);
-		tracer._print (maxEndingHere + ' + ' + array [i]);
-		maxEndingHere += array [i];
-		tracer._print ('=> ' + maxEndingHere);
+    for (var i = 0; i < array.length; i++) {
+        tracer._select(i);
+        logger._print(maxEndingHere + ' + ' + array[i]);
+        maxEndingHere += array[i];
+        logger._print('=> ' + maxEndingHere);
 
-		if (maxEndingHere < 0) {
-			tracer._print ('maxEndingHere is negative, set to 0');
-			maxEndingHere = 0;
-		}
+        if (maxEndingHere < 0) {
+            logger._print('maxEndingHere is negative, set to 0');
+            maxEndingHere = 0;
+        }
 
-		if (maxSoFar < maxEndingHere) {
-			tracer._print ('maxSoFar < maxEndingHere, setting maxSoFar to maxEndingHere (' + maxEndingHere + ')');
-			maxSoFar = maxEndingHere;
-		}
-		
-		tracer._deselect (i);
-	}
+        if (maxSoFar < maxEndingHere) {
+            logger._print('maxSoFar < maxEndingHere, setting maxSoFar to maxEndingHere (' + maxEndingHere + ')');
+            maxSoFar = maxEndingHere;
+        }
 
-	return maxSoFar;
-}) (D);
+        tracer._wait();
+        tracer._deselect(i);
+    }
 
-tracer._print ('Maximum Subarray\'s Sum is: ' + maxSubarraySum);
+    return maxSoFar;
+})(D);
+
+logger._print('Maximum Subarray\'s Sum is: ' + maxSubarraySum);
