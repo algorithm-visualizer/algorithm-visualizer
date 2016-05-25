@@ -1,5 +1,5 @@
 function Array1DTracer(module) {
-    return Array2DTracer.call(this, module || Array1DTracer);
+    return Array2DTracer.call(this);
 }
 
 Array1DTracer.prototype = $.extend(true, Object.create(Array2DTracer.prototype), {

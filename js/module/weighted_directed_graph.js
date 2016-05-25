@@ -1,5 +1,5 @@
 function WeightedDirectedGraphTracer(module) {
-    if (DirectedGraphTracer.call(this, module || WeightedDirectedGraphTracer)) {
+    if (DirectedGraphTracer.call(this)) {
         WeightedDirectedGraphTracer.prototype.init.call(this);
         return true;
     }

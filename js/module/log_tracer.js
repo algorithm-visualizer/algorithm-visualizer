@@ -1,5 +1,5 @@
 function LogTracer(module) {
-    if (Tracer.call(this, module || LogTracer)) {
+    if (Tracer.call(this)) {
         LogTracer.prototype.init.call(this);
         return true;
     }
