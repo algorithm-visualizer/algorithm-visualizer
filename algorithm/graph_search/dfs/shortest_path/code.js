@@ -1,15 +1,15 @@
 function DFS(node, parent, weight) { // node = current node, parent = previous node
     if (minWeight < weight) return;
     if (node == e) {
-        tracer._next()._visit(node, parent, weight);
-        tracer._next()._leave(node, parent, 0);
+        tracer._visit(node, parent, weight)._wait();
+        tracer._leave(node, parent, 0)._wait();
         if (minWeight > weight) {
             minWeight = weight;
         }
         return;
     }
     D[node] = true; // label current node as discovered
-    tracer._next()._visit(node, parent, weight);
+    tracer._visit(node, parent, weight)._wait();
     for (var i = 0; i < G[node].length; i++) {
         if (G[node][i]) { // if the path from current node to the i-th node exists
             if (!D[i]) { // if the i-th node is not labeled as discovered
@@ -18,7 +18,7 @@ function DFS(node, parent, weight) { // node = current node, parent = previous n
         }
     }
     D[node] = false; // label current node as undiscovered
-    tracer._next()._leave(node, parent, 0);
+    tracer._leave(node, parent, 0)._wait();
 }
 var s = Math.random() * G.length | 0; // s = start node
 var e; // e = end node

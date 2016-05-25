@@ -2,8 +2,8 @@ var N = DP.length;
 var M = DP[0].length;
 function update(i, j, value) {
     DP[i][j] = value;
-    dataViewer._select(i, j)._next();
-    tracer._notify(i, j, DP[i][j])._next();
+    dataViewer._select(i, j)._wait();
+    tracer._notify(i, j, DP[i][j])._wait();
     tracer._denotify(i, j);
     dataViewer._deselect(i, j);
 }

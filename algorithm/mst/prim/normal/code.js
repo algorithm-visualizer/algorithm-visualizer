@@ -10,7 +10,7 @@ function prim() {
             if (D[i]) // First node in an edge must be visited
                 for (var j = 0; j < G.length; j++)
                     if (!D[j] && G[i][j]) {
-                        tracer._next()._visit(i, j);
+                        tracer._visit(i, j)._wait();
                         // Second node must not be visited and must be connected to first node
                         if (G[i][j] < minD) {
                             // Searching for cheapest edge which satisfies requirements
@@ -18,9 +18,9 @@ function prim() {
                             minI = i;
                             minJ = j;
                         }
-                        tracer._next()._leave(i, j);
+                        tracer._leave(i, j)._wait();
                     }
-        tracer._next()._visit(minI, minJ);
+        tracer._visit(minI, minJ)._wait();
         D[minJ] = 1; // Visit second node and insert it into or tree
         sum += G[minI][minJ];
     }

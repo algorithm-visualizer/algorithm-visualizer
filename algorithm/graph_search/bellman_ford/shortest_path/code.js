@@ -20,14 +20,14 @@ function BELLMAN_FORD(src, dest) {
         for (var currentNode = 0; currentNode < G.length; currentNode++) {
             for (var currentNodeNeighbor = 0; currentNodeNeighbor <= G.length; currentNodeNeighbor++) {
                 if (G [currentNode] [currentNodeNeighbor]) {	//proceed to relax Edges only if a particular weight != 0 (0 represents no edge)
-                    logger._next()._print('Exploring edge from ' + currentNode + ' to ' + currentNodeNeighbor + ', weight = ' + G [currentNode] [currentNodeNeighbor]);
+                    logger._print('Exploring edge from ' + currentNode + ' to ' + currentNodeNeighbor + ', weight = ' + G [currentNode] [currentNodeNeighbor]);
 
                     if (weights [currentNodeNeighbor] > (weights [currentNode] + G [currentNode] [currentNodeNeighbor])) {
                         weights [currentNodeNeighbor] = weights [currentNode] + G [currentNode] [currentNodeNeighbor];
                         logger._print('weights [' + currentNodeNeighbor + '] = weights [' + currentNode + '] + ' + G [currentNode] [currentNodeNeighbor]);
                     }
-                    tracer._visit(currentNodeNeighbor, currentNode, weights [currentNodeNeighbor]);
-                    tracer._next()._leave(currentNodeNeighbor, currentNode);
+                    tracer._visit(currentNodeNeighbor, currentNode, weights [currentNodeNeighbor])._wait();
+                    tracer._leave(currentNodeNeighbor, currentNode)._wait();
                 }
             }
         }

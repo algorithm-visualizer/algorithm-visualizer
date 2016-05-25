@@ -7,9 +7,9 @@ function BinarySearch(array, element, minIndex, maxIndex) { // array = sorted ar
     var middleIndex = Math.floor((minIndex + maxIndex) / 2);
     var testElement = array[middleIndex];
 
-    tracer._select(minIndex, maxIndex)._next();
+    tracer._select(minIndex, maxIndex)._wait();
     tracer._notify(middleIndex);
-    logger._print('Searching at index: ' + middleIndex)._next();
+    logger._print('Searching at index: ' + middleIndex)._wait();
     tracer._denotify(middleIndex);
     tracer._deselect(minIndex, maxIndex);
 

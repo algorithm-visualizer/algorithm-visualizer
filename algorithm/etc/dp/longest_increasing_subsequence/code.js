@@ -9,7 +9,7 @@ for (var i = 1; i < 10; i++) {
     tracer._select(i);
     logger._print(' LIS[' + i + '] = ' + LIS[i]);
     for (var j = 0; j < i; j++) {
-        tracer._notify(j)._next();
+        tracer._notify(j)._wait();
         tracer._denotify(j);
         if (A[i] > A[j] && LIS[i] < LIS[j] + 1) {
             LIS[i] = LIS[j] + 1;

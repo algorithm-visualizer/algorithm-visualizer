@@ -8,7 +8,7 @@ function BFS() {
     }
     W[s] = 0;
     Q.push(s); // add start node to queue
-    tracer._visit(s, undefined, 0);
+    tracer._visit(s, undefined, 0)._wait();
     while (Q.length > 0) {
         var node = Q.shift(); // dequeue
         for (i = 0; i < G[node].length; i++) {
@@ -16,7 +16,7 @@ function BFS() {
                 if (W[i] > W[node] + G[node][i]) { // if current path is shorter than the previously shortest path
                     W[i] = W[node] + G[node][i]; // update the length of the shortest path
                     Q.push(i); // add child node to queue
-                    tracer._next()._visit(i, node, W[i]);
+                    tracer._visit(i, node, W[i])._wait();
                 }
             }
         }

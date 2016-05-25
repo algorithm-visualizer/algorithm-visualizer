@@ -24,12 +24,12 @@ mergeSort.merge = function (start, middle, end) {
         if (i < leftSize) {
             left.push(D[start + i]);
             tracer._select(start + i);
-            logger._print('insert value into left array[' + i + '] = ' + D[start + i])._next();
+            logger._print('insert value into left array[' + i + '] = ' + D[start + i])._wait();
         }
         if (i < rightSize) {
             right.push(D[middle + i]);
             tracer._select(middle + i);
-            logger._print('insert value into right array[' + i + '] = ' + D[middle + i])._next();
+            logger._print('insert value into right array[' + i + '] = ' + D[middle + i])._wait();
         }
     }
     logger._print('left array = [' + left.join(', ') + '], ' + 'right array = [' + right.join(', ') + ']');
@@ -53,7 +53,7 @@ mergeSort.merge = function (start, middle, end) {
         }
 
         tracer._deselect(start + i);
-        tracer._notify(start + i, D[start + i])._next();
+        tracer._notify(start + i, D[start + i])._wait();
         tracer._denotify(start + i);
         i++;
     }

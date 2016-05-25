@@ -13,9 +13,9 @@ function heapSort(array, size) {
         array[j] = temp;
         
         tracer._notify(0, array[0])._notify(j, array[j]);
-        logger._print('Swapping elements : ' + array[0] + ' & ' + array[j])._next();
+        logger._print('Swapping elements : ' + array[0] + ' & ' + array[j])._wait();
         tracer._denotify(0)._denotify(j);
-        tracer._select(j)._next();
+        tracer._select(j)._wait();
 
         heapify(array, j, 0);
 
@@ -44,7 +44,7 @@ function heapify(array, size, root) {
         array[largest] = temp;
 
         tracer._notify(root, array[root])._notify(largest, array[largest]);
-        logger._print('Swapping elements : ' + array[root] + ' & ' + array[largest])._next();
+        logger._print('Swapping elements : ' + array[root] + ' & ' + array[largest])._wait();
         tracer._denotify(root)._denotify(largest);
 
         heapify(array, size, largest);

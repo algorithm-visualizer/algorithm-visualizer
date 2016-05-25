@@ -3,19 +3,19 @@ function FloydWarshall() {
     var S = new Array(G.length);
     for (var i = 0; i < G.length; i++) S[i] = new Array(G.length)
     for (i = 0; i < G.length; i++) {
-        tracer._next()._visit(i)
+        tracer._visit(i)._wait();
         for (var j = 0; j < G.length; j++) {
             // Distance to self is always 0
             if (i == j) S[i][i] = 0;
             // Distance between connected nodes is their weight
             else if (G[i][j] > 0) {
                 S[i][j] = G[i][j];
-                tracer._next()._visit(j, i, S[i][j]);
-                tracer._next()._leave(j, i, S[i][j]);
+                tracer._visit(j, i, S[i][j])._wait();
+                tracer._leave(j, i, S[i][j])._wait();
             }// Else we don't know the distance and we set it to infinity
             else S[i][j] = MAX_VALUE;
         }
-        tracer._next()._leave(i)
+        tracer._leave(i)._wait();
     }
     // If there is a shorter path using k, use it instead
     for (var k = 0; k < G.length; k++)

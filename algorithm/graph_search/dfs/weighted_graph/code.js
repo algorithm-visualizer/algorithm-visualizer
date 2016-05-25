@@ -1,6 +1,6 @@
 function DFS(node, parent, weight) { // node = current node, parent = previous node
-    logger._next()._print((parent === undefined ? '' : parent) + ' -> ' + node);
-    tracer._visit(node, parent, weight);
+    logger._print((parent === undefined ? '' : parent) + ' -> ' + node);
+    tracer._visit(node, parent, weight)._wait();
     D[node] = true; // label current node as discovered
     for (var i = 0; i < G[node].length; i++) {
         if (G[node][i]) { // if the edge from current node to the i-th node exists
@@ -10,8 +10,8 @@ function DFS(node, parent, weight) { // node = current node, parent = previous n
         }
     }
     D[node] = false; // label current node as undiscovered
-    logger._next()._print(node + ' <- ' + (parent === undefined ? '' : parent));
-    tracer._leave(node, parent, 0);
+    logger._print(node + ' <- ' + (parent === undefined ? '' : parent));
+    tracer._leave(node, parent, 0)._wait();
 }
 var D; // D[i] indicates whether the i-th node is discovered or not
 for (var i = 0; i < G.length; i++) { // start from every node

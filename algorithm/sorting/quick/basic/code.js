@@ -19,7 +19,7 @@ function partition(low, high) {
             temp = D[i];
             D[i] = D[j];
             D[j] = temp;
-            tracer._notify(i, D[i])._notify(j, D[j])._next();
+            tracer._notify(i, D[i])._notify(j, D[j])._wait();
             tracer._denotify(i)._denotify(j);
             i++;
         }
@@ -27,7 +27,7 @@ function partition(low, high) {
     temp = D[i];
     D[i] = D[high];
     D[high] = temp;
-    tracer._notify(i, D[i])._notify(high, D[high])._next();
+    tracer._notify(i, D[i])._notify(high, D[high])._wait();
     tracer._denotify(i)._denotify(high);
     tracer._deselect(low, high);
     return i;

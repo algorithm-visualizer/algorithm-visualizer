@@ -1,5 +1,4 @@
 function Dijkstra(start, end) {
-    tracer._next();
     var MAX_VALUE = Infinity;
     var minIndex, minDistance;
     var S = []; // S[i] returns the distance from node v to node start
@@ -21,17 +20,17 @@ function Dijkstra(start, end) {
         }
         if (minDistance == MAX_VALUE) break; // If there is no edge from current node, jump out of loop
         D[minIndex] = true;
-        tracer._next()._visit(minIndex);
+        tracer._visit(minIndex)._wait();
         // For every unvisited neighbour of current node, we check
         // whether the path to it is shorter if going over the current node
         for (i = 0; i < G.length; i++) {
             if (G[minIndex][i] && S[i] > S[minIndex] + G[minIndex][i]) {
                 S[i] = S[minIndex] + G[minIndex][i];
-                tracer._next()._visit(i, minIndex, S[i]);
-                tracer._next()._leave(i, minIndex, S[i]);
+                tracer._visit(i, minIndex, S[i])._wait();
+                tracer._leave(i, minIndex, S[i])._wait();
             }
         }
-        tracer._next()._leave(minIndex);
+        tracer._leave(minIndex)._wait();
     }
     if (S[end] == MAX_VALUE) {
         logger._print('there is no path from ' + start + ' to ' + end);
@@ -45,5 +44,5 @@ var e; // e = end node
 do {
     e = Math.random() * G.length | 0;
 } while (s == e);
-logger._print('finding the shortest path from ' + s + ' to ' + e);
+logger._print('finding the shortest path from ' + s + ' to ' + e)._wait();
 Dijkstra(s, e);
