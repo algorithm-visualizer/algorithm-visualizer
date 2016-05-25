@@ -155,7 +155,7 @@ $.getJSON('./algorithm/category.json', function (data) {
         (function (category) {
             var $category = $('<button class="category">').append(list[category].name);
             $category.click(function () {
-                $('[data-category="' + category + '"]').toggleClass('fold');
+                $('[data-category="' + category + '"]').toggleClass('collapse');
             });
             $('#list').append($category);
             var subList = list[category].list;
