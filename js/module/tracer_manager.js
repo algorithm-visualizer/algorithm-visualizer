@@ -15,7 +15,7 @@ TracerManager.prototype = {
             module: tracer.module,
             tracer: tracer,
             allocated: true,
-            name: null,
+            defaultName: null,
             $container: $container,
             new: true
         };
@@ -41,7 +41,7 @@ TracerManager.prototype = {
             count++;
             selectedCapsule = this.add(newTracer);
         }
-        selectedCapsule.name = newTracer.constructor.name + count;
+        selectedCapsule.defaultName = newTracer.constructor.name + ' ' + count;
         return selectedCapsule;
     },
     deallocateAll: function () {

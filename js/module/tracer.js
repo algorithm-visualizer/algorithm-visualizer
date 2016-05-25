@@ -1,19 +1,13 @@
-function Tracer() {
+function Tracer(name) {
     this.module = this.constructor;
     this.capsule = tm.allocate(this);
     $.extend(this, this.capsule);
-    if (this.new) {
-        Tracer.prototype.init.call(this);
-        return true;
-    }
-    return false;
+    this.setName(name);
+    return this.new;
 }
 
 Tracer.prototype = {
     constructor: Tracer,
-    init: function () {
-        this.$container.append($('<span class="name">').text(this.name));
-    },
     _setData: function () {
         var args = Array.prototype.slice.call(arguments);
         tm.pushStep(this.capsule, {type: 'setData', args: toJSON(args)});
@@ -36,6 +30,16 @@ Tracer.prototype = {
                 this.clear();
                 break;
         }
+    },
+    setName: function (name) {
+        var $name;
+        if (this.new) {
+            $name = $('<span class="name">');
+            this.$container.append($name);
+        } else {
+            $name = this.$container.find('span.name');
+        }
+        $name.text(name || this.defaultName);
     },
     setData: function () {
         var data = toJSON(arguments);
