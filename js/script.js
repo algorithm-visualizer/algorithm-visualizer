@@ -178,6 +178,9 @@ $.getJSON('./algorithm/category.json', function (data) {
         })(category);
     }
 });
+$('#powered-by').click(function () {
+    $('#powered-by-list button').toggleClass('collapse');
+});
 
 var sidemenu_percent;
 $('#navigation').click(function () {
