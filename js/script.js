@@ -39,7 +39,6 @@ dataEditor.on('change', function () {
         tm.deallocateAll();
         eval(data);
     } catch (err) {
-        console.error(err);
     } finally {
         tm.visualize();
         tm.removeUnallocated();
@@ -215,6 +214,7 @@ var showInfoToast = function (info) {
 };
 
 $('#btn_run').click(function () {
+    $('#btn_trace').click();
     try {
         tm.deallocateAll();
         eval(dataEditor.getValue());
