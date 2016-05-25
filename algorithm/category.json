@@ -13,7 +13,8 @@
   "mst": {
     "name": "Minimum Spanning Tree",
     "list": {
-      "prim": "Prim's Algorithm"
+      "prim": "Prim's Algorithm",
+      "kruskal": "Kruskal's Algorithm"
     }
   },
   "search": {
