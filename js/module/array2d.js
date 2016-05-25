@@ -12,54 +12,59 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         this.$table = this.capsule.$table = $('<div class="mtbl-table">');
         this.$container.append(this.$table);
     },
-    _notify: function (x1, y1, x2, y2) {
+    _notify: function (x1, y1, v1, x2, y2, v2) {
         var second = x2 !== undefined && y2 !== undefined;
         tm.pushStep(this.capsule, {
-            type: 'notifying',
+            type: 'notify',
             x: x1,
             y: y1,
-            value: this.D[x1][y1]
+            v: v1
         }, !second);
         if (second) tm.pushStep(this.capsule, {
-            type: 'notifying',
+            type: 'notify',
             x: x2,
             y: y2,
-            value: this.D[x2][y2]
+            v: v2
         });
+        return this;
+    },
+    _denotify: function (x1, y1, x2, y2) {
+        var second = x2 !== undefined && y2 !== undefined;
         tm.pushStep(this.capsule, {
-            type: 'notified',
+            type: 'denotify',
             x: x1,
             y: y1
-        }, false);
+        });
         if (second) tm.pushStep(this.capsule, {
-            type: 'notified',
+            type: 'denotify',
             x: x2,
             y: y2
-        }, false);
+        });
+        return this;
     },
     _select: function (sx, sy, ex, ey) {
         this.pushSelectingStep('select', null, arguments);
+        return this;
     },
     _selectRow: function (x, sy, ey) {
         this.pushSelectingStep('select', 'row', arguments);
+        return this;
     },
     _selectCol: function (y, sx, ex) {
         this.pushSelectingStep('select', 'col', arguments);
-    },
-    _selectSet: function (coords) {
-        this.pushSelectingStep('select', 'set', arguments);
+        return this;
     },
     _deselect: function (sx, sy, ex, ey) {
         this.pushSelectingStep('deselect', null, arguments);
+        return this;
     },
     _deselectRow: function (x, sy, ey) {
         this.pushSelectingStep('deselect', 'row', arguments);
+        return this;
     },
     _deselectCol: function (y, sx, ex) {
         this.pushSelectingStep('deselect', 'col', arguments);
-    },
-    _deselectSet: function (coords) {
-        this.pushSelectingStep('deselect', 'set', arguments);
+        return this;
     },
     pushSelectingStep: function () {
         var args = Array.prototype.slice.call(arguments);
@@ -82,11 +87,6 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
                     ex: args[2]
                 };
                 break;
-            case 'set':
-                coord = {
-                    coords: args[0]
-                };
-                break;
             default:
                 if (args[2] === undefined && args[3] === undefined) {
                     coord = {
@@ -106,44 +106,37 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
             type: type
         };
         $.extend(step, coord);
-        tm.pushStep(this.capsule, step, type == 'select');
+        tm.pushStep(this.capsule, step);
     },
     processStep: function (step, options) {
         var tracer = this;
 
         switch (step.type) {
-            case 'notifying':
-                var $row = this.$table.find('.mtbl-row').eq(step.x);
-                $row.find('.mtbl-cell').eq(step.y).text(step.value);
-            case 'notified':
+            case 'notify':
+                if (step.v) {
+                    var $row = this.$table.find('.mtbl-row').eq(step.x);
+                    $row.find('.mtbl-cell').eq(step.y).text(refineNumber(step.v));
+                }
+            case 'denotify':
             case 'select':
             case 'deselect':
-                var colorClass = step.type == 'select' || step.type == 'deselect' ? this.colorClass.selected : this.colorClass.notifying;
-                var addClass = step.type == 'select' || step.type == 'notifying';
-                if (step.coords) {
-                    step.coords.forEach(function (coord) {
-                        var x = coord.x;
-                        var y = coord.y;
-                        tracer.paintColor(x, y, x, y, colorClass, addClass);
-                    });
-                } else {
-                    var sx = step.sx;
-                    var sy = step.sy;
-                    var ex = step.ex;
-                    var ey = step.ey;
-                    if (sx === undefined) sx = step.x;
-                    if (sy === undefined) sy = step.y;
-                    if (ex === undefined) ex = step.x;
-                    if (ey === undefined) ey = step.y;
-                    this.paintColor(sx, sy, ex, ey, colorClass, addClass);
-                }
+                var colorClass = step.type == 'select' || step.type == 'deselect' ? this.colorClass.selected : this.colorClass.notified;
+                var addClass = step.type == 'select' || step.type == 'notify';
+                var sx = step.sx;
+                var sy = step.sy;
+                var ex = step.ex;
+                var ey = step.ey;
+                if (sx === undefined) sx = step.x;
+                if (sy === undefined) sy = step.y;
+                if (ex === undefined) ex = step.x;
+                if (ey === undefined) ey = step.y;
+                this.paintColor(sx, sy, ex, ey, colorClass, addClass);
                 break;
             default:
                 Tracer.prototype.processStep.call(this, step, options);
         }
     },
     setData: function (D) {
-        this.D = D;
         this.viewX = this.viewY = 0;
         this.paddingH = 6;
         this.paddingV = 3;
@@ -152,7 +145,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         if (Tracer.prototype.setData.apply(this, arguments)) {
             this.$table.find('.mtbl-row').each(function (i) {
                 $(this).children().each(function (j) {
-                    $(this).text(D[i][j]);
+                    $(this).text(refineNumber(D[i][j]));
                 });
             });
             return true;
@@ -165,7 +158,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
             for (var j = 0; j < D[i].length; j++) {
                 var $cell = $('<div class="mtbl-cell">')
                     .css(this.getCellCss())
-                    .text(D[i][j]);
+                    .text(refineNumber(D[i][j]));
                 $row.append($cell);
             }
         }
@@ -253,7 +246,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
     },
     colorClass: {
         selected: 'selected',
-        notifying: 'notifying'
+        notified: 'notified'
     }
 });
 

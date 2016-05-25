@@ -31,18 +31,21 @@ WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGra
     },
     _weight: function (target, weight, delay) {
         tm.pushStep(this.capsule, {type: 'weight', target: target, weight: weight}, delay);
+        return this;
     },
     _visit: function (target, source, weight) {
         tm.pushStep(this.capsule, {type: 'visit', target: target, source: source, weight: weight});
+        return this;
     },
     _leave: function (target, source, weight) {
         tm.pushStep(this.capsule, {type: 'leave', target: target, source: source, weight: weight});
+        return this;
     },
     processStep: function (step, options) {
         switch (step.type) {
             case 'weight':
                 var targetNode = this.graph.nodes(this.n(step.target));
-                if (step.weight !== undefined) targetNode.weight = step.weight;
+                if (step.weight !== undefined) targetNode.weight = refineNumber(step.weight);
                 break;
             case 'visit':
             case 'leave':
@@ -50,15 +53,18 @@ WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGra
                 var targetNode = this.graph.nodes(this.n(step.target));
                 var color = visit ? this.color.visited : this.color.left;
                 targetNode.color = color;
-                if (step.weight !== undefined) targetNode.weight = step.weight;
+                if (step.weight !== undefined) targetNode.weight = refineNumber(step.weight);
                 if (step.source !== undefined) {
                     var edgeId = this.e(step.source, step.target);
                     var edge = this.graph.edges(edgeId);
                     edge.color = color;
                     this.graph.dropEdge(edgeId).addEdge(edge);
                 }
-                var source = step.source;
-                if (source === undefined) source = '';
+                if (this.logTracer) {
+                    var source = step.source;
+                    if (source === undefined) source = '';
+                    this.logTracer.print(visit ? source + ' -> ' + step.target : source + ' <- ' + step.target);
+                }
                 break;
             default:
                 DirectedGraphTracer.prototype.processStep.call(this, step, options);
@@ -91,7 +97,7 @@ WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGra
                         target: this.n(j),
                         color: this.color.default,
                         size: 1,
-                        weight: G[i][j]
+                        weight: refineNumber(G[i][j])
                     });
                 }
             }

@@ -41,7 +41,6 @@ TracerManager.prototype = {
             count++;
             selectedCapsule = this.add(newTracer);
         }
-        console.log(newTracer);
         selectedCapsule.name = newTracer.constructor.name + count;
         return selectedCapsule;
     },

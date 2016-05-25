@@ -47,12 +47,15 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
     },
     _setTreeData: function (G, root) {
         tm.pushStep(this.capsule, {type: 'setTreeData', arguments: arguments});
+        return this;
     },
     _visit: function (target, source) {
         tm.pushStep(this.capsule, {type: 'visit', target: target, source: source});
+        return this;
     },
     _leave: function (target, source) {
         tm.pushStep(this.capsule, {type: 'leave', target: target, source: source});
+        return this;
     },
     processStep: function (step, options) {
         switch (step.type) {
@@ -71,8 +74,11 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
                     edge.color = color;
                     this.graph.dropEdge(edgeId).addEdge(edge);
                 }
-                var source = step.source;
-                if (source === undefined) source = '';
+                if (this.logTracer) {
+                    var source = step.source;
+                    if (source === undefined) source = '';
+                    this.logTracer.print(visit ? source + ' -> ' + step.target : source + ' <- ' + step.target);
+                }
                 break;
             default:
                 Tracer.prototype.processStep.call(this, step, options);
