@@ -1,4 +1,4 @@
-tracer._print('Original array = [' + D.join(', ') + ']');
+logger._print('Original array = [' + D.join(', ') + ']');
 
 function heapSort(array, size) {
     var i, j, temp;
@@ -12,11 +12,12 @@ function heapSort(array, size) {
         array[0] = array[j];
         array[j] = temp;
         
-        tracer._notify(0, j);
-        tracer._select(j);
+        tracer._notify(0, array[0])._notify(j, array[j]);
+        logger._print('Swapping elements : ' + array[0] + ' & ' + array[j])._wait();
+        tracer._denotify(0)._denotify(j);
+        tracer._select(j)._wait();
 
         heapify(array, j, 0);
-        tracer._print('Swapping elements : ' + array[0] + ' & ' + array[j]);
 
         tracer._deselect(j);
     }
@@ -42,17 +43,14 @@ function heapify(array, size, root) {
         array[root] = array[largest];
         array[largest] = temp;
 
-        tracer._notify(largest, root);
-
-        tracer._print('Swapping elements : ' + array[root] + ' & ' + array[largest]);
+        tracer._notify(root, array[root])._notify(largest, array[largest]);
+        logger._print('Swapping elements : ' + array[root] + ' & ' + array[largest])._wait();
+        tracer._denotify(root)._denotify(largest);
 
         heapify(array, size, largest);
     }
 }
 
-tracer._sleep(1000);
-tracer._pace(800);
+heapSort(D, D.length);
 
-heapSort(D, 10);
-
-tracer._print('Final array = [' + D.join(', ') + ']');
+logger._print('Final array = [' + D.join(', ') + ']');

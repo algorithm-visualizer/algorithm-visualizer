@@ -24,6 +24,7 @@
     "tree": "Searching a tree",
     "all_paths": "Going through all possible paths without making any circuit",
     "weighted_graph": "DFS of Weighted Graph",
-    "shortest_path": "Finding the shortest path"
+    "shortest_path": "Finding the shortest path",
+    "exploration": "Explore an undirected graph to see if it is connected"
   }
 }

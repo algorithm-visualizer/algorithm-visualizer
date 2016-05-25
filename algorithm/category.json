@@ -7,13 +7,15 @@
       "dijkstra": "Dijkstra",
       "bellman_ford": "Bellman-Ford",
       "floyd_warshall": "Floyd-Warshall",
-      "topological_sort": "Topological-Sort"
+      "topological_sort": "Topological-Sort",
+      "bridges": "Find-Bridges"
     }
   },
   "mst": {
     "name": "Minimum Spanning Tree",
     "list": {
-      "prim": "Prim's Algorithm"
+      "prim": "Prim's Algorithm",
+      "kruskal": "Kruskal's Algorithm"
     }
   },
   "search": {
@@ -30,7 +32,8 @@
       "bubble": "Bubble Sort",
       "quick": "Quicksort",
       "merge": "Mergesort",
-      "heap" : "Heap Sort"
+      "heap" : "Heap Sort",
+      "radix" : "Radix Sort"
     }
   },
   "string": {
@@ -42,8 +45,7 @@
   "etc": {
     "name": "Uncategorized",
     "list": {
-      "dp": "Dynamic Programming",
-      "scratch_paper": "<i class='fa fa-code'></i> Scratch Paper"
+      "dp": "Dynamic Programming"
     }
   }
 }

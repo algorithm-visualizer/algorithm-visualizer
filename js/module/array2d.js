@@ -1,7 +1,5 @@
-var $table = null;
-
-function Array2DTracer(module) {
-    if (Tracer.call(this, module || Array2DTracer)) {
+function Array2DTracer() {
+    if (Tracer.apply(this, arguments)) {
         Array2DTracer.prototype.init.call(this);
         return true;
     }
@@ -11,98 +9,49 @@ function Array2DTracer(module) {
 Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
     constructor: Array2DTracer,
     init: function () {
-        $table = $('<div class="mtbl-table">');
-        $module_container.append($table);
+        this.$table = this.capsule.$table = $('<div class="mtbl-table">');
+        this.$container.append(this.$table);
     },
-    resize: function () {
-        Tracer.prototype.resize.call(this);
-
-        this.refresh();
+    _notify: function (x, y, v) {
+        tm.pushStep(this.capsule, {
+            type: 'notify',
+            x: x,
+            y: y,
+            v: v
+        });
+        return this;
     },
-    clear: function () {
-        Tracer.prototype.clear.call(this);
-
-        this.clearColor();
-    },
-    _setData: function (D) {
-        this.D = D;
-        this.viewX = this.viewY = 0;
-        this.paddingH = 6;
-        this.paddingV = 3;
-        this.fontSize = 16;
-
-        if (Tracer.prototype._setData.call(this, arguments)) {
-            $('.mtbl-row').each(function (i) {
-                $(this).children().each(function (j) {
-                    $(this).text(D[i][j]);
-                });
-            });
-            return true;
-        }
-
-        $table.empty();
-        for (var i = 0; i < D.length; i++) {
-            var $row = $('<div class="mtbl-row">');
-            $table.append($row);
-            for (var j = 0; j < D[i].length; j++) {
-                var $cell = $('<div class="mtbl-cell">')
-                    .css(this.getCellCss())
-                    .text(D[i][j]);
-                $row.append($cell);
-            }
-        }
-        this.resize();
-
-        return false;
-    },
-    _notify: function (x1, y1, x2, y2) {
-        var second = x2 !== undefined && y2 !== undefined;
-        this.pushStep({
-            type: 'notifying',
-            x: x1,
-            y: y1,
-            value: this.D[x1][y1]
-        }, !second);
-        if (second) this.pushStep({
-            type: 'notifying',
-            x: x2,
-            y: y2,
-            value: this.D[x2][y2]
-        }, true);
-        this.pushStep({
-            type: 'notified',
-            x: x1,
-            y: y1
-        }, false);
-        if (second) this.pushStep({
-            type: 'notified',
-            x: x2,
-            y: y2
-        }, false);
+    _denotify: function (x, y) {
+        tm.pushStep(this.capsule, {
+            type: 'denotify',
+            x: x,
+            y: y
+        });
+        return this;
     },
     _select: function (sx, sy, ex, ey) {
         this.pushSelectingStep('select', null, arguments);
+        return this;
     },
     _selectRow: function (x, sy, ey) {
         this.pushSelectingStep('select', 'row', arguments);
+        return this;
     },
     _selectCol: function (y, sx, ex) {
         this.pushSelectingStep('select', 'col', arguments);
-    },
-    _selectSet: function (coords) {
-        this.pushSelectingStep('select', 'set', arguments);
+        return this;
     },
     _deselect: function (sx, sy, ex, ey) {
         this.pushSelectingStep('deselect', null, arguments);
+        return this;
     },
     _deselectRow: function (x, sy, ey) {
         this.pushSelectingStep('deselect', 'row', arguments);
+        return this;
     },
     _deselectCol: function (y, sx, ex) {
         this.pushSelectingStep('deselect', 'col', arguments);
-    },
-    _deselectSet: function (coords) {
-        this.pushSelectingStep('deselect', 'set', arguments);
+        return this;
     },
     pushSelectingStep: function () {
         var args = Array.prototype.slice.call(arguments);
@@ -125,11 +74,6 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
                     ex: args[2]
                 };
                 break;
-            case 'set':
-                coord = {
-                    coords: args[0]
-                };
-                break;
             default:
                 if (args[2] === undefined && args[3] === undefined) {
                     coord = {
@@ -149,39 +93,73 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
             type: type
         };
         $.extend(step, coord);
-        this.pushStep(step, type == 'select');
+        tm.pushStep(this.capsule, step);
     },
     processStep: function (step, options) {
-        var tracer = this;
-
         switch (step.type) {
-            case 'notifying':
-                var $row = $table.find('.mtbl-row').eq(step.x);
-                $row.find('.mtbl-cell').eq(step.y).text(step.value);
-            case 'notified':
+            case 'notify':
+                if (step.v) {
+                    var $row = this.$table.find('.mtbl-row').eq(step.x);
+                    $row.find('.mtbl-cell').eq(step.y).text(refineNumber(step.v));
+                }
+            case 'denotify':
             case 'select':
             case 'deselect':
-                var colorClass = step.type == 'select' || step.type == 'deselect' ? this.colorClass.selected : this.colorClass.notifying;
-                var addClass = step.type == 'select' || step.type == 'notifying';
-                if (step.coords) {
-                    step.coords.forEach(function (coord) {
-                        var x = coord.x;
-                        var y = coord.y;
-                        tracer.paintColor(x, y, x, y, colorClass, addClass);
-                    });
-                } else {
-                    var sx = step.sx;
-                    var sy = step.sy;
-                    var ex = step.ex;
-                    var ey = step.ey;
-                    if (sx === undefined) sx = step.x;
-                    if (sy === undefined) sy = step.y;
-                    if (ex === undefined) ex = step.x;
-                    if (ey === undefined) ey = step.y;
-                    this.paintColor(sx, sy, ex, ey, colorClass, addClass);
-                }
+                var colorClass = step.type == 'select' || step.type == 'deselect' ? this.colorClass.selected : this.colorClass.notified;
+                var addClass = step.type == 'select' || step.type == 'notify';
+                var sx = step.sx;
+                var sy = step.sy;
+                var ex = step.ex;
+                var ey = step.ey;
+                if (sx === undefined) sx = step.x;
+                if (sy === undefined) sy = step.y;
+                if (ex === undefined) ex = step.x;
+                if (ey === undefined) ey = step.y;
+                this.paintColor(sx, sy, ex, ey, colorClass, addClass);
                 break;
+            default:
+                Tracer.prototype.processStep.call(this, step, options);
         }
+    },
+    setData: function (D) {
+        this.viewX = this.viewY = 0;
+        this.paddingH = 6;
+        this.paddingV = 3;
+        this.fontSize = 16;
+
+        if (Tracer.prototype.setData.apply(this, arguments)) {
+            this.$table.find('.mtbl-row').each(function (i) {
+                $(this).children().each(function (j) {
+                    $(this).text(refineNumber(D[i][j]));
+                });
+            });
+            return true;
+        }
+
+        this.$table.empty();
+        for (var i = 0; i < D.length; i++) {
+            var $row = $('<div class="mtbl-row">');
+            this.$table.append($row);
+            for (var j = 0; j < D[i].length; j++) {
+                var $cell = $('<div class="mtbl-cell">')
+                    .css(this.getCellCss())
+                    .text(refineNumber(D[i][j]));
+                $row.append($cell);
+            }
+        }
+        this.resize();
+
+        return false;
+    },
+    resize: function () {
+        Tracer.prototype.resize.call(this);
+
+        this.refresh();
+    },
+    clear: function () {
+        Tracer.prototype.clear.call(this);
+
+        this.clearColor();
     },
     getCellCss: function () {
         return {
@@ -192,26 +170,11 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
     refresh: function () {
         Tracer.prototype.refresh.call(this);
 
-        var $parent = $table.parent();
-        var top = $parent.height() / 2 - $table.height() / 2 + this.viewY;
-        var left = $parent.width() / 2 - $table.width() / 2 + this.viewX;
-        $table.css('margin-top', top);
-        $table.css('margin-left', left);
-    },
-    prevStep: function () {
-        this.clear();
-        $('#tab_trace .wrapper').empty();
-        var finalIndex = this.traceIndex - 1;
-        if (finalIndex < 0) {
-            this.traceIndex = -1;
-            return;
-        }
-        for (var i = 0; i < finalIndex; i++) {
-            this.step(i, {
-                virtual: true
-            });
-        }
-        this.step(finalIndex);
+        var $parent = this.$table.parent();
+        var top = $parent.height() / 2 - this.$table.height() / 2 + this.viewY;
+        var left = $parent.width() / 2 - this.$table.width() / 2 + this.viewX;
+        this.$table.css('margin-top', top);
+        this.$table.css('margin-left', left);
     },
     mousedown: function (e) {
         Tracer.prototype.mousedown.call(this, e);
@@ -250,12 +213,12 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         this.paddingV *= ratio;
         this.paddingH *= ratio;
         this.fontSize *= ratio;
-        $('.mtbl-cell').css(this.getCellCss());
+        this.$table.find('.mtbl-cell').css(this.getCellCss());
         this.refresh();
     },
     paintColor: function (sx, sy, ex, ey, colorClass, addClass) {
         for (var i = sx; i <= ex; i++) {
-            var $row = $table.find('.mtbl-row').eq(i);
+            var $row = this.$table.find('.mtbl-row').eq(i);
             for (var j = sy; j <= ey; j++) {
                 var $cell = $row.find('.mtbl-cell').eq(j);
                 if (addClass) $cell.addClass(colorClass);
@@ -264,11 +227,11 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         }
     },
     clearColor: function () {
-        $table.find('.mtbl-cell').removeClass(Object.keys(this.colorClass).join(' '));
+        this.$table.find('.mtbl-cell').removeClass(Object.keys(this.colorClass).join(' '));
     },
     colorClass: {
         selected: 'selected',
-        notifying: 'notifying'
+        notified: 'notified'
     }
 });
 

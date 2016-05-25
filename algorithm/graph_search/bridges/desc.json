@@ -1,0 +1,16 @@
+{
+  "Bridges": "An edge in an undirected connected graph is a bridge iff removing it disconnects the graph. A naive solution to finding bridges in a graph is to:<br />1.Delete an edge E<br />2.Perform DFS Exploration to check is Graph is connected<br />3.Restore Edge E. E is a bridge only if DFS explore determines that the graph is disconnected without E",
+  "Applications": [
+    "Find vulnerabilities in Graphs and Electrical Circuits"
+  ],
+  "Complexity": {
+    "time": "worst O(|E|.(|V|+|E|))",
+    "space": "worst O(|V|.|E|)"
+  },
+  "References": [
+    "<a href='https://en.wikipedia.org/wiki/Bridge_(graph_theory)'>Wikipedia</a>"
+  ],
+  "files": {
+    "naive": "Find all the bridges in an Undirected Graph"
+  }
+}

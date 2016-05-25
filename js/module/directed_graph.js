@@ -1,7 +1,5 @@
-var s = null, graph = null, sigmaCanvas = null;
-
-function DirectedGraphTracer(module) {
-    if (Tracer.call(this, module || DirectedGraphTracer)) {
+function DirectedGraphTracer() {
+    if (Tracer.apply(this, arguments)) {
         DirectedGraphTracer.prototype.init.call(this);
         return true;
     }
@@ -13,14 +11,9 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
     init: function () {
         var tracer = this;
 
-        if (sigmaCanvas == null) {
-            sigmaCanvas = $.extend(true, {}, sigma.canvas);
-        } else {
-            sigma.canvas = $.extend(true, {}, sigmaCanvas);
-        }
-        s = new sigma({
+        this.s = this.capsule.s = new sigma({
             renderer: {
-                container: $module_container[0],
+                container: this.$container[0],
                 type: 'canvas'
             },
             settings: {
@@ -36,33 +29,62 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
                 minNodeSize: .5,
                 maxNodeSize: 12,
                 labelSize: 'proportional',
-                labelSizeRatio: 1.3
+                labelSizeRatio: 1.3,
+                funcLabelsDef: function (node, context, settings) {
+                    tracer.drawLabel(node, context, settings);
+                },
+                funcHoversDef: function (node, context, settings, next) {
+                    tracer.drawOnHover(node, context, settings, next);
+                },
+                funcEdgesArrow: function (edge, source, target, context, settings) {
+                    var color = tracer.getColor(edge, source, target, settings);
+                    tracer.drawArrow(edge, source, target, color, context, settings);
+                }
             }
         });
-        graph = s.graph;
-        sigma.canvas.labels.def = function (node, context, settings) {
-            tracer.drawLabel(node, context, settings);
-        };
-        sigma.canvas.hovers.def = function (node, context, settings, next) {
-            tracer.drawOnHover(node, context, settings, next);
-        };
-        sigma.canvas.edges.arrow = function (edge, source, target, context, settings) {
-            var color = tracer.getColor(edge, source, target, settings);
-            tracer.drawArrow(edge, source, target, color, context, settings);
-        };
-        sigma.plugins.dragNodes(s, s.renderers[0]);
-    },
-    resize: function () {
-        Tracer.prototype.resize.call(this);
-
-        this.refresh();
-    },
-    clear: function () {
-        Tracer.prototype.clear.call(this);
-
-        this.clearGraphColor();
+        sigma.plugins.dragNodes(this.s, this.s.renderers[0]);
+        this.graph = this.capsule.graph = this.s.graph;
     },
     _setTreeData: function (G, root) {
+        tm.pushStep(this.capsule, {type: 'setTreeData', arguments: arguments});
+        return this;
+    },
+    _visit: function (target, source) {
+        tm.pushStep(this.capsule, {type: 'visit', target: target, source: source});
+        return this;
+    },
+    _leave: function (target, source) {
+        tm.pushStep(this.capsule, {type: 'leave', target: target, source: source});
+        return this;
+    },
+    processStep: function (step, options) {
+        switch (step.type) {
+            case 'setTreeData':
+                this.setTreeData.apply(this, step.arguments);
+                break;
+            case 'visit':
+            case 'leave':
+                var visit = step.type == 'visit';
+                var targetNode = this.graph.nodes(this.n(step.target));
+                var color = visit ? this.color.visited : this.color.left;
+                targetNode.color = color;
+                if (step.source !== undefined) {
+                    var edgeId = this.e(step.source, step.target);
+                    var edge = this.graph.edges(edgeId);
+                    edge.color = color;
+                    this.graph.dropEdge(edgeId).addEdge(edge);
+                }
+                if (this.logTracer) {
+                    var source = step.source;
+                    if (source === undefined) source = '';
+                    this.logTracer.print(visit ? source + ' -> ' + step.target : source + ' <- ' + step.target);
+                }
+                break;
+            default:
+                Tracer.prototype.processStep.call(this, step, options);
+        }
+    },
+    setTreeData: function (G, root) {
         var tracer = this;
 
         root = root || 0;
@@ -79,10 +101,10 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
         };
         getDepth(root, 1);
 
-        if (this._setData(G, root)) return true;
+        if (this.setData.apply(this, arguments)) return true;
 
         var place = function (node, x, y) {
-            var temp = graph.nodes(tracer.n(node));
+            var temp = tracer.graph.nodes(tracer.n(node));
             temp.x = x;
             temp.y = y;
         };
@@ -104,10 +126,10 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
 
         this.refresh();
     },
-    _setData: function (G) {
-        if (Tracer.prototype._setData.call(this, arguments)) return true;
+    setData: function (G) {
+        if (Tracer.prototype.setData.apply(this, arguments)) return true;
 
-        graph.clear();
+        this.graph.clear();
         var nodes = [];
         var edges = [];
         var unitAngle = 2 * Math.PI / G.length;
@@ -135,11 +157,11 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
             }
         }
 
-        graph.read({
+        this.graph.read({
             nodes: nodes,
             edges: edges
         });
-        s.camera.goTo({
+        this.s.camera.goTo({
             x: 0,
             y: 0,
             angle: 0,
@@ -149,50 +171,21 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
 
         return false;
     },
-    _visit: function (target, source) {
-        this.pushStep({type: 'visit', target: target, source: source}, true);
-    },
-    _leave: function (target, source) {
-        this.pushStep({type: 'leave', target: target, source: source}, true);
-    },
-    processStep: function (step, options) {
-        switch (step.type) {
-            case 'visit':
-            case 'leave':
-                var visit = step.type == 'visit';
-                var targetNode = graph.nodes(this.n(step.target));
-                var color = visit ? this.color.visited : this.color.left;
-                targetNode.color = color;
-                if (step.source !== undefined) {
-                    var edgeId = this.e(step.source, step.target);
-                    var edge = graph.edges(edgeId);
-                    edge.color = color;
-                    graph.dropEdge(edgeId).addEdge(edge);
-                }
-                var source = step.source;
-                if (source === undefined) source = '';
-                this.printTrace(visit ? source + ' -> ' + step.target : source + ' <- ' + step.target);
-                break;
-        }
+    resize: function () {
+        Tracer.prototype.resize.call(this);
+
+        this.s.renderers[0].resize();
+        this.refresh();
     },
     refresh: function () {
         Tracer.prototype.refresh.call(this);
 
-        s.refresh();
+        this.s.refresh();
     },
-    prevStep: function () {
-        this.clear();
-        $('#tab_trace .wrapper').empty();
-        var finalIndex = this.traceIndex - 1;
-        if (finalIndex < 0) {
-            this.traceIndex = -1;
-            this.refresh();
-            return;
-        }
-        for (var i = 0; i < finalIndex; i++) {
-            this.step(i, {virtual: true});
-        }
-        this.step(finalIndex);
+    clear: function () {
+        Tracer.prototype.clear.call(this);
+
+        this.clearGraphColor();
     },
     color: {
         visited: '#f00',
@@ -202,10 +195,10 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
     clearGraphColor: function () {
         var tracer = this;
 
-        graph.nodes().forEach(function (node) {
+        this.graph.nodes().forEach(function (node) {
             node.color = tracer.color.default;
         });
-        graph.edges().forEach(function (edge) {
+        this.graph.edges().forEach(function (edge) {
             edge.color = tracer.color.default;
         });
     },
@@ -308,17 +301,17 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
 
         context.setLineDash([5, 5]);
         var nodeIdx = node.id.substring(1);
-        graph.edges().forEach(function (edge) {
+        this.graph.edges().forEach(function (edge) {
             var ends = edge.id.substring(1).split("_");
             if (ends[0] == nodeIdx) {
                 var color = '#0ff';
                 var source = node;
-                var target = graph.nodes('n' + ends[1]);
+                var target = tracer.graph.nodes('n' + ends[1]);
                 tracer.drawArrow(edge, source, target, color, context, settings);
                 if (next) next(edge, source, target, color, context, settings);
             } else if (ends[1] == nodeIdx) {
                 var color = '#ff0';
-                var source = graph.nodes('n' + ends[0]);
+                var source = tracer.graph.nodes('n' + ends[0]);
                 var target = node;
                 tracer.drawArrow(edge, source, target, color, context, settings);
                 if (next) next(edge, source, target, color, context, settings);
@@ -341,5 +334,30 @@ var DirectedGraph = {
             }
         }
         return G;
+    }
+};
+
+sigma.canvas.labels.def = function (node, context, settings) {
+    var func = settings('funcLabelsDef');
+    if (func) {
+        func(node, context, settings);
+    }
+};
+sigma.canvas.hovers.def = function (node, context, settings) {
+    var func = settings('funcHoversDef');
+    if (func) {
+        func(node, context, settings);
+    }
+};
+sigma.canvas.edges.def = function (edge, source, target, context, settings) {
+    var func = settings('funcEdgesDef');
+    if (func) {
+        func(edge, source, target, context, settings);
+    }
+};
+sigma.canvas.edges.arrow = function (edge, source, target, context, settings) {
+    var func = settings('funcEdgesArrow');
+    if (func) {
+        func(edge, source, target, context, settings);
     }
 };
