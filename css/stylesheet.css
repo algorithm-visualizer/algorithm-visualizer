@@ -8,6 +8,7 @@ body {
     background: rgb(60, 63, 65);
     font-family: 'Roboto', sans-serif;
     color: rgb(187, 187, 187);
+    -webkit-font-smoothing: subpixel-antialiased;
 }
 
 *::-webkit-scrollbar {
@@ -219,10 +220,31 @@ section {
     top: 30px;
     height: 30px;
     background: rgb(44, 44, 44);
-    padding: 0 8px;
-    line-height: 30px;
+    padding: 7px;
     font-size: 12px;
-    overflow-y: auto;
+}
+
+#explanation:before {
+    font-family: FontAwesome;
+    content: '\f05a\00a0\00a0';
+}
+
+#explanation {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.explanation_container:hover {
+    z-index: 5;
+    height: auto;
+    bottom: auto;
+    box-shadow: 0 8px 8px -8px rgba(0, 0, 0, .8);
+}
+
+.explanation_container:hover #explanation {
+    white-space: normal;
 }
 
 .data_container {
