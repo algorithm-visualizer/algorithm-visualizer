@@ -390,3 +390,19 @@ if (/[?&]scratch-paper=/.test(location.search)) {
     console.log(gistID);
     loadScratchPaper(gistID);
 }
+
+var toJSON = function (obj) {
+    return JSON.stringify(obj, function (key, value) {
+        return value === Infinity ? "Infinity" : value;
+    });
+};
+
+var fromJSON = function (obj) {
+    return JSON.parse(obj, function (key, value) {
+        return value === "Infinity" ? Infinity : value;
+    });
+};
+
+var refineNumber = function (number) {
+    return number === Infinity ? '∞' : number;
+};

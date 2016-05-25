@@ -169,7 +169,6 @@ section {
     position: absolute;
     width: 100%;
     height: 100%;
-    overflow: scroll;
     visibility: hidden;
 }
 
@@ -182,15 +181,20 @@ section {
     visibility: visible;
 }
 
+.module_wrapper {
+    overflow: scroll;
+}
+
 .module_wrapper .name {
-    position: absolute;
+    position: fixed;
+    z-index: 5;
     padding: 4px;
     font-size: 14px;
     background: rgb(44, 44, 44);
 }
 
 .module_wrapper .wrapper {
-    padding: 16px;
+    padding: 24px 16px;
     box-sizing: border-box;
 }
 
@@ -297,6 +301,6 @@ pre {
     background: #00f;
 }
 
-.mtbl-cell.notifying {
+.mtbl-cell.notified {
     background: #f00;
 }

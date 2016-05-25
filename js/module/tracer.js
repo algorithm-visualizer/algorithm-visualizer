@@ -14,19 +14,23 @@ Tracer.prototype = {
     init: function () {
         this.$container.append($('<span class="name">').text(this.name));
     },
-    _setData: function () {
-        tm.pushStep(this.capsule, {type: 'setData', arguments: arguments});
+    _setData: function (a) {
+        var args = Array.prototype.slice.call(arguments);
+        tm.pushStep(this.capsule, {type: 'setData', args: toJSON(args)});
+        return this;
     },
     _clear: function () {
         tm.pushStep(this.capsule, {type: 'clear'});
+        return this;
     },
     _next: function () {
         tm.newStep();
+        return this;
     },
     processStep: function (step, options) {
         switch (step.type) {
             case 'setData':
-                this.setData.apply(this, step.arguments);
+                this.setData.apply(this, fromJSON(step.args));
                 break;
             case 'clear':
                 this.clear();
@@ -34,7 +38,7 @@ Tracer.prototype = {
         }
     },
     setData: function () {
-        var data = JSON.stringify(arguments);
+        var data = toJSON(arguments);
         if (!this.new && this.lastData == data) return true;
         this.new = this.capsule.new = false;
         this.lastData = this.capsule.lastData = data;
@@ -45,6 +49,12 @@ Tracer.prototype = {
     refresh: function () {
     },
     clear: function () {
+    },
+    attach: function (tracer) {
+        if (tracer.module == LogTracer) {
+            this.logTracer = tracer;
+        }
+        return this;
     },
     mousedown: function (e) {
     },

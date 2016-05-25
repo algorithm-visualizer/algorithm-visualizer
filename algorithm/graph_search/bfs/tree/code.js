@@ -7,7 +7,7 @@ function BFS(s) { // s = start node
         for (var i = 0; i < G[node].length; i++) {
             if (G[node][i]) { // if current node has the i-th node as a child
                 Q.push(i); // add child node to queue
-                tracer._visit(i, node);
+                tracer._next()._visit(i, node);
             }
         }
     }

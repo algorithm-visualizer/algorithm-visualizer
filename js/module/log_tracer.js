@@ -14,11 +14,12 @@ LogTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
     },
     _print: function (msg, delay) {
         tm.pushStep(this.capsule, {type: 'print', msg: msg}, delay);
+        return this;
     },
     processStep: function (step, options) {
         switch (step.type) {
             case 'print':
-                this.printTrace(step.msg);
+                this.print(step.msg);
                 break;
         }
     },
@@ -30,7 +31,7 @@ LogTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
 
         this.$wrapper.empty();
     },
-    printTrace: function (message) {
+    print: function (message) {
         this.$wrapper.append($('<span>').append(message + '<br/>'));
     },
     scrollToEnd: function (duration) {

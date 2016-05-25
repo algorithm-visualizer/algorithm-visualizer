@@ -1,4 +1,6 @@
 var tracer = new WeightedUndirectedGraphTracer();
+var logger = new LogTracer();
+tracer.attach(logger);
 /*var G = [ // G[i][j] indicates the weight of the path from the i-th node to the j-th node
  [0, 3, 0, 1, 0],
  [5, 0, 1, 2, 4],

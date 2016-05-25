@@ -1,22 +1,22 @@
-tracer._print('original array = [' + D.join(', ') + ']');
-tracer._sleep(1000);
+logger._print('original array = [' + D.join(', ') + ']');
 for (var i = 0; i < D.length - 1; i++) {
     var minJ = i;
-    tracer._select(i);
+    tracer._select(i)._next();
     for (var j = i + 1; j < D.length; j++) {
         if (D[j] < D[minJ]) {
-            tracer._select(j);
+            tracer._select(j)._next();
             minJ = j;
             tracer._deselect(j);
         }
     }
     if (minJ != i) {
-        tracer._print('swap ' + D[i] + ' and ' + D[minJ]);
+        logger._print('swap ' + D[i] + ' and ' + D[minJ]);
         var temp = D[i];
         D[i] = D[minJ];
         D[minJ] = temp;
-        tracer._notify(i, minJ);
+        tracer._notify(i, D[i])._notify(minJ, D[minJ])._next();
+        tracer._denotify(i)._denotify(minJ);
     }
     tracer._deselect(i);
 }
-tracer._print('sorted array = [' + D.join(', ') + ']');
+logger._print('sorted array = [' + D.join(', ') + ']');
