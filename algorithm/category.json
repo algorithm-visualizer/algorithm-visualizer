@@ -30,7 +30,8 @@
       "bubble": "Bubble Sort",
       "quick": "Quicksort",
       "merge": "Mergesort",
-      "heap" : "Heap Sort"
+      "heap" : "Heap Sort",
+      "radix" : "Radix Sort"
     }
   },
   "string": {

@@ -51,6 +51,6 @@ function heapify(array, size, root) {
     }
 }
 
-heapSort(D, 10);
+heapSort(D, D.length);
 
 logger._print('Final array = [' + D.join(', ') + ']');
