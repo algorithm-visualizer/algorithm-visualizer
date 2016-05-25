@@ -60,6 +60,10 @@ button.indent {
     padding-left: 28px;
 }
 
+button.fold {
+    display: none !important;
+}
+
 .divider {
     position: absolute !important;
     z-index: 3;

@@ -154,6 +154,9 @@ $.getJSON('./algorithm/category.json', function (data) {
     for (var category in list) {
         (function (category) {
             var $category = $('<button class="category">').append(list[category].name);
+            $category.click(function () {
+                $('[data-category="' + category + '"]').toggleClass('fold');
+            });
             $('#list').append($category);
             var subList = list[category].list;
             for (var algorithm in subList) {
