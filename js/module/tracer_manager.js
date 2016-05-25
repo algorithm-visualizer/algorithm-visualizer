@@ -1,7 +1,7 @@
-var timer = null;
-var stepLimit = 1e6;
+const stepLimit = 1e6;
 
 var TracerManager = function () {
+    this.timer = null;
     this.pause = false;
     this.capsules = [];
     this.interval = 500;
@@ -89,7 +89,7 @@ TracerManager.prototype = {
         this.traces = [];
         this.traceIndex = -1;
         this.stepCnt = 0;
-        if (timer) clearTimeout(timer);
+        if (this.timer) clearTimeout(this.timer);
         this.command('clear');
     },
     pushStep: function (capsule, step) {
@@ -109,7 +109,7 @@ TracerManager.prototype = {
     pauseStep: function () {
         if (this.traceIndex < 0) return;
         this.pause = true;
-        if (timer) clearTimeout(timer);
+        if (this.timer) clearTimeout(this.timer);
         $('#btn_pause').addClass('active');
     },
     resumeStep: function () {
@@ -132,7 +132,7 @@ TracerManager.prototype = {
             this.command('refresh');
         }
         if (this.pause) return;
-        timer = setTimeout(function () {
+        this.timer = setTimeout(function () {
             tracer.step(i + 1, options);
         }, this.interval);
     },
