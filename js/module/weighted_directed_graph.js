@@ -29,8 +29,8 @@ WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGra
             }
         });
     },
-    _weight: function (target, weight, delay) {
-        tm.pushStep(this.capsule, {type: 'weight', target: target, weight: weight}, delay);
+    _weight: function (target, weight) {
+        tm.pushStep(this.capsule, {type: 'weight', target: target, weight: weight});
         return this;
     },
     _visit: function (target, source, weight) {

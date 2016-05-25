@@ -109,8 +109,6 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         tm.pushStep(this.capsule, step);
     },
     processStep: function (step, options) {
-        var tracer = this;
-
         switch (step.type) {
             case 'notify':
                 if (step.v) {
