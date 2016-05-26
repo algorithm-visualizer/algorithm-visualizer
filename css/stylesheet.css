@@ -206,18 +206,6 @@ section {
     height: 30px;
 }
 
-.files_bar_right_button {
-    height: 30px;
-    float: right;
-    position: relative;
-}
-
-.files_bar_left_button {
-    height: 30px;
-    float: left;
-    position: relative;
-}
-
 .files_bar {
     height: 30px;
 }
