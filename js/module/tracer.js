@@ -1,6 +1,6 @@
 function Tracer(name) {
     this.module = this.constructor;
-    this.capsule = tm.allocate(this);
+    this.capsule = this.tm.allocate(this);
     $.extend(this, this.capsule);
     this.setName(name);
     return this.new;
@@ -8,23 +8,24 @@ function Tracer(name) {
 
 Tracer.prototype = {
     constructor: Tracer,
+    tm: null,
     _setData: function () {
         var args = Array.prototype.slice.call(arguments);
-        tm.pushStep(this.capsule, {type: 'setData', args: toJSON(args)});
+        this.tm.pushStep(this.capsule, {type: 'setData', args: TracerUtil.toJSON(args)});
         return this;
     },
     _clear: function () {
-        tm.pushStep(this.capsule, {type: 'clear'});
+        this.tm.pushStep(this.capsule, {type: 'clear'});
         return this;
     },
     _wait: function () {
-        tm.newStep();
+        this.tm.newStep();
         return this;
     },
     processStep: function (step, options) {
         switch (step.type) {
             case 'setData':
-                this.setData.apply(this, fromJSON(step.args));
+                this.setData.apply(this, TracerUtil.fromJSON(step.args));
                 break;
             case 'clear':
                 this.clear();
@@ -42,7 +43,7 @@ Tracer.prototype = {
         $name.text(name || this.defaultName);
     },
     setData: function () {
-        var data = toJSON(arguments);
+        var data = TracerUtil.toJSON(arguments);
         if (!this.new && this.lastData == data) return true;
         this.new = this.capsule.new = false;
         this.lastData = this.capsule.lastData = data;
