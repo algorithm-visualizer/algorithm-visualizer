@@ -3,11 +3,6 @@ Number.prototype.mod = function (n) {
     return ((this%n)+n)%n;
 };
 
-function randString (length) {
-	var result = Math.random ().toString (36);
-	return result.substring (result.length - length);
-}
-
 function tracker (substring) {
 	var i = 1, j = 0;
 
