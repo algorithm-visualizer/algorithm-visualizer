@@ -52,7 +52,8 @@
       "longest_increasing_subsequence": "Longest increasing subsequence",
       "max_subarray": "Maximum subarray",
       "max_sum_path": "Maximum sum path",
-      "sliding_window": "Sliding window"
+      "sliding_window": "Sliding window",
+      "integer_partition": "Integer partition"
     }
    },
   "etc": {
