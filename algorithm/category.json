@@ -40,7 +40,8 @@
   "string": {
    		"name": "String",
    		"list": {
-   			"edit_distance": "Edit Distance"
+   			"edit_distance": "Edit Distance",
+   			"knuth_morris_pratt": "KMP Substring Search"
    		}
    },
    "dp": {
