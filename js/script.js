@@ -151,22 +151,58 @@ var showAlgorithm = function(category, algorithm) {
     codeEditor.setValue('');
 };
 var showFiles = function(category, algorithm, files) {
-    $('.files_bar').empty();
-    var init = false;
-    for (var file in files) {
-        (function(file, explanation) {
-            var $file = $('<button>').append(file).click(function() {
+    var maxButtonCount = 3, fileNames = Object.keys (files), lastFile = -1;
+        var init = false;
+        var currentFileBarButtons = [];
+
+        function addFileButton (file, explanation) {
+            var $file = $('<button>').append(file).click(function () {
                 loadFile(category, algorithm, file, explanation);
                 $('.files_bar > button').removeClass('active');
                 $(this).addClass('active');
             });
             $('.files_bar').append($file);
+            currentFileBarButtons.push ($file);
+
             if (!init) {
                 init = true;
                 $file.click();
             }
-        })(file, files[file]);
-    }
+        }
+
+        function clearFileBar () {
+            currentFileBarButtons.forEach (function (f) {
+                f.remove ();
+            });
+        }
+
+        $('.files_bar').empty();
+
+        var $nextButton = $('<button>').append ('<b>&gt;</b>').addClass ('files_bar_right_button').click (function () {
+            if (lastFile >= fileNames.length) { return; }
+            clearFileBar ();    //first, remove the previously visible buttons
+
+            init = false;
+            fileNames.slice (lastFile+1, lastFile+1+maxButtonCount).forEach (function (file) {
+                file && addFileButton (file, files [file]);
+            });
+            lastFile += maxButtonCount;
+        });
+        $ ('.files_bar').append ($nextButton);
+
+        var $prevButton = $('<button>').append ('<b>&lt;</b>').addClass ('files_bar_left_button').click (function () {
+            if (lastFile === maxButtonCount-1) { return; }
+
+            clearFileBar ();    //first, remove the previously visible buttons
+            lastFile -= maxButtonCount;
+            init = false;
+            fileNames.slice (lastFile+1-maxButtonCount, lastFile+1).forEach (function (file) {
+                addFileButton (file, files [file]);
+            });
+        });
+        $ ('.files_bar').append ($prevButton);
+
+        $nextButton.click ();   //initialize the file bar with the First 3 Buttons
 };
 var loadAlgorithm = function(category, algorithm) {
     if (checkLoading()) return;
