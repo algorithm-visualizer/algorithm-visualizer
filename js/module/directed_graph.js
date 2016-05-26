@@ -111,7 +111,7 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
 
         var wgap = 1 / (maxDepth - 1);
         var dfs = function (node, depth, top, bottom) {
-            place(node, depth * wgap, (top + bottom) / 2);
+            place(node, top + bottom, depth * wgap);
             var children = 0;
             for (var i = 0; i < G[node].length; i++) {
                 if (G[node][i]) children++;
