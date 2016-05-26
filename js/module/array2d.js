@@ -13,7 +13,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         this.$container.append(this.$table);
     },
     _notify: function (x, y, v) {
-        tm.pushStep(this.capsule, {
+        this.tm.pushStep(this.capsule, {
             type: 'notify',
             x: x,
             y: y,
@@ -22,7 +22,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         return this;
     },
     _denotify: function (x, y) {
-        tm.pushStep(this.capsule, {
+        this.tm.pushStep(this.capsule, {
             type: 'denotify',
             x: x,
             y: y
@@ -93,14 +93,14 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
             type: type
         };
         $.extend(step, coord);
-        tm.pushStep(this.capsule, step);
+        this.tm.pushStep(this.capsule, step);
     },
     processStep: function (step, options) {
         switch (step.type) {
             case 'notify':
                 if (step.v) {
                     var $row = this.$table.find('.mtbl-row').eq(step.x);
-                    $row.find('.mtbl-cell').eq(step.y).text(refineNumber(step.v));
+                    $row.find('.mtbl-cell').eq(step.y).text(TracerUtil.refineNumber(step.v));
                 }
             case 'denotify':
             case 'select':
@@ -130,7 +130,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         if (Tracer.prototype.setData.apply(this, arguments)) {
             this.$table.find('.mtbl-row').each(function (i) {
                 $(this).children().each(function (j) {
-                    $(this).text(refineNumber(D[i][j]));
+                    $(this).text(TracerUtil.refineNumber(D[i][j]));
                 });
             });
             return true;
@@ -143,7 +143,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
             for (var j = 0; j < D[i].length; j++) {
                 var $cell = $('<div class="mtbl-cell">')
                     .css(this.getCellCss())
-                    .text(refineNumber(D[i][j]));
+                    .text(TracerUtil.refineNumber(D[i][j]));
                 $row.append($cell);
             }
         }
