@@ -190,8 +190,6 @@ $('.files_bar > .btn-right').click(function () {
     $wrapper.children('button').each(function () {
         var left = $(this).position().left;
         var right = left + $(this).outerWidth();
-        console.log(left);
-        console.log(right);
         if (clipWidth < right) {
             $wrapper.scrollLeft(scrollLeft + left);
             return false;
