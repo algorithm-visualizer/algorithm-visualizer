@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     overflow: hidden;
@@ -47,6 +48,7 @@ button {
 
 button:hover {
     background: rgba(0, 0, 0, .15) !important;
+    cursor: pointer;
 }
 
 button.active {
@@ -202,6 +204,12 @@ section {
 .module_wrapper .wrapper {
     padding: 24px 16px;
     box-sizing: border-box;
+}
+
+#tab_desc h3 {
+    border-bottom: 1px solid rgb(44, 44, 44);
+    padding: 5px;
+    margin: 2px;
 }
 
 #tab_desc > .wrapper a {
