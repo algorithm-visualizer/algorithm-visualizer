@@ -1,5 +1,5 @@
 {
-  "Longest increasing subsequence": "Find the length of the longest subsequence of a given sequence such that all elements of the subsequence are sorted in increasing order",
+  "Longest Increasing Subsequence": "Find the length of the longest subsequence of a given sequence such that all elements of the subsequence are sorted in increasing order",
   "Complexity": {
     "time": "O(n(log n))",
     "space": "O(n)"
