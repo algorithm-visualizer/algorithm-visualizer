@@ -25,7 +25,9 @@ var initEditor = function(id) {
     editor.setOptions({
         enableBasicAutocompletion: true,
         enableSnippets: true,
-        enableLiveAutocompletion: true
+        enableLiveAutocompletion: true,
+        fontFamily: "Source Code Pro",
+        fontSize: "10pt"
     });
     editor.setTheme("ace/theme/tomorrow_night_eighties");
     editor.session.setMode("ace/mode/javascript");
