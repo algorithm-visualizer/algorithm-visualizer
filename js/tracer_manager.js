@@ -10,7 +10,7 @@ var TracerManager = function () {
 TracerManager.prototype = {
     add: function (tracer) {
         var $container = $('<section class="module_wrapper">');
-        $module_container.append($container);
+        $('.module_container').append($container);
         var capsule = {
             module: tracer.module,
             tracer: tracer,
@@ -175,5 +175,21 @@ TracerManager.prototype = {
             }
         });
         return selectedCapsule.tracer;
+    }
+};
+
+var TracerUtil = {
+    toJSON: function (obj) {
+        return JSON.stringify(obj, function (key, value) {
+            return value === Infinity ? "Infinity" : value;
+        });
+    },
+    fromJSON: function (obj) {
+        return JSON.parse(obj, function (key, value) {
+            return value === "Infinity" ? Infinity : value;
+        });
+    },
+    refineNumber: function (number) {
+        return number === Infinity ? '∞' : number;
     }
 };
