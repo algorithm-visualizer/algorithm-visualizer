@@ -304,6 +304,7 @@ $('#btn_share').click(function () {
         $icon.removeClass('fa-spin fa-spin-faster');
         $('#shared').removeClass('collapse');
         $('#shared').val(url);
+        showInfoToast('Shareable link is created.');
     });
 });
 $('#btn_run').click(function () {
