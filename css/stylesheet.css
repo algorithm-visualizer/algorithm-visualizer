@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     overflow: hidden;
@@ -59,6 +60,7 @@ button {
 .btn:hover,
 button:hover {
     background: rgba(0, 0, 0, .15) !important;
+    cursor: pointer;
 }
 
 .btn.active,
@@ -233,12 +235,30 @@ section {
     box-sizing: border-box;
 }
 
+#tab_desc h3 {
+    border-bottom: 1px solid rgb(81, 81, 81);
+    padding: 5px;
+    margin: 2px;
+}
+
 #tab_desc > .wrapper a {
     text-decoration: underline;
 }
 
 .tab_bar {
     height: 30px;
+}
+
+.files_bar_right_button {
+    height: 30px;
+    float: right;
+    position: relative;
+}
+
+.files_bar_left_button {
+    height: 30px;
+    float: left;
+    position: relative;
 }
 
 .files_bar {
