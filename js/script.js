@@ -208,7 +208,7 @@ $('.files_bar > .wrapper').scroll(function () {
     var $right = $wrapper.children('button:last-child');
     var left = $left.position().left;
     var right = $right.position().left + $right.outerWidth();
-    if (definitelyBigger(clipWidth, right)) {
+    if (definitelyBigger(0, left) && definitelyBigger(clipWidth, right)) {
         var scrollLeft = $wrapper.scrollLeft();
         $wrapper.scrollLeft(scrollLeft + clipWidth - right);
         return;
