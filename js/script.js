@@ -168,34 +168,57 @@ var showFiles = function (category, algorithm, files) {
             }
         })(file, files[file]);
     }
+    $('.files_bar > .wrapper').scroll();
 };
-$('.files_bar > .button-left').click(function () {
-    var $parent = $('.files_bar > .wrapper');
-    var clipWidth = $parent.width();
-    var scrollLeft = $parent.scrollLeft();
-    $($parent.children('button').get().reverse()).each(function () {
+$('.files_bar > .btn-left').click(function () {
+    var $wrapper = $('.files_bar > .wrapper');
+    var clipWidth = $wrapper.width();
+    var scrollLeft = $wrapper.scrollLeft();
+    $($wrapper.children('button').get().reverse()).each(function () {
         var left = $(this).position().left;
         var right = left + $(this).outerWidth();
         if (0 > left) {
-            $parent.scrollLeft(scrollLeft + right - clipWidth);
+            $wrapper.scrollLeft(scrollLeft + right - clipWidth);
             return false;
         }
     });
 });
-$('.files_bar > .button-right').click(function () {
-    var $parent = $('.files_bar > .wrapper');
-    var clipWidth = $parent.width();
-    var scrollLeft = $parent.scrollLeft();
-    $parent.children('button').each(function () {
+$('.files_bar > .btn-right').click(function () {
+    var $wrapper = $('.files_bar > .wrapper');
+    var clipWidth = $wrapper.width();
+    var scrollLeft = $wrapper.scrollLeft();
+    $wrapper.children('button').each(function () {
         var left = $(this).position().left;
         var right = left + $(this).outerWidth();
         console.log(left);
         console.log(right);
         if (clipWidth < right) {
-            $parent.scrollLeft(scrollLeft + left);
+            $wrapper.scrollLeft(scrollLeft + left);
             return false;
         }
     });
+});
+$('.files_bar > .wrapper').scroll(function () {
+    var definitelyBigger = function (x, y) {
+        return x > y + 2;
+    };
+    var $wrapper = $('.files_bar > .wrapper');
+    var clipWidth = $wrapper.width();
+    var $left = $wrapper.children('button:first-child');
+    var $right = $wrapper.children('button:last-child');
+    var left = $left.position().left;
+    var right = $right.position().left + $right.outerWidth();
+    if (definitelyBigger(clipWidth, right)) {
+        var scrollLeft = $wrapper.scrollLeft();
+        $wrapper.scrollLeft(scrollLeft + clipWidth - right);
+        return;
+    }
+    var lefter = definitelyBigger(0, left);
+    var righter = definitelyBigger(right, clipWidth);
+    $wrapper.toggleClass('shadow-left', lefter);
+    $wrapper.toggleClass('shadow-right', righter);
+    $('.files_bar > .btn-left').attr('disabled', !lefter);
+    $('.files_bar > .btn-right').attr('disabled', !righter);
 });
 var loadAlgorithm = function (category, algorithm) {
     if (checkLoading()) return;
@@ -388,6 +411,7 @@ for (var i = 0; i < dividers.length; i++) {
                     $second.css('left', percent + '%');
                     x = e.pageX;
                     tm.resize();
+                    $('.files_bar > .wrapper').scroll();
                 }
             });
             $(document).mouseup(function (e) {
