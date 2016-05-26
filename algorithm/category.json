@@ -43,10 +43,20 @@
    			"edit_distance": "Edit Distance"
    		}
    },
+   "dp": {
+    "name": "Dynamic Programming",
+    "list": {
+      "fibonacci": "Fibonacci sequence",
+      "knapsack_problem": "Knapsack problem",
+      "longest_increasing_subsequence": "Longest increasing subsequence",
+      "max_subarray": "Maximum subarray",
+      "max_sum_path": "Maximum sum path",
+      "sliding_window": "Sliding window"
+    }
+   },
   "etc": {
     "name": "Uncategorized",
     "list": {
-      "dp": "Dynamic Programming"
     }
   }
 }
