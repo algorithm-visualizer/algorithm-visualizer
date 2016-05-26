@@ -31,9 +31,10 @@
       "selection": "Selection Sort",
       "bubble": "Bubble Sort",
       "quick": "Quicksort",
-      "merge": "Mergesort",
-      "heap" : "Heap Sort",
-      "radix" : "Radix Sort"
+      "merge": "Merge Sort",
+      "heap" : "Heapsort",
+      "radix": "Radix Sort",
+      "shell": "Shellsort"
     }
   },
   "string": {
