@@ -30,33 +30,36 @@
       "insertion": "Insertion Sort",
       "selection": "Selection Sort",
       "bubble": "Bubble Sort",
-      "quick": "Quicksort",
       "merge": "Merge Sort",
-      "heap" : "Heapsort",
       "radix": "Radix Sort",
+      "quick": "Quicksort",
+      "heap" : "Heapsort",
       "shell": "Shellsort"
     }
   },
   "string": {
    		"name": "String",
    		"list": {
-   			"edit_distance": "Edit Distance"
+   			"edit_distance": "Edit Distance",
+   			"knuth_morris_pratt": "KMP Substring Search"
    		}
    },
    "dp": {
     "name": "Dynamic Programming",
     "list": {
-      "fibonacci": "Fibonacci sequence",
-      "knapsack_problem": "Knapsack problem",
-      "longest_increasing_subsequence": "Longest increasing subsequence",
-      "max_subarray": "Maximum subarray",
-      "max_sum_path": "Maximum sum path",
-      "sliding_window": "Sliding window"
+      "fibonacci": "Fibonacci Sequence",
+      "knapsack_problem": "Knapsack Sroblem",
+      "longest_increasing_subsequence": "Longest Increasing Subsequence",
+      "max_subarray": "Maximum Subarray",
+      "max_sum_path": "Maximum Sum Path",
+      "sliding_window": "Sliding Window",
+      "integer_partition": "Integer Partition"
     }
    },
   "etc": {
     "name": "Uncategorized",
     "list": {
+       "flood_fill": "Flood Fill"
     }
   }
 }
