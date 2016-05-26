@@ -14,9 +14,6 @@ function FloodFill(i, j, oldColor, newColor) {
     FloodFill(i - 1, j, oldColor, newColor);
     FloodFill(i, j + 1, oldColor, newColor);
     FloodFill(i, j - 1, oldColor, newColor);
-    
-    tracer._denotify(i, j);
-    tracer._deselect(i, j)._wait();
 }
 
 FloodFill(4, 4, '-', 'a');
