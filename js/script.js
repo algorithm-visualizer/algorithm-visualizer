@@ -241,11 +241,11 @@ $.getJSON('./algorithm/category.json', function (data) {
     for (var category in list) {
         (function (category) {
             var $category = $('<button class="category">')
-                .append('<i class="fa fa-fw fa-caret-down">')
+                .append('<i class="fa fa-fw fa-caret-right">')
                 .append(list[category].name);
             $category.click(function () {
                 $('[data-category="' + category + '"]').toggleClass('collapse');
-                $(this).find('i.fa').toggleClass('fa-caret-down fa-caret-right');
+                $(this).find('i.fa').toggleClass('fa-caret-right fa-caret-down');
             });
             $('#list').append($category);
             var subList = list[category].list;
