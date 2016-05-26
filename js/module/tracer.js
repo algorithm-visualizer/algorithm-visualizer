@@ -57,7 +57,7 @@ Tracer.prototype = {
     },
     attach: function (tracer) {
         if (tracer.module == LogTracer) {
-            this.logTracer = tracer;
+            this.LogTracer = tracer;
         }
         return this;
     },
