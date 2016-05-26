@@ -41,9 +41,9 @@ dataEditor.on('change', function () {
     try {
         tm.deallocateAll();
         eval(data);
+        tm.visualize();
     } catch (err) {
     } finally {
-        tm.visualize();
         tm.removeUnallocated();
     }
 });
