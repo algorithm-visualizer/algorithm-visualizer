@@ -32,7 +32,18 @@ a {
     user-select: none;
 }
 
+.btn {
+    display: inline-table;
+}
+
+.btn > .wrapper {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.btn,
 button {
+    vertical-align: top;
     border: none;
     height: 100%;
     padding: 0 12px;
@@ -45,12 +56,22 @@ button {
     text-overflow: ellipsis;
 }
 
+.btn:hover,
 button:hover {
     background: rgba(0, 0, 0, .15) !important;
 }
 
+.btn.active,
 button.active {
     background: rgb(44, 44, 44);
+}
+
+.btn input,
+button input {
+    outline: none;
+    background: rgba(0, 0, 0, .3);
+    padding: 4px;
+    border: none;
 }
 
 .divider {
@@ -80,16 +101,25 @@ nav h3 {
     padding: 0 4px;
 }
 
+#category:empty + .nav-arrow {
+    display: none;
+}
+
 .buttons {
     float: right;
     height: 100%;
 }
 
-button input {
-    outline: none;
-    background: none;
-    border: none;
-    width: 20px;
+#shared {
+    width: 128px;
+}
+
+#shared.collapse {
+    display: none;
+}
+
+#interval {
+    width: 24px;
     text-align: right;
 }
 
@@ -122,11 +152,10 @@ button.category {
 
 button.indent {
     padding-left: 28px;
-    display: none;
 }
 
 button.collapse {
-    display: block;
+    display: none;
 }
 
 .workspace {
@@ -199,7 +228,7 @@ section {
     background: rgb(44, 44, 44);
 }
 
-.module_wrapper .wrapper {
+.module_wrapper > .wrapper {
     padding: 24px 16px;
     box-sizing: border-box;
 }
@@ -300,6 +329,11 @@ pre {
 
 .github-fork-ribbon.left-bottom:before {
     background-color: #333;
+}
+
+.fa-spin-faster {
+    -webkit-animation: fa-spin 1s infinite ease-in-out;
+    animation: fa-spin 1s infinite ease-in-out;
 }
 
 .mtbl-wrapper {

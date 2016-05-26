@@ -83,7 +83,7 @@ TracerManager.prototype = {
         return this.pause;
     },
     setInterval: function (interval) {
-        $('#btn_interval input').val(interval);
+        $('#interval').val(interval);
     },
     reset: function () {
         this.traces = [];
