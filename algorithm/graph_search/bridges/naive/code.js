@@ -13,8 +13,8 @@ function DFSExplore (graph, source) {
 			//logger._print (node);
 
 			/*
-			if (prev !== undefined && graph [node] [prev]) { tracer._visit (node, prev)._wait (200); console.log ('tracer ' + prev + ', ' + node); }
-			else { tracer._visit (node)._wait (200); console.log ('tracer ' + node); }
+			if (prev !== undefined && graph [node] [prev]) { tracer._visit (node, prev)._wait (); console.log ('tracer ' + prev + ', ' + node); }
+			else { tracer._visit (node)._wait (); console.log ('tracer ' + node); }
 			*/
 
 			for (i = 0; i < graph.length; i++) {
@@ -35,8 +35,8 @@ function findBridges (graph) {
 		for (var j = 0; j < graph.length; j++) {
 			if (graph [i] [j]) {	//check if an edge exists
 				logger._print ('Deleting edge ' + i + '->' + j + ' and calling DFSExplore ()');
-				tracer._visit (j, i)._wait (200);
-				tracer._leave (j, i)._wait (200);
+				tracer._visit (j, i)._wait ();
+				tracer._leave (j, i)._wait ();
 
 				tempGraph = JSON.parse (JSON.stringify (graph));
 				tempGraph [i] [j] = 0;

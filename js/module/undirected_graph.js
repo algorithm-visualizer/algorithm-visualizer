@@ -1,5 +1,5 @@
-function UndirectedGraphTracer(module) {
-    if (DirectedGraphTracer.call(this, module || UndirectedGraphTracer)) {
+function UndirectedGraphTracer() {
+    if (DirectedGraphTracer.apply(this, arguments)) {
         UndirectedGraphTracer.prototype.init.call(this);
         return true;
     }
