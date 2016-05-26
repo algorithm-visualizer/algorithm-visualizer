@@ -7,10 +7,13 @@ $(document).on('click', 'a', function (e) {
         alert('Please allow popups for this site');
     }
 });
+$('.btn input').click(function (e) {
+    e.stopPropagation();
+});
 
 var tm = new TracerManager();
 
-$('#btn_interval input').on('change', function () {
+$('#interval').on('change', function () {
     tm.interval = Number.parseFloat($(this).val() * 1000);
     showInfoToast('Tracing interval has been set to ' + tm.interval / 1000 + ' second(s).');
 });
@@ -181,9 +184,9 @@ var loadAlgorithm = function (category, algorithm) {
     });
 };
 var list = {};
+var anyOpened = false;
 $.getJSON('./algorithm/category.json', function (data) {
     list = data;
-    var init = false;
     for (var category in list) {
         (function (category) {
             var $category = $('<button class="category">').append(list[category].name);
@@ -194,7 +197,7 @@ $.getJSON('./algorithm/category.json', function (data) {
             var subList = list[category].list;
             for (var algorithm in subList) {
                 (function (category, subList, algorithm) {
-                    var $algorithm = $('<button class="indent">')
+                    var $algorithm = $('<button class="indent collapse">')
                         .append(subList[algorithm])
                         .attr('data-algorithm', algorithm)
                         .attr('data-category', category)
@@ -202,8 +205,8 @@ $.getJSON('./algorithm/category.json', function (data) {
                             loadAlgorithm(category, algorithm);
                         });
                     $('#list').append($algorithm);
-                    if (!init) {
-                        init = true;
+                    if (!anyOpened) {
+                        anyOpened = true;
                         $algorithm.click();
                     }
                 })(category, subList, algorithm);
@@ -255,6 +258,15 @@ var showInfoToast = function (info) {
     }, 3000);
 };
 
+$('#btn_share').click(function () {
+    var $icon = $(this).find('.fa-share');
+    $icon.addClass('fa-spin fa-spin-faster');
+    shareScratchPaper(function (url) {
+        $icon.removeClass('fa-spin fa-spin-faster');
+        $('#shared').removeClass('collapse');
+        $('#shared').val(url);
+    });
+});
 $('#btn_run').click(function () {
     $('#btn_trace').click();
     try {
@@ -393,8 +405,6 @@ $module_container.on('DOMMouseScroll mousewheel', '.module_wrapper', function (e
     tm.findOwner(this).mousewheel(e);
 });
 
-// Share scratch paper
-
 var getParameterByName = function (name) {
     var url = window.location.href;
     name = name.replace(/[\[\]]/g, "\\$&");
@@ -405,30 +415,38 @@ var getParameterByName = function (name) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 };
 
-var shareScratchPaper = function () {
+var shareScratchPaper = function (callback) {
     var gist = {
         'description': 'temp',
         'public': true,
         'files': {
-            'code.js': {'content': dataEditor.getValue()},
-            'data.js': {'content': codeEditor.getValue()}
+            'code.js': {'content': codeEditor.getValue()},
+            'data.js': {'content': dataEditor.getValue()}
         }
     };
     $.post('https://api.github.com/gists', JSON.stringify(gist), function (res) {
         var data = JSON.parse(res);
-        console.log(location.protocol + '//' + location.host + location.pathname + '?scratch-paper=' + data.id);
+        if (callback) callback(location.protocol + '//' + location.host + location.pathname + '?scratch-paper=' + data.id);
     });
 };
 
 var loadScratchPaper = function (gistID) {
+    anyOpened = true;
     $.get('https://api.github.com/gists/' + gistID, function (res) {
         var data = JSON.parse(res);
-        console.log(data);
+        var category = null;
+        var algorithm = 'scratch_paper';
+        var dir = getFileDir(category, algorithm, 'scratch_paper');
+        cachedFile[dir] = {
+            data: data.files['data.js'].content,
+            code: data.files['code.js'].content
+        };
+        loadAlgorithm(category, algorithm);
     });
 };
 
-if (/[?&]scratch-paper=/.test(location.search)) {
-    var gistID = getParameterByName('scratch-paper');
+var gistID = getParameterByName('scratch-paper');
+if (gistID) {
     console.log(gistID);
     loadScratchPaper(gistID);
 }

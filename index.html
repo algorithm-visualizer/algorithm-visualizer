@@ -26,11 +26,20 @@
         </h3>
     </button>
     <div class="buttons">
+        <div class="btn" id="btn_share">
+            <div class="wrapper">
+                <i class="fa fa-share" aria-hidden="true"></i> Share <input type="text" class="collapse" id="shared">
+            </div>
+        </div>
         <button id="btn_run"><i class="fa fa-play" aria-hidden="true"></i> Run</button>
         <button id="btn_prev"><i class="fa fa-chevron-left" aria-hidden="true"></i> Prev</button>
         <button id="btn_pause"><i class="fa fa-pause" aria-hidden="true"></i> Pause</button>
         <button id="btn_next">Next <i class="fa fa-chevron-right" aria-hidden="true"></i></button>
-        <button id="btn_interval">Interval: <input type="text" value="0.5"> sec</button>
+        <div class="btn">
+            <div class="wrapper">
+                Interval: <input type="text" value="0.5" id="interval"> sec
+            </div>
+        </div>
     </div>
 </nav>
 <section class="sidemenu active">
