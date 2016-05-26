@@ -245,7 +245,7 @@ $.getJSON('./algorithm/category.json', function (data) {
                 .append(list[category].name);
             $category.click(function () {
                 $('[data-category="' + category + '"]').toggleClass('collapse');
-                $(this).find('i.fa').toggleClass('fa-caret-down fa-caret-up');
+                $(this).find('i.fa').toggleClass('fa-caret-down fa-caret-right');
             });
             $('#list').append($category);
             var subList = list[category].list;
