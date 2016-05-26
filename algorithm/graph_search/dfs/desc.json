@@ -21,12 +21,6 @@
     "<a href='https://en.wikipedia.org/wiki/Depth-first_search'>Wikipedia</a>"
   ],
   "files": {
-    "11111111111": "",
-    "22222222222": "",
-    "33333333333": "",
-    "44444444444": "",
-    "55555555555": "",
-    "66666666666": "",
     "tree": "Searching a tree",
     "all_paths": "Going through all possible paths without making any circuit",
     "weighted_graph": "DFS of Weighted Graph",

@@ -58,14 +58,14 @@ button {
 }
 
 .btn:hover,
-button:hover {
+button:not([disabled]):hover {
     background: rgba(0, 0, 0, .15) !important;
     cursor: pointer;
 }
 
 .btn.active,
 button.active {
-    background: rgb(44, 44, 44);
+    background: rgba(0, 0, 0, .28);
 }
 
 .btn input,
@@ -138,7 +138,7 @@ nav h3 {
 }
 
 .sidemenu #footer {
-    border-top: 2px solid rgb(44, 44, 44);
+    border-top: 2px solid rgba(0, 0, 0, .28);
 }
 
 .sidemenu button {
@@ -181,7 +181,7 @@ section,
 
 nav,
 section {
-    border: 1px solid rgb(44, 44, 44);
+    border: 1px solid rgba(0, 0, 0, .28);
     box-sizing: border-box;
 }
 
@@ -227,7 +227,7 @@ section {
     z-index: 5;
     padding: 4px;
     font-size: 14px;
-    background: rgb(44, 44, 44);
+    background: rgba(0, 0, 0, .28);
 }
 
 .module_wrapper > .wrapper {
@@ -258,11 +258,19 @@ section {
     height: 100%
 }
 
-.files_bar > .button-left {
+.files_bar > button {
+    width: 30px;
+}
+
+.files_bar > button:disabled {
+    background: rgba(0, 0, 0, .15);
+}
+
+.files_bar > .btn-left {
     left: 0;
 }
 
-.files_bar > .button-right {
+.files_bar > .btn-right {
     right: 0;
 }
 
@@ -277,10 +285,23 @@ section {
     max-width: 80%;
 }
 
+.files_bar > .wrapper.shadow-left {
+    box-shadow: inset 16px 0 16px -16px rgba(0, 0, 0, .6);
+}
+
+.files_bar > .wrapper.shadow-right {
+    box-shadow: inset -16px 0 16px -16px rgba(0, 0, 0, .6);
+}
+
+.files_bar > .wrapper.shadow-left.shadow-right {
+    box-shadow: inset 16px 0 16px -16px rgba(0, 0, 0, .6),
+    inset -16px 0 16px -16px rgba(0, 0, 0, .6);
+}
+
 .explanation_container {
     top: 30px;
     height: 30px;
-    background: rgb(44, 44, 44);
+    background: rgba(0, 0, 0, .28);
     padding: 7px;
     font-size: 12px;
 }
