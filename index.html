@@ -36,27 +36,29 @@
 <section class="sidemenu active">
     <div id="list">
     </div>
-    <div id="header">
+    <div id="footer">
+        <button id="scratch-paper"><i class="fa fa-code"></i> Scratch Paper</button>
         <a href="https://github.com/parkjs814/AlgorithmVisualizer/wiki">
             <button><i class="fa fa-book"></i> Documentation</button>
         </a>
-        <button class="category"><i class="fa fa-github"></i> Powered by ...</button>
-        <a href="https://github.com/jquery/jquery">
-            <button class="indent">jquery/jquery</button>
-        </a>
-        <a href="https://github.com/ajaxorg/ace">
-            <button class="indent">ajaxorg/ace</button>
-        </a>
-        <a href="https://github.com/jacomyal/sigma.js">
-            <button class="indent">jacomyal/sigma.js</button>
-        </a>
-        <a href="https://github.com/FortAwesome/Font-Awesome">
-            <button class="indent">FortAwesome/Font-Awesome</button>
-        </a>
-        <a href="https://github.com/simonwhitaker/github-fork-ribbon-css">
-            <button class="indent">simonwhitaker/github-fork-ribbon-css</button>
-        </a>
-
+        <button class="category" id="powered-by"><i class="fa fa-github"></i> Powered by ...</button>
+        <div id="powered-by-list">
+            <a href="https://github.com/jquery/jquery">
+                <button class="indent">jquery/jquery</button>
+            </a>
+            <a href="https://github.com/ajaxorg/ace">
+                <button class="indent">ajaxorg/ace</button>
+            </a>
+            <a href="https://github.com/jacomyal/sigma.js">
+                <button class="indent">jacomyal/sigma.js</button>
+            </a>
+            <a href="https://github.com/FortAwesome/Font-Awesome">
+                <button class="indent">FortAwesome/Font-Awesome</button>
+            </a>
+            <a href="https://github.com/simonwhitaker/github-fork-ribbon-css">
+                <button class="indent">simonwhitaker/github-fork-ribbon-css</button>
+            </a>
+        </div>
     </div>
     <a class="github-fork-ribbon left-bottom" href="http://github.com/parkjs814/AlgorithmVisualizer"
        title="Fork me on GitHub">Fork me on GitHub</a>
@@ -70,20 +72,6 @@
         <section class="tab_container">
             <div class="tab active" id="tab_desc">
                 <div class="wrapper">
-                    <h2 id="desc_title"></h2>
-                    <p id="desc_def"></p>
-                    <hr/>
-                    <h3>Application</h3>
-                    <ul id="desc_app"></ul>
-                    <hr/>
-                    <h3>Complexity</h3>
-                    <p>
-                        <strong>Time</strong> <span id="desc_time"></span><br/>
-                        <strong>Space</strong> <span id="desc_space"></span>
-                    </p>
-                    <hr/>
-                    <h3>Reference</h3>
-                    <ul id="desc_ref"></ul>
                 </div>
             </div>
             <div class="tab module_container" id="tab_module">
@@ -94,7 +82,7 @@
         <section class="files_bar">
         </section>
         <section class="explanation_container">
-            <i class="fa fa-info-circle" aria-hidden="true"></i> <span id="explanation"></span>
+            <span id="explanation"></span>
         </section>
         <section class="data_container">
             <pre id="data"></pre>

@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     overflow: hidden;
@@ -8,6 +9,7 @@ body {
     background: rgb(60, 63, 65);
     font-family: 'Roboto', sans-serif;
     color: rgb(187, 187, 187);
+    -webkit-font-smoothing: subpixel-antialiased;
 }
 
 *::-webkit-scrollbar {
@@ -45,19 +47,12 @@ button {
 }
 
 button:hover {
-    background: rgba(0, 0, 0, .15);
+    background: rgba(0, 0, 0, .15) !important;
+    cursor: pointer;
 }
 
 button.active {
     background: rgb(44, 44, 44);
-}
-
-button.category {
-    background: rgba(0, 0, 0, .10);
-}
-
-button.indent {
-    padding-left: 28px;
 }
 
 .divider {
@@ -112,7 +107,7 @@ button input {
     visibility: visible;
 }
 
-.sidemenu #header {
+.sidemenu #footer {
     border-top: 2px solid rgb(44, 44, 44);
 }
 
@@ -121,6 +116,19 @@ button input {
     width: 100%;
     height: 30px;
     text-align: left;
+}
+
+button.category {
+    background: rgba(0, 0, 0, .10);
+}
+
+button.indent {
+    padding-left: 28px;
+    display: none;
+}
+
+button.collapse {
+    display: block;
 }
 
 .workspace {
@@ -198,6 +206,12 @@ section {
     box-sizing: border-box;
 }
 
+#tab_desc h3 {
+    border-bottom: 1px solid rgb(81, 81, 81);
+    padding: 5px;
+    margin: 2px;
+}
+
 #tab_desc > .wrapper a {
     text-decoration: underline;
 }
@@ -214,10 +228,31 @@ section {
     top: 30px;
     height: 30px;
     background: rgb(44, 44, 44);
-    padding: 0 8px;
-    line-height: 30px;
+    padding: 7px;
     font-size: 12px;
-    overflow-y: auto;
+}
+
+#explanation:before {
+    font-family: FontAwesome;
+    content: '\f05a\00a0\00a0';
+}
+
+#explanation {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.explanation_container:hover {
+    z-index: 5;
+    height: auto;
+    bottom: auto;
+    box-shadow: 0 8px 8px -8px rgba(0, 0, 0, .8);
+}
+
+.explanation_container:hover #explanation {
+    white-space: normal;
 }
 
 .data_container {
