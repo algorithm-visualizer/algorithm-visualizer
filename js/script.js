@@ -1,24 +1,24 @@
-var executeData = function (tracerManager, data) {
+var executeData = function () {
     try {
-        tracerManager.deallocateAll();
-        eval(data);
-        tracerManager.visualize();
+        arguments[0].deallocateAll();
+        eval(arguments[1]);
+        arguments[0].visualize();
     } catch (err) {
         return err;
     } finally {
-        tracerManager.removeUnallocated();
+        arguments[0].removeUnallocated();
     }
 };
-var executeDataAndCode = function (tracerManager, data, code) {
+var executeDataAndCode = function () {
     try {
-        tracerManager.deallocateAll();
-        eval(data);
-        eval(code);
-        tracerManager.visualize();
+        arguments[0].deallocateAll();
+        eval(arguments[1]);
+        eval(arguments[2]);
+        arguments[0].visualize();
     } catch (err) {
         return err;
     } finally {
-        tracerManager.removeUnallocated();
+        arguments[0].removeUnallocated();
     }
 };
 (function () {
