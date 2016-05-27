@@ -189,6 +189,12 @@ var TracerUtil = {
             return value === "Infinity" ? Infinity : value;
         });
     },
+    refineByType: function (item) {
+      return $.isNumeric(item) ? this.refineNumber(item) : this.refineString(item);  
+    },
+    refineString: function (string) {
+        return string === '' ? ' ' : string;
+    },
     refineNumber: function (number) {
         return number === Infinity ? '∞' : number;
     }

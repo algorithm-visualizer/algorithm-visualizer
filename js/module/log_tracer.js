@@ -13,7 +13,7 @@ LogTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         this.$container.append(this.$wrapper);
     },
     _print: function (msg) {
-        this.tm.pushStep(this.capsule, {type: 'print', msg: msg});
+        this.manager.pushStep(this.capsule, {type: 'print', msg: msg});
         return this;
     },
     processStep: function (step, options) {

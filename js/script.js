@@ -35,12 +35,12 @@ var executeDataAndCode = function () {
         e.stopPropagation();
     });
 
-    var tm = new TracerManager();
-    Tracer.prototype.tm = tm;
+    var tracerManager = new TracerManager();
+    Tracer.prototype.manager = tracerManager;
 
     $('#interval').on('change', function () {
-        tm.interval = Number.parseFloat($(this).val() * 1000);
-        showInfoToast('Tracing interval has been set to ' + tm.interval / 1000 + ' second(s).');
+        tracerManager.interval = Number.parseFloat($(this).val() * 1000);
+        showInfoToast('Tracing interval has been set to ' + tracerManager.interval / 1000 + ' second(s).');
     });
 
     var $module_container = $('.module_container');
@@ -63,7 +63,7 @@ var executeDataAndCode = function () {
     dataEditor.on('change', function () {
         var data = dataEditor.getValue();
         if (lastFile) cachedFile[lastFile].data = data;
-        executeData(tm, data);
+        executeData(tracerManager, data);
     });
     codeEditor.on('change', function () {
         var code = codeEditor.getValue();
@@ -305,7 +305,7 @@ var executeDataAndCode = function () {
             $sidemenu.css('right', 0);
             $workspace.css('left', 0);
         }
-        tm.resize();
+        tracerManager.resize();
     });
 
     var showErrorToast = function (err) {
@@ -345,26 +345,26 @@ var executeDataAndCode = function () {
         $('#btn_trace').click();
         var data = dataEditor.getValue();
         var code = codeEditor.getValue();
-        var err = executeDataAndCode(tm, data, code);
+        var err = executeDataAndCode(tracerManager, data, code);
         if (err) {
             console.error(err);
             showErrorToast(err);
         }
     });
     $('#btn_pause').click(function () {
-        if (tm.isPause()) {
-            tm.resumeStep();
+        if (tracerManager.isPause()) {
+            tracerManager.resumeStep();
         } else {
-            tm.pauseStep();
+            tracerManager.pauseStep();
         }
     });
     $('#btn_prev').click(function () {
-        tm.pauseStep();
-        tm.prevStep();
+        tracerManager.pauseStep();
+        tracerManager.prevStep();
     });
     $('#btn_next').click(function () {
-        tm.pauseStep();
-        tm.nextStep();
+        tracerManager.pauseStep();
+        tracerManager.nextStep();
     });
 
     $('#btn_desc').click(function () {
@@ -381,7 +381,7 @@ var executeDataAndCode = function () {
     });
 
     $(window).resize(function () {
-        tm.resize();
+        tracerManager.resize();
     });
 
     var dividers = [
@@ -422,7 +422,7 @@ var executeDataAndCode = function () {
                         $first.css('right', (100 - percent) + '%');
                         $second.css('left', percent + '%');
                         x = e.pageX;
-                        tm.resize();
+                        tracerManager.resize();
                         $('.files_bar > .wrapper').scroll();
                     }
                 });
@@ -451,7 +451,7 @@ var executeDataAndCode = function () {
                         $first.css('bottom', (100 - percent) + '%');
                         $second.css('top', percent + '%');
                         y = e.pageY;
-                        tm.resize();
+                        tracerManager.resize();
                     }
                 });
                 $(document).mouseup(function (e) {
@@ -464,16 +464,16 @@ var executeDataAndCode = function () {
     }
 
     $module_container.on('mousedown', '.module_wrapper', function (e) {
-        tm.findOwner(this).mousedown(e);
+        tracerManager.findOwner(this).mousedown(e);
     });
     $module_container.on('mousemove', '.module_wrapper', function (e) {
-        tm.findOwner(this).mousemove(e);
+        tracerManager.findOwner(this).mousemove(e);
     });
     $(document).mouseup(function (e) {
-        tm.command('mouseup', e);
+        tracerManager.command('mouseup', e);
     });
     $module_container.on('DOMMouseScroll mousewheel', '.module_wrapper', function (e) {
-        tm.findOwner(this).mousewheel(e);
+        tracerManager.findOwner(this).mousewheel(e);
     });
 
 // Share scratch paper

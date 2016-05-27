@@ -11,6 +11,13 @@
       "bridges": "Find-Bridges"
     }
   },
+  "cryptography": {
+    "name": "Cryptography",
+    "list": {
+      "caesar_cipher": "Caesar Cipher",
+      "affine_cipher": "Affine Cipher"
+    }
+  },
   "mst": {
     "name": "Minimum Spanning Tree",
     "list": {
