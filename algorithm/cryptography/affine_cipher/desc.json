@@ -2,7 +2,7 @@
   "Affine Cipher": "The affine cipher is a type of monoalphabetic substitution cipher, wherein each letter in an alphabet is mapped to its numeric equivalent, encrypted using a simple mathematical function, and converted back to a letter.",
   "Applications": [
     "Cryptanalysis",
-    "More complex Variations of Affine Cihper are used in practical cryptography"
+    "More complex Variations of Affine Cipher are used in practical cryptography"
   ],
   "Complexity": {
     "time": "worst O(N), N = length of plain/cipher text",
