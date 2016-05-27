@@ -11,7 +11,7 @@ for (var i = 0; i < N + 1; i++) {
     }
 }
 
-var tracer = new Array2DTracer()._setData(DP);
-var dataViewer1 = new Array1DTracer()._setData(val);
-var dataViewer2 = new Array1DTracer()._setData(wt);
+var tracer = new Array2DTracer('Knapsack Table')._setData(DP);
+var dataViewer1 = new Array1DTracer('Values')._setData(val);
+var dataViewer2 = new Array1DTracer('Weights')._setData(wt);
 var logger = new LogTracer();
