@@ -60,7 +60,8 @@
       "max_subarray": "Maximum Subarray",
       "max_sum_path": "Maximum Sum Path",
       "sliding_window": "Sliding Window",
-      "integer_partition": "Integer Partition"
+      "integer_partition": "Integer Partition",
+      "ugly_numbers": "Ugly Numbers"
     }
    },
   "etc": {
