@@ -8,11 +8,11 @@ function Array2DTracer() {
 
 Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
     constructor: Array2DTracer,
-    init: function () {
+    init: function() {
         this.$table = this.capsule.$table = $('<div class="mtbl-table">');
         this.$container.append(this.$table);
     },
-    _notify: function (x, y, v) {
+    _notify: function(x, y, v) {
         this.tm.pushStep(this.capsule, {
             type: 'notify',
             x: x,
@@ -21,7 +21,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         });
         return this;
     },
-    _denotify: function (x, y) {
+    _denotify: function(x, y) {
         this.tm.pushStep(this.capsule, {
             type: 'denotify',
             x: x,
@@ -29,31 +29,31 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         });
         return this;
     },
-    _select: function (sx, sy, ex, ey) {
+    _select: function(sx, sy, ex, ey) {
         this.pushSelectingStep('select', null, arguments);
         return this;
     },
-    _selectRow: function (x, sy, ey) {
+    _selectRow: function(x, sy, ey) {
         this.pushSelectingStep('select', 'row', arguments);
         return this;
     },
-    _selectCol: function (y, sx, ex) {
+    _selectCol: function(y, sx, ex) {
         this.pushSelectingStep('select', 'col', arguments);
         return this;
     },
-    _deselect: function (sx, sy, ex, ey) {
+    _deselect: function(sx, sy, ex, ey) {
         this.pushSelectingStep('deselect', null, arguments);
         return this;
     },
-    _deselectRow: function (x, sy, ey) {
+    _deselectRow: function(x, sy, ey) {
         this.pushSelectingStep('deselect', 'row', arguments);
         return this;
     },
-    _deselectCol: function (y, sx, ex) {
+    _deselectCol: function(y, sx, ex) {
         this.pushSelectingStep('deselect', 'col', arguments);
         return this;
     },
-    pushSelectingStep: function () {
+    pushSelectingStep: function() {
         var args = Array.prototype.slice.call(arguments);
         var type = args.shift();
         var mode = args.shift();
@@ -95,12 +95,12 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         $.extend(step, coord);
         this.tm.pushStep(this.capsule, step);
     },
-    processStep: function (step, options) {
+    processStep: function(step, options) {
         switch (step.type) {
             case 'notify':
                 if (step.v) {
                     var $row = this.$table.find('.mtbl-row').eq(step.x);
-                    $row.find('.mtbl-cell').eq(step.y).text(TracerUtil.refineNumber(step.v));
+                    $row.find('.mtbl-cell').eq(step.y).text(TracerUtil.refinePrimitiveByType(step.v));
                 }
             case 'denotify':
             case 'select':
@@ -121,16 +121,16 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
                 Tracer.prototype.processStep.call(this, step, options);
         }
     },
-    setData: function (D) {
+    setData: function(D) {
         this.viewX = this.viewY = 0;
         this.paddingH = 6;
         this.paddingV = 3;
         this.fontSize = 16;
 
         if (Tracer.prototype.setData.apply(this, arguments)) {
-            this.$table.find('.mtbl-row').each(function (i) {
-                $(this).children().each(function (j) {
-                    $(this).text(TracerUtil.refineNumber(D[i][j]));
+            this.$table.find('.mtbl-row').each(function(i) {
+                $(this).children().each(function(j) {
+                    $(this).text(TracerUtil.refinePrimitiveByType(D[i][j]));
                 });
             });
             return true;
@@ -143,7 +143,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
             for (var j = 0; j < D[i].length; j++) {
                 var $cell = $('<div class="mtbl-cell">')
                     .css(this.getCellCss())
-                    .text(TracerUtil.refineNumber(D[i][j]));
+                    .text(TracerUtil.refinePrimitiveByType(D[i][j]));
                 $row.append($cell);
             }
         }
@@ -151,23 +151,29 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
 
         return false;
     },
-    resize: function () {
+    setValue: function(value, rowIndex, valueIndex) {
+        var row = this.$table.find('.mtbl-row')[rowIndex];
+        var cell = $(row).children()[valueIndex];
+        $(cell).text(TracerUtil.refinePrimitiveByType(value));
+        return this;
+    },
+    resize: function() {
         Tracer.prototype.resize.call(this);
 
         this.refresh();
     },
-    clear: function () {
+    clear: function() {
         Tracer.prototype.clear.call(this);
 
         this.clearColor();
     },
-    getCellCss: function () {
+    getCellCss: function() {
         return {
             padding: this.paddingV.toFixed(1) + 'px ' + this.paddingH.toFixed(1) + 'px',
             'font-size': this.fontSize.toFixed(1) + 'px'
         };
     },
-    refresh: function () {
+    refresh: function() {
         Tracer.prototype.refresh.call(this);
 
         var $parent = this.$table.parent();
@@ -176,14 +182,14 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         this.$table.css('margin-top', top);
         this.$table.css('margin-left', left);
     },
-    mousedown: function (e) {
+    mousedown: function(e) {
         Tracer.prototype.mousedown.call(this, e);
 
         this.dragX = e.pageX;
         this.dragY = e.pageY;
         this.dragging = true;
     },
-    mousemove: function (e) {
+    mousemove: function(e) {
         Tracer.prototype.mousemove.call(this, e);
 
         if (this.dragging) {
@@ -194,12 +200,12 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
             this.refresh();
         }
     },
-    mouseup: function (e) {
+    mouseup: function(e) {
         Tracer.prototype.mouseup.call(this, e);
 
         this.dragging = false;
     },
-    mousewheel: function (e) {
+    mousewheel: function(e) {
         Tracer.prototype.mousewheel.call(this, e);
 
         e.preventDefault();
@@ -216,7 +222,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         this.$table.find('.mtbl-cell').css(this.getCellCss());
         this.refresh();
     },
-    paintColor: function (sx, sy, ex, ey, colorClass, addClass) {
+    paintColor: function(sx, sy, ex, ey, colorClass, addClass) {
         for (var i = sx; i <= ex; i++) {
             var $row = this.$table.find('.mtbl-row').eq(i);
             for (var j = sy; j <= ey; j++) {
@@ -226,7 +232,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
             }
         }
     },
-    clearColor: function () {
+    clearColor: function() {
         this.$table.find('.mtbl-cell').removeClass(Object.keys(this.colorClass).join(' '));
     },
     colorClass: {
@@ -236,7 +242,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
 });
 
 var Array2D = {
-    random: function (N, M, min, max) {
+    random: function(N, M, min, max) {
         if (!N) N = 10;
         if (!M) M = 10;
         if (min === undefined) min = 1;
@@ -250,9 +256,9 @@ var Array2D = {
         }
         return D;
     },
-    randomSorted: function (N, M, min, max) {
-        return this.random(N, M, min, max).map(function (arr) {
-            return arr.sort(function (a, b) {
+    randomSorted: function(N, M, min, max) {
+        return this.random(N, M, min, max).map(function(arr) {
+            return arr.sort(function(a, b) {
                 return a - b;
             });
         });
