@@ -44,7 +44,7 @@ function merge(mergeFrom, start, middle, end, mergeTo) {
             /**/if (j < end) {
                 /**/    logger._print('writing smaller value to output');
                 /**/} else {
-                /**/    logger._print('copying index ' + j + ' to output');
+                /**/    logger._print('copying index ' + i + ' to output');
                 /**/}
             /**/tracer._notify(mergeTo, k, D[mergeFrom][i])._wait();
             /**/tracer._denotify(mergeTo, k);
