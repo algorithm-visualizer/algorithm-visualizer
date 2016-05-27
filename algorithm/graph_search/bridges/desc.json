@@ -1,16 +1,17 @@
 {
-  "Bridges": "An edge in an undirected connected graph is a bridge iff removing it disconnects the graph. A naive solution to finding bridges in a graph is to:<br />1.Delete an edge E<br />2.Perform DFS Exploration to check if the Graph is still connected<br />3.Restore Edge E. E is a bridge only if DFS exploration determines that the graph is disconnected without E",
+  "Bridges": "An edge in an undirected connected graph is a bridge iff removing it disconnects the graph. A naive solution to finding bridges in a graph is to:<br />1.Delete an edge E<br />2.Perform DFS Exploration to check if the Graph is still connected<br />3.Restore Edge E. E is a bridge only if DFS exploration determines that the graph is disconnected without E. An efficient solution also exists, which uses the idea that edge U-V (U is parent) is a bridge if no subtree rooted at V has a back edge to U or one of its ancestors.",
   "Applications": [
     "Finding vulnerabilities in Graphs and Electrical Circuits"
   ],
   "Complexity": {
-    "time": "worst O(|E|.(|V|+|E|))",
+    "time": "worst Naive: O(|E|.(|V|+|E|)), Efficient: O(|V|+|E|)",
     "space": "worst O(|V|.|E|)"
   },
   "References": [
     "<a href='https://en.wikipedia.org/wiki/Bridge_(graph_theory)'>Wikipedia</a>"
   ],
   "files": {
-    "naive": "Find all the bridges in an Undirected Graph"
+    "naive": "Find all the bridges in an Undirected Graph",
+    "efficient": "Efficiently find all the bridges in an Undirected Graph"
   }
 }
