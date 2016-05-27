@@ -46,15 +46,15 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
         this.graph = this.capsule.graph = this.s.graph;
     },
     _setTreeData: function (G, root) {
-        this.tm.pushStep(this.capsule, {type: 'setTreeData', arguments: arguments});
+        this.manager.pushStep(this.capsule, {type: 'setTreeData', arguments: arguments});
         return this;
     },
     _visit: function (target, source) {
-        this.tm.pushStep(this.capsule, {type: 'visit', target: target, source: source});
+        this.manager.pushStep(this.capsule, {type: 'visit', target: target, source: source});
         return this;
     },
     _leave: function (target, source) {
-        this.tm.pushStep(this.capsule, {type: 'leave', target: target, source: source});
+        this.manager.pushStep(this.capsule, {type: 'leave', target: target, source: source});
         return this;
     },
     processStep: function (step, options) {
