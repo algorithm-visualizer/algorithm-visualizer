@@ -1,6 +1,6 @@
 function Tracer(name) {
     this.module = this.constructor;
-    this.capsule = this.tm.allocate(this);
+    this.capsule = this.manager.allocate(this);
     $.extend(this, this.capsule);
     this.setName(name);
     return this.new;
@@ -8,18 +8,18 @@ function Tracer(name) {
 
 Tracer.prototype = {
     constructor: Tracer,
-    tm: null,
+    manager: null,
     _setData: function () {
         var args = Array.prototype.slice.call(arguments);
-        this.tm.pushStep(this.capsule, {type: 'setData', args: TracerUtil.toJSON(args)});
+        this.manager.pushStep(this.capsule, {type: 'setData', args: TracerUtil.toJSON(args)});
         return this;
     },
     _clear: function () {
-        this.tm.pushStep(this.capsule, {type: 'clear'});
+        this.manager.pushStep(this.capsule, {type: 'clear'});
         return this;
     },
     _wait: function () {
-        this.tm.newStep();
+        this.manager.newStep();
         return this;
     },
     processStep: function (step, options) {
