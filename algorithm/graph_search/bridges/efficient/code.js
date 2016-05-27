@@ -25,12 +25,12 @@ var util = function (u, disc, low, parent) {
 
 	adj [u].forEach (function (v) {
 		if (disc [v] > -1 && v == parent) {
-			trace(v)
+			trace(v);
 			logger._print (u + '\'s neighbor ' + v + ' is u\'s parent. Not visiting it.');
 			
 		}
 		else if (disc[v] > -1 && v != parent) {
-			trace(v)
+			trace(v);
 		    logger._print(u + '\'s neighbor ' + v + ' is not u\'s parent. Comparing low[u] with disc[v]')
 		    if(low[u] > disc[v]) {
 		        logger._print('low[' + u + '] is greater than disc[' + v + ']. Setting low[' + u + '] to disc[' + v + ']')
@@ -39,7 +39,7 @@ var util = function (u, disc, low, parent) {
 		}
 
 		if (disc[v] == -1) {
-			trace(v)
+			trace(v);
 			logger._print (u + '\'s neighbor ' + v + ' has not been visited yet');
 			//logger._print ('Setting parent of ' + v + ' to ' + u + ' (parent [v] = u)');
 
