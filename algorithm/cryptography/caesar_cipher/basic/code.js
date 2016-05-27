@@ -10,7 +10,7 @@ function getNextChar(currChar, direction) {
   var pos = alphabetMap[currChar];
   var nextPos = direction === 'up' ? getPosUp(pos) : getPosDown(pos);
   var nextChar = alphabet.charAt(nextPos);
-  
+
   logger._print(currChar + ' -> ' + nextChar);
   return nextChar;
 }
@@ -21,24 +21,23 @@ function cipher(str, rotation, direction, cipherTracer) {
   for (var i = 0; i < str.length; i++) {
 
     cipherTracer._wait();
-    
+
     var currChar = str.charAt(i);
     var r = rotation;
 
     logger._print('Rotating ' + currChar + ' ' + direction + ' ' + rotation + ' times');
-    cipherTracer._notify(i)._wait();
+    cipherTracer._select(i)._wait();
 
     // perform given amount of rotations in the given direction
-    while (--r > 0) {
+    while (r-- > 0) {
       currChar = getNextChar(currChar, direction);
       cipherTracer._notify(i, currChar)._wait();
     }
-    
+
     str = str.substring(0, i) + currChar + str.substring(i + 1);
     logger._print('Current result: ' + str);
   }
-
-  cipherTracer._select(0, i);
+    
   return str;
 }
 

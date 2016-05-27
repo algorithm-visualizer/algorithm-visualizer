@@ -65,7 +65,7 @@ button:not([disabled]):hover {
 
 .btn.active,
 button.active {
-    background: rgba(0, 0, 0, .28);
+    background: rgb(38, 38, 38);
 }
 
 .btn input,
@@ -138,7 +138,7 @@ nav h3 {
 }
 
 .sidemenu #footer {
-    border-top: 2px solid rgba(0, 0, 0, .28);
+    border-top: 2px solid rgb(38, 38, 38);
 }
 
 .sidemenu button {
@@ -181,7 +181,7 @@ section,
 
 nav,
 section {
-    border: 1px solid rgba(0, 0, 0, .28);
+    border: 1px solid rgb(38, 38, 38);
     box-sizing: border-box;
 }
 
@@ -227,7 +227,7 @@ section {
     z-index: 5;
     padding: 4px;
     font-size: 14px;
-    background: rgba(0, 0, 0, .28);
+    background: rgba(0, 0, 0, .4);
 }
 
 .module_wrapper > .wrapper {
@@ -299,10 +299,11 @@ section {
 }
 
 .explanation_container {
+    border: none;
     top: 30px;
     height: 30px;
-    background: rgba(0, 0, 0, .28);
-    padding: 7px;
+    background: rgb(38, 38, 38);
+    padding: 8px;
     font-size: 12px;
 }
 
