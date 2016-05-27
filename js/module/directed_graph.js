@@ -46,15 +46,15 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
         this.graph = this.capsule.graph = this.s.graph;
     },
     _setTreeData: function (G, root) {
-        tm.pushStep(this.capsule, {type: 'setTreeData', arguments: arguments});
+        this.tm.pushStep(this.capsule, {type: 'setTreeData', arguments: arguments});
         return this;
     },
     _visit: function (target, source) {
-        tm.pushStep(this.capsule, {type: 'visit', target: target, source: source});
+        this.tm.pushStep(this.capsule, {type: 'visit', target: target, source: source});
         return this;
     },
     _leave: function (target, source) {
-        tm.pushStep(this.capsule, {type: 'leave', target: target, source: source});
+        this.tm.pushStep(this.capsule, {type: 'leave', target: target, source: source});
         return this;
     },
     processStep: function (step, options) {
@@ -111,7 +111,7 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
 
         var wgap = 1 / (maxDepth - 1);
         var dfs = function (node, depth, top, bottom) {
-            place(node, depth * wgap, (top + bottom) / 2);
+            place(node, top + bottom, depth * wgap);
             var children = 0;
             for (var i = 0; i < G[node].length; i++) {
                 if (G[node][i]) children++;

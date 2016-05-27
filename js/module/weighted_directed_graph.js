@@ -30,22 +30,22 @@ WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGra
         });
     },
     _weight: function (target, weight) {
-        tm.pushStep(this.capsule, {type: 'weight', target: target, weight: weight});
+        this.tm.pushStep(this.capsule, {type: 'weight', target: target, weight: weight});
         return this;
     },
     _visit: function (target, source, weight) {
-        tm.pushStep(this.capsule, {type: 'visit', target: target, source: source, weight: weight});
+        this.tm.pushStep(this.capsule, {type: 'visit', target: target, source: source, weight: weight});
         return this;
     },
     _leave: function (target, source, weight) {
-        tm.pushStep(this.capsule, {type: 'leave', target: target, source: source, weight: weight});
+        this.tm.pushStep(this.capsule, {type: 'leave', target: target, source: source, weight: weight});
         return this;
     },
     processStep: function (step, options) {
         switch (step.type) {
             case 'weight':
                 var targetNode = this.graph.nodes(this.n(step.target));
-                if (step.weight !== undefined) targetNode.weight = refineNumber(step.weight);
+                if (step.weight !== undefined) targetNode.weight = TracerUtil.refineNumber(step.weight);
                 break;
             case 'visit':
             case 'leave':
@@ -53,7 +53,7 @@ WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGra
                 var targetNode = this.graph.nodes(this.n(step.target));
                 var color = visit ? this.color.visited : this.color.left;
                 targetNode.color = color;
-                if (step.weight !== undefined) targetNode.weight = refineNumber(step.weight);
+                if (step.weight !== undefined) targetNode.weight = TracerUtil.refineNumber(step.weight);
                 if (step.source !== undefined) {
                     var edgeId = this.e(step.source, step.target);
                     var edge = this.graph.edges(edgeId);
@@ -97,7 +97,7 @@ WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGra
                         target: this.n(j),
                         color: this.color.default,
                         size: 1,
-                        weight: refineNumber(G[i][j])
+                        weight: TracerUtil.refineNumber(G[i][j])
                     });
                 }
             }

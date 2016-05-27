@@ -1,12 +1,5 @@
-var tracer = new UndirectedGraphTracer ();
-var logger = new LogTracer ();
-var G = [
-	[0,1,0,0,0,0],
-	[1,0,0,1,1,0],
-	[0,0,0,1,0,0],
-	[0,1,1,0,1,1],
-	[0,1,0,1,0,0],
-	[0,0,0,1,0,0]
-];
+var tracer = new UndirectedGraphTracer();
+var logger = new LogTracer();
+var G = UndirectedGraph.random(8, .2);
 
-tracer._setData (G);
+tracer._setData(G);
