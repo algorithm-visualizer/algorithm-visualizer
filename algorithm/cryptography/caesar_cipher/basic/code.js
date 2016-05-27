@@ -23,7 +23,6 @@ function getNextChar(c, direction) {
 function cipher(str, rotation, direction, cipherTracer) {
   if (!str) return '';
 
-  var result = '';
   for (var i = 0; i < str.length; i++) {
 
     var currChar = str.charAt(i);

@@ -5,7 +5,7 @@
   ],
   "Complexity": {
     "time": "best O(N * #ofRotations), worst O(N * #ofRotations * alphabetSize)",
-    "space": "O(1)"
+    "space": "best O(1), word O(alphabetSize)"
   },
   "References": [
     "<a href='https://en.wikipedia.org/wiki/Caesar_cipher'>Wikipedia</a>"
