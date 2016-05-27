@@ -13,7 +13,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         this.$container.append(this.$table);
     },
     _notify: function (x, y, v) {
-        this.tm.pushStep(this.capsule, {
+        this.manager.pushStep(this.capsule, {
             type: 'notify',
             x: x,
             y: y,
@@ -22,7 +22,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         return this;
     },
     _denotify: function (x, y) {
-        this.tm.pushStep(this.capsule, {
+        this.manager.pushStep(this.capsule, {
             type: 'denotify',
             x: x,
             y: y
@@ -51,6 +51,38 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
     },
     _deselectCol: function (y, sx, ex) {
         this.pushSelectingStep('deselect', 'col', arguments);
+        return this;
+    },
+    _separate: function (x, y) {
+        this.manager.pushStep(this.capsule, {
+            type: 'separate',
+            x: x,
+            y: y
+        });
+        return this;
+    },
+    _separateRow: function (x) {
+        this._separate(x, -1);
+        return this;
+    },
+    _separateCol: function (y) {
+        this._separate(-1, y);
+        return this;
+    },
+    _deseparate: function (x, y) {
+        this.manager.pushStep(this.capsule, {
+            type: 'deseparate',
+            x: x,
+            y: y
+        });
+        return this;
+    },
+    _deseparateRow: function (x) {
+        this._deseparate(x, -1);
+        return this;
+    },
+    _deseparateCol: function (y) {
+        this._deseparate(-1, y);
         return this;
     },
     pushSelectingStep: function () {
@@ -93,14 +125,15 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
             type: type
         };
         $.extend(step, coord);
-        this.tm.pushStep(this.capsule, step);
+        this.manager.pushStep(this.capsule, step);
     },
     processStep: function (step, options) {
         switch (step.type) {
             case 'notify':
                 if (step.v) {
                     var $row = this.$table.find('.mtbl-row').eq(step.x);
-                    $row.find('.mtbl-cell').eq(step.y).text(TracerUtil.refineNumber(step.v));
+                    var $col = $row.find('.mtbl-col').eq(step.y);
+                    $col.text(TracerUtil.refineByType(step.v));
                 }
             case 'denotify':
             case 'select':
@@ -117,6 +150,13 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
                 if (ey === undefined) ey = step.y;
                 this.paintColor(sx, sy, ex, ey, colorClass, addClass);
                 break;
+            case 'separate':
+                this.deseparate(step.x, step.y);
+                this.separate(step.x, step.y);
+                break;
+            case 'deseparate':
+                this.deseparate(step.x, step.y);
+                break;
             default:
                 Tracer.prototype.processStep.call(this, step, options);
         }
@@ -129,8 +169,8 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
 
         if (Tracer.prototype.setData.apply(this, arguments)) {
             this.$table.find('.mtbl-row').each(function (i) {
-                $(this).children().each(function (j) {
-                    $(this).text(TracerUtil.refineNumber(D[i][j]));
+                $(this).find('.mtbl-col').each(function (j) {
+                    $(this).text(TracerUtil.refineByType(D[i][j]));
                 });
             });
             return true;
@@ -141,10 +181,10 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
             var $row = $('<div class="mtbl-row">');
             this.$table.append($row);
             for (var j = 0; j < D[i].length; j++) {
-                var $cell = $('<div class="mtbl-cell">')
+                var $col = $('<div class="mtbl-col">')
                     .css(this.getCellCss())
-                    .text(TracerUtil.refineNumber(D[i][j]));
-                $row.append($cell);
+                    .text(TracerUtil.refineByType(D[i][j]));
+                $row.append($col);
             }
         }
         this.resize();
@@ -160,6 +200,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         Tracer.prototype.clear.call(this);
 
         this.clearColor();
+        this.deseparateAll();
     },
     getCellCss: function () {
         return {
@@ -213,25 +254,46 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         this.paddingV *= ratio;
         this.paddingH *= ratio;
         this.fontSize *= ratio;
-        this.$table.find('.mtbl-cell').css(this.getCellCss());
+        this.$table.find('.mtbl-col').css(this.getCellCss());
         this.refresh();
     },
     paintColor: function (sx, sy, ex, ey, colorClass, addClass) {
         for (var i = sx; i <= ex; i++) {
             var $row = this.$table.find('.mtbl-row').eq(i);
             for (var j = sy; j <= ey; j++) {
-                var $cell = $row.find('.mtbl-cell').eq(j);
-                if (addClass) $cell.addClass(colorClass);
-                else $cell.removeClass(colorClass);
+                var $col = $row.find('.mtbl-col').eq(j);
+                if (addClass) $col.addClass(colorClass);
+                else $col.removeClass(colorClass);
             }
         }
     },
     clearColor: function () {
-        this.$table.find('.mtbl-cell').removeClass(Object.keys(this.colorClass).join(' '));
+        this.$table.find('.mtbl-col').removeClass(Object.keys(this.colorClass).join(' '));
     },
     colorClass: {
         selected: 'selected',
         notified: 'notified'
+    },
+    separate: function (x, y) {
+        this.$table.find('.mtbl-row').each(function (i) {
+            var $row = $(this);
+            if (i == x) {
+                $row.after($('<div class="mtbl-empty-row">').attr('data-row', i))
+            }
+            $row.find('.mtbl-col').each(function (j) {
+                var $col = $(this);
+                if (j == y) {
+                    $col.after($('<div class="mtbl-empty-col">').attr('data-col', j));
+                }
+            });
+        });
+    },
+    deseparate: function (x, y) {
+        this.$table.find('[data-row=' + x + ']').remove();
+        this.$table.find('[data-col=' + y + ']').remove();
+    },
+    deseparateAll: function () {
+        this.$table.find('.mtbl-empty-row, .mtbl-empty-col').remove();
     }
 });
 
