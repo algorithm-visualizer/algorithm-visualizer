@@ -1,4 +1,4 @@
-var tracer = new Array2DTracer();
+var tracer = new Array2DTracer('Distance Table');
 var logger = new LogTracer();
 var str1 = 'stack', str2 = 'racket', table = new Array(str1.length + 1);
 
