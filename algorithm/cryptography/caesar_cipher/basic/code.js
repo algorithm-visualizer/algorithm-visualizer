@@ -1,23 +1,16 @@
 function getPosUp(pos) {
-  if (pos === alphabet.length - 1) {
-    return 0;
-  } else {
-    return pos + 1;
-  }
+  return (pos === alphabet.length - 1) ? 0 : pos + 1;
 }
 
 function getPosDown(pos) {
-  if (pos === 0) {
-    return alphabet.length - 1;
-  } else {
-    return pos - 1;
-  }
+  return (pos === 0) ? alphabet.length - 1 : pos - 1;
 }
 
 function getNextChar(currChar, direction) {
   var pos = alphabetMap[currChar];
   var nextPos = direction === 'up' ? getPosUp(pos) : getPosDown(pos);
   var nextChar = alphabet.charAt(nextPos);
+  
   logger._print(currChar + ' -> ' + nextChar);
   return nextChar;
 }
@@ -27,6 +20,8 @@ function cipher(str, rotation, direction, cipherTracer) {
 
   for (var i = 0; i < str.length; i++) {
 
+    cipherTracer._wait();
+    
     var currChar = str.charAt(i);
     var r = rotation;
 
@@ -38,11 +33,8 @@ function cipher(str, rotation, direction, cipherTracer) {
       currChar = getNextChar(currChar, direction);
       cipherTracer._notify(i, currChar)._wait();
     }
-
-    logger._print('Rotation result: ' + currChar);
-
+    
     str = str.substring(0, i) + currChar + str.substring(i + 1);
-
     logger._print('Current result: ' + str);
   }
 
