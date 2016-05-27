@@ -30,10 +30,10 @@
       "insertion": "Insertion Sort",
       "selection": "Selection Sort",
       "bubble": "Bubble Sort",
-      "quick": "Quicksort",
       "merge": "Merge Sort",
-      "heap" : "Heapsort",
       "radix": "Radix Sort",
+      "quick": "Quicksort",
+      "heap" : "Heapsort",
       "shell": "Shellsort"
     }
   },
@@ -47,12 +47,13 @@
    "dp": {
     "name": "Dynamic Programming",
     "list": {
-      "fibonacci": "Fibonacci sequence",
-      "knapsack_problem": "Knapsack problem",
-      "longest_increasing_subsequence": "Longest increasing subsequence",
-      "max_subarray": "Maximum subarray",
-      "max_sum_path": "Maximum sum path",
-      "sliding_window": "Sliding window"
+      "fibonacci": "Fibonacci Sequence",
+      "knapsack_problem": "Knapsack Problem",
+      "longest_increasing_subsequence": "Longest Increasing Subsequence",
+      "max_subarray": "Maximum Subarray",
+      "max_sum_path": "Maximum Sum Path",
+      "sliding_window": "Sliding Window",
+      "integer_partition": "Integer Partition"
     }
    },
   "etc": {
