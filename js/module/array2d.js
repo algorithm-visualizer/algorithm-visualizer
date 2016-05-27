@@ -100,7 +100,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
             case 'notify':
                 if (step.v) {
                     var $row = this.$table.find('.mtbl-row').eq(step.x);
-                    $row.find('.mtbl-cell').eq(step.y).text(TracerUtil.refineNumber(step.v));
+                    $row.find('.mtbl-cell').eq(step.y).text(TracerUtil.refineByType(step.v));
                 }
             case 'denotify':
             case 'select':
@@ -130,7 +130,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         if (Tracer.prototype.setData.apply(this, arguments)) {
             this.$table.find('.mtbl-row').each(function (i) {
                 $(this).children().each(function (j) {
-                    $(this).text(TracerUtil.refineNumber(D[i][j]));
+                    $(this).text(TracerUtil.refineByType(D[i][j]));
                 });
             });
             return true;
@@ -143,7 +143,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
             for (var j = 0; j < D[i].length; j++) {
                 var $cell = $('<div class="mtbl-cell">')
                     .css(this.getCellCss())
-                    .text(TracerUtil.refineNumber(D[i][j]));
+                    .text(TracerUtil.refineByType(D[i][j]));
                 $row.append($cell);
             }
         }
