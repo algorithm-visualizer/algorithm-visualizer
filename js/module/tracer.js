@@ -9,30 +9,46 @@ function Tracer(name) {
 Tracer.prototype = {
     constructor: Tracer,
     tm: null,
-    _setData: function () {
+    _setData: function() {
         var args = Array.prototype.slice.call(arguments);
-        this.tm.pushStep(this.capsule, {type: 'setData', args: TracerUtil.toJSON(args)});
+        this.tm.pushStep(this.capsule, {
+            type: 'setData',
+            args: TracerUtil.toJSON(args)
+        });
         return this;
     },
-    _clear: function () {
-        this.tm.pushStep(this.capsule, {type: 'clear'});
+    _setValue: function() {
+        var args = Array.prototype.slice.call(arguments);
+        this.tm.pushStep(this.capsule, {
+            type: 'setValue',
+            args: TracerUtil.toJSON(args)
+        });
         return this;
     },
-    _wait: function () {
+    _clear: function() {
+        this.tm.pushStep(this.capsule, {
+            type: 'clear'
+        });
+        return this;
+    },
+    _wait: function() {
         this.tm.newStep();
         return this;
     },
-    processStep: function (step, options) {
+    processStep: function(step, options) {
         switch (step.type) {
             case 'setData':
                 this.setData.apply(this, TracerUtil.fromJSON(step.args));
+                break;
+            case 'setValue':
+                this.setValue.apply(this, TracerUtil.fromJSON(step.args));
                 break;
             case 'clear':
                 this.clear();
                 break;
         }
     },
-    setName: function (name) {
+    setName: function(name) {
         var $name;
         if (this.new) {
             $name = $('<span class="name">');
@@ -42,31 +58,24 @@ Tracer.prototype = {
         }
         $name.text(name || this.defaultName);
     },
-    setData: function () {
+    setData: function() {
         var data = TracerUtil.toJSON(arguments);
         if (!this.new && this.lastData == data) return true;
         this.new = this.capsule.new = false;
         this.lastData = this.capsule.lastData = data;
         return false;
     },
-    resize: function () {
-    },
-    refresh: function () {
-    },
-    clear: function () {
-    },
-    attach: function (tracer) {
+    resize: function() {},
+    refresh: function() {},
+    clear: function() {},
+    attach: function(tracer) {
         if (tracer.module == LogTracer) {
             this.logTracer = tracer;
         }
         return this;
     },
-    mousedown: function (e) {
-    },
-    mousemove: function (e) {
-    },
-    mouseup: function (e) {
-    },
-    mousewheel: function (e) {
-    }
+    mousedown: function(e) {},
+    mousemove: function(e) {},
+    mouseup: function(e) {},
+    mousewheel: function(e) {}
 };

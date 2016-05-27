@@ -1,6 +1,6 @@
 const stepLimit = 1e6;
 
-var TracerManager = function () {
+var TracerManager = function() {
     this.timer = null;
     this.pause = false;
     this.capsules = [];
@@ -8,7 +8,7 @@ var TracerManager = function () {
 };
 
 TracerManager.prototype = {
-    add: function (tracer) {
+    add: function(tracer) {
         var $container = $('<section class="module_wrapper">');
         $('.module_container').append($container);
         var capsule = {
@@ -22,10 +22,10 @@ TracerManager.prototype = {
         this.capsules.push(capsule);
         return capsule;
     },
-    allocate: function (newTracer) {
+    allocate: function(newTracer) {
         var selectedCapsule = null;
         var count = 0;
-        $.each(this.capsules, function (i, capsule) {
+        $.each(this.capsules, function(i, capsule) {
             if (capsule.module == newTracer.module) {
                 count++;
                 if (!capsule.allocated) {
@@ -44,15 +44,15 @@ TracerManager.prototype = {
         selectedCapsule.defaultName = newTracer.constructor.name + ' ' + count;
         return selectedCapsule;
     },
-    deallocateAll: function () {
+    deallocateAll: function() {
         this.reset();
-        $.each(this.capsules, function (i, capsule) {
+        $.each(this.capsules, function(i, capsule) {
             capsule.allocated = false;
         });
     },
-    removeUnallocated: function () {
+    removeUnallocated: function() {
         var changed = false;
-        this.capsules = $.grep(this.capsules, function (capsule) {
+        this.capsules = $.grep(this.capsules, function(capsule) {
             var removed = !capsule.allocated;
             if (capsule.new || removed) changed = true;
             if (removed) {
@@ -62,9 +62,9 @@ TracerManager.prototype = {
         });
         if (changed) this.place();
     },
-    place: function () {
+    place: function() {
         var capsules = this.capsules;
-        $.each(capsules, function (i, capsule) {
+        $.each(capsules, function(i, capsule) {
             var width = 100;
             var height = (100 / capsules.length);
             var top = height * i;
@@ -76,23 +76,23 @@ TracerManager.prototype = {
             capsule.tracer.resize();
         });
     },
-    resize: function () {
+    resize: function() {
         this.command('resize');
     },
-    isPause: function () {
+    isPause: function() {
         return this.pause;
     },
-    setInterval: function (interval) {
+    setInterval: function(interval) {
         $('#interval').val(interval);
     },
-    reset: function () {
+    reset: function() {
         this.traces = [];
         this.traceIndex = -1;
         this.stepCnt = 0;
         if (this.timer) clearTimeout(this.timer);
         this.command('clear');
     },
-    pushStep: function (capsule, step) {
+    pushStep: function(capsule, step) {
         if (this.stepCnt++ > stepLimit) throw "Tracer's stack overflow";
         var len = this.traces.length;
         var last = [];
@@ -101,23 +101,25 @@ TracerManager.prototype = {
         } else {
             last = this.traces[len - 1];
         }
-        last.push($.extend(step, {capsule: capsule}));
+        last.push($.extend(step, {
+            capsule: capsule
+        }));
     },
-    newStep: function () {
+    newStep: function() {
         this.traces.push([]);
     },
-    pauseStep: function () {
+    pauseStep: function() {
         if (this.traceIndex < 0) return;
         this.pause = true;
         if (this.timer) clearTimeout(this.timer);
         $('#btn_pause').addClass('active');
     },
-    resumeStep: function () {
+    resumeStep: function() {
         this.pause = false;
         this.step(this.traceIndex + 1);
         $('#btn_pause').removeClass('active');
     },
-    step: function (i, options) {
+    step: function(i, options) {
         var tracer = this;
 
         if (isNaN(i) || i >= this.traces.length || i < 0) return;
@@ -125,18 +127,18 @@ TracerManager.prototype = {
 
         this.traceIndex = i;
         var trace = this.traces[i];
-        trace.forEach(function (step) {
+        trace.forEach(function(step) {
             step.capsule.tracer.processStep(step, options);
         });
         if (!options.virtual) {
             this.command('refresh');
         }
         if (this.pause) return;
-        this.timer = setTimeout(function () {
+        this.timer = setTimeout(function() {
             tracer.step(i + 1, options);
         }, this.interval);
     },
-    prevStep: function () {
+    prevStep: function() {
         this.command('clear');
         var finalIndex = this.traceIndex - 1;
         if (finalIndex < 0) {
@@ -145,30 +147,32 @@ TracerManager.prototype = {
             return;
         }
         for (var i = 0; i < finalIndex; i++) {
-            this.step(i, {virtual: true});
+            this.step(i, {
+                virtual: true
+            });
         }
         this.step(finalIndex);
     },
-    nextStep: function () {
+    nextStep: function() {
         this.step(this.traceIndex + 1);
     },
-    visualize: function () {
+    visualize: function() {
         this.traceIndex = -1;
         this.resumeStep();
     },
-    command: function () {
+    command: function() {
         var args = Array.prototype.slice.call(arguments);
 
         var functionName = args.shift();
-        $.each(this.capsules, function (i, capsule) {
+        $.each(this.capsules, function(i, capsule) {
             if (capsule.allocated) {
                 capsule.tracer.module.prototype[functionName].apply(capsule.tracer, args);
             }
         });
     },
-    findOwner: function (container) {
+    findOwner: function(container) {
         var selectedCapsule = null;
-        $.each(this.capsules, function (i, capsule) {
+        $.each(this.capsules, function(i, capsule) {
             if (capsule.$container[0] == container) {
                 selectedCapsule = capsule;
                 return false;
@@ -179,17 +183,23 @@ TracerManager.prototype = {
 };
 
 var TracerUtil = {
-    toJSON: function (obj) {
-        return JSON.stringify(obj, function (key, value) {
+    toJSON: function(obj) {
+        return JSON.stringify(obj, function(key, value) {
             return value === Infinity ? "Infinity" : value;
         });
     },
-    fromJSON: function (obj) {
-        return JSON.parse(obj, function (key, value) {
+    fromJSON: function(obj) {
+        return JSON.parse(obj, function(key, value) {
             return value === "Infinity" ? Infinity : value;
         });
     },
-    refineNumber: function (number) {
+    refinePrimitiveByType: function(item) {
+        return $.isNumeric(item) ? this.refineNumber(item) : this.refineString(item);
+    },
+    refineNumber: function(number) {
         return number === Infinity ? '∞' : number;
+    },
+    refineString: function(string) {
+        return string === '' ? ' ' : string;
     }
 };
