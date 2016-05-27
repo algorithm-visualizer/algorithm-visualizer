@@ -1,0 +1,396 @@
+﻿Merge remote-tracking branch 'refs/remotes/parkjs814/gh-pages' into gh-pages
+
+# Conflicts:
+#	index.html
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please remove the file
+#	.git/MERGE_HEAD
+# and try again.
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch gh-pages
+# Your branch is up-to-date with 'origin/gh-pages'.
+#
+# All conflicts fixed but you are still merging.
+#
+# Changes to be committed:
+#	new file:   branding/opencollective/cover.png
+#	new file:   branding/opencollective/cover.psd
+#	new file:   branding/opencollective/logo.png
+#	new file:   branding/opencollective/logo.psd
+#	modified:   index.html
+#	deleted:    js/ace/theme-solarized_light.js
+#	renamed:    js/ace/ace.js -> js/lib/ace/ace.js
+#	renamed:    js/ace/ext-beautify.js -> js/lib/ace/ext-beautify.js
+#	renamed:    js/ace/ext-chromevox.js -> js/lib/ace/ext-chromevox.js
+#	renamed:    js/ace/ext-elastic_tabstops_lite.js -> js/lib/ace/ext-elastic_tabstops_lite.js
+#	renamed:    js/ace/ext-emmet.js -> js/lib/ace/ext-emmet.js
+#	renamed:    js/ace/ext-error_marker.js -> js/lib/ace/ext-error_marker.js
+#	renamed:    js/ace/ext-keybinding_menu.js -> js/lib/ace/ext-keybinding_menu.js
+#	renamed:    js/ace/ext-language_tools.js -> js/lib/ace/ext-language_tools.js
+#	renamed:    js/ace/ext-linking.js -> js/lib/ace/ext-linking.js
+#	renamed:    js/ace/ext-modelist.js -> js/lib/ace/ext-modelist.js
+#	renamed:    js/ace/ext-old_ie.js -> js/lib/ace/ext-old_ie.js
+#	renamed:    js/ace/ext-searchbox.js -> js/lib/ace/ext-searchbox.js
+#	renamed:    js/ace/ext-settings_menu.js -> js/lib/ace/ext-settings_menu.js
+#	renamed:    js/ace/ext-spellcheck.js -> js/lib/ace/ext-spellcheck.js
+#	renamed:    js/ace/ext-split.js -> js/lib/ace/ext-split.js
+#	renamed:    js/ace/ext-static_highlight.js -> js/lib/ace/ext-static_highlight.js
+#	renamed:    js/ace/ext-statusbar.js -> js/lib/ace/ext-statusbar.js
+#	renamed:    js/ace/ext-textarea.js -> js/lib/ace/ext-textarea.js
+#	renamed:    js/ace/ext-themelist.js -> js/lib/ace/ext-themelist.js
+#	renamed:    js/ace/ext-whitespace.js -> js/lib/ace/ext-whitespace.js
+#	renamed:    js/ace/keybinding-emacs.js -> js/lib/ace/keybinding-emacs.js
+#	renamed:    js/ace/keybinding-vim.js -> js/lib/ace/keybinding-vim.js
+#	renamed:    js/ace/mode-abap.js -> js/lib/ace/mode-abap.js
+#	renamed:    js/ace/mode-abc.js -> js/lib/ace/mode-abc.js
+#	renamed:    js/ace/mode-actionscript.js -> js/lib/ace/mode-actionscript.js
+#	renamed:    js/ace/mode-ada.js -> js/lib/ace/mode-ada.js
+#	renamed:    js/ace/mode-apache_conf.js -> js/lib/ace/mode-apache_conf.js
+#	renamed:    js/ace/mode-applescript.js -> js/lib/ace/mode-applescript.js
+#	renamed:    js/ace/mode-asciidoc.js -> js/lib/ace/mode-asciidoc.js
+#	renamed:    js/ace/mode-assembly_x86.js -> js/lib/ace/mode-assembly_x86.js
+#	renamed:    js/ace/mode-autohotkey.js -> js/lib/ace/mode-autohotkey.js
+#	renamed:    js/ace/mode-batchfile.js -> js/lib/ace/mode-batchfile.js
+#	renamed:    js/ace/mode-c9search.js -> js/lib/ace/mode-c9search.js
+#	renamed:    js/ace/mode-c_cpp.js -> js/lib/ace/mode-c_cpp.js
+#	renamed:    js/ace/mode-cirru.js -> js/lib/ace/mode-cirru.js
+#	renamed:    js/ace/mode-clojure.js -> js/lib/ace/mode-clojure.js
+#	renamed:    js/ace/mode-cobol.js -> js/lib/ace/mode-cobol.js
+#	renamed:    js/ace/mode-coffee.js -> js/lib/ace/mode-coffee.js
+#	renamed:    js/ace/mode-coldfusion.js -> js/lib/ace/mode-coldfusion.js
+#	renamed:    js/ace/mode-csharp.js -> js/lib/ace/mode-csharp.js
+#	renamed:    js/ace/mode-css.js -> js/lib/ace/mode-css.js
+#	renamed:    js/ace/mode-curly.js -> js/lib/ace/mode-curly.js
+#	renamed:    js/ace/mode-d.js -> js/lib/ace/mode-d.js
+#	renamed:    js/ace/mode-dart.js -> js/lib/ace/mode-dart.js
+#	renamed:    js/ace/mode-diff.js -> js/lib/ace/mode-diff.js
+#	renamed:    js/ace/mode-django.js -> js/lib/ace/mode-django.js
+#	renamed:    js/ace/mode-dockerfile.js -> js/lib/ace/mode-dockerfile.js
+#	renamed:    js/ace/mode-dot.js -> js/lib/ace/mode-dot.js
+#	renamed:    js/ace/mode-eiffel.js -> js/lib/ace/mode-eiffel.js
+#	renamed:    js/ace/mode-ejs.js -> js/lib/ace/mode-ejs.js
+#	renamed:    js/ace/mode-elixir.js -> js/lib/ace/mode-elixir.js
+#	renamed:    js/ace/mode-elm.js -> js/lib/ace/mode-elm.js
+#	renamed:    js/ace/mode-erlang.js -> js/lib/ace/mode-erlang.js
+#	renamed:    js/ace/mode-forth.js -> js/lib/ace/mode-forth.js
+#	renamed:    js/ace/mode-fortran.js -> js/lib/ace/mode-fortran.js
+#	renamed:    js/ace/mode-ftl.js -> js/lib/ace/mode-ftl.js
+#	renamed:    js/ace/mode-gcode.js -> js/lib/ace/mode-gcode.js
+#	renamed:    js/ace/mode-gherkin.js -> js/lib/ace/mode-gherkin.js
+#	renamed:    js/ace/mode-gitignore.js -> js/lib/ace/mode-gitignore.js
+#	renamed:    js/ace/mode-glsl.js -> js/lib/ace/mode-glsl.js
+#	renamed:    js/ace/mode-gobstones.js -> js/lib/ace/mode-gobstones.js
+#	renamed:    js/ace/mode-golang.js -> js/lib/ace/mode-golang.js
+#	renamed:    js/ace/mode-groovy.js -> js/lib/ace/mode-groovy.js
+#	renamed:    js/ace/mode-haml.js -> js/lib/ace/mode-haml.js
+#	renamed:    js/ace/mode-handlebars.js -> js/lib/ace/mode-handlebars.js
+#	renamed:    js/ace/mode-haskell.js -> js/lib/ace/mode-haskell.js
+#	renamed:    js/ace/mode-haxe.js -> js/lib/ace/mode-haxe.js
+#	renamed:    js/ace/mode-html.js -> js/lib/ace/mode-html.js
+#	renamed:    js/ace/mode-html_elixir.js -> js/lib/ace/mode-html_elixir.js
+#	renamed:    js/ace/mode-html_ruby.js -> js/lib/ace/mode-html_ruby.js
+#	renamed:    js/ace/mode-ini.js -> js/lib/ace/mode-ini.js
+#	renamed:    js/ace/mode-io.js -> js/lib/ace/mode-io.js
+#	renamed:    js/ace/mode-jack.js -> js/lib/ace/mode-jack.js
+#	renamed:    js/ace/mode-jade.js -> js/lib/ace/mode-jade.js
+#	renamed:    js/ace/mode-java.js -> js/lib/ace/mode-java.js
+#	renamed:    js/ace/mode-javascript.js -> js/lib/ace/mode-javascript.js
+#	renamed:    js/ace/mode-json.js -> js/lib/ace/mode-json.js
+#	renamed:    js/ace/mode-jsoniq.js -> js/lib/ace/mode-jsoniq.js
+#	renamed:    js/ace/mode-jsp.js -> js/lib/ace/mode-jsp.js
+#	renamed:    js/ace/mode-jsx.js -> js/lib/ace/mode-jsx.js
+#	renamed:    js/ace/mode-julia.js -> js/lib/ace/mode-julia.js
+#	renamed:    js/ace/mode-latex.js -> js/lib/ace/mode-latex.js
+#	renamed:    js/ace/mode-lean.js -> js/lib/ace/mode-lean.js
+#	renamed:    js/ace/mode-less.js -> js/lib/ace/mode-less.js
+#	renamed:    js/ace/mode-liquid.js -> js/lib/ace/mode-liquid.js
+#	renamed:    js/ace/mode-lisp.js -> js/lib/ace/mode-lisp.js
+#	renamed:    js/ace/mode-live_script.js -> js/lib/ace/mode-live_script.js
+#	renamed:    js/ace/mode-livescript.js -> js/lib/ace/mode-livescript.js
+#	renamed:    js/ace/mode-logiql.js -> js/lib/ace/mode-logiql.js
+#	renamed:    js/ace/mode-lsl.js -> js/lib/ace/mode-lsl.js
+#	renamed:    js/ace/mode-lua.js -> js/lib/ace/mode-lua.js
+#	renamed:    js/ace/mode-luapage.js -> js/lib/ace/mode-luapage.js
+#	renamed:    js/ace/mode-lucene.js -> js/lib/ace/mode-lucene.js
+#	renamed:    js/ace/mode-makefile.js -> js/lib/ace/mode-makefile.js
+#	renamed:    js/ace/mode-markdown.js -> js/lib/ace/mode-markdown.js
+#	renamed:    js/ace/mode-mask.js -> js/lib/ace/mode-mask.js
+#	renamed:    js/ace/mode-matlab.js -> js/lib/ace/mode-matlab.js
+#	renamed:    js/ace/mode-maze.js -> js/lib/ace/mode-maze.js
+#	renamed:    js/ace/mode-mel.js -> js/lib/ace/mode-mel.js
+#	renamed:    js/ace/mode-mips_assembler.js -> js/lib/ace/mode-mips_assembler.js
+#	renamed:    js/ace/mode-mipsassembler.js -> js/lib/ace/mode-mipsassembler.js
+#	renamed:    js/ace/mode-mushcode.js -> js/lib/ace/mode-mushcode.js
+#	renamed:    js/ace/mode-mysql.js -> js/lib/ace/mode-mysql.js
+#	renamed:    js/ace/mode-nix.js -> js/lib/ace/mode-nix.js
+#	renamed:    js/ace/mode-nsis.js -> js/lib/ace/mode-nsis.js
+#	renamed:    js/ace/mode-objectivec.js -> js/lib/ace/mode-objectivec.js
+#	renamed:    js/ace/mode-ocaml.js -> js/lib/ace/mode-ocaml.js
+#	renamed:    js/ace/mode-pascal.js -> js/lib/ace/mode-pascal.js
+#	renamed:    js/ace/mode-perl.js -> js/lib/ace/mode-perl.js
+#	renamed:    js/ace/mode-pgsql.js -> js/lib/ace/mode-pgsql.js
+#	renamed:    js/ace/mode-php.js -> js/lib/ace/mode-php.js
+#	renamed:    js/ace/mode-plain_text.js -> js/lib/ace/mode-plain_text.js
+#	renamed:    js/ace/mode-powershell.js -> js/lib/ace/mode-powershell.js
+#	renamed:    js/ace/mode-praat.js -> js/lib/ace/mode-praat.js
+#	renamed:    js/ace/mode-prolog.js -> js/lib/ace/mode-prolog.js
+#	renamed:    js/ace/mode-properties.js -> js/lib/ace/mode-properties.js
+#	renamed:    js/ace/mode-protobuf.js -> js/lib/ace/mode-protobuf.js
+#	renamed:    js/ace/mode-python.js -> js/lib/ace/mode-python.js
+#	renamed:    js/ace/mode-r.js -> js/lib/ace/mode-r.js
+#	renamed:    js/ace/mode-razor.js -> js/lib/ace/mode-razor.js
+#	renamed:    js/ace/mode-rdoc.js -> js/lib/ace/mode-rdoc.js
+#	renamed:    js/ace/mode-rhtml.js -> js/lib/ace/mode-rhtml.js
+#	renamed:    js/ace/mode-rst.js -> js/lib/ace/mode-rst.js
+#	renamed:    js/ace/mode-ruby.js -> js/lib/ace/mode-ruby.js
+#	renamed:    js/ace/mode-rust.js -> js/lib/ace/mode-rust.js
+#	renamed:    js/ace/mode-sass.js -> js/lib/ace/mode-sass.js
+#	renamed:    js/ace/mode-scad.js -> js/lib/ace/mode-scad.js
+#	renamed:    js/ace/mode-scala.js -> js/lib/ace/mode-scala.js
+#	renamed:    js/ace/mode-scheme.js -> js/lib/ace/mode-scheme.js
+#	renamed:    js/ace/mode-scss.js -> js/lib/ace/mode-scss.js
+#	renamed:    js/ace/mode-sh.js -> js/lib/ace/mode-sh.js
+#	renamed:    js/ace/mode-sjs.js -> js/lib/ace/mode-sjs.js
+#	renamed:    js/ace/mode-smarty.js -> js/lib/ace/mode-smarty.js
+#	renamed:    js/ace/mode-snippets.js -> js/lib/ace/mode-snippets.js
+#	renamed:    js/ace/mode-soy_template.js -> js/lib/ace/mode-soy_template.js
+#	renamed:    js/ace/mode-space.js -> js/lib/ace/mode-space.js
+#	renamed:    js/ace/mode-sql.js -> js/lib/ace/mode-sql.js
+#	renamed:    js/ace/mode-sqlserver.js -> js/lib/ace/mode-sqlserver.js
+#	renamed:    js/ace/mode-stylus.js -> js/lib/ace/mode-stylus.js
+#	renamed:    js/ace/mode-svg.js -> js/lib/ace/mode-svg.js
+#	renamed:    js/ace/mode-swift.js -> js/lib/ace/mode-swift.js
+#	renamed:    js/ace/mode-swig.js -> js/lib/ace/mode-swig.js
+#	renamed:    js/ace/mode-tcl.js -> js/lib/ace/mode-tcl.js
+#	renamed:    js/ace/mode-tex.js -> js/lib/ace/mode-tex.js
+#	renamed:    js/ace/mode-text.js -> js/lib/ace/mode-text.js
+#	renamed:    js/ace/mode-textile.js -> js/lib/ace/mode-textile.js
+#	renamed:    js/ace/mode-toml.js -> js/lib/ace/mode-toml.js
+#	renamed:    js/ace/mode-twig.js -> js/lib/ace/mode-twig.js
+#	renamed:    js/ace/mode-typescript.js -> js/lib/ace/mode-typescript.js
+#	renamed:    js/ace/mode-vala.js -> js/lib/ace/mode-vala.js
+#	renamed:    js/ace/mode-vbscript.js -> js/lib/ace/mode-vbscript.js
+#	renamed:    js/ace/mode-velocity.js -> js/lib/ace/mode-velocity.js
+#	renamed:    js/ace/mode-verilog.js -> js/lib/ace/mode-verilog.js
+#	renamed:    js/ace/mode-vhdl.js -> js/lib/ace/mode-vhdl.js
+#	renamed:    js/ace/mode-wollok.js -> js/lib/ace/mode-wollok.js
+#	renamed:    js/ace/mode-xml.js -> js/lib/ace/mode-xml.js
+#	renamed:    js/ace/mode-xquery.js -> js/lib/ace/mode-xquery.js
+#	renamed:    js/ace/mode-yaml.js -> js/lib/ace/mode-yaml.js
+#	renamed:    js/ace/snippets/abap.js -> js/lib/ace/snippets/abap.js
+#	renamed:    js/ace/snippets/abc.js -> js/lib/ace/snippets/abc.js
+#	renamed:    js/ace/snippets/actionscript.js -> js/lib/ace/snippets/actionscript.js
+#	renamed:    js/ace/snippets/ada.js -> js/lib/ace/snippets/ada.js
+#	renamed:    js/ace/snippets/apache_conf.js -> js/lib/ace/snippets/apache_conf.js
+#	renamed:    js/ace/snippets/applescript.js -> js/lib/ace/snippets/applescript.js
+#	renamed:    js/ace/snippets/asciidoc.js -> js/lib/ace/snippets/asciidoc.js
+#	renamed:    js/ace/snippets/assembly_x86.js -> js/lib/ace/snippets/assembly_x86.js
+#	renamed:    js/ace/snippets/autohotkey.js -> js/lib/ace/snippets/autohotkey.js
+#	renamed:    js/ace/snippets/batchfile.js -> js/lib/ace/snippets/batchfile.js
+#	renamed:    js/ace/snippets/c9search.js -> js/lib/ace/snippets/c9search.js
+#	renamed:    js/ace/snippets/c_cpp.js -> js/lib/ace/snippets/c_cpp.js
+#	renamed:    js/ace/snippets/cirru.js -> js/lib/ace/snippets/cirru.js
+#	renamed:    js/ace/snippets/clojure.js -> js/lib/ace/snippets/clojure.js
+#	renamed:    js/ace/snippets/cobol.js -> js/lib/ace/snippets/cobol.js
+#	renamed:    js/ace/snippets/coffee.js -> js/lib/ace/snippets/coffee.js
+#	renamed:    js/ace/snippets/coldfusion.js -> js/lib/ace/snippets/coldfusion.js
+#	renamed:    js/ace/snippets/csharp.js -> js/lib/ace/snippets/csharp.js
+#	renamed:    js/ace/snippets/css.js -> js/lib/ace/snippets/css.js
+#	renamed:    js/ace/snippets/curly.js -> js/lib/ace/snippets/curly.js
+#	renamed:    js/ace/snippets/d.js -> js/lib/ace/snippets/d.js
+#	renamed:    js/ace/snippets/dart.js -> js/lib/ace/snippets/dart.js
+#	renamed:    js/ace/snippets/diff.js -> js/lib/ace/snippets/diff.js
+#	renamed:    js/ace/snippets/django.js -> js/lib/ace/snippets/django.js
+#	renamed:    js/ace/snippets/dockerfile.js -> js/lib/ace/snippets/dockerfile.js
+#	renamed:    js/ace/snippets/dot.js -> js/lib/ace/snippets/dot.js
+#	renamed:    js/ace/snippets/eiffel.js -> js/lib/ace/snippets/eiffel.js
+#	renamed:    js/ace/snippets/ejs.js -> js/lib/ace/snippets/ejs.js
+#	renamed:    js/ace/snippets/elixir.js -> js/lib/ace/snippets/elixir.js
+#	renamed:    js/ace/snippets/elm.js -> js/lib/ace/snippets/elm.js
+#	renamed:    js/ace/snippets/erlang.js -> js/lib/ace/snippets/erlang.js
+#	renamed:    js/ace/snippets/forth.js -> js/lib/ace/snippets/forth.js
+#	renamed:    js/ace/snippets/fortran.js -> js/lib/ace/snippets/fortran.js
+#	renamed:    js/ace/snippets/ftl.js -> js/lib/ace/snippets/ftl.js
+#	renamed:    js/ace/snippets/gcode.js -> js/lib/ace/snippets/gcode.js
+#	renamed:    js/ace/snippets/gherkin.js -> js/lib/ace/snippets/gherkin.js
+#	renamed:    js/ace/snippets/gitignore.js -> js/lib/ace/snippets/gitignore.js
+#	renamed:    js/ace/snippets/glsl.js -> js/lib/ace/snippets/glsl.js
+#	renamed:    js/ace/snippets/gobstones.js -> js/lib/ace/snippets/gobstones.js
+#	renamed:    js/ace/snippets/golang.js -> js/lib/ace/snippets/golang.js
+#	renamed:    js/ace/snippets/groovy.js -> js/lib/ace/snippets/groovy.js
+#	renamed:    js/ace/snippets/haml.js -> js/lib/ace/snippets/haml.js
+#	renamed:    js/ace/snippets/handlebars.js -> js/lib/ace/snippets/handlebars.js
+#	renamed:    js/ace/snippets/haskell.js -> js/lib/ace/snippets/haskell.js
+#	renamed:    js/ace/snippets/haxe.js -> js/lib/ace/snippets/haxe.js
+#	renamed:    js/ace/snippets/html.js -> js/lib/ace/snippets/html.js
+#	renamed:    js/ace/snippets/html_elixir.js -> js/lib/ace/snippets/html_elixir.js
+#	renamed:    js/ace/snippets/html_ruby.js -> js/lib/ace/snippets/html_ruby.js
+#	renamed:    js/ace/snippets/ini.js -> js/lib/ace/snippets/ini.js
+#	renamed:    js/ace/snippets/io.js -> js/lib/ace/snippets/io.js
+#	renamed:    js/ace/snippets/jack.js -> js/lib/ace/snippets/jack.js
+#	renamed:    js/ace/snippets/jade.js -> js/lib/ace/snippets/jade.js
+#	renamed:    js/ace/snippets/java.js -> js/lib/ace/snippets/java.js
+#	renamed:    js/ace/snippets/javascript.js -> js/lib/ace/snippets/javascript.js
+#	renamed:    js/ace/snippets/json.js -> js/lib/ace/snippets/json.js
+#	renamed:    js/ace/snippets/jsoniq.js -> js/lib/ace/snippets/jsoniq.js
+#	renamed:    js/ace/snippets/jsp.js -> js/lib/ace/snippets/jsp.js
+#	renamed:    js/ace/snippets/jsx.js -> js/lib/ace/snippets/jsx.js
+#	renamed:    js/ace/snippets/julia.js -> js/lib/ace/snippets/julia.js
+#	renamed:    js/ace/snippets/latex.js -> js/lib/ace/snippets/latex.js
+#	renamed:    js/ace/snippets/lean.js -> js/lib/ace/snippets/lean.js
+#	renamed:    js/ace/snippets/less.js -> js/lib/ace/snippets/less.js
+#	renamed:    js/ace/snippets/liquid.js -> js/lib/ace/snippets/liquid.js
+#	renamed:    js/ace/snippets/lisp.js -> js/lib/ace/snippets/lisp.js
+#	renamed:    js/ace/snippets/live_script.js -> js/lib/ace/snippets/live_script.js
+#	renamed:    js/ace/snippets/livescript.js -> js/lib/ace/snippets/livescript.js
+#	renamed:    js/ace/snippets/logiql.js -> js/lib/ace/snippets/logiql.js
+#	renamed:    js/ace/snippets/lsl.js -> js/lib/ace/snippets/lsl.js
+#	renamed:    js/ace/snippets/lua.js -> js/lib/ace/snippets/lua.js
+#	renamed:    js/ace/snippets/luapage.js -> js/lib/ace/snippets/luapage.js
+#	renamed:    js/ace/snippets/lucene.js -> js/lib/ace/snippets/lucene.js
+#	renamed:    js/ace/snippets/makefile.js -> js/lib/ace/snippets/makefile.js
+#	renamed:    js/ace/snippets/markdown.js -> js/lib/ace/snippets/markdown.js
+#	renamed:    js/ace/snippets/mask.js -> js/lib/ace/snippets/mask.js
+#	renamed:    js/ace/snippets/matlab.js -> js/lib/ace/snippets/matlab.js
+#	renamed:    js/ace/snippets/maze.js -> js/lib/ace/snippets/maze.js
+#	renamed:    js/ace/snippets/mel.js -> js/lib/ace/snippets/mel.js
+#	renamed:    js/ace/snippets/mips_assembler.js -> js/lib/ace/snippets/mips_assembler.js
+#	renamed:    js/ace/snippets/mipsassembler.js -> js/lib/ace/snippets/mipsassembler.js
+#	renamed:    js/ace/snippets/mushcode.js -> js/lib/ace/snippets/mushcode.js
+#	renamed:    js/ace/snippets/mysql.js -> js/lib/ace/snippets/mysql.js
+#	renamed:    js/ace/snippets/nix.js -> js/lib/ace/snippets/nix.js
+#	renamed:    js/ace/snippets/nsis.js -> js/lib/ace/snippets/nsis.js
+#	renamed:    js/ace/snippets/objectivec.js -> js/lib/ace/snippets/objectivec.js
+#	renamed:    js/ace/snippets/ocaml.js -> js/lib/ace/snippets/ocaml.js
+#	renamed:    js/ace/snippets/pascal.js -> js/lib/ace/snippets/pascal.js
+#	renamed:    js/ace/snippets/perl.js -> js/lib/ace/snippets/perl.js
+#	renamed:    js/ace/snippets/pgsql.js -> js/lib/ace/snippets/pgsql.js
+#	renamed:    js/ace/snippets/php.js -> js/lib/ace/snippets/php.js
+#	renamed:    js/ace/snippets/plain_text.js -> js/lib/ace/snippets/plain_text.js
+#	renamed:    js/ace/snippets/powershell.js -> js/lib/ace/snippets/powershell.js
+#	renamed:    js/ace/snippets/praat.js -> js/lib/ace/snippets/praat.js
+#	renamed:    js/ace/snippets/prolog.js -> js/lib/ace/snippets/prolog.js
+#	renamed:    js/ace/snippets/properties.js -> js/lib/ace/snippets/properties.js
+#	renamed:    js/ace/snippets/protobuf.js -> js/lib/ace/snippets/protobuf.js
+#	renamed:    js/ace/snippets/python.js -> js/lib/ace/snippets/python.js
+#	renamed:    js/ace/snippets/r.js -> js/lib/ace/snippets/r.js
+#	renamed:    js/ace/snippets/razor.js -> js/lib/ace/snippets/razor.js
+#	renamed:    js/ace/snippets/rdoc.js -> js/lib/ace/snippets/rdoc.js
+#	renamed:    js/ace/snippets/rhtml.js -> js/lib/ace/snippets/rhtml.js
+#	renamed:    js/ace/snippets/rst.js -> js/lib/ace/snippets/rst.js
+#	renamed:    js/ace/snippets/ruby.js -> js/lib/ace/snippets/ruby.js
+#	renamed:    js/ace/snippets/rust.js -> js/lib/ace/snippets/rust.js
+#	renamed:    js/ace/snippets/sass.js -> js/lib/ace/snippets/sass.js
+#	renamed:    js/ace/snippets/scad.js -> js/lib/ace/snippets/scad.js
+#	renamed:    js/ace/snippets/scala.js -> js/lib/ace/snippets/scala.js
+#	renamed:    js/ace/snippets/scheme.js -> js/lib/ace/snippets/scheme.js
+#	renamed:    js/ace/snippets/scss.js -> js/lib/ace/snippets/scss.js
+#	renamed:    js/ace/snippets/sh.js -> js/lib/ace/snippets/sh.js
+#	renamed:    js/ace/snippets/sjs.js -> js/lib/ace/snippets/sjs.js
+#	renamed:    js/ace/snippets/smarty.js -> js/lib/ace/snippets/smarty.js
+#	renamed:    js/ace/snippets/snippets.js -> js/lib/ace/snippets/snippets.js
+#	renamed:    js/ace/snippets/soy_template.js -> js/lib/ace/snippets/soy_template.js
+#	renamed:    js/ace/snippets/space.js -> js/lib/ace/snippets/space.js
+#	renamed:    js/ace/snippets/sql.js -> js/lib/ace/snippets/sql.js
+#	renamed:    js/ace/snippets/sqlserver.js -> js/lib/ace/snippets/sqlserver.js
+#	renamed:    js/ace/snippets/stylus.js -> js/lib/ace/snippets/stylus.js
+#	renamed:    js/ace/snippets/svg.js -> js/lib/ace/snippets/svg.js
+#	renamed:    js/ace/snippets/swift.js -> js/lib/ace/snippets/swift.js
+#	renamed:    js/ace/snippets/swig.js -> js/lib/ace/snippets/swig.js
+#	renamed:    js/ace/snippets/tcl.js -> js/lib/ace/snippets/tcl.js
+#	renamed:    js/ace/snippets/tex.js -> js/lib/ace/snippets/tex.js
+#	renamed:    js/ace/snippets/text.js -> js/lib/ace/snippets/text.js
+#	renamed:    js/ace/snippets/textile.js -> js/lib/ace/snippets/textile.js
+#	renamed:    js/ace/snippets/toml.js -> js/lib/ace/snippets/toml.js
+#	renamed:    js/ace/snippets/twig.js -> js/lib/ace/snippets/twig.js
+#	renamed:    js/ace/snippets/typescript.js -> js/lib/ace/snippets/typescript.js
+#	renamed:    js/ace/snippets/vala.js -> js/lib/ace/snippets/vala.js
+#	renamed:    js/ace/snippets/vbscript.js -> js/lib/ace/snippets/vbscript.js
+#	renamed:    js/ace/snippets/velocity.js -> js/lib/ace/snippets/velocity.js
+#	renamed:    js/ace/snippets/verilog.js -> js/lib/ace/snippets/verilog.js
+#	renamed:    js/ace/snippets/vhdl.js -> js/lib/ace/snippets/vhdl.js
+#	renamed:    js/ace/snippets/wollok.js -> js/lib/ace/snippets/wollok.js
+#	renamed:    js/ace/snippets/xml.js -> js/lib/ace/snippets/xml.js
+#	renamed:    js/ace/snippets/xquery.js -> js/lib/ace/snippets/xquery.js
+#	renamed:    js/ace/snippets/yaml.js -> js/lib/ace/snippets/yaml.js
+#	renamed:    js/ace/theme-ambiance.js -> js/lib/ace/theme-ambiance.js
+#	renamed:    js/ace/theme-chaos.js -> js/lib/ace/theme-chaos.js
+#	renamed:    js/ace/theme-chrome.js -> js/lib/ace/theme-chrome.js
+#	renamed:    js/ace/theme-clouds.js -> js/lib/ace/theme-clouds.js
+#	renamed:    js/ace/theme-clouds_midnight.js -> js/lib/ace/theme-clouds_midnight.js
+#	renamed:    js/ace/theme-cobalt.js -> js/lib/ace/theme-cobalt.js
+#	renamed:    js/ace/theme-crimson_editor.js -> js/lib/ace/theme-crimson_editor.js
+#	renamed:    js/ace/theme-dawn.js -> js/lib/ace/theme-dawn.js
+#	renamed:    js/ace/theme-dreamweaver.js -> js/lib/ace/theme-dreamweaver.js
+#	renamed:    js/ace/theme-eclipse.js -> js/lib/ace/theme-eclipse.js
+#	renamed:    js/ace/theme-github.js -> js/lib/ace/theme-github.js
+#	renamed:    js/ace/theme-idle_fingers.js -> js/lib/ace/theme-idle_fingers.js
+#	renamed:    js/ace/theme-iplastic.js -> js/lib/ace/theme-iplastic.js
+#	renamed:    js/ace/theme-katzenmilch.js -> js/lib/ace/theme-katzenmilch.js
+#	renamed:    js/ace/theme-kr_theme.js -> js/lib/ace/theme-kr_theme.js
+#	renamed:    js/ace/theme-kuroir.js -> js/lib/ace/theme-kuroir.js
+#	renamed:    js/ace/theme-merbivore.js -> js/lib/ace/theme-merbivore.js
+#	renamed:    js/ace/theme-merbivore_soft.js -> js/lib/ace/theme-merbivore_soft.js
+#	renamed:    js/ace/theme-mono_industrial.js -> js/lib/ace/theme-mono_industrial.js
+#	renamed:    js/ace/theme-monokai.js -> js/lib/ace/theme-monokai.js
+#	renamed:    js/ace/theme-pastel_on_dark.js -> js/lib/ace/theme-pastel_on_dark.js
+#	renamed:    js/ace/theme-solarized_dark.js -> js/lib/ace/theme-solarized_dark.js
+#
+# Changes not staged for commit:
+#	deleted:    js/Chart-2.1.3.min.js
+#	deleted:    js/ace/theme-sqlserver.js
+#	deleted:    js/ace/theme-terminal.js
+#	deleted:    js/ace/theme-textmate.js
+#	deleted:    js/ace/theme-tomorrow.js
+#	deleted:    js/ace/theme-tomorrow_night.js
+#	deleted:    js/ace/theme-tomorrow_night_blue.js
+#	deleted:    js/ace/theme-tomorrow_night_bright.js
+#	deleted:    js/ace/theme-tomorrow_night_eighties.js
+#	deleted:    js/ace/theme-twilight.js
+#	deleted:    js/ace/theme-vibrant_ink.js
+#	deleted:    js/ace/theme-xcode.js
+#	deleted:    js/ace/worker-coffee.js
+#	deleted:    js/ace/worker-css.js
+#	deleted:    js/ace/worker-html.js
+#	deleted:    js/ace/worker-javascript.js
+#	deleted:    js/ace/worker-json.js
+#	deleted:    js/ace/worker-lua.js
+#	deleted:    js/ace/worker-php.js
+#	deleted:    js/ace/worker-xml.js
+#	deleted:    js/ace/worker-xquery.js
+#	deleted:    js/jquery-2.2.3.min.js
+#	deleted:    js/sigma/plugins/sigma.plugins.dragNodes.min.js
+#	deleted:    js/sigma/sigma.min.js
+#
+# Untracked files:
+#	js/lib/Chart-2.1.3.min.js
+#	js/lib/ace/theme-solarized_light.js
+#	js/lib/ace/theme-sqlserver.js
+#	js/lib/ace/theme-terminal.js
+#	js/lib/ace/theme-textmate.js
+#	js/lib/ace/theme-tomorrow.js
+#	js/lib/ace/theme-tomorrow_night.js
+#	js/lib/ace/theme-tomorrow_night_blue.js
+#	js/lib/ace/theme-tomorrow_night_bright.js
+#	js/lib/ace/theme-tomorrow_night_eighties.js
+#	js/lib/ace/theme-twilight.js
+#	js/lib/ace/theme-vibrant_ink.js
+#	js/lib/ace/theme-xcode.js
+#	js/lib/ace/worker-coffee.js
+#	js/lib/ace/worker-css.js
+#	js/lib/ace/worker-html.js
+#	js/lib/ace/worker-javascript.js
+#	js/lib/ace/worker-json.js
+#	js/lib/ace/worker-lua.js
+#	js/lib/ace/worker-php.js
+#	js/lib/ace/worker-xml.js
+#	js/lib/ace/worker-xquery.js
+#	js/lib/jquery-2.2.3.min.js
+#	js/lib/markdown.min.js
+#	js/lib/sigma/
+#
+
