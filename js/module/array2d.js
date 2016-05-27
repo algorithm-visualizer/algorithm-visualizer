@@ -13,7 +13,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         this.$container.append(this.$table);
     },
     _notify: function (x, y, v) {
-        this.tm.pushStep(this.capsule, {
+        this.manager.pushStep(this.capsule, {
             type: 'notify',
             x: x,
             y: y,
@@ -22,7 +22,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         return this;
     },
     _denotify: function (x, y) {
-        this.tm.pushStep(this.capsule, {
+        this.manager.pushStep(this.capsule, {
             type: 'denotify',
             x: x,
             y: y
@@ -93,7 +93,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
             type: type
         };
         $.extend(step, coord);
-        this.tm.pushStep(this.capsule, step);
+        this.manager.pushStep(this.capsule, step);
     },
     processStep: function (step, options) {
         switch (step.type) {

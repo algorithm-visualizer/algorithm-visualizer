@@ -30,15 +30,15 @@ WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGra
         });
     },
     _weight: function (target, weight) {
-        this.tm.pushStep(this.capsule, {type: 'weight', target: target, weight: weight});
+        this.manager.pushStep(this.capsule, {type: 'weight', target: target, weight: weight});
         return this;
     },
     _visit: function (target, source, weight) {
-        this.tm.pushStep(this.capsule, {type: 'visit', target: target, source: source, weight: weight});
+        this.manager.pushStep(this.capsule, {type: 'visit', target: target, source: source, weight: weight});
         return this;
     },
     _leave: function (target, source, weight) {
-        this.tm.pushStep(this.capsule, {type: 'leave', target: target, source: source, weight: weight});
+        this.manager.pushStep(this.capsule, {type: 'leave', target: target, source: source, weight: weight});
         return this;
     },
     processStep: function (step, options) {
