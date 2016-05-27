@@ -20,7 +20,7 @@ function getNextChar(c, direction) {
   return alphabet.charAt(nextPos);
 }
 
-function cypher(str, rotation, direction, cypherTracer) {
+function cipher(str, rotation, direction, cipherTracer) {
   if (!str) return '';
 
   var result = '';
@@ -30,14 +30,14 @@ function cypher(str, rotation, direction, cypherTracer) {
     var r = rotation;
 
     logger._print('Rotating ' + currChar + ' ' + direction + ' ' + rotation + ' times');
-    cypherTracer._select(i)._wait();
+    cipherTracer._select(i)._wait();
 
     // perform given amount of rotations in the given direction
     while (--r > 0) {
       currChar = getNextChar(currChar, direction);
-      cypherTracer._setValue(currChar, i)._wait();
+      cipherTracer._setValue(currChar, i)._wait();
     }
-    cypherTracer._deselect(i)._notify(i)._wait();
+    cipherTracer._deselect(i)._notify(i)._wait();
 
     logger._print('Rotation result: ' + currChar);
 
@@ -51,12 +51,12 @@ function cypher(str, rotation, direction, cypherTracer) {
 
 function encrypt(str, rotation) {
   logger._print('Encrypting: ' + str);
-  return cypher(str, rotation, 'down', encryptTracer);
+  return cipher(str, rotation, 'down', encryptTracer);
 }
 
 function decrypt(str, rotation) {
   logger._print('Decrypting: ' + str);
-  return cypher(str, rotation, 'up', decryptTracer);
+  return cipher(str, rotation, 'up', decryptTracer);
 }
 
 var encrypted = encrypt(string, rotation);
