@@ -14,7 +14,8 @@
   "cryptography": {
     "name": "Cryptography",
     "list": {
-      "caesar_cipher": "Caesar Cipher"
+      "caesar_cipher": "Caesar Cipher",
+      "affine_cipher": "Affine Cipher"
     }
   },
   "mst": {
