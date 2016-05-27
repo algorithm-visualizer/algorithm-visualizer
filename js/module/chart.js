@@ -25,24 +25,33 @@ ChartTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
                     backgroundColor: color,
                     data: C
                 }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
             }
         };
         this.chart = this.capsule.chart = new Chart(this.$wrapper, data);
     },
     _notify: function (s, v) {
-        this.tm.pushStep(this.capsule, { type: 'notify', s: s, v: v });
+        this.manager.pushStep(this.capsule, { type: 'notify', s: s, v: v });
         return this;
     },
     _denotify: function (s) {
-        this.tm.pushStep(this.capsule, { type: 'denotify', s: s });
+        this.manager.pushStep(this.capsule, { type: 'denotify', s: s });
         return this;
     },
     _select: function (s, e) {
-        this.tm.pushStep(this.capsule, { type: 'select', s: s, e: e });
+        this.manager.pushStep(this.capsule, { type: 'select', s: s, e: e });
         return this;
     },
     _deselect: function (s, e) {
-        this.tm.pushStep(this.capsule, { type: 'deselect', s: s, e: e });
+        this.manager.pushStep(this.capsule, { type: 'deselect', s: s, e: e });
         return this;
     },
     processStep: function (step, options) {
