@@ -26,7 +26,7 @@ function cipher(str, rotation, direction, cipherTracer) {
     var r = rotation;
 
     logger._print('Rotating ' + currChar + ' ' + direction + ' ' + rotation + ' times');
-    cipherTracer._notify(i)._wait();
+    cipherTracer._select(i)._wait();
 
     // perform given amount of rotations in the given direction
     while (r-- > 0) {
@@ -37,8 +37,7 @@ function cipher(str, rotation, direction, cipherTracer) {
     str = str.substring(0, i) + currChar + str.substring(i + 1);
     logger._print('Current result: ' + str);
   }
-
-  cipherTracer._select(0, i);
+    
   return str;
 }
 
