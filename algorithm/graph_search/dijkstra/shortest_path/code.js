@@ -1,33 +1,31 @@
 function Dijkstra(start, end) {
-    var MAX_VALUE = Infinity;
     var minIndex, minDistance;
-    var S = []; // S[i] returns the distance from node v to node start
     var D = []; // D[i] indicates whether the i-th node is discovered or not
-    for (var i = 0; i < G.length; i++) {
-        D.push(false);
-        S[i] = MAX_VALUE;
-    }
+    for (var i = 0; i < G.length; i++) D.push(false);
     S[start] = 0; // Starting node is at distance 0 from itself
     var k = G.length;
     while (k--) {
         // Finding a node with the shortest distance from S[minIndex]
         minDistance = MAX_VALUE;
         for (i = 0; i < G.length; i++) {
+            tracerS._select(i)._wait();
             if (S[i] < minDistance && !D[i]) {
                 minDistance = S[i];
                 minIndex = i;
             }
+            tracerS._deselect(i);
         }
         if (minDistance == MAX_VALUE) break; // If there is no edge from current node, jump out of loop
         D[minIndex] = true;
+        tracerS._notify(minIndex, S[minIndex])._denotify(minIndex);
         tracer._visit(minIndex)._wait();
         // For every unvisited neighbour of current node, we check
         // whether the path to it is shorter if going over the current node
         for (i = 0; i < G.length; i++) {
             if (G[minIndex][i] && S[i] > S[minIndex] + G[minIndex][i]) {
                 S[i] = S[minIndex] + G[minIndex][i];
-                tracer._visit(i, minIndex, S[i])._wait();
-                tracer._leave(i, minIndex, S[i])._wait();
+                tracerS._notify(i, S[i])._wait()._denotify(i);
+                tracer._visit(i, minIndex, S[i])._wait()._leave(i, minIndex);
             }
         }
         tracer._leave(minIndex)._wait();
