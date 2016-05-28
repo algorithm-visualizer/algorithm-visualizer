@@ -112,6 +112,7 @@ var executeDataAndCode = function () {
                 }).fail(onFail);
             }).fail(onFail);
         }
+        setAlgorithmHash(category, algorithm, isScratchPaper(category) ? null : file);
     };
     var checkLoading = function () {
         if (loading) {
@@ -150,7 +151,7 @@ var executeDataAndCode = function () {
         if (isScratchPaper(category)) {
             $menu = $('#scratch-paper');
             category_name = 'Scratch Paper';
-            algorithm_name = algorithm == 'temp' ? 'Temporary' : 'Shared';
+            algorithm_name = algorithm ? 'Shared' : 'Temporary';
         } else {
             $menu = $('[data-category="' + category + '"][data-algorithm="' + algorithm + '"]');
             category_name = list[category].name;
@@ -158,10 +159,6 @@ var executeDataAndCode = function () {
         }
         $('.sidemenu button').removeClass('active');
         $menu.addClass('active');
-
-        var requestedTab = getAlgorithmHash('algorithm')['tab'];
-        if (requestedTab === 'trace') $('#btn_trace').click();
-        else $('#btn_desc').click();
 
         $('#category').html(category_name);
         $('#algorithm').html(algorithm_name);
@@ -172,9 +169,10 @@ var executeDataAndCode = function () {
         dataEditor.setValue('');
         codeEditor.setValue('');
     };
-    var showFiles = function (category, algorithm, files) {
+    var showFiles = function (category, algorithm, files, requestedFile) {
         $('.files_bar > .wrapper').empty();
-        var init = false;
+        var anyRequested = requestedFile;
+        var anyOpened = false;
         for (var file in files) {
             (function (file, explanation) {
                 var $file = $('<button>').append(file).click(function () {
@@ -183,13 +181,25 @@ var executeDataAndCode = function () {
                     $(this).addClass('active');
                 });
                 $('.files_bar > .wrapper').append($file);
-                if (!init) {
-                    init = true;
-                    $file.click();
+                if (anyRequested) {
+                    if (file == requestedFile) {
+                        anyOpened = true;
+                        $file.click();
+                    }
+                } else {
+                    if (!anyOpened) {
+                        anyOpened = true;
+                        $file.click();
+                    }
                 }
             })(file, files[file]);
         }
         $('.files_bar > .wrapper').scroll();
+
+        if (!anyOpened) {
+            showErrorToast('Oops! This link appears to be broken.');
+            $('#scratch-paper').click();
+        }
     };
     $('.files_bar > .btn-left').click(function () {
         var $wrapper = $('.files_bar > .wrapper');
@@ -239,7 +249,7 @@ var executeDataAndCode = function () {
         $('.files_bar > .btn-left').attr('disabled', !lefter);
         $('.files_bar > .btn-right').attr('disabled', !righter);
     });
-    var loadAlgorithm = function (category, algorithm) {
+    var loadAlgorithm = function (category, algorithm, requestedFile) {
         if (checkLoading()) return;
         showAlgorithm(category, algorithm);
 
@@ -250,7 +260,7 @@ var executeDataAndCode = function () {
             delete data.files;
 
             showDescription(data);
-            showFiles(category, algorithm, files);
+            showFiles(category, algorithm, files, requestedFile);
         });
         setAlgorithmHash(category, algorithm);
     };
@@ -259,7 +269,8 @@ var executeDataAndCode = function () {
     $.getJSON('./algorithm/category.json', function (data) {
         var algorithmHash = getAlgorithmHash();
         var requestedCategory = algorithmHash['category'],
-            requestedAlgorithm = algorithmHash['algorithm'];
+            requestedAlgorithm = algorithmHash['algorithm'],
+            requestedFile = algorithmHash['file'];
         var anyRequested = requestedCategory && requestedAlgorithm;
         anyOpened = false;
         var $selectedCategory = null, $selectedAlgorithm = null;
@@ -318,7 +329,7 @@ var executeDataAndCode = function () {
         $('#powered-by-list button').toggleClass('collapse');
     });
     $('#scratch-paper').click(function () {
-        loadAlgorithm('scratch', loadedScratch || 'temp');
+        loadAlgorithm('scratch', loadedScratch);
     });
 
     var sidemenu_percent;
@@ -403,16 +414,12 @@ var executeDataAndCode = function () {
         $('#tab_desc').addClass('active');
         $('.tab_bar > button').removeClass('active');
         $(this).addClass('active');
-        var algorithmHash = getAlgorithmHash();
-        setAlgorithmHash(algorithmHash['category'], algorithmHash['algorithm'], 'desc');
     });
     $('#btn_trace').click(function () {
         $('.tab_container > .tab').removeClass('active');
         $('#tab_module').addClass('active');
         $('.tab_bar > button').removeClass('active');
         $(this).addClass('active');
-        var algorithmHash = getAlgorithmHash();
-        setAlgorithmHash(algorithmHash['category'], algorithmHash['algorithm'], 'trace');
     });
 
     $(window).resize(function () {
@@ -573,8 +580,8 @@ var executeDataAndCode = function () {
         window.location.hash = '#' + newHash;
     };
 
-    var setAlgorithmHash = function (category, algorithm, tab) {
-        var algorithmHash = category ? category + (algorithm ? '/' + algorithm + (tab ? '/' + tab : '') : '') : '';
+    var setAlgorithmHash = function (category, algorithm, file) {
+        var algorithmHash = category ? category + (algorithm ? '/' + algorithm + (file ? '/' + file : '') : '') : '';
         setHashValue('algorithm', algorithmHash);
     };
 
@@ -582,7 +589,7 @@ var executeDataAndCode = function () {
         var hash = getHashValue('algorithm');
         if (hash) {
             var parts = hash.split('/');
-            return {category: parts[0], algorithm: parts[1], tab: parts[2]};
+            return {category: parts[0], algorithm: parts[1], file: parts[2]};
         } else {
             return false;
         }
