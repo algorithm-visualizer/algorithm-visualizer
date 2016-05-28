@@ -1,0 +1,16 @@
+{
+  "Rabin–Karp Algorithm": "Rabin–Karp algorithm or Karp–Rabin algorithm is a string searching algorithm created by Richard M. Karp and Michael O. Rabin (1987) that uses hashing to find any one of a set of pattern strings in a text.",
+  "Applications": [
+    "Substring Search"
+  ],
+  "Complexity": {
+    "time": " O(N) : If a sufficiently large prime number is used for the hash function. O(MN) : Worst Case ",
+    "space": "O( 1 )"
+  },
+  "References": [
+    "<a href='https://en.wikipedia.org/wiki/Rabin%E2%80%93Karp_algorithm'>Wikipedia</a>"
+  ],
+  "files": {
+    "basic": "Rabin-Karp Algorithm"
+  }
+}
