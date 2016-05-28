@@ -190,12 +190,12 @@ var TracerUtil = {
         });
     },
     refineByType: function (item) {
-      return $.isNumeric(item) ? this.refineNumber(item) : this.refineString(item);  
+      return typeof(item) === 'number' ? this.refineNumber(item) : this.refineString(item);  
     },
-    refineString: function (string) {
-        return string === '' ? ' ' : string;
+    refineString: function (str) {
+        return str === '' ? ' ' : str;
     },
-    refineNumber: function (number) {
-        return number === Infinity ? '∞' : number;
+    refineNumber: function (num) {
+        return num === Infinity ? '∞' : num;
     }
 };
