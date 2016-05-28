@@ -1,37 +1,40 @@
 logger._print('original array = [' + D.join(', ') + ']');
 
-function quicksort(low, high) {
-    if (low < high) {
-        var p = partition(low, high);
-        quicksort(low, p - 1);
-        quicksort(p + 1, high);
-    }
-}
-
-function partition(low, high) {
-    var pivot = D[high];
-    tracer._select(low, high);
-    var i = low;
-    var temp;
-
-    for (var j = low; j < high; j++) {
-        if (D[j] <= pivot) {
-            temp = D[i];
+function partition(D, low, high) {
+    var i, j, s;
+    while (high > low) {
+        i = low;
+        j = high;
+        s = D[low];
+        while (i < j) {
+            tracer._select(high)._select(low)._wait();
+            while (D[j] > s){ 
+                tracer._select(j)._wait();
+                tracer._deselect(j);
+                j--;
+            }
             D[i] = D[j];
-            D[j] = temp;
-            tracer._notify(i, D[i])._notify(j, D[j])._wait();
-            tracer._denotify(i)._denotify(j);
-            i++;
+            tracer._notify(i, D[j])._wait()._denotify(i);
+            while (s >= D[i] && i < j){ 
+                tracer._select(i)._wait();
+                tracer._deselect(i);
+                i++;
+            }
+            D[j] = D[i];
+            tracer._notify(j, D[i])._wait()._denotify(j);
+            tracer._deselect(high)._deselect(low);
         }
+        D[i] = s;
+        tracer._notify(i, s)._wait();
+        tracer._denotify(i);
+        partition(D, low, i-1);
+        low = i+1;
     }
-    temp = D[i];
-    D[i] = D[high];
-    D[high] = temp;
-    tracer._notify(i, D[i])._notify(high, D[high])._wait();
-    tracer._denotify(i)._denotify(high);
-    tracer._deselect(low, high);
-    return i;
 }
 
-quicksort(0, D.length - 1);
+function quicksort(D) {
+       partition(D, 0, D.length-1);
+}
+
+quicksort(D);
 logger._print('sorted array = [' + D.join(', ') + ']');
