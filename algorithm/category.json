@@ -42,7 +42,8 @@
       "quick": "Quicksort",
       "heap" : "Heapsort",
       "shell": "Shellsort",
-      "cycle": "Cycle Sort"
+      "cycle": "Cycle Sort",
+      "comb": "Comb Sort"
     }
   },
   "string": {
