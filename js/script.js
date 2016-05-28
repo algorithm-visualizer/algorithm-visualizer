@@ -112,7 +112,11 @@ var executeDataAndCode = function () {
                 }).fail(onFail);
             }).fail(onFail);
         }
-        setPath(category, algorithm, isScratchPaper(category) ? null : file);
+        if (isScratchPaper(category)) {
+            setPath(category, loadedScratch);
+        } else {
+            setPath(category, algorithm, file);
+        }
     };
     var checkLoading = function () {
         if (loading) {
@@ -265,14 +269,13 @@ var executeDataAndCode = function () {
         setPath(category, algorithm);
     };
     var list = {};
-    var anyOpened = false;
     $.getJSON('./algorithm/category.json', function (data) {
         var path = getPath();
         var requestedCategory = path['category'],
             requestedAlgorithm = path['algorithm'],
             requestedFile = path['file'];
-        var anyRequested = requestedCategory && requestedAlgorithm;
-        anyOpened = false;
+        var anyRequested = requestedCategory;
+        var anyOpened = false;
         var $selectedCategory = null, $selectedAlgorithm = null;
 
         list = data;
@@ -318,8 +321,12 @@ var executeDataAndCode = function () {
         if (anyOpened) {
             $selectedCategory.click();
             $selectedAlgorithm.click();
-        } else if (anyRequested && isScratchPaper(requestedCategory)) {
-            loadScratchPaper(requestedAlgorithm);
+        } else if (isScratchPaper(requestedCategory)) {
+            if (requestedAlgorithm) {
+                loadScratchPaper(requestedAlgorithm);
+            } else {
+                loadAlgorithm('scratch');
+            }
         } else {
             showErrorToast('Oops! This link appears to be broken.');
             $('#scratch-paper').click();
@@ -607,8 +614,10 @@ var executeDataAndCode = function () {
         };
         $.post('https://api.github.com/gists', JSON.stringify(gist), function (res) {
             var data = JSON.parse(res);
-            setPath('scratch', data.id);
+            loadedScratch = data.id;
+            setPath('scratch', loadedScratch);
             if (callback) callback(location.href);
+            $('#algorithm').html('Shared');
         });
     };
 
