@@ -50,7 +50,8 @@
    		"name": "String",
    		"list": {
    			"edit_distance": "Edit Distance",
-   			"knuth_morris_pratt": "KMP Substring Search"
+   			"knuth_morris_pratt": "KMP Substring Search",
+        "rabin_karp_algorithm": "Rabin-Karp Algorithm"
    		}
    },
    "dp": {
