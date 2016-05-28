@@ -158,7 +158,15 @@ var executeDataAndCode = function () {
         }
         $('.sidemenu button').removeClass('active');
         $menu.addClass('active');
-        $('#btn_desc').click();
+        var requestedTab = getHashValue('tab');
+        if(requestedTab) {
+            if(requestedTab === 'trace')
+                $('#btn_trace').click();
+            else
+                $('#btn_desc').click();
+        } else {
+            $('#btn_desc').click();
+        }
 
         $('#category').html(category_name);
         $('#algorithm').html(algorithm_name);
@@ -253,6 +261,11 @@ var executeDataAndCode = function () {
     var list = {};
     var anyOpened = false;
     $.getJSON('./algorithm/category.json', function (data) {
+        var requestedCategory = getHashValue('category'),
+            requestedAlgorithm = getHashValue('algorithm');
+        var anyRequested = requestedCategory && requestedAlgorithm;
+        anyOpened = anyRequested;
+
         list = data;
         for (var category in list) {
             (function (category) {
@@ -272,6 +285,9 @@ var executeDataAndCode = function () {
                             .attr('data-algorithm', algorithm)
                             .attr('data-category', category)
                             .click(function () {
+                                setHashValue('category', category);
+                                setHashValue('algorithm', algorithm);
+                                setHashValue('tab', 'desc');
                                 loadAlgorithm(category, algorithm);
                             });
                         $('#list').append($algorithm);
@@ -282,6 +298,19 @@ var executeDataAndCode = function () {
                     })(category, subList, algorithm);
                 }
             })(category);
+        }
+
+        if(anyRequested) {
+            if(!list[requestedCategory] || !list[requestedCategory].list[requestedAlgorithm]) {
+                showErrorToast('Oops! This link appears to be broken.');
+                $('#scratch-paper').click();
+                removeHashValue('category');
+                removeHashValue('algorithm');
+                removeHashValue('tab');
+            } else {
+                $('[data-category="' + requestedCategory + '"]').toggleClass('collapse');
+                loadAlgorithm(requestedCategory, requestedAlgorithm);
+            }
         }
     });
     $('#powered-by').click(function () {
@@ -372,12 +401,14 @@ var executeDataAndCode = function () {
         $('#tab_desc').addClass('active');
         $('.tab_bar > button').removeClass('active');
         $(this).addClass('active');
+        setHashValue('tab', 'desc');
     });
     $('#btn_trace').click(function () {
         $('.tab_container > .tab').removeClass('active');
         $('#tab_module').addClass('active');
         $('.tab_bar > button').removeClass('active');
         $(this).addClass('active');
+        setHashValue('tab', 'trace');
     });
 
     $(window).resize(function () {
@@ -476,6 +507,55 @@ var executeDataAndCode = function () {
         tracerManager.findOwner(this).mousewheel(e);
     });
 
+    var getHashValue = function (key) {
+        if(!key) return null;
+        var hash = window.location.hash.substr(1);
+        var params = hash ? hash.split('&') : [];
+        for(var i = 0; i < params.length; i++) {
+            var pair = params[i].split('=');
+            if(pair[0] === key) {
+                return pair[1];
+            }
+        }
+        return null;
+    }
+    var setHashValue = function (key, value) {
+        if(!key || !value) return;
+        var hash = window.location.hash.substr(1);
+        var params = hash ? hash.split('&') : [];
+
+        var found = false;
+        for(var i = 0; i < params.length && !found; i++) {
+            var pair = params[i].split('=');
+            if(pair[0] === key) {
+                pair[1] = value;
+                params[i] = pair.join('=');
+                found = true;
+            }
+        }
+        if(!found) {
+            params.push([key, value].join('='));
+        }
+
+        var newHash = params.join('&');
+        window.location.hash = '#' + newHash;
+    }
+    var removeHashValue = function (key) {
+        if(!key) return;
+        var hash = window.location.hash.substr(1);
+        var params = hash ? hash.split('&') : [];
+
+        for(var i = 0; i < params.length; i++) {
+            var pair = params[i].split('=');
+            if(pair[0] === key) {
+                params.splice(i, 1);
+                break;
+            }
+        }
+
+        var newHash = params.join('&');
+        window.location.hash = '#' + newHash;
+    }
 // Share scratch paper
 
     var getParameterByName = function (name) {
