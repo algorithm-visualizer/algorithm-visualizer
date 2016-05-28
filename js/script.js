@@ -73,14 +73,14 @@ var executeDataAndCode = function () {
     var cachedFile = {};
     var loading = false;
     var isScratchPaper = function (category, algorithm) {
-        return category == null && algorithm == 'scratch_paper';
+        return category == 'scratch';
     };
     var getAlgorithmDir = function (category, algorithm) {
-        if (isScratchPaper(category, algorithm)) return './algorithm/scratch_paper/';
+        if (isScratchPaper(category)) return './algorithm/scratch_paper/';
         return './algorithm/' + category + '/' + algorithm + '/';
     };
     var getFileDir = function (category, algorithm, file) {
-        if (isScratchPaper(category, algorithm)) return './algorithm/scratch_paper/';
+        if (isScratchPaper(category)) return './algorithm/scratch_paper/';
         return './algorithm/' + category + '/' + algorithm + '/' + file + '/';
     };
     var loadFile = function (category, algorithm, file, explanation) {
@@ -147,10 +147,10 @@ var executeDataAndCode = function () {
         var $menu;
         var category_name;
         var algorithm_name;
-        if (isScratchPaper(category, algorithm)) {
+        if (isScratchPaper(category)) {
             $menu = $('#scratch-paper');
-            category_name = '';
-            algorithm_name = 'Scratch Paper';
+            category_name = 'Scratch Paper';
+            algorithm_name = algorithm == 'temp' ? 'Temporary' : 'Shared';
         } else {
             $menu = $('[data-category="' + category + '"][data-algorithm="' + algorithm + '"]');
             category_name = list[category].name;
@@ -160,7 +160,7 @@ var executeDataAndCode = function () {
         $menu.addClass('active');
 
         var requestedTab = getAlgorithmHash('algorithm')['tab'];
-        if(requestedTab === 'trace') $('#btn_trace').click();
+        if (requestedTab === 'trace') $('#btn_trace').click();
         else $('#btn_desc').click();
 
         $('#category').html(category_name);
@@ -252,18 +252,17 @@ var executeDataAndCode = function () {
             showDescription(data);
             showFiles(category, algorithm, files);
         });
-        var hash = isScratchPaper(category, algorithm) ? algorithm : category + '/' + algorithm;
-        setHashValue('algorithm', hash);
+        setAlgorithmHash(category, algorithm);
     };
     var list = {};
     var anyOpened = false;
     $.getJSON('./algorithm/category.json', function (data) {
         var algorithmHash = getAlgorithmHash();
-        console.log(algorithmHash);
         var requestedCategory = algorithmHash['category'],
             requestedAlgorithm = algorithmHash['algorithm'];
         var anyRequested = requestedCategory && requestedAlgorithm;
-        anyOpened = anyRequested;
+        anyOpened = false;
+        var $selectedCategory = null, $selectedAlgorithm = null;
 
         list = data;
         for (var category in list) {
@@ -287,30 +286,39 @@ var executeDataAndCode = function () {
                                 loadAlgorithm(category, algorithm);
                             });
                         $('#list').append($algorithm);
-                        if (!anyOpened) {
-                            anyOpened = true;
-                            $algorithm.click();
+                        if (anyRequested) {
+                            if (category == requestedCategory && algorithm == requestedAlgorithm) {
+                                anyOpened = true;
+                                $selectedCategory = $category;
+                                $selectedAlgorithm = $algorithm;
+                            }
+                        } else {
+                            if (!anyOpened) {
+                                anyOpened = true;
+                                $selectedCategory = $category;
+                                $selectedAlgorithm = $algorithm;
+                            }
                         }
                     })(category, subList, algorithm);
                 }
             })(category);
         }
 
-        if(anyRequested) {
-            if(!list[requestedCategory] || !list[requestedCategory].list[requestedAlgorithm]) {
-                showErrorToast('Oops! This link appears to be broken.');
-                $('#scratch-paper').click();
-            } else {
-                $('[data-category="' + requestedCategory + '"]').toggleClass('collapse');
-                loadAlgorithm(requestedCategory, requestedAlgorithm);
-            }
+        if (anyOpened) {
+            $selectedCategory.click();
+            $selectedAlgorithm.click();
+        } else if (anyRequested && isScratchPaper(requestedCategory)) {
+            loadScratchPaper(requestedAlgorithm);
+        } else {
+            showErrorToast('Oops! This link appears to be broken.');
+            $('#scratch-paper').click();
         }
     });
     $('#powered-by').click(function () {
         $('#powered-by-list button').toggleClass('collapse');
     });
     $('#scratch-paper').click(function () {
-        loadAlgorithm(null, 'scratch_paper');
+        loadAlgorithm('scratch', loadedScratch || 'temp');
     });
 
     var sidemenu_percent;
@@ -396,7 +404,7 @@ var executeDataAndCode = function () {
         $('.tab_bar > button').removeClass('active');
         $(this).addClass('active');
         var algorithmHash = getAlgorithmHash();
-        setHashValue('algorithm', algorithmHash['category'] + '/' + algorithmHash['algorithm']);
+        setAlgorithmHash(algorithmHash['category'], algorithmHash['algorithm'], 'desc');
     });
     $('#btn_trace').click(function () {
         $('.tab_container > .tab').removeClass('active');
@@ -404,7 +412,7 @@ var executeDataAndCode = function () {
         $('.tab_bar > button').removeClass('active');
         $(this).addClass('active');
         var algorithmHash = getAlgorithmHash();
-        setHashValue('algorithm', algorithmHash['category'] + '/' + algorithmHash['algorithm']  + '/trace');
+        setAlgorithmHash(algorithmHash['category'], algorithmHash['algorithm'], 'trace');
     });
 
     $(window).resize(function () {
@@ -504,48 +512,48 @@ var executeDataAndCode = function () {
     });
 
     var getHashValue = function (key) {
-        if(!key) return null;
+        if (!key) return null;
         var hash = window.location.hash.substr(1);
         var params = hash ? hash.split('&') : [];
-        for(var i = 0; i < params.length; i++) {
+        for (var i = 0; i < params.length; i++) {
             var pair = params[i].split('=');
-            if(pair[0] === key) {
+            if (pair[0] === key) {
                 return pair[1];
             }
         }
         return null;
-    }
+    };
 
     var setHashValue = function (key, value) {
-        if(!key || !value) return;
+        if (!key || !value) return;
         var hash = window.location.hash.substr(1);
         var params = hash ? hash.split('&') : [];
 
         var found = false;
-        for(var i = 0; i < params.length && !found; i++) {
+        for (var i = 0; i < params.length && !found; i++) {
             var pair = params[i].split('=');
-            if(pair[0] === key) {
+            if (pair[0] === key) {
                 pair[1] = value;
                 params[i] = pair.join('=');
                 found = true;
             }
         }
-        if(!found) {
+        if (!found) {
             params.push([key, value].join('='));
         }
 
         var newHash = params.join('&');
         window.location.hash = '#' + newHash;
-    }
+    };
 
     var removeHashValue = function (key) {
-        if(!key) return;
+        if (!key) return;
         var hash = window.location.hash.substr(1);
         var params = hash ? hash.split('&') : [];
 
-        for(var i = 0; i < params.length; i++) {
+        for (var i = 0; i < params.length; i++) {
             var pair = params[i].split('=');
-            if(pair[0] === key) {
+            if (pair[0] === key) {
                 params.splice(i, 1);
                 break;
             }
@@ -553,34 +561,21 @@ var executeDataAndCode = function () {
 
         var newHash = params.join('&');
         window.location.hash = '#' + newHash;
-    }
+    };
+
+    var setAlgorithmHash = function (category, algorithm, tab) {
+        var algorithmHash = category ? category + (algorithm ? '/' + algorithm + (tab ? '/' + tab : '') : '') : '';
+        setHashValue('algorithm', algorithmHash);
+    };
 
     var getAlgorithmHash = function () {
         var hash = getHashValue('algorithm');
-        if(hash){
-            var regex = /(?:[^\/\\]+|\\.)+/g;
-            var tmp = null, algorithmHash = {}, i = 0;
-            while(tmp = regex.exec(hash)){
-                if(i === 0) algorithmHash['category'] = tmp[0];
-                if(i === 1) algorithmHash['algorithm'] = tmp[0];
-                if(i === 2) algorithmHash['tab'] = tmp[0];
-                i++;
-            } 
-            return algorithmHash;            
-        } else
+        if (hash) {
+            var parts = hash.split('/');
+            return {category: parts[0], algorithm: parts[1], tab: parts[2]};
+        } else {
             return false;
-    }
-
-// Share scratch paper
-
-    var getParameterByName = function (name) {
-        var url = window.location.href;
-        name = name.replace(/[\[\]]/g, "\\$&");
-        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-            results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
     };
 
     var shareScratchPaper = function (callback) {
@@ -594,16 +589,18 @@ var executeDataAndCode = function () {
         };
         $.post('https://api.github.com/gists', JSON.stringify(gist), function (res) {
             var data = JSON.parse(res);
-            if (callback) callback(location.protocol + '//' + location.host + location.pathname + '#scratch-paper=' + data.id);
+            setAlgorithmHash('scratch', data.id);
+            if (callback) callback(location.href);
         });
     };
 
+    var loadedScratch = null;
     var loadScratchPaper = function (gistID) {
-        anyOpened = true;
+        loadedScratch = gistID;
         $.get('https://api.github.com/gists/' + gistID, function (res) {
             var data = JSON.parse(res);
-            var category = null;
-            var algorithm = 'scratch_paper';
+            var category = 'scratch';
+            var algorithm = gistID;
             var dir = getFileDir(category, algorithm, 'scratch_paper');
             cachedFile[dir] = {
                 data: data.files['data.js'].content,
@@ -613,9 +610,4 @@ var executeDataAndCode = function () {
             loadAlgorithm(category, algorithm);
         });
     };
-
-    var gistID = getHashValue('scratch-paper');
-    if (gistID) {
-        loadScratchPaper(gistID);
-    }
 })();
