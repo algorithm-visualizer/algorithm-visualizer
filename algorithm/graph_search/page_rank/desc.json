@@ -1,0 +1,17 @@
+{
+  "PageRank-Algorithm": "PageRank is an algorithm used by Google Search to rank websites in their search engine results.",
+  "Applications": [
+    "Web Page Indexing for refining search results"
+  ],
+  "Complexity": {
+    "time": "worst O(|V|+|E|)",
+    "space": "worst O(|V|)"
+  },
+  "References": [
+    "<a href='http://www.cs.princeton.edu/~chazelle/courses/BIB/pagerank.htm'>Princeton university</a>",
+    "<a href='http://pr.efactory.de/e-pagerank-algorithm.shtml'>E-Factory</a>"
+  ],
+  "files": {
+    "basic": "Version #1 of PageRank Algorithm (does not take into account the total number of nodes in the graph, i.e., number of pages on web)."
+  }
+}

@@ -8,7 +8,8 @@
       "bellman_ford": "Bellman-Ford",
       "floyd_warshall": "Floyd-Warshall",
       "topological_sort": "Topological-Sort",
-      "bridges": "Find-Bridges"
+      "bridges": "Find-Bridges",
+      "page_rank": "PageRank Algorithm"
     }
   },
   "cryptography": {
