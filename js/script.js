@@ -112,7 +112,7 @@ var executeDataAndCode = function () {
                 }).fail(onFail);
             }).fail(onFail);
         }
-        setAlgorithmHash(category, algorithm, isScratchPaper(category) ? null : file);
+        setPath(category, algorithm, isScratchPaper(category) ? null : file);
     };
     var checkLoading = function () {
         if (loading) {
@@ -262,15 +262,15 @@ var executeDataAndCode = function () {
             showDescription(data);
             showFiles(category, algorithm, files, requestedFile);
         });
-        setAlgorithmHash(category, algorithm);
+        setPath(category, algorithm);
     };
     var list = {};
     var anyOpened = false;
     $.getJSON('./algorithm/category.json', function (data) {
-        var algorithmHash = getAlgorithmHash();
-        var requestedCategory = algorithmHash['category'],
-            requestedAlgorithm = algorithmHash['algorithm'],
-            requestedFile = algorithmHash['file'];
+        var path = getPath();
+        var requestedCategory = path['category'],
+            requestedAlgorithm = path['algorithm'],
+            requestedFile = path['file'];
         var anyRequested = requestedCategory && requestedAlgorithm;
         anyOpened = false;
         var $selectedCategory = null, $selectedAlgorithm = null;
@@ -294,7 +294,7 @@ var executeDataAndCode = function () {
                             .attr('data-algorithm', algorithm)
                             .attr('data-category', category)
                             .click(function () {
-                                loadAlgorithm(category, algorithm);
+                                loadAlgorithm(category, algorithm, requestedFile);
                             });
                         $('#list').append($algorithm);
                         if (anyRequested) {
@@ -324,6 +324,7 @@ var executeDataAndCode = function () {
             showErrorToast('Oops! This link appears to be broken.');
             $('#scratch-paper').click();
         }
+        requestedFile = null;
     });
     $('#powered-by').click(function () {
         $('#powered-by-list button').toggleClass('collapse');
@@ -580,12 +581,12 @@ var executeDataAndCode = function () {
         window.location.hash = '#' + newHash;
     };
 
-    var setAlgorithmHash = function (category, algorithm, file) {
-        var algorithmHash = category ? category + (algorithm ? '/' + algorithm + (file ? '/' + file : '') : '') : '';
-        setHashValue('algorithm', algorithmHash);
+    var setPath = function (category, algorithm, file) {
+        var path = category ? category + (algorithm ? '/' + algorithm + (file ? '/' + file : '') : '') : '';
+        setHashValue('algorithm', path);
     };
 
-    var getAlgorithmHash = function () {
+    var getPath = function () {
         var hash = getHashValue('algorithm');
         if (hash) {
             var parts = hash.split('/');
@@ -606,7 +607,7 @@ var executeDataAndCode = function () {
         };
         $.post('https://api.github.com/gists', JSON.stringify(gist), function (res) {
             var data = JSON.parse(res);
-            setAlgorithmHash('scratch', data.id);
+            setPath('scratch', data.id);
             if (callback) callback(location.href);
         });
     };
