@@ -511,6 +511,16 @@ var executeDataAndCode = function () {
         tracerManager.findOwner(this).mousewheel(e);
     });
 
+    var getParameterByName = function (name) {
+        var url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    };
+
     var getHashValue = function (key) {
         if (!key) return null;
         var hash = window.location.hash.substr(1);
@@ -610,4 +620,11 @@ var executeDataAndCode = function () {
             loadAlgorithm(category, algorithm);
         });
     };
+
+    var v1LoadedScratch = getHashValue('scratch-paper');
+    var v2LoadedScratch = getParameterByName('scratch-paper');
+    var vLoadedScratch = v1LoadedScratch || v2LoadedScratch;
+    if (vLoadedScratch) {
+        location.href = location.protocol + '//' + location.host + location.pathname + '#algorithm=scratch/' + vLoadedScratch;
+    }
 })();
