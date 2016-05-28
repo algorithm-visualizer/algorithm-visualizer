@@ -130,7 +130,7 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
     processStep: function (step, options) {
         switch (step.type) {
             case 'notify':
-                if (step.v) {
+                if (step.v === 0 || step.v) {
                     var $row = this.$table.find('.mtbl-row').eq(step.x);
                     var $col = $row.find('.mtbl-col').eq(step.y);
                     $col.text(TracerUtil.refineByType(step.v));
