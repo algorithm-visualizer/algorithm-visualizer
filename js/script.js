@@ -158,15 +158,10 @@ var executeDataAndCode = function () {
         }
         $('.sidemenu button').removeClass('active');
         $menu.addClass('active');
-        var requestedTab = getHashValue('tab');
-        if(requestedTab) {
-            if(requestedTab === 'trace')
-                $('#btn_trace').click();
-            else
-                $('#btn_desc').click();
-        } else {
-            $('#btn_desc').click();
-        }
+
+        var requestedTab = getAlgorithmHash('algorithm')['tab'];
+        if(requestedTab === 'trace') $('#btn_trace').click();
+        else $('#btn_desc').click();
 
         $('#category').html(category_name);
         $('#algorithm').html(algorithm_name);
@@ -261,8 +256,10 @@ var executeDataAndCode = function () {
     var list = {};
     var anyOpened = false;
     $.getJSON('./algorithm/category.json', function (data) {
-        var requestedCategory = getHashValue('category'),
-            requestedAlgorithm = getHashValue('algorithm');
+        var algorithmHash = getAlgorithmHash();
+        console.log(algorithmHash);
+        var requestedCategory = algorithmHash['category'],
+            requestedAlgorithm = algorithmHash['algorithm'];
         var anyRequested = requestedCategory && requestedAlgorithm;
         anyOpened = anyRequested;
 
@@ -285,9 +282,7 @@ var executeDataAndCode = function () {
                             .attr('data-algorithm', algorithm)
                             .attr('data-category', category)
                             .click(function () {
-                                setHashValue('category', category);
-                                setHashValue('algorithm', algorithm);
-                                setHashValue('tab', 'desc');
+                                setHashValue('algorithm', category + '/' + algorithm + '/desc');
                                 loadAlgorithm(category, algorithm);
                             });
                         $('#list').append($algorithm);
@@ -303,10 +298,8 @@ var executeDataAndCode = function () {
         if(anyRequested) {
             if(!list[requestedCategory] || !list[requestedCategory].list[requestedAlgorithm]) {
                 showErrorToast('Oops! This link appears to be broken.');
+
                 $('#scratch-paper').click();
-                removeHashValue('category');
-                removeHashValue('algorithm');
-                removeHashValue('tab');
             } else {
                 $('[data-category="' + requestedCategory + '"]').toggleClass('collapse');
                 loadAlgorithm(requestedCategory, requestedAlgorithm);
@@ -363,6 +356,7 @@ var executeDataAndCode = function () {
     $('#btn_share').click(function () {
         var $icon = $(this).find('.fa-share');
         $icon.addClass('fa-spin fa-spin-faster');
+
         shareScratchPaper(function (url) {
             $icon.removeClass('fa-spin fa-spin-faster');
             $('#shared').removeClass('collapse');
@@ -401,14 +395,16 @@ var executeDataAndCode = function () {
         $('#tab_desc').addClass('active');
         $('.tab_bar > button').removeClass('active');
         $(this).addClass('active');
-        setHashValue('tab', 'desc');
+        var algorithmHash = getAlgorithmHash();
+        setHashValue('algorithm', algorithmHash['category'] + '/' + algorithmHash['algorithm']  + '/desc');
     });
     $('#btn_trace').click(function () {
         $('.tab_container > .tab').removeClass('active');
         $('#tab_module').addClass('active');
         $('.tab_bar > button').removeClass('active');
         $(this).addClass('active');
-        setHashValue('tab', 'trace');
+        var algorithmHash = getAlgorithmHash();
+        setHashValue('algorithm', algorithmHash['category'] + '/' + algorithmHash['algorithm']  + '/trace');
     });
 
     $(window).resize(function () {
@@ -519,6 +515,7 @@ var executeDataAndCode = function () {
         }
         return null;
     }
+
     var setHashValue = function (key, value) {
         if(!key || !value) return;
         var hash = window.location.hash.substr(1);
@@ -540,6 +537,7 @@ var executeDataAndCode = function () {
         var newHash = params.join('&');
         window.location.hash = '#' + newHash;
     }
+
     var removeHashValue = function (key) {
         if(!key) return;
         var hash = window.location.hash.substr(1);
@@ -556,6 +554,23 @@ var executeDataAndCode = function () {
         var newHash = params.join('&');
         window.location.hash = '#' + newHash;
     }
+
+    var getAlgorithmHash = function () {
+        var hash = getHashValue('algorithm');
+        if(hash){
+            var regex = /(?:[^\/\\]+|\\.)+/g;
+            var tmp = null, algorithmHash = {}, i = 0;
+            while(tmp = regex.exec(hash)){
+                if(i === 0) algorithmHash['category'] = tmp[0];
+                if(i === 1) algorithmHash['algorithm'] = tmp[0];
+                if(i === 2) algorithmHash['tab'] = tmp[0];
+                i++;
+            } 
+            return algorithmHash;            
+        } else
+            return false;
+    }
+
 // Share scratch paper
 
     var getParameterByName = function (name) {
@@ -579,7 +594,7 @@ var executeDataAndCode = function () {
         };
         $.post('https://api.github.com/gists', JSON.stringify(gist), function (res) {
             var data = JSON.parse(res);
-            if (callback) callback(location.protocol + '//' + location.host + location.pathname + '?scratch-paper=' + data.id);
+            if (callback) callback(location.protocol + '//' + location.host + location.pathname + '#scratch-paper=' + data.id);
         });
     };
 
@@ -595,11 +610,12 @@ var executeDataAndCode = function () {
                 code: data.files['code.js'].content,
                 'CREDIT.md': 'Shared by an anonymous user from http://parkjs814.github.io/AlgorithmVisualizer'
             };
+            setHashValue('algorithm', 'scratch_paper');
             loadAlgorithm(category, algorithm);
         });
     };
 
-    var gistID = getParameterByName('scratch-paper');
+    var gistID = getHashValue('scratch-paper');
     if (gistID) {
         loadScratchPaper(gistID);
     }
