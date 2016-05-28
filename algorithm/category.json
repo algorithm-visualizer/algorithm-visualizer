@@ -42,7 +42,8 @@
       "radix": "Radix Sort",
       "quick": "Quicksort",
       "heap" : "Heapsort",
-      "shell": "Shellsort"
+      "shell": "Shellsort",
+      "cycle": "Cycle Sort"
     }
   },
   "string": {
