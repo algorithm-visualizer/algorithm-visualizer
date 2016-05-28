@@ -633,6 +633,6 @@ var executeDataAndCode = function () {
     var v2LoadedScratch = getParameterByName('scratch-paper');
     var vLoadedScratch = v1LoadedScratch || v2LoadedScratch;
     if (vLoadedScratch) {
-        location.href = location.protocol + '//' + location.host + location.pathname + '#algorithm=scratch/' + vLoadedScratch;
+        location.href = location.protocol + '//' + location.host + location.pathname + '#path=scratch/' + vLoadedScratch;
     }
 })();
