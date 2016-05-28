@@ -193,7 +193,7 @@ var TracerUtil = {
       return typeof(item) === 'number' ? this.refineNumber(item) : this.refineString(item);  
     },
     refineString: function (str) {
-        return str === '' ? ' ' : string;
+        return str === '' ? ' ' : str;
     },
     refineNumber: function (num) {
         return num === Infinity ? '∞' : num;
