@@ -28,6 +28,22 @@ Array1DTracer.prototype = $.extend(true, Object.create(Array2DTracer.prototype),
         }
         return this;
     },
+    _separate: function (idx) {
+        this.manager.pushStep(this.capsule, {
+            type: 'separate',
+            x: 0,
+            y: idx
+        });
+        return this;
+    },
+    _deseparate: function (idx) {
+        this.manager.pushStep(this.capsule, {
+            type: 'deseparate',
+            x: 0,
+            y: idx
+        });
+        return this;
+    },
     setData: function (D) {
         return Array2DTracer.prototype.setData.call(this, [D]);
     }
