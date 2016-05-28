@@ -252,6 +252,8 @@ var executeDataAndCode = function () {
             showDescription(data);
             showFiles(category, algorithm, files);
         });
+        var hash = isScratchPaper(category, algorithm) ? algorithm : category + '/' + algorithm;
+        setHashValue('algorithm', hash);
     };
     var list = {};
     var anyOpened = false;
@@ -282,7 +284,6 @@ var executeDataAndCode = function () {
                             .attr('data-algorithm', algorithm)
                             .attr('data-category', category)
                             .click(function () {
-                                setHashValue('algorithm', category + '/' + algorithm + '/desc');
                                 loadAlgorithm(category, algorithm);
                             });
                         $('#list').append($algorithm);
@@ -298,7 +299,6 @@ var executeDataAndCode = function () {
         if(anyRequested) {
             if(!list[requestedCategory] || !list[requestedCategory].list[requestedAlgorithm]) {
                 showErrorToast('Oops! This link appears to be broken.');
-
                 $('#scratch-paper').click();
             } else {
                 $('[data-category="' + requestedCategory + '"]').toggleClass('collapse');
@@ -396,7 +396,7 @@ var executeDataAndCode = function () {
         $('.tab_bar > button').removeClass('active');
         $(this).addClass('active');
         var algorithmHash = getAlgorithmHash();
-        setHashValue('algorithm', algorithmHash['category'] + '/' + algorithmHash['algorithm']  + '/desc');
+        setHashValue('algorithm', algorithmHash['category'] + '/' + algorithmHash['algorithm']);
     });
     $('#btn_trace').click(function () {
         $('.tab_container > .tab').removeClass('active');
@@ -610,7 +610,6 @@ var executeDataAndCode = function () {
                 code: data.files['code.js'].content,
                 'CREDIT.md': 'Shared by an anonymous user from http://parkjs814.github.io/AlgorithmVisualizer'
             };
-            setHashValue('algorithm', 'scratch_paper');
             loadAlgorithm(category, algorithm);
         });
     };
