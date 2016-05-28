@@ -158,7 +158,10 @@ var executeDataAndCode = function () {
         }
         $('.sidemenu button').removeClass('active');
         $menu.addClass('active');
-        $('#btn_desc').click();
+
+        var requestedTab = getAlgorithmHash('algorithm')['tab'];
+        if(requestedTab === 'trace') $('#btn_trace').click();
+        else $('#btn_desc').click();
 
         $('#category').html(category_name);
         $('#algorithm').html(algorithm_name);
@@ -249,10 +252,19 @@ var executeDataAndCode = function () {
             showDescription(data);
             showFiles(category, algorithm, files);
         });
+        var hash = isScratchPaper(category, algorithm) ? algorithm : category + '/' + algorithm;
+        setHashValue('algorithm', hash);
     };
     var list = {};
     var anyOpened = false;
     $.getJSON('./algorithm/category.json', function (data) {
+        var algorithmHash = getAlgorithmHash();
+        console.log(algorithmHash);
+        var requestedCategory = algorithmHash['category'],
+            requestedAlgorithm = algorithmHash['algorithm'];
+        var anyRequested = requestedCategory && requestedAlgorithm;
+        anyOpened = anyRequested;
+
         list = data;
         for (var category in list) {
             (function (category) {
@@ -282,6 +294,16 @@ var executeDataAndCode = function () {
                     })(category, subList, algorithm);
                 }
             })(category);
+        }
+
+        if(anyRequested) {
+            if(!list[requestedCategory] || !list[requestedCategory].list[requestedAlgorithm]) {
+                showErrorToast('Oops! This link appears to be broken.');
+                $('#scratch-paper').click();
+            } else {
+                $('[data-category="' + requestedCategory + '"]').toggleClass('collapse');
+                loadAlgorithm(requestedCategory, requestedAlgorithm);
+            }
         }
     });
     $('#powered-by').click(function () {
@@ -334,6 +356,7 @@ var executeDataAndCode = function () {
     $('#btn_share').click(function () {
         var $icon = $(this).find('.fa-share');
         $icon.addClass('fa-spin fa-spin-faster');
+
         shareScratchPaper(function (url) {
             $icon.removeClass('fa-spin fa-spin-faster');
             $('#shared').removeClass('collapse');
@@ -372,12 +395,16 @@ var executeDataAndCode = function () {
         $('#tab_desc').addClass('active');
         $('.tab_bar > button').removeClass('active');
         $(this).addClass('active');
+        var algorithmHash = getAlgorithmHash();
+        setHashValue('algorithm', algorithmHash['category'] + '/' + algorithmHash['algorithm']);
     });
     $('#btn_trace').click(function () {
         $('.tab_container > .tab').removeClass('active');
         $('#tab_module').addClass('active');
         $('.tab_bar > button').removeClass('active');
         $(this).addClass('active');
+        var algorithmHash = getAlgorithmHash();
+        setHashValue('algorithm', algorithmHash['category'] + '/' + algorithmHash['algorithm']  + '/trace');
     });
 
     $(window).resize(function () {
@@ -476,6 +503,74 @@ var executeDataAndCode = function () {
         tracerManager.findOwner(this).mousewheel(e);
     });
 
+    var getHashValue = function (key) {
+        if(!key) return null;
+        var hash = window.location.hash.substr(1);
+        var params = hash ? hash.split('&') : [];
+        for(var i = 0; i < params.length; i++) {
+            var pair = params[i].split('=');
+            if(pair[0] === key) {
+                return pair[1];
+            }
+        }
+        return null;
+    }
+
+    var setHashValue = function (key, value) {
+        if(!key || !value) return;
+        var hash = window.location.hash.substr(1);
+        var params = hash ? hash.split('&') : [];
+
+        var found = false;
+        for(var i = 0; i < params.length && !found; i++) {
+            var pair = params[i].split('=');
+            if(pair[0] === key) {
+                pair[1] = value;
+                params[i] = pair.join('=');
+                found = true;
+            }
+        }
+        if(!found) {
+            params.push([key, value].join('='));
+        }
+
+        var newHash = params.join('&');
+        window.location.hash = '#' + newHash;
+    }
+
+    var removeHashValue = function (key) {
+        if(!key) return;
+        var hash = window.location.hash.substr(1);
+        var params = hash ? hash.split('&') : [];
+
+        for(var i = 0; i < params.length; i++) {
+            var pair = params[i].split('=');
+            if(pair[0] === key) {
+                params.splice(i, 1);
+                break;
+            }
+        }
+
+        var newHash = params.join('&');
+        window.location.hash = '#' + newHash;
+    }
+
+    var getAlgorithmHash = function () {
+        var hash = getHashValue('algorithm');
+        if(hash){
+            var regex = /(?:[^\/\\]+|\\.)+/g;
+            var tmp = null, algorithmHash = {}, i = 0;
+            while(tmp = regex.exec(hash)){
+                if(i === 0) algorithmHash['category'] = tmp[0];
+                if(i === 1) algorithmHash['algorithm'] = tmp[0];
+                if(i === 2) algorithmHash['tab'] = tmp[0];
+                i++;
+            } 
+            return algorithmHash;            
+        } else
+            return false;
+    }
+
 // Share scratch paper
 
     var getParameterByName = function (name) {
@@ -499,7 +594,7 @@ var executeDataAndCode = function () {
         };
         $.post('https://api.github.com/gists', JSON.stringify(gist), function (res) {
             var data = JSON.parse(res);
-            if (callback) callback(location.protocol + '//' + location.host + location.pathname + '?scratch-paper=' + data.id);
+            if (callback) callback(location.protocol + '//' + location.host + location.pathname + '#scratch-paper=' + data.id);
         });
     };
 
@@ -519,7 +614,7 @@ var executeDataAndCode = function () {
         });
     };
 
-    var gistID = getParameterByName('scratch-paper');
+    var gistID = getHashValue('scratch-paper');
     if (gistID) {
         loadScratchPaper(gistID);
     }
