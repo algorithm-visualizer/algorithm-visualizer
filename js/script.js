@@ -583,11 +583,11 @@ var executeDataAndCode = function () {
 
     var setPath = function (category, algorithm, file) {
         var path = category ? category + (algorithm ? '/' + algorithm + (file ? '/' + file : '') : '') : '';
-        setHashValue('algorithm', path);
+        setHashValue('path', path);
     };
 
     var getPath = function () {
-        var hash = getHashValue('algorithm');
+        var hash = getHashValue('path');
         if (hash) {
             var parts = hash.split('/');
             return {category: parts[0], algorithm: parts[1], file: parts[2]};
