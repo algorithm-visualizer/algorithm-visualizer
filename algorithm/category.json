@@ -41,21 +41,21 @@
       "merge": "Merge Sort",
       "radix": "Radix Sort",
       "quick": "Quicksort",
-      "heap" : "Heapsort",
+      "heap": "Heapsort",
       "shell": "Shellsort",
       "cycle": "Cycle Sort",
       "comb": "Comb Sort"
     }
   },
   "string": {
-   		"name": "String",
-   		"list": {
-   			"edit_distance": "Edit Distance",
-   			"knuth_morris_pratt": "KMP Substring Search",
-        "rabin_karp_algorithm": "Rabin-Karp Algorithm"
-   		}
-   },
-   "dp": {
+    "name": "String",
+    "list": {
+      "edit_distance": "Edit Distance",
+      "knuth_morris_pratt": "KMP Substring Search",
+      "rabin_karp_algorithm": "Rabin-Karp Algorithm"
+    }
+  },
+  "dp": {
     "name": "Dynamic Programming",
     "list": {
       "fibonacci": "Fibonacci Sequence",
@@ -67,12 +67,17 @@
       "integer_partition": "Integer Partition",
       "ugly_numbers": "Ugly Numbers"
     }
-   },
+  },
+  "greedy": {
+    "name": "Greedy",
+    "list": {
+      "job_scheduling": "Job Scheduling Problem"
+    }
+  },
   "etc": {
     "name": "Uncategorized",
     "list": {
-       "flood_fill": "Flood Fill",
-       "job_scheduling": "Job Scheduling Problem"
+      "flood_fill": "Flood Fill"
     }
   }
 }
