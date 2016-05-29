@@ -83,7 +83,8 @@
   "etc": {
     "name": "Uncategorized",
     "list": {
-      "flood_fill": "Flood Fill"
+      "flood_fill": "Flood Fill",
+      "pascal_triangle": "Pascal's Trangle"
     }
   }
 }

@@ -1,0 +1,17 @@
+{
+  "Pascal's Triangle": " Pascal's triangle is a triangular array of the binomial coefficients.",
+  "Applications": [
+    "Binomial Expansion",
+    "Probability"
+  ],
+  "Complexity": {
+    "time": " O(N<sup>2</sup>)",
+    "space": "O(N<sup>2</sup>)"
+  },
+  "References": [
+    "<a href='https://en.wikipedia.org/wiki/Pascal%27s_triangle'>Wikipedia</a>"
+  ],
+  "files": {
+    "pascal_triangle": "Pascal's Triangle"
+  }
+}
