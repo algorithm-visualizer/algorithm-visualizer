@@ -1,0 +1,19 @@
+{
+  "Catalan Number": " Pascal's triangle is a triangular array of the binomial coefficients.",
+  "Applications": [
+    "The number of ways to stack coins on a bottom row that consists of n consecutive coins in a plane, such that no coins are allowed to be put on the two sides of the bottom coins and every additional coin must be above two other coins, is the nth Catalan number",
+    "The number of ways to group a string of n pairs of parentheses, such that each open parenthesis has a matching closed parenthesis, is the nth Catalan number",
+    "The number of ways to cut an n+2-sided convex polygon in a plane into triangles by connecting vertices with straight, non-intersecting lines is the nth Catalan number. This is the application in which Euler was interested."
+  ],
+  "Complexity": {
+    "time": " O(N<sup>2</sup>)",
+    "space": "O(N)"
+  },
+  "References": [
+    "<a href='https://en.wikipedia.org/wiki/Catalan_number'>Wikipedia</a>",
+    "<a href='http://oldweb.sbc.edu/sites/default/files/Honors/XiaotongJiang.July20_0.pdf'>Sweet Briar College"
+  ],
+  "files": {
+    "catalan_number": "Catalan Number"
+  }
+}
