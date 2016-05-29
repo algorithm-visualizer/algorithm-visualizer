@@ -11,6 +11,12 @@
       "bridges": "Find-Bridges"
     }
   },
+  "number_theory": {
+    "name": "Number Theory",
+    "list": {
+      "seive_of_erathrones": "Seive of Erathrones"
+    }
+  },
   "cryptography": {
     "name": "Cryptography",
     "list": {
