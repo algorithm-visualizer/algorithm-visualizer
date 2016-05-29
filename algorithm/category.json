@@ -71,7 +71,8 @@
       "max_sum_path": "Maximum Sum Path",
       "sliding_window": "Sliding Window",
       "integer_partition": "Integer Partition",
-      "ugly_numbers": "Ugly Numbers"
+      "ugly_numbers": "Ugly Numbers",
+      "pascal_triangle": "Pascal's Trangle"
     }
   },
   "greedy": {
@@ -83,8 +84,7 @@
   "etc": {
     "name": "Uncategorized",
     "list": {
-      "flood_fill": "Flood Fill",
-      "pascal_triangle": "Pascal's Trangle"
+      "flood_fill": "Flood Fill"
     }
   }
 }
