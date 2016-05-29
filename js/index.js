@@ -52,7 +52,4 @@ $(() => {
     }
 
   });
-
-  // http://localhost:8080/?scratch-paper=dcf0d0de60a4ad335b3b0cb5c39035e7
-
 });

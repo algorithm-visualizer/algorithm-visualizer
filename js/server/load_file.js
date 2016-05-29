@@ -19,7 +19,6 @@ const loadDataAndCode = (dir) => {
 };
 
 const loadFileAndUpdateContent = (dir) => {
-  appInstance.setIsLoading(true);
   appInstance.getEditor().clearContent();
 
   return loadDataAndCode(dir).then((content) => {
