@@ -1,0 +1,13 @@
+{
+  "Seive of Erathrones": "Finding all prime numbers upto a given range.",
+  "Complexity": {
+    "time": "O(n(log n)(log log n))",
+    "space": "O(n<sup>1/2</sup>)"
+  },
+  "References": [
+    "<a href='https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes'>Wikipedia</a>"
+  ],
+  "files": {
+    "basic": "Seive of Erathrones"
+  }
+}
