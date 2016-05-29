@@ -1,3 +1,12 @@
+const {
+    DirectedGraph,
+    DirectedGraphTracer
+} = require('./directed_graph');
+
+const {
+    refineByType
+} = require('../tracer_manager/util');
+
 function WeightedDirectedGraphTracer() {
     if (DirectedGraphTracer.apply(this, arguments)) {
         WeightedDirectedGraphTracer.prototype.init.call(this);
@@ -8,44 +17,58 @@ function WeightedDirectedGraphTracer() {
 
 WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGraphTracer.prototype), {
     constructor: WeightedDirectedGraphTracer,
-    init: function () {
+    init: function() {
         var tracer = this;
 
         this.s.settings({
             edgeLabelSize: 'proportional',
             defaultEdgeLabelSize: 20,
             edgeLabelSizePowRatio: 0.8,
-            funcLabelsDef: function (node, context, settings) {
+            funcLabelsDef: function(node, context, settings) {
                 tracer.drawNodeWeight(node, context, settings);
                 tracer.drawLabel(node, context, settings);
             },
-            funcHoversDef: function (node, context, settings) {
+            funcHoversDef: function(node, context, settings) {
                 tracer.drawOnHover(node, context, settings, tracer.drawEdgeWeight);
             },
-            funcEdgesArrow: function (edge, source, target, context, settings) {
+            funcEdgesArrow: function(edge, source, target, context, settings) {
                 var color = tracer.getColor(edge, source, target, settings);
                 tracer.drawArrow(edge, source, target, color, context, settings);
                 tracer.drawEdgeWeight(edge, source, target, color, context, settings);
             }
         });
     },
-    _weight: function (target, weight) {
-        this.manager.pushStep(this.capsule, {type: 'weight', target: target, weight: weight});
+    _weight: function(target, weight) {
+        this.manager.pushStep(this.capsule, {
+            type: 'weight',
+            target: target,
+            weight: weight
+        });
         return this;
     },
-    _visit: function (target, source, weight) {
-        this.manager.pushStep(this.capsule, {type: 'visit', target: target, source: source, weight: weight});
+    _visit: function(target, source, weight) {
+        this.manager.pushStep(this.capsule, {
+            type: 'visit',
+            target: target,
+            source: source,
+            weight: weight
+        });
         return this;
     },
-    _leave: function (target, source, weight) {
-        this.manager.pushStep(this.capsule, {type: 'leave', target: target, source: source, weight: weight});
+    _leave: function(target, source, weight) {
+        this.manager.pushStep(this.capsule, {
+            type: 'leave',
+            target: target,
+            source: source,
+            weight: weight
+        });
         return this;
     },
-    processStep: function (step, options) {
+    processStep: function(step, options) {
         switch (step.type) {
             case 'weight':
                 var targetNode = this.graph.nodes(this.n(step.target));
-                if (step.weight !== undefined) targetNode.weight = TracerUtil.refineByType(step.weight);
+                if (step.weight !== undefined) targetNode.weight = refineByType(step.weight);
                 break;
             case 'visit':
             case 'leave':
@@ -53,7 +76,7 @@ WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGra
                 var targetNode = this.graph.nodes(this.n(step.target));
                 var color = visit ? this.color.visited : this.color.left;
                 targetNode.color = color;
-                if (step.weight !== undefined) targetNode.weight = TracerUtil.refineByType(step.weight);
+                if (step.weight !== undefined) targetNode.weight = refineByType(step.weight);
                 if (step.source !== undefined) {
                     var edgeId = this.e(step.source, step.target);
                     var edge = this.graph.edges(edgeId);
@@ -70,7 +93,7 @@ WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGra
                 DirectedGraphTracer.prototype.processStep.call(this, step, options);
         }
     },
-    setData: function (G) {
+    setData: function(G) {
         if (Tracer.prototype.setData.apply(this, arguments)) return true;
 
         this.graph.clear();
@@ -97,7 +120,7 @@ WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGra
                         target: this.n(j),
                         color: this.color.default,
                         size: 1,
-                        weight: TracerUtil.refineByType(G[i][j])
+                        weight: refineByType(G[i][j])
                     });
                 }
             }
@@ -117,17 +140,17 @@ WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGra
 
         return false;
     },
-    clear: function () {
+    clear: function() {
         DirectedGraphTracer.prototype.clear.call(this);
 
         this.clearWeights();
     },
-    clearWeights: function () {
-        this.graph.nodes().forEach(function (node) {
+    clearWeights: function() {
+        this.graph.nodes().forEach(function(node) {
             node.weight = 0;
         });
     },
-    drawEdgeWeight: function (edge, source, target, color, context, settings) {
+    drawEdgeWeight: function(edge, source, target, color, context, settings) {
         if (source == target)
             return;
 
@@ -149,9 +172,9 @@ WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGra
 
         fontSize = (settings('edgeLabelSize') === 'fixed') ?
             settings('defaultEdgeLabelSize') :
-        settings('defaultEdgeLabelSize') *
-        size *
-        Math.pow(size, -1 / settings('edgeLabelSizePowRatio'));
+            settings('defaultEdgeLabelSize') *
+            size *
+            Math.pow(size, -1 / settings('edgeLabelSizePowRatio'));
 
         context.save();
 
@@ -163,8 +186,7 @@ WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGra
             ].join(' ');
 
             context.fillStyle = color;
-        }
-        else {
+        } else {
             context.font = [
                 settings('fontStyle'),
                 fontSize + 'px',
@@ -187,7 +209,7 @@ WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGra
 
         context.restore();
     },
-    drawNodeWeight: function (node, context, settings) {
+    drawNodeWeight: function(node, context, settings) {
         var fontSize,
             prefix = settings('prefix') || '',
             size = node[prefix + 'size'];
@@ -197,7 +219,7 @@ WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGra
 
         fontSize = (settings('labelSize') === 'fixed') ?
             settings('defaultLabelSize') :
-        settings('labelSizeRatio') * size;
+            settings('labelSizeRatio') * size;
 
         context.font = (settings('fontStyle') ? settings('fontStyle') + ' ' : '') +
             fontSize + 'px ' + settings('font');
@@ -215,7 +237,7 @@ WeightedDirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGra
 });
 
 var WeightedDirectedGraph = {
-    random: function (N, ratio, min, max) {
+    random: function(N, ratio, min, max) {
         if (!N) N = 5;
         if (!ratio) ratio = .3;
         if (!min) min = 1;
@@ -231,4 +253,9 @@ var WeightedDirectedGraph = {
         }
         return G;
     }
+};
+
+module.exports = {
+    WeightedDirectedGraph,
+    WeightedDirectedGraphTracer
 };

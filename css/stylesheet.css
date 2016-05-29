@@ -103,7 +103,7 @@ nav h3 {
     padding: 0 4px;
 }
 
-#navigation span:empty + .nav-arrow {
+#category:empty + .nav-arrow {
     display: none;
 }
 
@@ -294,8 +294,7 @@ section {
 }
 
 .files_bar > .wrapper.shadow-left.shadow-right {
-    box-shadow: inset 16px 0 16px -16px rgba(0, 0, 0, .6),
-    inset -16px 0 16px -16px rgba(0, 0, 0, .6);
+    box-shadow: inset 16px 0 16px -16px rgba(0, 0, 0, .6), inset -16px 0 16px -16px rgba(0, 0, 0, .6);
 }
 
 .explanation_container {
@@ -430,4 +429,58 @@ pre {
 
 .mtbl-col.notified {
     background: #f00;
+}
+
+#loading-slider {
+    position: absolute;
+    width: 100%;
+    height: 2px;
+}
+
+#loading-slider.loaded {
+    visibility: hidden;
+}
+
+.line {
+    position: absolute;
+    background: #4a8df8;
+    width: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 3px;
+}
+
+.break {
+    position: absolute;
+    background: #222;
+    width: 6px;
+    height: 2px;
+}
+
+.dot1 {
+    animation: loading 2s infinite;
+}
+
+.dot2 {
+    animation: loading 2s 0.5s infinite;
+}
+
+.dot3 {
+    animation: loading 2s 1s infinite;
+}
+
+@keyframes loading {
+    from {
+        left: 0;
+    }
+    to {
+        left: 100%;
+    }
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
