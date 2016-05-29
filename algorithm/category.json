@@ -72,7 +72,8 @@
       "sliding_window": "Sliding Window",
       "integer_partition": "Integer Partition",
       "ugly_numbers": "Ugly Numbers",
-      "pascal_triangle": "Pascal's Trangle"
+      "pascal_triangle": "Pascal's Trangle",
+      "catalan_number": "Catalan Number"
     }
   },
   "greedy": {
