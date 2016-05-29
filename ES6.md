@@ -8,11 +8,11 @@ It will stay there until it reaches the same level as`gh-pages`, at which point 
 The new app uses [gulp](http://gulpjs.com/) to:
 
 - combine all individual modules into a single file
-- transpile ES6 code to ES5 with babel
+- transpile ES6 code to ES5 with [babel.js](http://babeljs.io/)
 - minimize JS and CSS code
 - generate source maps
-- add css autoprefixer to add vendor rules
-- provide a server with live-reload observing file changes
+- add vendor prefixer to the css
+- provide a server with live-reload
 
 ## Installation
 
@@ -43,7 +43,7 @@ gulp
 
 *Note:* Although no linter is added as of yet, the code closely follows the conventions from [Airbnb's Javascript style guide](https://github.com/airbnb/javascript)
 
-### [`js/index.js`](https://github.com/parkjs814/AlgorithmVisualizer/blob/master/js/index.js)
+### [js/index.js](https://github.com/parkjs814/AlgorithmVisualizer/blob/master/js/index.js)
 
 The app entry point is [`js/index.js`](https://github.com/parkjs814/AlgorithmVisualizer/blob/master/js/index.js). 
 It performs the initial application setup (loads the app when jQuery loads, loads the initial data from the server etc.)
@@ -88,7 +88,7 @@ The `utils` folder holds a few helper methods that are used everywhere such as b
 
 ## Remaining updates
 
-- Any algorithms added since ES6 updates for pushed to master.
+- Any algorithms added since ES6 updates were pushed to master.
 - The following pull-request code is still missing from the ES6 project and needs to be added before a full project update can be made:
 
   - https://github.com/parkjs814/AlgorithmVisualizer/pull/97
