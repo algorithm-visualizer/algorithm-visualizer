@@ -16,21 +16,9 @@ The new app uses [gulp](http://gulpjs.com/) to:
 
 ## Installation
 
-Create a `.babelrc` file at the top level of the project with the following contents:
-
-```js
-{
-    presets: ['es2015']
-}
-```
-
-This file is needed to run [`gulpfile.babel.js`](https://github.com/parkjs814/AlgorithmVisualizer/blob/master/gulpfile.babel.js) with ES6 syntax.
-
-Steps for running the project:
-
 ```bash
 # install gulp globally so you can run it from the command line
-npm install -g gulp
+npm install -g gulp-cli
 
 # install all dependencies
 npm install
