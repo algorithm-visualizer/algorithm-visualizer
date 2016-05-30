@@ -1,4 +1,4 @@
-var tracer = new Array1DTracer('Seive');
+var tracer = new Array1DTracer('Sieve');
 length = 30;
 var a = [];
 var b = [];
