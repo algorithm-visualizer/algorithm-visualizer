@@ -19,7 +19,7 @@ const normalize = (sec) => {
     interval = minInterval;
     message = `Interval of ${sec} seconds is too low. Setting to min allowed interval of ${minInterval} second(s).`;
   } else if (sec > maxInterval) {
-    interval = minInterval;
+    interval = maxInterval;
     message = `Interval of ${sec} seconds is too high. Setting to max allowed interval of ${maxInterval} second(s).`;
   } else {
     interval = sec;
