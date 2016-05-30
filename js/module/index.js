@@ -16,6 +16,11 @@ const {
 const ChartTracer = require('./chart');
 
 const {
+  CoordinateSystem,
+  CoordinateSystemTracer
+} = require('./coordinate_system');
+
+const {
   DirectedGraph,
   DirectedGraphTracer
 } = require('./directed_graph');
@@ -41,6 +46,8 @@ module.exports = {
   Array2D,
   Array2DTracer,
   ChartTracer,
+  CoordinateSystem,
+  CoordinateSystemTracer,
   DirectedGraph,
   DirectedGraphTracer,
   UndirectedGraph,
