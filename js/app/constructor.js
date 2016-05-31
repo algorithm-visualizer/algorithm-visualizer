@@ -3,6 +3,12 @@
 const Editor = require('../editor');
 const TracerManager = require('../tracer_manager');
 const DOM = require('../dom/setup');
+
+const {
+  showLoadingSlider,
+  hideLoadingSlider
+} = require('../dom/loading_slider');
+
 const {
   getFileDir
 } = require('../utils');
@@ -39,9 +45,9 @@ const App = function() {
   this.setIsLoading = (loading) => {
     state.isLoading = loading;
     if (loading) {
-      $('#loading-slider').removeClass('loaded');
+      showLoadingSlider();
     } else {
-      $('#loading-slider').addClass('loaded');
+      hideLoadingSlider();
     }
   };
 
