@@ -15,6 +15,8 @@ do{
     swapped = false;    // initialize swapped
     // a single comb over the input list
     for( var i=0; i+gap < N; i++ ){
+        tracer._select(i)._select(i+gap)._wait();
+
         if( D[i] > D[i+gap] ){
             logger._print('swap ' + D[i] + ' and ' + D[i+gap]);     // log swap event
             
@@ -27,5 +29,6 @@ do{
 
             swapped = true;     // Flag swapped has happened and list is not guaranteed sorted
         }
+        tracer._deselect(i)._deselect(i+gap);
     } // End of combing
 } while( gap!=1 || swapped  )

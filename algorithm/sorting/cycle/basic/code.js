@@ -7,30 +7,39 @@ var temp;
 for( cycleStart=0; cycleStart<=N-2; cycleStart++ ){
     item = D[cycleStart];
     pos = cycleStart;
+    tracer._select(cycleStart);
+
     for( i=cycleStart+1; i<=N-1; i++ ){
+        tracer._select(i)._wait()._deselect(i);
         if( D[i]<item ){
             pos++;
         }
     }
     if( pos == cycleStart ){
+        tracer._deselect(cycleStart);
         continue;
     }
     while( item == D[pos] ){
         pos++;
     }
+
     temp = D[pos];
     D[pos] = item;
     item = temp;
 
-    logger._print( 'Rewrite '+D[pos]+' to index '+pos );
-
-    tracer._notify(pos, D[pos])._notify(cycleStart, D[cycleStart])._wait();
-    tracer._denotify(pos)._denotify(pos);
-
+    if( pos !== cycleStart ){
+        logger._print( 'Rewrite '+D[pos]+' to index '+pos+'; the next value to rewrite is '+item );    
+    }else{
+        logger._print( 'Rewrite '+D[pos]+' to index '+pos);    
+    }
+    tracer._select(pos)._wait()._deselect(pos);
+    tracer._notify(pos, D[pos])._notify(cycleStart, D[cycleStart])._wait()._denotify(pos)._denotify(cycleStart);
 
     while( pos != cycleStart ){
         pos = cycleStart;
+        
         for( i=cycleStart+1; i<=N-1; i++ ){
+            tracer._select(i)._wait()._deselect(i);
             if( D[i]<item ){
                 pos++;
             }
@@ -39,14 +48,18 @@ for( cycleStart=0; cycleStart<=N-2; cycleStart++ ){
         while( item == D[pos] ){
             pos++;
         }
+
         temp = D[pos];
         D[pos] = item;
         item = temp;
 
-        logger._print( 'Rewrite '+D[pos]+' to index '+pos );
-
-        tracer._notify(pos, D[pos])._notify(cycleStart, D[cycleStart])._wait();
-        tracer._denotify(pos)._denotify(pos);
+        if( pos !== cycleStart ){
+            logger._print( 'Rewrite '+D[pos]+' to index '+pos+'; the next value to rewrite is '+item );    
+        }else{
+            logger._print( 'Rewrite '+D[pos]+' to index '+pos);    
+        }
+        tracer._select(pos)._wait()._deselect(pos);
+        tracer._notify(pos, D[pos])._notify(cycleStart, D[cycleStart])._wait()._denotify(pos)._denotify(cycleStart);
 
         writes++;
     }
