@@ -1,3 +1,5 @@
+#### [Oh yeah, ES6 update is here 😎](https://github.com/parkjs814/AlgorithmVisualizer/blob/gh-pages/ES6.md)
+
 # Algorithm Visualizer
 
 [![Join the chat at https://gitter.im/parkjs814/AlgorithmVisualizer](https://badges.gitter.im/parkjs814/AlgorithmVisualizer.svg)](https://gitter.im/parkjs814/AlgorithmVisualizer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)

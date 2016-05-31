@@ -103,7 +103,7 @@ nav h3 {
     padding: 0 4px;
 }
 
-#category:empty + .nav-arrow {
+#navigation span:empty + .nav-arrow {
     display: none;
 }
 
@@ -207,6 +207,7 @@ section {
     width: 100%;
     height: 100%;
     visibility: hidden;
+    overflow: scroll;
 }
 
 .tab > .wrapper {

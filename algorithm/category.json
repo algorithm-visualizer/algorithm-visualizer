@@ -12,6 +12,12 @@
       "page_rank": "PageRank Algorithm"
     }
   },
+  "number_theory": {
+    "name": "Number Theory",
+    "list": {
+      "seive_of_erathrones": "Seive of Erathrones"
+    }
+  },
   "cryptography": {
     "name": "Cryptography",
     "list": {
@@ -65,7 +71,9 @@
       "max_sum_path": "Maximum Sum Path",
       "sliding_window": "Sliding Window",
       "integer_partition": "Integer Partition",
-      "ugly_numbers": "Ugly Numbers"
+      "ugly_numbers": "Ugly Numbers",
+      "pascal_triangle": "Pascal's Trangle",
+      "catalan_number": "Catalan Number"
     }
   },
   "greedy": {
