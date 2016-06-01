@@ -37,18 +37,18 @@ function cipher(str, rotation, direction, cipherTracer) {
     str = str.substring(0, i) + currChar + str.substring(i + 1);
     logger._print('Current result: ' + str);
   }
-    
+
   return str;
 }
 
 function encrypt(str, rotation) {
   logger._print('Encrypting: ' + str);
-  return cipher(str, rotation, 'down', encryptTracer);
+  return cipher(str, rotation, 'up', encryptTracer);
 }
 
 function decrypt(str, rotation) {
   logger._print('Decrypting: ' + str);
-  return cipher(str, rotation, 'up', decryptTracer);
+  return cipher(str, rotation, 'down', decryptTracer);
 }
 
 var encrypted = encrypt(string, rotation);
