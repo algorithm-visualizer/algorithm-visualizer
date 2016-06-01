@@ -1,0 +1,13 @@
+{
+  "Euclidean Algorithm": "Finds the greatest common divisor of two positive integers. The Euclidean Algorithm uses the fact that gcd(m, n) = gcd(m, n % m).",
+  "Complexity": {
+    "time": "O(log(m)log(n))",
+    "space": "O(1)"
+  },
+  "References": [
+    "<a href='https://en.wikipedia.org/wiki/Euclidean_algorithm'>Wikipedia</a>"
+  ],
+  "files": {
+    "basic": "Euclidean Algorithm"
+  }
+}

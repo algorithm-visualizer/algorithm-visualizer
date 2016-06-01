@@ -15,7 +15,8 @@
   "number_theory": {
     "name": "Number Theory",
     "list": {
-      "seive_of_erathrones": "Seive of Erathrones"
+      "seive_of_erathrones": "Seive of Erathrones",
+	  "euclidean_algorithm": "Euclidean Algorithm"
     }
   },
   "cryptography": {
