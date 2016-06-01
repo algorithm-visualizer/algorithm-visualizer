@@ -51,7 +51,8 @@ TracerManager.prototype = {
       selectedCapsule = this.add(newTracer);
     }
 
-    selectedCapsule.defaultName = `${newTracer.constructor.name} ${count}`;
+    console.log(newTracer);
+    selectedCapsule.defaultName = `${newTracer.name} ${count}`;
     return selectedCapsule;
   },
 
