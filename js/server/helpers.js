@@ -58,7 +58,7 @@ const setHashValue = (key, value)=> {
   }
 
   const newHash = params.join('&');
-  window.location.hash = '#' + newHash;
+  window.location.hash = `#${newHash}`;
 };
 
 const removeHashValue = (key) => {
@@ -75,19 +75,19 @@ const removeHashValue = (key) => {
   }
 
   const newHash = params.join('&');
-  window.location.hash = '#' + newHash;
+  window.location.hash = `#${newHash}`;
 };
 
 const setPath = (category, algorithm, file) => {
-  const path = category ? category + (algorithm ? '/' + algorithm + (file ? '/' + file : '') : '') : '';
+  const path = category ? category + (algorithm ? `/${algorithm}` + (file ? `/${file}` : '') : '') : '';
   setHashValue('path', path);
 };
 
 const getPath = () => {
   const hash = getHashValue('path');
   if (hash) {
-    const parts = hash.split('/');
-    return {category: parts[0], algorithm: parts[1], file: parts[2]};
+    const [ category, algorithm, file ] = hash.split('/');
+    return { category, algorithm, file };
   } else {
     return false;
   }
