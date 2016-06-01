@@ -94,7 +94,7 @@ ChartTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
       default:
         Tracer.prototype.processStep.call(this, step, options);
     }
-  },
+  }
 });
 
 module.exports = ChartTracer;
