@@ -9,8 +9,8 @@ var alphabetMap = alphabet.split('').reduce(function(map, curr, idx) {
   return map;
 }, {});
 
-var logger = new LogTracer();
 var encryptTracer = new Array1DTracer('Encryption');
 var decryptTracer = new Array1DTracer('Decryption');
+var logger = new LogTracer();
 
 encryptTracer._setData(string);

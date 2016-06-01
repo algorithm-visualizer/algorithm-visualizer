@@ -8,7 +8,15 @@
       "bellman_ford": "Bellman-Ford",
       "floyd_warshall": "Floyd-Warshall",
       "topological_sort": "Topological-Sort",
-      "bridges": "Find-Bridges"
+      "bridges": "Find-Bridges",
+      "page_rank": "PageRank Algorithm"
+    }
+  },
+  "number_theory": {
+    "name": "Number Theory",
+    "list": {
+      "seive_of_erathrones": "Seive of Erathrones",
+	  "euclidean_algorithm": "Euclidean Algorithm"
     }
   },
   "cryptography": {
@@ -40,20 +48,21 @@
       "merge": "Merge Sort",
       "radix": "Radix Sort",
       "quick": "Quicksort",
-      "heap" : "Heapsort",
+      "heap": "Heapsort",
       "shell": "Shellsort",
       "cycle": "Cycle Sort",
       "comb": "Comb Sort"
     }
   },
   "string": {
-   		"name": "String",
-   		"list": {
-   			"edit_distance": "Edit Distance",
-   			"knuth_morris_pratt": "KMP Substring Search"
-   		}
-   },
-   "dp": {
+    "name": "String",
+    "list": {
+      "edit_distance": "Edit Distance",
+      "knuth_morris_pratt": "KMP Substring Search",
+      "rabin_karp_algorithm": "Rabin-Karp Algorithm"
+    }
+  },
+  "dp": {
     "name": "Dynamic Programming",
     "list": {
       "fibonacci": "Fibonacci Sequence",
@@ -63,13 +72,21 @@
       "max_sum_path": "Maximum Sum Path",
       "sliding_window": "Sliding Window",
       "integer_partition": "Integer Partition",
-      "ugly_numbers": "Ugly Numbers"
+      "ugly_numbers": "Ugly Numbers",
+      "pascal_triangle": "Pascal's Trangle",
+      "catalan_number": "Catalan Number"
     }
-   },
+  },
+  "greedy": {
+    "name": "Greedy",
+    "list": {
+      "job_scheduling": "Job Scheduling Problem"
+    }
+  },
   "etc": {
     "name": "Uncategorized",
     "list": {
-       "flood_fill": "Flood Fill"
+      "flood_fill": "Flood Fill"
     }
   }
 }
