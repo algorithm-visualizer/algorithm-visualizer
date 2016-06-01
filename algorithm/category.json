@@ -59,7 +59,8 @@
     "list": {
       "edit_distance": "Edit Distance",
       "knuth_morris_pratt": "KMP Substring Search",
-      "rabin_karp_algorithm": "Rabin-Karp Algorithm"
+      "rabin_karp_algorithm": "Rabin-Karp Algorithm",
+      "suffix_array": "Suffix Array (construction & usage)"
     }
   },
   "dp": {
