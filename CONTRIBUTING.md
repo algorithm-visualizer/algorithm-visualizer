@@ -1,4 +1,4 @@
-# ES6 Project
+# Contributing to Algorithm Visualizer
 
 ## Build System
 
@@ -24,13 +24,51 @@ npm install
 gulp
 ```
 
-## Changes Summary
+## Adding changes
+
+To add changes and improvements or resolve issues, these are the usual steps:
+
+- Fork the project on Github then clone it to your machine:
+```bash
+git clone https://github.com/<your-username>/AlgorithmVisualizer
+```
+- Your fork's remote repository should be named `origin` by default, so add the main repository as a remote as well and give it a name to distinguish it from your fork (something like `main` would work):
+```bash
+git remote add main https://github.com/parkjs814/AlgorithmVisualizer
+```
+
+- Create a branch addressing the issue/improvement you'd like to tackle.
+
+```bash
+git checkout -b my-problem-fixer-branch
+```
+
+- Make your changes and push to your repo
+```bash
+# write some awesome code and then ...
+git add .
+git commit -m "Explain my awesome changes"
+git push origin my-problem-fixer-branch
+```
+
+- Next you create a pull request from `my-problem-fixer-branch` on `origin`to `gh-pages` on `main`.
+
+- Once approved, just delete `my-problem-fixer-branch` both locally and remotely because it's not needed anymore.
+
+- Finally, checkout `gh-pages` locally, pull the approved changes from the `main` repo and push them to your `origin` repo:
+```bash
+git checkout gh-pages  # checkout gh pages locally
+git pull main gh-pages # pull new changes from main repository
+git push main gh-pages # push the changes to your fork
+```
+
+## Project Structure
 
 *Note:* Although no linter is added as of yet, the code closely follows the conventions from [Airbnb's Javascript style guide](https://github.com/airbnb/javascript)
 
 ### [js/index.js](https://github.com/parkjs814/AlgorithmVisualizer/blob/gh-pages/js/index.js)
 
-The app entry point is [`js/index.js`](https://github.com/parkjs814/AlgorithmVisualizer/blob/gh-pages/js/index.js). 
+The app entry point is [`js/index.js`](https://github.com/parkjs814/AlgorithmVisualizer/blob/gh-pages/js/index.js).
 It performs the initial application setup (loads the app when jQuery loads, loads the initial data from the server etc.)
 
 ### [js/app/*.js](https://github.com/parkjs814/AlgorithmVisualizer/tree/gh-pages/js/app)
@@ -41,7 +79,7 @@ This means that from here on now, any file that does `require(/* path to js/app 
 
 ### [js/dom/*.js](https://github.com/parkjs814/AlgorithmVisualizer/tree/gh-pages/js/dom)
 
-The `js/dom` folder holds all the code interacting with the DOM (go figure 😜). 
+The `js/dom` folder holds all the code interacting with the DOM (go figure 😜).
 The code is split into:
 
 - "static" methods that are used everywhere (such as adding algorithm info to the DOM) and,
@@ -53,14 +91,14 @@ The `js/editor` folder holds the code to create and execute code in the ace edit
 
 ### [js/module/*.js](https://github.com/parkjs814/AlgorithmVisualizer/tree/gh-pages/js/module)
 
-The `js/module` folder holds all the tracers and their variations and it is essentially the same as [`js/module`](https://github.com/parkjs814/AlgorithmVisualizer/tree/gh-pages/js/module) on the `gh-pages` branch. 
-The only changes are present in `js/tracer.js` where the code is converted to ES6. 
+The `js/module` folder holds all the tracers and their variations and it is essentially the same as [`js/module`](https://github.com/parkjs814/AlgorithmVisualizer/tree/gh-pages/js/module) on the `gh-pages` branch.
+The only changes are present in `js/tracer.js` where the code is converted to ES6.
 All the modules are exported together and then "required" inside the entry point [`js/index.js`](https://github.com/parkjs814/AlgorithmVisualizer/blob/gh-pages/js/index.js) where they are [attached to the global `window` object](https://github.com/parkjs814/AlgorithmVisualizer/blob/gh-pages/js/index.js#L33) so [`eval` can use them](https://github.com/parkjs814/AlgorithmVisualizer/blob/gh-pages/js/editor/executor.js#L7) when executing code in the code editor.
 
 ### [js/server/*.js](https://github.com/parkjs814/AlgorithmVisualizer/tree/gh-pages/js/server)
 
-The `js/server` folder holds all the code to load data from the server and utilizes promises from [RSVP.js](https://github.com/tildeio/rsvp.js/). 
-In [`js/server/ajax`](https://github.com/parkjs814/AlgorithmVisualizer/tree/gh-pages/js/server/ajax) are some helper methods to make requesting from the server a little easier. 
+The `js/server` folder holds all the code to load data from the server and utilizes promises from [RSVP.js](https://github.com/tildeio/rsvp.js/).
+In [`js/server/ajax`](https://github.com/parkjs814/AlgorithmVisualizer/tree/gh-pages/js/server/ajax) are some helper methods to make requesting from the server a little easier.
 The main method is [`js/server/ajax/request.js`](https://github.com/parkjs814/AlgorithmVisualizer/blob/gh-pages/js/server/ajax/request.js) that is used by all other methods to call `$.ajax` with certain options and set/reset the global `isLoading` flag for every request.
 
 ### [js/trace_manager/*.js](https://github.com/parkjs814/AlgorithmVisualizer/tree/gh-pages/js/server/ajax)
