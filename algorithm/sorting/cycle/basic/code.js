@@ -1,11 +1,13 @@
 logger._print('original array = [' + D.join(', ') + ']');
 var N = D.length;
-var writes = 0;
-var pos;
-var item;
-var temp;
+var writes = 0;   // number of writing performed
+var pos;          // the index of item in the sorted array
+var item;         // an item in the array
+var temp;         // a temp value used for storing swapped item
 for (var cycleStart = 0; cycleStart <= N - 2; cycleStart++) {
   item = D[cycleStart];
+
+  // find where to put the item
   pos = cycleStart;
   tracer._select(cycleStart);
 
@@ -15,17 +17,24 @@ for (var cycleStart = 0; cycleStart <= N - 2; cycleStart++) {
       pos++;
     }
   }
+
+  // if the item is already there, this is not a circle
   if (pos == cycleStart) {
     tracer._deselect(cycleStart);
     continue;
   }
+
+  // otherwise put the item there or right after any duplicates
   while (item == D[pos]) {
     pos++;
   }
 
+  // write item to new index and increment writes
   temp = D[pos];
   D[pos] = item;
   item = temp;
+
+  writes++;
 
   if (pos !== cycleStart) {
     logger._print('Rewrite ' + D[pos] + ' to index ' + pos + '; the next value to rewrite is ' + item);
@@ -36,6 +45,7 @@ for (var cycleStart = 0; cycleStart <= N - 2; cycleStart++) {
   tracer._notify(pos, D[pos])._notify(cycleStart, D[cycleStart])._wait();
   tracer._denotify(pos)._denotify(cycleStart);
 
+  // rotate the rest of the cycle
   while (pos != cycleStart) {
     pos = cycleStart;
 
@@ -65,8 +75,6 @@ for (var cycleStart = 0; cycleStart <= N - 2; cycleStart++) {
 
     writes++;
   }
-
-  writes++;
 }
 
 logger._print('Number of writes performed is ' + writes);
