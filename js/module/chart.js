@@ -75,7 +75,7 @@ ChartTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
   processStep: function (step, options) {
     switch (step.type) {
       case 'notify':
-        if (step.v) {
+        if (step.v !== undefined) {
           this.chart.config.data.datasets[0].data[step.s] = step.v;
           this.chart.config.data.labels[step.s] = step.v.toString();
         }
