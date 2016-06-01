@@ -2,7 +2,7 @@
 
 const stepLimit = 1e6;
 
-const TracerManager = function() {
+const TracerManager = function () {
   this.timer = null;
   this.pause = false;
   this.capsules = [];
@@ -51,12 +51,13 @@ TracerManager.prototype = {
       selectedCapsule = this.add(newTracer);
     }
 
-    console.log(newTracer);
     selectedCapsule.defaultName = `${newTracer.name} ${count}`;
+    selectedCapsule.order = this.order++;
     return selectedCapsule;
   },
 
   deallocateAll() {
+    this.order = 0;
     this.reset();
     $.each(this.capsules, (i, capsule) => {
       capsule.allocated = false;
@@ -92,7 +93,7 @@ TracerManager.prototype = {
     $.each(capsules, (i, capsule) => {
       let width = 100;
       let height = (100 / capsules.length);
-      let top = height * i;
+      let top = height * capsule.order;
 
       capsule.$container.css({
         top: `${top}%`,
