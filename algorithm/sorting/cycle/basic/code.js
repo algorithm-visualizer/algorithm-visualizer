@@ -4,10 +4,10 @@ var writes = 0;
 var pos;
 var item;
 var temp;
-for( cycleStart=0; cycleStart<=N-2; cycleStart++ ){
+for( var cycleStart=0; cycleStart<=N-2; cycleStart++ ){
     item = D[cycleStart];
     pos = cycleStart;
-    for( i=cycleStart+1; i<=N-1; i++ ){
+    for( var i=cycleStart+1; i<=N-1; i++ ){
         if( D[i]<item ){
             pos++;
         }
