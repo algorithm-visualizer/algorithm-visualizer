@@ -1,3 +1,12 @@
+const {
+    WeightedDirectedGraph,
+    WeightedDirectedGraphTracer
+} = require('./weighted_directed_graph');
+
+const {
+    UndirectedGraphTracer
+} = require('./undirected_graph');
+
 function WeightedUndirectedGraphTracer() {
     if (WeightedDirectedGraphTracer.apply(this, arguments)) {
         WeightedUndirectedGraphTracer.prototype.init.call(this);
@@ -8,19 +17,19 @@ function WeightedUndirectedGraphTracer() {
 
 WeightedUndirectedGraphTracer.prototype = $.extend(true, Object.create(WeightedDirectedGraphTracer.prototype), {
     constructor: WeightedUndirectedGraphTracer,
-    init: function () {
+    init: function() {
         var tracer = this;
 
         this.s.settings({
             defaultEdgeType: 'def',
-            funcEdgesDef: function (edge, source, target, context, settings) {
+            funcEdgesDef: function(edge, source, target, context, settings) {
                 var color = tracer.getColor(edge, source, target, settings);
                 tracer.drawEdge(edge, source, target, color, context, settings);
                 tracer.drawEdgeWeight(edge, source, target, color, context, settings);
             }
         });
     },
-    setData: function (G) {
+    setData: function(G) {
         if (Tracer.prototype.setData.apply(this, arguments)) return true;
 
         this.graph.clear();
@@ -72,7 +81,7 @@ WeightedUndirectedGraphTracer.prototype = $.extend(true, Object.create(WeightedD
     e: UndirectedGraphTracer.prototype.e,
     drawOnHover: UndirectedGraphTracer.prototype.drawOnHover,
     drawEdge: UndirectedGraphTracer.prototype.drawEdge,
-    drawEdgeWeight: function (edge, source, target, color, context, settings) {
+    drawEdgeWeight: function(edge, source, target, color, context, settings) {
         var prefix = settings('prefix') || '';
         if (source[prefix + 'x'] > target[prefix + 'x']) {
             var temp = source;
@@ -84,7 +93,7 @@ WeightedUndirectedGraphTracer.prototype = $.extend(true, Object.create(WeightedD
 });
 
 var WeightedUndirectedGraph = {
-    random: function (N, ratio, min, max) {
+    random: function(N, ratio, min, max) {
         if (!N) N = 5;
         if (!ratio) ratio = .3;
         if (!min) min = 1;
@@ -100,4 +109,9 @@ var WeightedUndirectedGraph = {
         }
         return G;
     }
+};
+
+module.exports = {
+    WeightedUndirectedGraph,
+    WeightedUndirectedGraphTracer
 };
