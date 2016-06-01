@@ -74,7 +74,8 @@
       "integer_partition": "Integer Partition",
       "ugly_numbers": "Ugly Numbers",
       "pascal_triangle": "Pascal's Trangle",
-      "catalan_number": "Catalan Number"
+      "catalan_number": "Catalan Number",
+      "digit_dp":"Digit Dp"
     }
   },
   "greedy": {
