@@ -1,3 +1,5 @@
+const Tracer = require('./tracer');
+
 function ChartTracer() {
     if (Tracer.apply(this, arguments)) {
         ChartTracer.prototype.init.call(this, arguments);
@@ -8,11 +10,11 @@ function ChartTracer() {
 
 ChartTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
     constructor: ChartTracer,
-    init: function () {
+    init: function() {
         this.$wrapper = this.capsule.$wrapper = $('<canvas id="chart">');
         this.$container.append(this.$wrapper);
     },
-    setData: function (C) {
+    setData: function(C) {
         if (Tracer.prototype.setData.apply(this, arguments)) return true;
         var tracer = this;
         var color = [];
@@ -30,7 +32,7 @@ ChartTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
                 scales: {
                     yAxes: [{
                         ticks: {
-                            beginAtZero:true
+                            beginAtZero: true
                         }
                     }]
                 }
@@ -38,23 +40,38 @@ ChartTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         };
         this.chart = this.capsule.chart = new Chart(this.$wrapper, data);
     },
-    _notify: function (s, v) {
-        this.manager.pushStep(this.capsule, { type: 'notify', s: s, v: v });
+    _notify: function(s, v) {
+        this.manager.pushStep(this.capsule, {
+            type: 'notify',
+            s: s,
+            v: v
+        });
         return this;
     },
-    _denotify: function (s) {
-        this.manager.pushStep(this.capsule, { type: 'denotify', s: s });
+    _denotify: function(s) {
+        this.manager.pushStep(this.capsule, {
+            type: 'denotify',
+            s: s
+        });
         return this;
     },
-    _select: function (s, e) {
-        this.manager.pushStep(this.capsule, { type: 'select', s: s, e: e });
+    _select: function(s, e) {
+        this.manager.pushStep(this.capsule, {
+            type: 'select',
+            s: s,
+            e: e
+        });
         return this;
     },
-    _deselect: function (s, e) {
-        this.manager.pushStep(this.capsule, { type: 'deselect', s: s, e: e });
+    _deselect: function(s, e) {
+        this.manager.pushStep(this.capsule, {
+            type: 'deselect',
+            s: s,
+            e: e
+        });
         return this;
     },
-    processStep: function (step, options) {
+    processStep: function(step, options) {
         switch (step.type) {
             case 'notify':
                 if (step.v) {
@@ -65,11 +82,11 @@ ChartTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
             case 'deselect':
                 var color = step.type == 'denotify' || step.type == 'deselect' ? 'rgba(136, 136, 136, 1)' : 'rgba(255, 0, 0, 1)';
             case 'select':
-                if(color === undefined) var color = 'rgba(0, 0, 255, 1)';
-                if(step.e !== undefined)
-                    for (var i = step.s; i <= step.e; i++) 
+                if (color === undefined) var color = 'rgba(0, 0, 255, 1)';
+                if (step.e !== undefined)
+                    for (var i = step.s; i <= step.e; i++)
                         this.chart.config.data.datasets[0].backgroundColor[i] = color;
-                else 
+                else
                     this.chart.config.data.datasets[0].backgroundColor[step.s] = color;
                 this.chart.update();
                 break;
@@ -78,3 +95,5 @@ ChartTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         }
     },
 });
+
+module.exports = ChartTracer;
