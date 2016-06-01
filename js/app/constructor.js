@@ -3,21 +3,15 @@
 const Editor = require('../editor');
 const TracerManager = require('../tracer_manager');
 const DOM = require('../dom/setup');
-const {
-  getFileDir
-} = require('../utils');
 
 const Cache = require('./cache');
-
-const {
-  each
-} = $;
 
 const state = {
   isLoading: null,
   editor: null,
   tracerManager: null,
-  categories: null
+  categories: null,
+  loadedScratch: null
 };
 
 const initState = (tracerManager) => {
@@ -25,12 +19,13 @@ const initState = (tracerManager) => {
   state.editor = new Editor(tracerManager);
   state.tracerManager = tracerManager;
   state.categories = {};
+  state.loadedScratch = null;
 };
 
 /**
  * Global application singleton.
  */
-const App = function() {
+const App = function () {
 
   this.getIsLoading = () => {
     return state.isLoading;
@@ -67,6 +62,14 @@ const App = function() {
 
   this.getTracerManager = () => {
     return state.tracerManager;
+  };
+
+  this.getLoadedScratch = () => {
+    return state.loadedScratch;
+  };
+
+  this.setLoadedScratch = (loadedScratch) => {
+    state.loadedScratch = loadedScratch;
   };
 
   const tracerManager = TracerManager.init();

@@ -1,4 +1,4 @@
-const appInstance = require('../../app');
+const app = require('../../app');
 
 const addDividerToDom = (divider) => {
   const [vertical, $first, $second] = divider;
@@ -37,7 +37,7 @@ const addDividerToDom = (divider) => {
         $first.css('right', (100 - percent) + '%');
         $second.css('left', percent + '%');
         x = pageX;
-        appInstance.getTracerManager().resize();
+        app.getTracerManager().resize();
         $('.files_bar > .wrapper').scroll();
       }
     });
@@ -75,7 +75,7 @@ const addDividerToDom = (divider) => {
         $first.css('bottom', (100 - percent) + '%');
         $second.css('top', percent + '%');
         y = pageY;
-        appInstance.getTracerManager().resize();
+        app.getTracerManager().resize();
       }
     });
 

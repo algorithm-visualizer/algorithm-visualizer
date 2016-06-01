@@ -1,33 +1,32 @@
 'use strict';
 
-const appInstance = require('../app');
+const app = require('../app');
+
 const {
   isScratchPaper
 } = require('../utils');
 
 const showDescription = require('./show_description');
-const showFiles = require('./show_files');
+const addFiles = require('./add_files');
 
-
-module.exports = (category, algorithm, data) => {
+module.exports = (category, algorithm, data, requestedFile) => {
   let $menu;
   let category_name;
   let algorithm_name;
 
-  if (isScratchPaper(category, algorithm)) {
+  if (isScratchPaper(category)) {
     $menu = $('#scratch-paper');
-    category_name = '';
-    algorithm_name = 'Scratch Paper';
+    category_name = 'Scratch Paper';
+    algorithm_name = algorithm ? 'Shared' : 'Temporary';
   } else {
     $menu = $(`[data-category="${category}"][data-algorithm="${algorithm}"]`);
-    const categoryObj = appInstance.getCategory(category);
+    const categoryObj = app.getCategory(category);
     category_name = categoryObj.name;
     algorithm_name = categoryObj.list[algorithm];
   }
 
   $('.sidemenu button').removeClass('active');
   $menu.addClass('active');
-  $('#btn_desc').click();
 
   $('#category').html(category_name);
   $('#algorithm').html(algorithm_name);
@@ -35,8 +34,8 @@ module.exports = (category, algorithm, data) => {
   $('.files_bar > .wrapper').empty();
   $('#explanation').html('');
 
-  appInstance.setLastFileUsed(null);
-  appInstance.getEditor().clearContent();
+  app.setLastFileUsed(null);
+  app.getEditor().clearContent();
 
   const {
     files
@@ -45,5 +44,5 @@ module.exports = (category, algorithm, data) => {
   delete data.files;
 
   showDescription(data);
-  showFiles(category, algorithm, files);
+  addFiles(category, algorithm, files, requestedFile);
 };

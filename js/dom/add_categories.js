@@ -1,6 +1,6 @@
 'use strict';
 
-const appInstance = require('../app');
+const app = require('../app');
 const Server = require('../server');
 const showAlgorithm = require('./show_algorithm');
 
@@ -13,7 +13,7 @@ const addAlgorithmToCategoryDOM = (category, subList, algorithm) => {
     .append(subList[algorithm])
     .attr('data-algorithm', algorithm)
     .attr('data-category', category)
-    .click(function() {
+    .click(function () {
       Server.loadAlgorithm(category, algorithm).then((data) => {
         showAlgorithm(category, algorithm, data);
       });
@@ -27,14 +27,15 @@ const addCategoryToDOM = (category) => {
   const {
     name: categoryName,
     list: categorySubList
-  } = appInstance.getCategory(category);
+  } = app.getCategory(category);
 
   const $category = $('<button class="category">')
     .append('<i class="fa fa-fw fa-caret-right">')
-    .append(categoryName);
+    .append(categoryName)
+    .attr('data-category', category);
 
-  $category.click(function() {
-    $(`[data-category="${category}"]`).toggleClass('collapse');
+  $category.click(function () {
+    $(`.indent[data-category="${category}"]`).toggleClass('collapse');
     $(this).find('i.fa').toggleClass('fa-caret-right fa-caret-down');
   });
 
@@ -46,5 +47,5 @@ const addCategoryToDOM = (category) => {
 };
 
 module.exports = () => {
-  each(appInstance.getCategories(), addCategoryToDOM);
+  each(app.getCategories(), addCategoryToDOM);
 };

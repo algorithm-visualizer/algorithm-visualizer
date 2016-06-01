@@ -1,4 +1,4 @@
-const appInstance = require('../../app');
+const app = require('../../app');
 
 let sidemenu_percent;
 
@@ -20,6 +20,6 @@ module.exports = () => {
       $workspace.css('left', 0);
     }
 
-    appInstance.getTracerManager().resize();
+    app.getTracerManager().resize();
   });
 }

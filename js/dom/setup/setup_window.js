@@ -1,7 +1,7 @@
-const appInstance = require('../../app');
+const app = require('../../app');
 
 module.exports = function() {
   $(window).resize(function() {
-    appInstance.getTracerManager().resize();
+    app.getTracerManager().resize();
   });
 };

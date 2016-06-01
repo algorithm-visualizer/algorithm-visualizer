@@ -1,7 +1,7 @@
 'use strict';
 
 const RSVP = require('rsvp');
-const appInstance = require('../../app');
+const app = require('../../app');
 
 const {
   ajax,
@@ -13,16 +13,16 @@ const defaults = {
 };
 
 module.exports = function(url, options = {}) {
-  appInstance.setIsLoading(true);
+  app.setIsLoading(true);
 
   return new RSVP.Promise((resolve, reject) => {
     const callbacks = {
       success(response) {
-        appInstance.setIsLoading(false);
+        app.setIsLoading(false);
         resolve(response);
       },
       error(reason) {
-        appInstance.setIsLoading(false);
+        app.setIsLoading(false);
         reject(reason);
       }
     };

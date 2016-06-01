@@ -1,6 +1,6 @@
 'use strict';
 
-const appInstance = require('../app');
+const app = require('../app');
 const createEditor = require('./create');
 const Executor = require('./executor');
 
@@ -57,9 +57,9 @@ function Editor(tracerManager) {
 
   this.dataEditor.on('change', () => {
     const data = this.dataEditor.getValue();
-    const lastFileUsed = appInstance.getLastFileUsed();
+    const lastFileUsed = app.getLastFileUsed();
     if (lastFileUsed) {
-      appInstance.updateCachedFile(lastFileUsed, {
+      app.updateCachedFile(lastFileUsed, {
         data
       });
     }
@@ -68,9 +68,9 @@ function Editor(tracerManager) {
 
   this.codeEditor.on('change', () => {
     const code = this.codeEditor.getValue();
-    const lastFileUsed = appInstance.getLastFileUsed();
+    const lastFileUsed = app.getLastFileUsed();
     if (lastFileUsed) {
-      appInstance.updateCachedFile(lastFileUsed, {
+      app.updateCachedFile(lastFileUsed, {
         code
       });
     }

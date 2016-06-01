@@ -1,15 +1,17 @@
 'use strict';
 
 const showAlgorithm = require('./show_algorithm');
-const showCategories = require('./show_categories');
+const addCategories = require('./add_categories');
 const showDescription = require('./show_description');
-const showFiles = require('./show_files');
+const addFiles = require('./add_files');
 const showFirstAlgorithm = require('./show_first_algorithm');
+const showRequestedAlgorithm = require('./show_requested_algorithm');
 
 module.exports = {
   showAlgorithm,
-  showCategories,
+  addCategories,
   showDescription,
-  showFiles,
-  showFirstAlgorithm
+  addFiles,
+  showFirstAlgorithm,
+  showRequestedAlgorithm
 };
