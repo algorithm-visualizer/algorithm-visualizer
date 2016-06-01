@@ -1,7 +1,7 @@
 const {
   toJSON,
   fromJSON
-} = require('../tracer_manager/util');
+} = require('../../tracer_manager/util/index');
 
 function Tracer(name) {
   this.module = this.constructor;

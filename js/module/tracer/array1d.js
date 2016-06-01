@@ -1,7 +1,4 @@
-const {
-  Array2D,
-  Array2DTracer
-} = require('./array2d');
+const Array2DTracer = require('./array2d');
 
 function Array1DTracer() {
   return Array2DTracer.apply(this, arguments);
@@ -39,16 +36,4 @@ Array1DTracer.prototype = $.extend(true, Object.create(Array2DTracer.prototype),
   }
 });
 
-var Array1D = {
-  random: function (N, min, max) {
-    return Array2D.random(1, N, min, max)[0];
-  },
-  randomSorted: function (N, min, max) {
-    return Array2D.randomSorted(1, N, min, max)[0];
-  }
-};
-
-module.exports = {
-  Array1D,
-  Array1DTracer
-};
+module.exports = Array1DTracer;

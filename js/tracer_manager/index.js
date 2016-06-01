@@ -1,7 +1,7 @@
 'use strict';
 
 const TracerManager = require('./manager');
-const Tracer = require('../module/tracer');
+const Tracer = require('../module/tracer/tracer');
 
 module.exports = {
 
