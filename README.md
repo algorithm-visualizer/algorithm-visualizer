@@ -1,5 +1,3 @@
-#### [Oh yeah, ES6 update is here 😎](https://github.com/parkjs814/AlgorithmVisualizer/blob/gh-pages/ES6.md)
-
 # Algorithm Visualizer
 
 [![Join the chat at https://gitter.im/parkjs814/AlgorithmVisualizer](https://badges.gitter.im/parkjs814/AlgorithmVisualizer.svg)](https://gitter.im/parkjs814/AlgorithmVisualizer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -11,9 +9,10 @@ http://parkjs814.github.io/AlgorithmVisualizer
 ![Algorithm Visualizer](http://i.giphy.com/3o6EhJFgsyShX6MHeM.gif)
 
 ### Contributing
-If you run _Algorithm Visualizer_ locally and files are not loaded because Cross-Origin Requests are blocked, use [http-server](https://github.com/indexzero/http-server) or [SimpleHTTPServer](https://docs.python.org/2/library/simplehttpserver.html) to resolve the issue. [(Issue #2)](https://github.com/parkjs814/AlgorithmVisualizer/issues/2)
 
-If in need of any help check out [**Wiki**](https://github.com/parkjs814/AlgorithmVisualizer/wiki) or join our [Gitter](https://gitter.im/parkjs814/AlgorithmVisualizer?utm_source=share-link&utm_medium=link&utm_campaign=share-link) chatroom!
+We encourage you to check out [**Wiki**](https://github.com/parkjs814/AlgorithmVisualizer/wiki) before you get started.
+
+If in need of any help, join our [Gitter](https://gitter.im/parkjs814/AlgorithmVisualizer?utm_source=share-link&utm_medium=link&utm_campaign=share-link) chatroom!
 ### Backers
 
 Support us with a monthly donation and help us continue our activities. [[Become a backer](https://opencollective.com/algorithmvisualizer#backer)]
