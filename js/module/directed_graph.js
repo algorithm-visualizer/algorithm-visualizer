@@ -1,3 +1,5 @@
+const Tracer = require('./tracer');
+
 function DirectedGraphTracer() {
     if (Tracer.apply(this, arguments)) {
         DirectedGraphTracer.prototype.init.call(this);
@@ -8,7 +10,7 @@ function DirectedGraphTracer() {
 
 DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
     constructor: DirectedGraphTracer,
-    init: function () {
+    init: function() {
         var tracer = this;
 
         this.s = this.capsule.s = new sigma({
@@ -30,13 +32,13 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
                 maxNodeSize: 12,
                 labelSize: 'proportional',
                 labelSizeRatio: 1.3,
-                funcLabelsDef: function (node, context, settings) {
+                funcLabelsDef: function(node, context, settings) {
                     tracer.drawLabel(node, context, settings);
                 },
-                funcHoversDef: function (node, context, settings, next) {
+                funcHoversDef: function(node, context, settings, next) {
                     tracer.drawOnHover(node, context, settings, next);
                 },
-                funcEdgesArrow: function (edge, source, target, context, settings) {
+                funcEdgesArrow: function(edge, source, target, context, settings) {
                     var color = tracer.getColor(edge, source, target, settings);
                     tracer.drawArrow(edge, source, target, color, context, settings);
                 }
@@ -45,19 +47,30 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
         sigma.plugins.dragNodes(this.s, this.s.renderers[0]);
         this.graph = this.capsule.graph = this.s.graph;
     },
-    _setTreeData: function (G, root) {
-        this.manager.pushStep(this.capsule, {type: 'setTreeData', arguments: arguments});
+    _setTreeData: function(G, root) {
+        this.manager.pushStep(this.capsule, {
+            type: 'setTreeData',
+            arguments: arguments
+        });
         return this;
     },
-    _visit: function (target, source) {
-        this.manager.pushStep(this.capsule, {type: 'visit', target: target, source: source});
+    _visit: function(target, source) {
+        this.manager.pushStep(this.capsule, {
+            type: 'visit',
+            target: target,
+            source: source
+        });
         return this;
     },
-    _leave: function (target, source) {
-        this.manager.pushStep(this.capsule, {type: 'leave', target: target, source: source});
+    _leave: function(target, source) {
+        this.manager.pushStep(this.capsule, {
+            type: 'leave',
+            target: target,
+            source: source
+        });
         return this;
     },
-    processStep: function (step, options) {
+    processStep: function(step, options) {
         switch (step.type) {
             case 'setTreeData':
                 this.setTreeData.apply(this, step.arguments);
@@ -84,14 +97,14 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
                 Tracer.prototype.processStep.call(this, step, options);
         }
     },
-    setTreeData: function (G, root) {
+    setTreeData: function(G, root) {
         var tracer = this;
 
         root = root || 0;
         var maxDepth = -1;
 
         var chk = new Array(G.length);
-        var getDepth = function (node, depth) {
+        var getDepth = function(node, depth) {
             if (chk[node]) throw "the given graph is not a tree because it forms a circuit";
             chk[node] = true;
             if (maxDepth < depth) maxDepth = depth;
@@ -103,14 +116,14 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
 
         if (this.setData.apply(this, arguments)) return true;
 
-        var place = function (node, x, y) {
+        var place = function(node, x, y) {
             var temp = tracer.graph.nodes(tracer.n(node));
             temp.x = x;
             temp.y = y;
         };
 
         var wgap = 1 / (maxDepth - 1);
-        var dfs = function (node, depth, top, bottom) {
+        var dfs = function(node, depth, top, bottom) {
             place(node, top + bottom, depth * wgap);
             var children = 0;
             for (var i = 0; i < G[node].length; i++) {
@@ -126,7 +139,7 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
 
         this.refresh();
     },
-    setData: function (G) {
+    setData: function(G) {
         if (Tracer.prototype.setData.apply(this, arguments)) return true;
 
         this.graph.clear();
@@ -171,18 +184,18 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
 
         return false;
     },
-    resize: function () {
+    resize: function() {
         Tracer.prototype.resize.call(this);
 
         this.s.renderers[0].resize();
         this.refresh();
     },
-    refresh: function () {
+    refresh: function() {
         Tracer.prototype.refresh.call(this);
 
         this.s.refresh();
     },
-    clear: function () {
+    clear: function() {
         Tracer.prototype.clear.call(this);
 
         this.clearGraphColor();
@@ -192,23 +205,23 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
         left: '#000',
         default: '#888'
     },
-    clearGraphColor: function () {
+    clearGraphColor: function() {
         var tracer = this;
 
-        this.graph.nodes().forEach(function (node) {
+        this.graph.nodes().forEach(function(node) {
             node.color = tracer.color.default;
         });
-        this.graph.edges().forEach(function (edge) {
+        this.graph.edges().forEach(function(edge) {
             edge.color = tracer.color.default;
         });
     },
-    n: function (v) {
+    n: function(v) {
         return 'n' + v;
     },
-    e: function (v1, v2) {
+    e: function(v1, v2) {
         return 'e' + v1 + '_' + v2;
     },
-    getColor: function (edge, source, target, settings) {
+    getColor: function(edge, source, target, settings) {
         var color = edge.color,
             edgeColor = settings('edgeColor'),
             defaultNodeColor = settings('defaultNodeColor'),
@@ -228,7 +241,7 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
 
         return color;
     },
-    drawLabel: function (node, context, settings) {
+    drawLabel: function(node, context, settings) {
         var fontSize,
             prefix = settings('prefix') || '',
             size = node[prefix + 'size'];
@@ -241,7 +254,7 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
 
         fontSize = (settings('labelSize') === 'fixed') ?
             settings('defaultLabelSize') :
-        settings('labelSizeRatio') * size;
+            settings('labelSizeRatio') * size;
 
         context.font = (settings('fontStyle') ? settings('fontStyle') + ' ' : '') +
             fontSize + 'px ' + settings('font');
@@ -256,7 +269,7 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
             Math.round(node[prefix + 'y'] + fontSize / 3)
         );
     },
-    drawArrow: function (edge, source, target, color, context, settings) {
+    drawArrow: function(edge, source, target, color, context, settings) {
         var prefix = settings('prefix') || '',
             size = edge[prefix + 'size'] || 1,
             tSize = target[prefix + 'size'],
@@ -296,12 +309,12 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
         context.closePath();
         context.fill();
     },
-    drawOnHover: function (node, context, settings, next) {
+    drawOnHover: function(node, context, settings, next) {
         var tracer = this;
 
         context.setLineDash([5, 5]);
         var nodeIdx = node.id.substring(1);
-        this.graph.edges().forEach(function (edge) {
+        this.graph.edges().forEach(function(edge) {
             var ends = edge.id.substring(1).split("_");
             if (ends[0] == nodeIdx) {
                 var color = '#0ff';
@@ -321,7 +334,7 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
 });
 
 var DirectedGraph = {
-    random: function (N, ratio) {
+    random: function(N, ratio) {
         if (!N) N = 5;
         if (!ratio) ratio = .3;
         var G = new Array(N);
@@ -337,27 +350,32 @@ var DirectedGraph = {
     }
 };
 
-sigma.canvas.labels.def = function (node, context, settings) {
+sigma.canvas.labels.def = function(node, context, settings) {
     var func = settings('funcLabelsDef');
     if (func) {
         func(node, context, settings);
     }
 };
-sigma.canvas.hovers.def = function (node, context, settings) {
+sigma.canvas.hovers.def = function(node, context, settings) {
     var func = settings('funcHoversDef');
     if (func) {
         func(node, context, settings);
     }
 };
-sigma.canvas.edges.def = function (edge, source, target, context, settings) {
+sigma.canvas.edges.def = function(edge, source, target, context, settings) {
     var func = settings('funcEdgesDef');
     if (func) {
         func(edge, source, target, context, settings);
     }
 };
-sigma.canvas.edges.arrow = function (edge, source, target, context, settings) {
+sigma.canvas.edges.arrow = function(edge, source, target, context, settings) {
     var func = settings('funcEdgesArrow');
     if (func) {
         func(edge, source, target, context, settings);
     }
+};
+
+module.exports = {
+    DirectedGraph,
+    DirectedGraphTracer
 };

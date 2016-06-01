@@ -1,3 +1,8 @@
+const {
+    DirectedGraph,
+    DirectedGraphTracer
+} = require('./directed_graph');
+
 function UndirectedGraphTracer() {
     if (DirectedGraphTracer.apply(this, arguments)) {
         UndirectedGraphTracer.prototype.init.call(this);
@@ -8,18 +13,18 @@ function UndirectedGraphTracer() {
 
 UndirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGraphTracer.prototype), {
     constructor: UndirectedGraphTracer,
-    init: function () {
+    init: function() {
         var tracer = this;
 
         this.s.settings({
             defaultEdgeType: 'def',
-            funcEdgesDef: function (edge, source, target, context, settings) {
+            funcEdgesDef: function(edge, source, target, context, settings) {
                 var color = tracer.getColor(edge, source, target, settings);
                 tracer.drawEdge(edge, source, target, color, context, settings);
             }
         });
     },
-    setData: function (G) {
+    setData: function(G) {
         if (Tracer.prototype.setData.apply(this, arguments)) return true;
 
         this.graph.clear();
@@ -66,7 +71,7 @@ UndirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGraphTrac
 
         return false;
     },
-    e: function (v1, v2) {
+    e: function(v1, v2) {
         if (v1 > v2) {
             var temp = v1;
             v1 = v2;
@@ -74,12 +79,12 @@ UndirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGraphTrac
         }
         return 'e' + v1 + '_' + v2;
     },
-    drawOnHover: function (node, context, settings, next) {
+    drawOnHover: function(node, context, settings, next) {
         var tracer = this;
 
         context.setLineDash([5, 5]);
         var nodeIdx = node.id.substring(1);
-        this.graph.edges().forEach(function (edge) {
+        this.graph.edges().forEach(function(edge) {
             var ends = edge.id.substring(1).split("_");
             if (ends[0] == nodeIdx) {
                 var color = '#0ff';
@@ -96,7 +101,7 @@ UndirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGraphTrac
             }
         });
     },
-    drawEdge: function (edge, source, target, color, context, settings) {
+    drawEdge: function(edge, source, target, color, context, settings) {
         var prefix = settings('prefix') || '',
             size = edge[prefix + 'size'] || 1;
 
@@ -116,7 +121,7 @@ UndirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGraphTrac
 });
 
 var UndirectedGraph = {
-    random: function (N, ratio) {
+    random: function(N, ratio) {
         if (!N) N = 5;
         if (!ratio) ratio = .3;
         var G = new Array(N);
@@ -130,4 +135,9 @@ var UndirectedGraph = {
         }
         return G;
     }
+};
+
+module.exports = {
+    UndirectedGraph,
+    UndirectedGraphTracer
 };
