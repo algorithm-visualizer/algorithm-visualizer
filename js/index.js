@@ -5,7 +5,6 @@ const appInstance = require('./app');
 const AppConstructor = require('./app/constructor');
 const DOM = require('./dom');
 const Server = require('./server');
-const Helpers = require('./server/helpers');
 
 const modules = require('./module');
 
@@ -18,8 +17,16 @@ $.ajaxSetup({
   dataType: 'text'
 });
 
+const {
+  isScratchPaper
+} = require('./utils');
+
+const {
+  getPath
+} = require('./server/helpers');
+
 // set global promise error handler
-RSVP.on('error', function(reason) {
+RSVP.on('error', function (reason) {
   console.assert(false, reason);
 });
 
@@ -34,19 +41,27 @@ $(() => {
 
   Server.loadCategories().then((data) => {
     appInstance.setCategories(data);
-    DOM.showCategories();
+    DOM.addCategories();
 
     // determine if the app is loading a pre-existing scratch-pad
     // or the home page
-    const gistID = Helpers.getParameterByName('scratch-paper');
-    if (gistID) {
-      Server.loadScratchPaper(gistID).then(({
-        category,
-        algorithm,
-        data
-      }) => {
-        DOM.showAlgorithm(category, algorithm, data);
-      });
+    const {
+      category,
+      algorithm,
+      file
+    } = getPath();
+    if (isScratchPaper(category)) {
+      if (algorithm) {
+        Server.loadScratchPaper(algorithm).then(({category, algorithm, data}) => {
+          DOM.showAlgorithm(category, algorithm, data);
+        });
+      } else {
+        Server.loadAlgorithm(category).then((data) => {
+          DOM.showAlgorithm(category, null, data);
+        });
+      }
+    } else if (category && algorithm) {
+      DOM.showRequestedAlgorithm(category, algorithm, file);
     } else {
       DOM.showFirstAlgorithm();
     }

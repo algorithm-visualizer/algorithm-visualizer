@@ -1,4 +1,4 @@
-const appInstance = require('../../app');
+const app = require('../../app');
 const Toast = require('../toast');
 
 const {
@@ -40,7 +40,7 @@ module.exports = () => {
   });
 
   $('#interval').on('change', function() {
-    const tracerManager = appInstance.getTracerManager();
+    const tracerManager = app.getTracerManager();
     const [seconds, message] = normalize(parseFloat($(this).val()));
 
     $(this).val(seconds);

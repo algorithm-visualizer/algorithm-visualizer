@@ -1,4 +1,4 @@
-const appInstance = require('../../app');
+const app = require('../../app');
 const Server = require('../../server');
 const Toast = require('../toast');
 
@@ -26,26 +26,26 @@ module.exports = () => {
 
   $('#btn_run').click(() => {
     $('#btn_trace').click();
-    var err = appInstance.getEditor().execute();
+    var err = app.getEditor().execute();
     if (err) {
       console.error(err);
       Toast.showErrorToast(err);
     }
   });
   $('#btn_pause').click(function() {
-    if (appInstance.getTracerManager().isPause()) {
-      appInstance.getTracerManager().resumeStep();
+    if (app.getTracerManager().isPause()) {
+      app.getTracerManager().resumeStep();
     } else {
-      appInstance.getTracerManager().pauseStep();
+      app.getTracerManager().pauseStep();
     }
   });
   $('#btn_prev').click(() => {
-    appInstance.getTracerManager().pauseStep();
-    appInstance.getTracerManager().prevStep();
+    app.getTracerManager().pauseStep();
+    app.getTracerManager().prevStep();
   });
   $('#btn_next').click(() => {
-    appInstance.getTracerManager().pauseStep();
-    appInstance.getTracerManager().nextStep();
+    app.getTracerManager().pauseStep();
+    app.getTracerManager().nextStep();
   });
 
   // description & trace

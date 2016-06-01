@@ -1,9 +1,13 @@
 'use strict';
 
 const RSVP = require('rsvp');
-const appInstance = require('../app');
+const app = require('../app');
 
 const postJSON = require('./ajax/post_json');
+
+const {
+  setPath
+} = require('./helpers');
 
 module.exports = () => {
   return new RSVP.Promise((resolve, reject) => {
@@ -11,7 +15,7 @@ module.exports = () => {
     const {
       dataEditor,
       codeEditor
-    } = appInstance.getEditor();
+    } = app.getEditor();
 
     const gist = {
       'description': 'temp',
@@ -29,15 +33,13 @@ module.exports = () => {
     postJSON('https://api.github.com/gists', gist).then(({
       id
     }) => {
-
+      app.setLoadedScratch(id);
+      setPath('scratch', id);
       const {
-        protocol,
-        host,
-        pathname
+        href
       } = location;
-
-      const url = `${protocol}//${host}${pathname}?scratch-paper=${id}`;
-      resolve(url);
+      $('#algorithm').html('Shared');
+      resolve(href);
     });
   });
 };

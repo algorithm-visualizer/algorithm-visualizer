@@ -2,11 +2,16 @@
 
 const RSVP = require('rsvp');
 
-const appInstance = require('../app');
-const Utils = require('../utils');
+const app = require('../app');
 
 const {
-  checkLoading
+  getFileDir,
+  isScratchPaper
+} = require('../utils');
+
+const {
+  checkLoading,
+  setPath
 } = require('./helpers');
 
 const get = require('./ajax/get');
@@ -19,11 +24,11 @@ const loadDataAndCode = (dir) => {
 };
 
 const loadFileAndUpdateContent = (dir) => {
-  appInstance.getEditor().clearContent();
+  app.getEditor().clearContent();
 
   return loadDataAndCode(dir).then((content) => {
-    appInstance.updateCachedFile(dir, content);
-    appInstance.getEditor().setContent(content);
+    app.updateCachedFile(dir, content);
+    app.getEditor().setContent(content);
   });
 };
 
@@ -35,18 +40,22 @@ const cachedContentExists = (cachedFile) => {
 
 module.exports = (category, algorithm, file, explanation) => {
   return new RSVP.Promise((resolve, reject) => {
-
     if (checkLoading()) {
       reject();
     } else {
+      if (isScratchPaper(category)) {
+        setPath(category, app.getLoadedScratch());
+      } else {
+        setPath(category, algorithm, file);
+      }
       $('#explanation').html(explanation);
 
-      let dir = Utils.getFileDir(category, algorithm, file);
-      appInstance.setLastFileUsed(dir);
-      const cachedFile = appInstance.getCachedFile(dir);
+      let dir = getFileDir(category, algorithm, file);
+      app.setLastFileUsed(dir);
+      const cachedFile = app.getCachedFile(dir);
 
       if (cachedContentExists(cachedFile)) {
-        appInstance.getEditor().setContent(cachedFile);
+        app.getEditor().setContent(cachedFile);
         resolve();
       } else {
         loadFileAndUpdateContent(dir).then(resolve, reject);

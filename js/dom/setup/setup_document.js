@@ -1,4 +1,4 @@
-const appInstance = require('../../app');
+const app = require('../../app');
 
 module.exports = () => {
   $(document).on('click', 'a', (e) => {
@@ -10,6 +10,6 @@ module.exports = () => {
   });
 
   $(document).mouseup(function(e) {
-    appInstance.getTracerManager().command('mouseup', e);
+    app.getTracerManager().command('mouseup', e);
   });
 };
