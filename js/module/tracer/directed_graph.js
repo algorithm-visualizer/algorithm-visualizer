@@ -334,23 +334,6 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
   }
 });
 
-var DirectedGraph = {
-  random: function (N, ratio) {
-    if (!N) N = 5;
-    if (!ratio) ratio = .3;
-    var G = new Array(N);
-    for (var i = 0; i < N; i++) {
-      G[i] = new Array(N);
-      for (var j = 0; j < N; j++) {
-        if (i != j) {
-          G[i][j] = (Math.random() * (1 / ratio) | 0) == 0 ? 1 : 0;
-        }
-      }
-    }
-    return G;
-  }
-};
-
 sigma.canvas.labels.def = function (node, context, settings) {
   var func = settings('funcLabelsDef');
   if (func) {
@@ -376,7 +359,4 @@ sigma.canvas.edges.arrow = function (edge, source, target, context, settings) {
   }
 };
 
-module.exports = {
-  DirectedGraph,
-  DirectedGraphTracer
-};
+module.exports = DirectedGraphTracer;

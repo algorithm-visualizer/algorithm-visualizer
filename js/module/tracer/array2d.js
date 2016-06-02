@@ -1,7 +1,8 @@
 const Tracer = require('./tracer');
+
 const {
   refineByType
-} = require('../tracer_manager/util');
+} = require('../../tracer_manager/util/index');
 
 function Array2DTracer() {
   if (Tracer.apply(this, arguments)) {
@@ -303,31 +304,4 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
   }
 });
 
-var Array2D = {
-  random: function (N, M, min, max) {
-    if (!N) N = 10;
-    if (!M) M = 10;
-    if (min === undefined) min = 1;
-    if (max === undefined) max = 9;
-    var D = [];
-    for (var i = 0; i < N; i++) {
-      D.push([]);
-      for (var j = 0; j < M; j++) {
-        D[i].push((Math.random() * (max - min + 1) | 0) + min);
-      }
-    }
-    return D;
-  },
-  randomSorted: function (N, M, min, max) {
-    return this.random(N, M, min, max).map(function (arr) {
-      return arr.sort(function (a, b) {
-        return a - b;
-      });
-    });
-  }
-};
-
-module.exports = {
-  Array2D,
-  Array2DTracer
-};
+module.exports = Array2DTracer;
