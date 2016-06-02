@@ -13,6 +13,8 @@ class ChartTracer extends Tracer {
 
   setData(C) {
     if (super.setData.apply(this, arguments)) return true;
+
+    if (this.chart) this.chart.destroy();
     var color = [];
     for (var i = 0; i < C.length; i++) color.push('rgba(136, 136, 136, 1)');
     var data = {
@@ -31,7 +33,8 @@ class ChartTracer extends Tracer {
               beginAtZero: true
             }
           }]
-        }
+        },
+        animation: false
       }
     };
     this.chart = this.capsule.chart = new Chart(this.$wrapper, data);
@@ -98,7 +101,7 @@ class ChartTracer extends Tracer {
 }
 
 const initView = (tracer) => {
-  tracer.$wrapper = tracer.capsule.$wrapper = $('<canvas id="chart">');
+  tracer.$wrapper = tracer.capsule.$wrapper = $('<canvas>');
   tracer.$container.append(tracer.$wrapper);
 };
 
