@@ -1,83 +1,30 @@
 const DirectedGraphTracer = require('./directed_graph');
 
-function UndirectedGraphTracer() {
-  if (DirectedGraphTracer.apply(this, arguments)) {
-    UndirectedGraphTracer.prototype.init.call(this);
-    return true;
+class UndirectedGraphTracer extends DirectedGraphTracer {
+  static getClassName() {
+    return 'UndirectedGraphTracer';
   }
-  return false;
-}
 
-UndirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGraphTracer.prototype), {
-  constructor: UndirectedGraphTracer,
-  name: 'UndirectedGraphTracer',
-  init: function () {
-    var tracer = this;
+  constructor(name) {
+    super(name);
 
-    this.s.settings({
-      defaultEdgeType: 'def',
-      funcEdgesDef: function (edge, source, target, context, settings) {
-        var color = tracer.getColor(edge, source, target, settings);
-        tracer.drawEdge(edge, source, target, color, context, settings);
-      }
-    });
-  },
-  setData: function (G) {
-    if (Tracer.prototype.setData.apply(this, arguments)) return true;
+    if (this.isNew) initView(this);
+  }
 
-    this.graph.clear();
-    var nodes = [];
-    var edges = [];
-    var unitAngle = 2 * Math.PI / G.length;
-    var currentAngle = 0;
-    for (var i = 0; i < G.length; i++) {
-      currentAngle += unitAngle;
-      nodes.push({
-        id: this.n(i),
-        label: '' + i,
-        x: .5 + Math.sin(currentAngle) / 2,
-        y: .5 + Math.cos(currentAngle) / 2,
-        size: 1,
-        color: this.color.default
-      });
-    }
-    for (var i = 0; i < G.length; i++) {
-      for (var j = 0; j <= i; j++) {
-        if (G[i][j] || G[j][i]) {
-          edges.push({
-            id: this.e(i, j),
-            source: this.n(i),
-            target: this.n(j),
-            color: this.color.default,
-            size: 1
-          });
-        }
-      }
-    }
+  setData(G) {
+    return super.setData(G, true);
+  }
 
-    this.graph.read({
-      nodes: nodes,
-      edges: edges
-    });
-    this.s.camera.goTo({
-      x: 0,
-      y: 0,
-      angle: 0,
-      ratio: 1
-    });
-    this.refresh();
-
-    return false;
-  },
-  e: function (v1, v2) {
+  e(v1, v2) {
     if (v1 > v2) {
       var temp = v1;
       v1 = v2;
       v2 = temp;
     }
     return 'e' + v1 + '_' + v2;
-  },
-  drawOnHover: function (node, context, settings, next) {
+  }
+
+  drawOnHover(node, context, settings, next) {
     var tracer = this;
 
     context.setLineDash([5, 5]);
@@ -98,8 +45,9 @@ UndirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGraphTrac
         if (next) next(edge, source, target, color, context, settings);
       }
     });
-  },
-  drawEdge: function (edge, source, target, color, context, settings) {
+  }
+
+  drawEdge(edge, source, target, color, context, settings) {
     var prefix = settings('prefix') || '',
       size = edge[prefix + 'size'] || 1;
 
@@ -116,6 +64,16 @@ UndirectedGraphTracer.prototype = $.extend(true, Object.create(DirectedGraphTrac
     );
     context.stroke();
   }
-});
+}
+
+const initView = (tracer) => {
+  tracer.s.settings({
+    defaultEdgeType: 'def',
+    funcEdgesDef(edge, source, target, context, settings) {
+      var color = tracer.getColor(edge, source, target, settings);
+      tracer.drawEdge(edge, source, target, color, context, settings);
+    }
+  });
+};
 
 module.exports = UndirectedGraphTracer;

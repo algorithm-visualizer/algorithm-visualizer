@@ -1,28 +1,17 @@
 const DirectedGraphTracer = require('./directed_graph');
 
-function CoordinateSystemTracer() {
-  if (DirectedGraphTracer.apply(this, arguments)) {
-    CoordinateSystemTracer.prototype.init.call(this);
-    return true;
+class CoordinateSystemTracer extends DirectedGraphTracer {
+  static getClassName() {
+    return 'CoordinateSystemTracer';
   }
-  return false;
-}
 
-CoordinateSystemTracer.prototype = $.extend(true, Object.create(DirectedGraphTracer.prototype), {
-  constructor: CoordinateSystemTracer,
-  name: 'CoordinateSystemTracer',
-  init: function () {
-    var tracer = this;
+  constructor(name) {
+    super(name);
 
-    this.s.settings({
-      defaultEdgeType: 'def',
-      funcEdgesDef: function (edge, source, target, context, settings) {
-        var color = tracer.getColor(edge, source, target, settings);
-        tracer.drawEdge(edge, source, target, color, context, settings);
-      }
-    });
-  },
-  setData: function (C) {
+    if (this.isNew) initView(this);
+  }
+
+  setData(C) {
     if (Tracer.prototype.setData.apply(this, arguments)) return true;
 
     this.graph.clear();
@@ -50,8 +39,9 @@ CoordinateSystemTracer.prototype = $.extend(true, Object.create(DirectedGraphTra
     this.refresh();
 
     return false;
-  },
-  processStep: function (step, options) {
+  }
+
+  processStep(step, options) {
     switch (step.type) {
       case 'visit':
       case 'leave':
@@ -82,18 +72,20 @@ CoordinateSystemTracer.prototype = $.extend(true, Object.create(DirectedGraphTra
         }
         break;
       default:
-        Tracer.prototype.processStep.call(this, step, options);
+        super.processStep(step, options);
     }
-  },
-  e: function (v1, v2) {
+  }
+
+  e(v1, v2) {
     if (v1 > v2) {
       var temp = v1;
       v1 = v2;
       v2 = temp;
     }
     return 'e' + v1 + '_' + v2;
-  },
-  drawOnHover: function (node, context, settings, next) {
+  }
+
+  drawOnHover(node, context, settings, next) {
     var tracer = this;
 
     context.setLineDash([5, 5]);
@@ -114,8 +106,9 @@ CoordinateSystemTracer.prototype = $.extend(true, Object.create(DirectedGraphTra
         if (next) next(edge, source, target, color, context, settings);
       }
     });
-  },
-  drawEdge: function (edge, source, target, color, context, settings) {
+  }
+
+  drawEdge(edge, source, target, color, context, settings) {
     var prefix = settings('prefix') || '',
       size = edge[prefix + 'size'] || 1;
 
@@ -132,6 +125,16 @@ CoordinateSystemTracer.prototype = $.extend(true, Object.create(DirectedGraphTra
     );
     context.stroke();
   }
-});
+}
+
+const initView = (tracer) => {
+  tracer.s.settings({
+    defaultEdgeType: 'def',
+    funcEdgesDef(edge, source, target, context, settings) {
+      var color = tracer.getColor(edge, source, target, settings);
+      tracer.drawEdge(edge, source, target, color, context, settings);
+    }
+  });
+};
 
 module.exports = CoordinateSystemTracer;

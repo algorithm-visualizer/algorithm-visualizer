@@ -51,7 +51,8 @@ TracerManager.prototype = {
       selectedCapsule = this.add(newTracer);
     }
 
-    selectedCapsule.defaultName = `${newTracer.name} ${count}`;
+    const className = newTracer.module.getClassName();
+    selectedCapsule.defaultName = `${className} ${count}`;
     selectedCapsule.order = this.order++;
     return selectedCapsule;
   },
