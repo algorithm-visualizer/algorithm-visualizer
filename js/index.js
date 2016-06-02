@@ -1,7 +1,7 @@
 'use strict';
 
 const RSVP = require('rsvp');
-const appInstance = require('./app');
+const app = require('./app');
 const AppConstructor = require('./app/constructor');
 const DOM = require('./dom');
 const Server = require('./server');
@@ -33,14 +33,14 @@ RSVP.on('error', function (reason) {
 $(() => {
 
   // initialize the application and attach in to the instance module
-  const app = new AppConstructor();
-  extend(true, appInstance, app);
+  const appConstructor = new AppConstructor();
+  extend(true, app, appConstructor);
 
   // load modules to the global scope so they can be evaled
   extend(true, window, modules);
 
   Server.loadCategories().then((data) => {
-    appInstance.setCategories(data);
+    app.setCategories(data);
     DOM.addCategories();
 
     // determine if the app is loading a pre-existing scratch-pad
