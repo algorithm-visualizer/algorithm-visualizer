@@ -1,77 +1,53 @@
 const Tracer = require('./tracer');
 
-function DirectedGraphTracer() {
-  if (Tracer.apply(this, arguments)) {
-    DirectedGraphTracer.prototype.init.call(this);
-    return true;
+const {
+  refineByType
+} = require('../../tracer_manager/util/index');
+
+class DirectedGraphTracer extends Tracer {
+  static getClassName() {
+    return 'DirectedGraphTracer';
   }
-  return false;
-}
 
-DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
-  constructor: DirectedGraphTracer,
-  name: 'DirectedGraphTracer',
-  init: function () {
-    var tracer = this;
+  constructor(name) {
+    super(name);
 
-    this.s = this.capsule.s = new sigma({
-      renderer: {
-        container: this.$container[0],
-        type: 'canvas'
-      },
-      settings: {
-        minArrowSize: 8,
-        defaultEdgeType: 'arrow',
-        maxEdgeSize: 2.5,
-        labelThreshold: 4,
-        font: 'Roboto',
-        defaultLabelColor: '#fff',
-        zoomMin: 0.6,
-        zoomMax: 1.2,
-        skipErrors: true,
-        minNodeSize: .5,
-        maxNodeSize: 12,
-        labelSize: 'proportional',
-        labelSizeRatio: 1.3,
-        funcLabelsDef: function (node, context, settings) {
-          tracer.drawLabel(node, context, settings);
-        },
-        funcHoversDef: function (node, context, settings, next) {
-          tracer.drawOnHover(node, context, settings, next);
-        },
-        funcEdgesArrow: function (edge, source, target, context, settings) {
-          var color = tracer.getColor(edge, source, target, settings);
-          tracer.drawArrow(edge, source, target, color, context, settings);
-        }
-      }
-    });
-    sigma.plugins.dragNodes(this.s, this.s.renderers[0]);
-    this.graph = this.capsule.graph = this.s.graph;
-  },
-  _setTreeData: function (G, root) {
+    this.color = {
+      visited: '#f00',
+      left: '#000',
+      default: '#888'
+    };
+
+    if (this.isNew) initView(this);
+  }
+
+  _setTreeData(G, root) {
     this.manager.pushStep(this.capsule, {
       type: 'setTreeData',
       arguments: arguments
     });
     return this;
-  },
-  _visit: function (target, source) {
+  }
+
+  _visit(target, source) {
     this.manager.pushStep(this.capsule, {
       type: 'visit',
       target: target,
       source: source
     });
     return this;
-  },
-  _leave: function (target, source) {
+  }
+
+  _leave(target, source) {
     this.manager.pushStep(this.capsule, {
       type: 'leave',
       target: target,
       source: source
     });
     return this;
-  },
-  processStep: function (step, options) {
+  }
+
+  processStep(step, options) {
     switch (step.type) {
       case 'setTreeData':
         this.setTreeData.apply(this, step.arguments);
@@ -95,10 +71,11 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
         }
         break;
       default:
-        Tracer.prototype.processStep.call(this, step, options);
+        super.processStep(step, options);
     }
-  },
-  setTreeData: function (G, root) {
+  }
+
+  setTreeData(G, root) {
     var tracer = this;
 
     root = root || 0;
@@ -115,7 +92,7 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
     };
     getDepth(root, 1);
 
-    if (this.setData.apply(this, arguments)) return true;
+    if (this.setData(G)) return true;
 
     var place = function (node, x, y) {
       var temp = tracer.graph.nodes(tracer.n(node));
@@ -139,16 +116,17 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
     dfs(root, 0, 0, 1);
 
     this.refresh();
-  },
-  setData: function (G) {
-    if (Tracer.prototype.setData.apply(this, arguments)) return true;
+  }
+
+  setData(G, undirected) {
+    if (super.setData.apply(this, arguments)) return true;
 
     this.graph.clear();
-    var nodes = [];
-    var edges = [];
-    var unitAngle = 2 * Math.PI / G.length;
-    var currentAngle = 0;
-    for (var i = 0; i < G.length; i++) {
+    const nodes = [];
+    const edges = [];
+    const unitAngle = 2 * Math.PI / G.length;
+    let currentAngle = 0;
+    for (let i = 0; i < G.length; i++) {
       currentAngle += unitAngle;
       nodes.push({
         id: this.n(i),
@@ -156,17 +134,35 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
         x: .5 + Math.sin(currentAngle) / 2,
         y: .5 + Math.cos(currentAngle) / 2,
         size: 1,
-        color: this.color.default
+        color: this.color.default,
+        weight: 0
       });
-      for (var j = 0; j < G[i].length; j++) {
-        if (G[i][j]) {
-          edges.push({
-            id: this.e(i, j),
-            source: this.n(i),
-            target: this.n(j),
-            color: this.color.default,
-            size: 1
-          });
+
+      if (undirected) {
+        for (let j = 0; j <= i; j++) {
+          if (G[i][j] || G[j][i]) {
+            edges.push({
+              id: this.e(i, j),
+              source: this.n(i),
+              target: this.n(j),
+              color: this.color.default,
+              size: 1,
+              weight: refineByType(G[i][j])
+            });
+          }
+        }
+      } else {
+        for (let j = 0; j < G[i].length; j++) {
+          if (G[i][j]) {
+            edges.push({
+              id: this.e(i, j),
+              source: this.n(i),
+              target: this.n(j),
+              color: this.color.default,
+              size: 1,
+              weight: refineByType(G[i][j])
+            });
+          }
         }
       }
     }
@@ -184,29 +180,28 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
     this.refresh();
 
     return false;
-  },
-  resize: function () {
-    Tracer.prototype.resize.call(this);
+  }
+
+  resize() {
+    super.resize();
 
     this.s.renderers[0].resize();
     this.refresh();
-  },
-  refresh: function () {
-    Tracer.prototype.refresh.call(this);
+  }
+
+  refresh() {
+    super.refresh();
 
     this.s.refresh();
-  },
-  clear: function () {
-    Tracer.prototype.clear.call(this);
+  }
+
+  clear() {
+    super.clear();
 
     this.clearGraphColor();
-  },
-  color: {
-    visited: '#f00',
-    left: '#000',
-    default: '#888'
-  },
-  clearGraphColor: function () {
+  }
+
+  clearGraphColor() {
     var tracer = this;
 
     this.graph.nodes().forEach(function (node) {
@@ -215,14 +210,17 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
     this.graph.edges().forEach(function (edge) {
       edge.color = tracer.color.default;
     });
-  },
-  n: function (v) {
+  }
+
+  n(v) {
     return 'n' + v;
-  },
-  e: function (v1, v2) {
+  }
+
+  e(v1, v2) {
     return 'e' + v1 + '_' + v2;
-  },
-  getColor: function (edge, source, target, settings) {
+  }
+
+  getColor(edge, source, target, settings) {
     var color = edge.color,
       edgeColor = settings('edgeColor'),
       defaultNodeColor = settings('defaultNodeColor'),
@@ -241,8 +239,9 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
       }
 
     return color;
-  },
-  drawLabel: function (node, context, settings) {
+  }
+
+  drawLabel(node, context, settings) {
     var fontSize,
       prefix = settings('prefix') || '',
       size = node[prefix + 'size'];
@@ -269,8 +268,9 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
       Math.round(node[prefix + 'x']),
       Math.round(node[prefix + 'y'] + fontSize / 3)
     );
-  },
-  drawArrow: function (edge, source, target, color, context, settings) {
+  }
+
+  drawArrow(edge, source, target, color, context, settings) {
     var prefix = settings('prefix') || '',
       size = edge[prefix + 'size'] || 1,
       tSize = target[prefix + 'size'],
@@ -309,8 +309,9 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
     context.lineTo(aX + vX, aY + vY);
     context.closePath();
     context.fill();
-  },
-  drawOnHover: function (node, context, settings, next) {
+  }
+
+  drawOnHover(node, context, settings, next) {
     var tracer = this;
 
     context.setLineDash([5, 5]);
@@ -332,7 +333,43 @@ DirectedGraphTracer.prototype = $.extend(true, Object.create(Tracer.prototype), 
       }
     });
   }
-});
+}
+
+const initView = (tracer) => {
+  tracer.s = tracer.capsule.s = new sigma({
+    renderer: {
+      container: tracer.$container[0],
+      type: 'canvas'
+    },
+    settings: {
+      minArrowSize: 8,
+      defaultEdgeType: 'arrow',
+      maxEdgeSize: 2.5,
+      labelThreshold: 4,
+      font: 'Roboto',
+      defaultLabelColor: '#fff',
+      zoomMin: 0.6,
+      zoomMax: 1.2,
+      skipErrors: true,
+      minNodeSize: .5,
+      maxNodeSize: 12,
+      labelSize: 'proportional',
+      labelSizeRatio: 1.3,
+      funcLabelsDef(node, context, settings) {
+        tracer.drawLabel(node, context, settings);
+      },
+      funcHoversDef(node, context, settings, next) {
+        tracer.drawOnHover(node, context, settings, next);
+      },
+      funcEdgesArrow(edge, source, target, context, settings) {
+        var color = tracer.getColor(edge, source, target, settings);
+        tracer.drawArrow(edge, source, target, color, context, settings);
+      }
+    }
+  });
+  sigma.plugins.dragNodes(tracer.s, tracer.s.renderers[0]);
+  tracer.graph = tracer.capsule.graph = tracer.s.graph;
+};
 
 sigma.canvas.labels.def = function (node, context, settings) {
   var func = settings('funcLabelsDef');

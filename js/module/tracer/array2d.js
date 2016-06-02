@@ -4,22 +4,23 @@ const {
   refineByType
 } = require('../../tracer_manager/util/index');
 
-function Array2DTracer() {
-  if (Tracer.apply(this, arguments)) {
-    Array2DTracer.prototype.init.call(this);
-    return true;
+class Array2DTracer extends Tracer {
+  static getClassName() {
+    return 'Array2DTracer';
   }
-  return false;
-}
 
-Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
-  constructor: Array2DTracer,
-  name: 'Array2DTracer',
-  init: function () {
-    this.$table = this.capsule.$table = $('<div class="mtbl-table">');
-    this.$container.append(this.$table);
-  },
-  _notify: function (x, y, v) {
+  constructor(name) {
+    super(name);
+
+    this.colorClass = {
+      selected: 'selected',
+      notified: 'notified'
+    };
+
+    if (this.isNew) initView(this);
+  }
+
+  _notify(x, y, v) {
     this.manager.pushStep(this.capsule, {
       type: 'notify',
       x: x,
@@ -27,72 +28,86 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
       v: v
     });
     return this;
-  },
-  _denotify: function (x, y) {
+  }
+
+  _denotify(x, y) {
     this.manager.pushStep(this.capsule, {
       type: 'denotify',
       x: x,
       y: y
     });
     return this;
-  },
-  _select: function (sx, sy, ex, ey) {
+  }
+
+  _select(sx, sy, ex, ey) {
     this.pushSelectingStep('select', null, arguments);
     return this;
-  },
-  _selectRow: function (x, sy, ey) {
+  }
+
+  _selectRow(x, sy, ey) {
     this.pushSelectingStep('select', 'row', arguments);
     return this;
-  },
-  _selectCol: function (y, sx, ex) {
+  }
+
+  _selectCol(y, sx, ex) {
     this.pushSelectingStep('select', 'col', arguments);
     return this;
-  },
-  _deselect: function (sx, sy, ex, ey) {
+  }
+
+  _deselect(sx, sy, ex, ey) {
     this.pushSelectingStep('deselect', null, arguments);
     return this;
-  },
-  _deselectRow: function (x, sy, ey) {
+  }
+
+  _deselectRow(x, sy, ey) {
     this.pushSelectingStep('deselect', 'row', arguments);
     return this;
-  },
-  _deselectCol: function (y, sx, ex) {
+  }
+
+  _deselectCol(y, sx, ex) {
     this.pushSelectingStep('deselect', 'col', arguments);
     return this;
-  },
-  _separate: function (x, y) {
+  }
+
+  _separate(x, y) {
     this.manager.pushStep(this.capsule, {
       type: 'separate',
       x: x,
       y: y
     });
     return this;
-  },
-  _separateRow: function (x) {
+  }
+
+  _separateRow(x) {
     this._separate(x, -1);
     return this;
-  },
-  _separateCol: function (y) {
+  }
+
+  _separateCol(y) {
     this._separate(-1, y);
     return this;
-  },
-  _deseparate: function (x, y) {
+  }
+
+  _deseparate(x, y) {
     this.manager.pushStep(this.capsule, {
       type: 'deseparate',
       x: x,
       y: y
     });
     return this;
-  },
-  _deseparateRow: function (x) {
+  }
+
+  _deseparateRow(x) {
     this._deseparate(x, -1);
     return this;
-  },
-  _deseparateCol: function (y) {
+  }
+
+  _deseparateCol(y) {
     this._deseparate(-1, y);
     return this;
-  },
-  pushSelectingStep: function () {
+  }
+
+  pushSelectingStep() {
     var args = Array.prototype.slice.call(arguments);
     var type = args.shift();
     var mode = args.shift();
@@ -133,8 +148,9 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
     };
     $.extend(step, coord);
     this.manager.pushStep(this.capsule, step);
-  },
-  processStep: function (step, options) {
+  }
+
+  processStep(step, options) {
     switch (step.type) {
       case 'notify':
         if (step.v !== undefined) {
@@ -165,16 +181,17 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         this.deseparate(step.x, step.y);
         break;
       default:
-        Tracer.prototype.processStep.call(this, step, options);
+        super.processStep(step, options);
     }
-  },
-  setData: function (D) {
+  }
+
+  setData(D) {
     this.viewX = this.viewY = 0;
     this.paddingH = 6;
     this.paddingV = 3;
     this.fontSize = 16;
 
-    if (Tracer.prototype.setData.apply(this, arguments)) {
+    if (super.setData.apply(this, arguments)) {
       this.$table.find('.mtbl-row').each(function (i) {
         $(this).find('.mtbl-col').each(function (j) {
           $(this).text(refineByType(D[i][j]));
@@ -197,42 +214,48 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
     this.resize();
 
     return false;
-  },
-  resize: function () {
-    Tracer.prototype.resize.call(this);
+  }
+
+  resize() {
+    super.resize();
 
     this.refresh();
-  },
-  clear: function () {
-    Tracer.prototype.clear.call(this);
+  }
+
+  clear() {
+    super.clear();
 
     this.clearColor();
     this.deseparateAll();
-  },
-  getCellCss: function () {
+  }
+
+  getCellCss() {
     return {
       padding: this.paddingV.toFixed(1) + 'px ' + this.paddingH.toFixed(1) + 'px',
       'font-size': this.fontSize.toFixed(1) + 'px'
     };
-  },
-  refresh: function () {
-    Tracer.prototype.refresh.call(this);
+  }
+
+  refresh() {
+    super.refresh();
 
     var $parent = this.$table.parent();
     var top = $parent.height() / 2 - this.$table.height() / 2 + this.viewY;
     var left = $parent.width() / 2 - this.$table.width() / 2 + this.viewX;
     this.$table.css('margin-top', top);
     this.$table.css('margin-left', left);
-  },
-  mousedown: function (e) {
-    Tracer.prototype.mousedown.call(this, e);
+  }
+
+  mousedown(e) {
+    super.mousedown(e);
 
     this.dragX = e.pageX;
     this.dragY = e.pageY;
     this.dragging = true;
-  },
-  mousemove: function (e) {
-    Tracer.prototype.mousemove.call(this, e);
+  }
+
+  mousemove(e) {
+    super.mousemove(e);
 
     if (this.dragging) {
       this.viewX += e.pageX - this.dragX;
@@ -241,14 +264,16 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
       this.dragY = e.pageY;
       this.refresh();
     }
-  },
-  mouseup: function (e) {
-    Tracer.prototype.mouseup.call(this, e);
+  }
+
+  mouseup(e) {
+    super.mouseup(e);
 
     this.dragging = false;
-  },
-  mousewheel: function (e) {
-    Tracer.prototype.mousewheel.call(this, e);
+  }
+
+  mousewheel(e) {
+    super.mousewheel(e);
 
     e.preventDefault();
     e = e.originalEvent;
@@ -263,8 +288,9 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
     this.fontSize *= ratio;
     this.$table.find('.mtbl-col').css(this.getCellCss());
     this.refresh();
-  },
-  paintColor: function (sx, sy, ex, ey, colorClass, addClass) {
+  }
+
+  paintColor(sx, sy, ex, ey, colorClass, addClass) {
     for (var i = sx; i <= ex; i++) {
       var $row = this.$table.find('.mtbl-row').eq(i);
       for (var j = sy; j <= ey; j++) {
@@ -273,15 +299,13 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         else $col.removeClass(colorClass);
       }
     }
-  },
-  clearColor: function () {
+  }
+
+  clearColor() {
     this.$table.find('.mtbl-col').removeClass(Object.keys(this.colorClass).join(' '));
-  },
-  colorClass: {
-    selected: 'selected',
-    notified: 'notified'
-  },
-  separate: function (x, y) {
+  }
+
+  separate(x, y) {
     this.$table.find('.mtbl-row').each(function (i) {
       var $row = $(this);
       if (i == x) {
@@ -294,14 +318,21 @@ Array2DTracer.prototype = $.extend(true, Object.create(Tracer.prototype), {
         }
       });
     });
-  },
-  deseparate: function (x, y) {
+  }
+
+  deseparate(x, y) {
     this.$table.find('[data-row=' + x + ']').remove();
     this.$table.find('[data-col=' + y + ']').remove();
-  },
-  deseparateAll: function () {
+  }
+
+  deseparateAll() {
     this.$table.find('.mtbl-empty-row, .mtbl-empty-col').remove();
   }
-});
+}
+
+const initView = (tracer) => {
+  tracer.$table = tracer.capsule.$table = $('<div class="mtbl-table">');
+  tracer.$container.append(tracer.$table);
+};
 
 module.exports = Array2DTracer;

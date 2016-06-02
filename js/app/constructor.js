@@ -9,10 +9,6 @@ const {
   hideLoadingSlider
 } = require('../dom/loading_slider');
 
-const {
-  getFileDir
-} = require('../utils');
-
 const Cache = require('./cache');
 
 const state = {

@@ -13,8 +13,8 @@ const random = (N, M, min, max) => {
   return D;
 };
 
-const randomSorted = (N, M, min, max)=> {
-  return this.random(N, M, min, max).map(function (arr) {
+const randomSorted = (N, M, min, max) => {
+  return random(N, M, min, max).map(function (arr) {
     return arr.sort(function (a, b) {
       return a - b;
     });
