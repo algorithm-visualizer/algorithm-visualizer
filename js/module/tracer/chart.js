@@ -34,7 +34,8 @@ class ChartTracer extends Tracer {
             }
           }]
         },
-        animation: false
+        animation: false,
+        legend: false
       }
     };
     this.chart = this.capsule.chart = new Chart(this.$wrapper, data);
