@@ -11,6 +11,10 @@ class UndirectedGraphTracer extends DirectedGraphTracer {
     if (this.isNew) initView(this);
   }
 
+  setTreeData(G, root) {
+    return super.setTreeData(G, root, true);
+  }
+
   setData(G) {
     return super.setData(G, true);
   }
