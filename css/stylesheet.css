@@ -493,16 +493,25 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .complexity {
-  margin: 10px 0px;
+    margin: 10px 0px;
 }
+
 .complexity-type {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 .buttons button.active {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 .buttons button.active .fa {
-	color: #00e676;
+    color: #00e676;
+}
+
+#btn_pause > .btn-text:before {
+    content: 'Pause'
+}
+
+#btn_pause.active > .btn-text:before {
+    content: 'Resume'
 }
