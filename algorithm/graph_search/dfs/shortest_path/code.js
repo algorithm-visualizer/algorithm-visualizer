@@ -2,10 +2,10 @@ function DFS(node, parent, weight) { // node = current node, parent = previous n
     if (minWeight < weight) return;
     if (node == e) {
         tracer._visit(node, parent, weight)._wait();
-        tracer._leave(node, parent, 0)._wait();
         if (minWeight > weight) {
             minWeight = weight;
         }
+        tracer._leave(node, parent, minWeight)._wait();
         return;
     }
     D[node] = true; // label current node as discovered
