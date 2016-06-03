@@ -12,6 +12,12 @@
       "page_rank": "PageRank Algorithm"
     }
   },
+  "tree": {
+    "name": "Tree",
+    "list": {
+      "binary_search_tree": "Binary Search Tree"
+    }
+  },
   "number_theory": {
     "name": "Number Theory",
     "list": {
