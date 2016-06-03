@@ -12,6 +12,7 @@
     "<a href='http://pr.efactory.de/e-pagerank-algorithm.shtml'>E-Factory</a>"
   ],
   "files": {
-    "basic": "Version #1 of PageRank Algorithm (does not take into account the total number of nodes in the graph, i.e., number of pages on web)."
+    "basic": "Version #1 of PageRank Algorithm (does not take into account the total number of nodes in the graph, i.e., number of pages on web).",
+    "v2": "Version #2 divides (1 - D), where D = damping factor, by N, the total no. of documents on internet (nodes in Graph). The resultant Page Ranks form a probability distribution."
   }
 }
