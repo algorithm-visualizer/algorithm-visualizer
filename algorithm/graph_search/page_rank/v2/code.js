@@ -1,7 +1,7 @@
 /*
-	PageRank Algorithm Version 1
+	PageRank Algorithm Version 2
 	Equation:
-		PR (X) = (1 - D) + D (Summation i->X (PR (I) / Out (i)))
+		PR (X) = ( (1 - D)/N ) + D (Summation i->X (PR (I) / Out (i)))
 	NOTE: Algorithm uses the recommended damping factor (D). Number of iterations is small because only a small Web of 5 Pages is simulated
 */
 
