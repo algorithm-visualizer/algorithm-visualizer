@@ -35,7 +35,9 @@ class ChartTracer extends Tracer {
           }]
         },
         animation: false,
-        legend: false
+        legend: false,
+        responsive: true,
+        maintainAspectRatio: false
       }
     };
     this.chart = this.capsule.chart = new Chart(this.$wrapper, data);
@@ -98,6 +100,12 @@ class ChartTracer extends Tracer {
       default:
         super.processStep(step, options);
     }
+  }
+
+  resize() {
+    super.resize();
+
+    this.chart.resize();
   }
 }
 
