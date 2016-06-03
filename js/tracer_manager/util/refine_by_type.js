@@ -1,5 +1,12 @@
 const refineByType = (item) => {
-  return typeof(item) === 'number' ? refineNumber(item) : refineString(item);
+  switch (typeof(item)) {
+    case 'number':
+      return refineNumber(item);
+    case 'boolean':
+      return refineBoolean(item);
+    default:
+      return refineString(item);
+  }
 };
 
 const refineString = (str) => {
@@ -8,6 +15,10 @@ const refineString = (str) => {
 
 const refineNumber = (num) => {
   return num === Infinity ? '∞' : num;
+};
+
+const refineBoolean = (bool) => {
+  return bool ? 'T' : 'F';
 };
 
 module.exports = refineByType;

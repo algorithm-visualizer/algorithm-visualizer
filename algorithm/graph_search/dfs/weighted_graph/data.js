@@ -1,5 +1,5 @@
-var tracer = new WeightedDirectedGraphTracer();
+var tracer = new WeightedUndirectedGraphTracer();
 var logger = new LogTracer();
 tracer.attach(logger);
-var G = WeightedDirectedGraph.random(4, .5);
+var G = WeightedUndirectedGraph.random(5, 1);
 tracer._setData(G);

@@ -1,6 +1,6 @@
-var tracer = new UndirectedGraphTracer();
+var graphTracer = new UndirectedGraphTracer();
+var visitedTracer = new Array1DTracer('visited');
 var logger = new LogTracer();
-tracer.attach(logger);
-var G = UndirectedGraph.random(8, .2);
-
-tracer._setData(G);
+graphTracer.attach(logger);
+var G = UndirectedGraph.random(8, .3);
+graphTracer._setData(G);
