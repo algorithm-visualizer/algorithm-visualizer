@@ -75,7 +75,7 @@ class DirectedGraphTracer extends Tracer {
     }
   }
 
-  setTreeData(G, root) {
+  setTreeData(G, root, undirected) {
     var tracer = this;
 
     root = root || 0;
@@ -92,7 +92,7 @@ class DirectedGraphTracer extends Tracer {
     };
     getDepth(root, 1);
 
-    if (this.setData(G)) return true;
+    if (this.setData(G, undirected)) return true;
 
     var place = function (node, x, y) {
       var temp = tracer.graph.nodes(tracer.n(node));
@@ -140,14 +140,15 @@ class DirectedGraphTracer extends Tracer {
 
       if (undirected) {
         for (let j = 0; j <= i; j++) {
-          if (G[i][j] || G[j][i]) {
+          const value = G[i][j] || G[j][i];
+          if (value) {
             edges.push({
               id: this.e(i, j),
               source: this.n(i),
               target: this.n(j),
               color: this.color.default,
               size: 1,
-              weight: refineByType(G[i][j])
+              weight: refineByType(value)
             });
           }
         }
