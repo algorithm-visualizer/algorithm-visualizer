@@ -1,0 +1,16 @@
+{
+  "Binary Search Tree": "Binary search trees (BST), sometimes called ordered or sorted binary trees, are a particular type of containers: data structures that store \"items\" (such as numbers, names etc.) in memory. They allow fast lookup, addition and removal of items, and can be used to implement either dynamic sets of items, or lookup tables that allow finding an item by its key (e.g., finding the phone number of a person by name).",
+  "Applications": [
+    "Search applications where data is constantly entering/leaving such as map and set objects in many languages' library."
+  ],
+  "Complexity": {
+    "time": "Best : O(1) Average : O(logN) Worst : O(N)",
+    "space": "O(n)"
+  },
+  "References": [
+    "<a href='https://en.wikipedia.org/wiki/Binary_search_tree'>Wikipedia</a>"
+  ],
+  "files": {
+    "bst_search": "Search in Binary Search Tree"
+  }
+}
