@@ -164,10 +164,7 @@ TracerManager.prototype = {
   step(i, options = {}) {
     const tracer = this;
 
-    if (isNaN(i) || i >= this.traces.length || i < 0) {
-      $('#btn_run').removeClass('active');
-      return;
-    }
+    if (isNaN(i) || i >= this.traces.length || i < 0) return;
 
     this.traceIndex = i;
     const trace = this.traces[i];
@@ -182,31 +179,41 @@ TracerManager.prototype = {
     if (this.pause) return;
 
     this.timer = setTimeout(() => {
-      tracer.step(i + 1, options);
+      if (!tracer.nextStep(options)) {
+        $('#btn_run').removeClass('active');
+      }
     }, this.interval);
   },
 
-  prevStep() {
+  prevStep(options = {}) {
     this.command('clear');
 
     const finalIndex = this.traceIndex - 1;
     if (finalIndex < 0) {
       this.traceIndex = -1;
       this.command('refresh');
-      return;
+      return false;
     }
 
     for (let i = 0; i < finalIndex; i++) {
-      this.step(i, {
+      this.step(i, $.extend(options, {
         virtual: true
-      });
+      }));
     }
 
     this.step(finalIndex);
+    return true;
   },
 
-  nextStep() {
-    this.step(this.traceIndex + 1);
+  nextStep(options = {}) {
+    const finalIndex = this.traceIndex + 1;
+    if (finalIndex >= this.traces.length) {
+      this.traceIndex = this.traces.length - 1;
+      return false;
+    }
+
+    this.step(finalIndex, options);
+    return true;
   },
 
   visualize() {
