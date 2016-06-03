@@ -164,7 +164,10 @@ TracerManager.prototype = {
   step(i, options = {}) {
     const tracer = this;
 
-    if (isNaN(i) || i >= this.traces.length || i < 0) return;
+    if (isNaN(i) || i >= this.traces.length || i < 0) {
+      $('#btn_run').removeClass('active');
+      return;
+    }
 
     this.traceIndex = i;
     const trace = this.traces[i];
