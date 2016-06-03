@@ -33,9 +33,10 @@ function DFSExplore(graph, source) {
 }
 
 var visited = DFSExplore(G, 0);
-if (G.length === Object.keys(visited).length) {
+var check = true;
+for (var i = 0; i < visited.length; i++) check &= visited[i];
+if (check) {
   logger._print('The Graph is CONNECTED');
-}
-else {
+} else {
   logger._print('The Graph is NOT CONNECTED');
 }
