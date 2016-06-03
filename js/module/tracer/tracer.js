@@ -72,7 +72,6 @@ class Tracer {
     if (!this.isNew && this.lastData === data) {
       return true;
     }
-    this.isNew = this.capsule.isNew = false;
     this.lastData = this.capsule.lastData = data;
     return false;
   }

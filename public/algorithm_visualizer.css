@@ -549,6 +549,11 @@ pre {
     background: #f00;
 }
 
+.mchrt-chart {
+    width: 100%;
+    height: 100%;
+}
+
 #loading-slider {
     position: absolute;
     width: 100%;

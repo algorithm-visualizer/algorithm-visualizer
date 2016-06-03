@@ -102,7 +102,7 @@ class ChartTracer extends Tracer {
 }
 
 const initView = (tracer) => {
-  tracer.$wrapper = tracer.capsule.$wrapper = $('<canvas>');
+  tracer.$wrapper = tracer.capsule.$wrapper = $('<canvas class="mchrt-chart">');
   tracer.$container.append(tracer.$wrapper);
 };
 
