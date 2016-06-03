@@ -8,39 +8,28 @@ class ChartTracer extends Tracer {
   constructor(name) {
     super(name);
 
+    this.color = {
+      selected: 'rgba(255, 0, 0, 1)',
+      notified: 'rgba(0, 0, 255, 1)',
+      default: 'rgba(136, 136, 136, 1)'
+    };
+
     if (this.isNew) initView(this);
   }
 
   setData(C) {
     if (super.setData.apply(this, arguments)) return true;
 
-    if (this.chart) this.chart.destroy();
     var color = [];
-    for (var i = 0; i < C.length; i++) color.push('rgba(136, 136, 136, 1)');
-    var data = {
-      type: 'bar',
-      data: {
-        labels: C.map(String),
-        datasets: [{
-          backgroundColor: color,
-          data: C
-        }]
-      },
-      options: {
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
-            }
-          }]
-        },
-        animation: false,
-        legend: false,
-        responsive: true,
-        maintainAspectRatio: false
-      }
+    for (var i = 0; i < C.length; i++) color.push(this.color.default);
+    this.chart.config.data = {
+      labels: C.map(String),
+      datasets: [{
+        backgroundColor: color,
+        data: C
+      }]
     };
-    this.chart = this.capsule.chart = new Chart(this.$wrapper, data);
+    this.chart.update();
   }
 
   _notify(s, v) {
@@ -87,9 +76,8 @@ class ChartTracer extends Tracer {
         }
       case 'denotify':
       case 'deselect':
-        var color = step.type == 'denotify' || step.type == 'deselect' ? 'rgba(136, 136, 136, 1)' : 'rgba(255, 0, 0, 1)';
       case 'select':
-        if (color === undefined) var color = 'rgba(0, 0, 255, 1)';
+        let color = step.type == 'notify' ? this.color.notified : step.type == 'select' ? this.color.selected : this.color.default;
         if (step.e !== undefined)
           for (var i = step.s; i <= step.e; i++)
             this.chart.config.data.datasets[0].backgroundColor[i] = color;
@@ -107,11 +95,44 @@ class ChartTracer extends Tracer {
 
     this.chart.resize();
   }
+
+  clear() {
+    super.clear();
+
+    const data = this.chart.config.data;
+    if (data.datasets.length) {
+      const backgroundColor = data.datasets[0].backgroundColor;
+      for (let i = 0; i < backgroundColor.length; i++) {
+        backgroundColor[i] = this.color.default;
+      }
+      this.chart.update();
+    }
+  }
 }
 
 const initView = (tracer) => {
   tracer.$wrapper = tracer.capsule.$wrapper = $('<canvas class="mchrt-chart">');
   tracer.$container.append(tracer.$wrapper);
+  tracer.chart = tracer.capsule.chart = new Chart(tracer.$wrapper, {
+    type: 'bar',
+    data: {
+      labels: [],
+      datasets: []
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      },
+      animation: false,
+      legend: false,
+      responsive: true,
+      maintainAspectRatio: false
+    }
+  });
 };
 
 module.exports = ChartTracer;
