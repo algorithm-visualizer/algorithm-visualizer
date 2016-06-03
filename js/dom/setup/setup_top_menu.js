@@ -24,8 +24,10 @@ module.exports = () => {
 
   // control
 
-  $('#btn_run').click(() => {
+  $('#btn_run').click(function() {
     $('#btn_trace').click();
+    $('#btn_pause').removeClass('active');
+    $(this).addClass('active');
     var err = app.getEditor().execute();
     if (err) {
       console.error(err);
@@ -33,6 +35,8 @@ module.exports = () => {
     }
   });
   $('#btn_pause').click(function() {
+    $('#btn_run').removeClass('active');
+    $(this).addClass('active');
     if (app.getTracerManager().isPause()) {
       app.getTracerManager().resumeStep();
     } else {
@@ -40,10 +44,14 @@ module.exports = () => {
     }
   });
   $('#btn_prev').click(() => {
+    $('#btn_run').removeClass('active');
+    $('#btn_pause').addClass('active');
     app.getTracerManager().pauseStep();
     app.getTracerManager().prevStep();
   });
   $('#btn_next').click(() => {
+    $('#btn_run').removeClass('active');
+    $('#btn_pause').addClass('active');
     app.getTracerManager().pauseStep();
     app.getTracerManager().nextStep();
   });
