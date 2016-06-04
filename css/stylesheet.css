@@ -527,9 +527,11 @@ button[disabled] {
 }
 
 .top-menu-buttons button.active {
-  box-shadow: 0px 0px 3px 0px black inset;
+  background: rgba(0, 0, 0, .15);
+  box-shadow: 0px 0px 10px 3px #1a1a1a inset;
 }
 
 .top-menu-buttons button:active {
-  box-shadow: 0px 0px 3px 0px black inset;
+  background: rgba(0, 0, 0, .15);
+  box-shadow: 0px 0px 10px 3px #1a1a1a inset;
 }
