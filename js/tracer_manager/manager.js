@@ -1,5 +1,7 @@
 'use strict';
 
+const TopMenu = require('../dom/top_menu');
+
 const stepLimit = 1e6;
 
 const TracerManager = function () {
@@ -180,7 +182,7 @@ TracerManager.prototype = {
 
     this.timer = setTimeout(() => {
       if (!tracer.nextStep(options)) {
-        $('#btn_run').removeClass('active');
+        TopMenu.resetTopMenuButtons();
       }
     }, this.interval);
   },
