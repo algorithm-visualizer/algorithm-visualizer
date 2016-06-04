@@ -4,13 +4,14 @@
     "Search applications where data is constantly entering/leaving such as map and set objects in many languages' library."
   ],
   "Complexity": {
-    "time": "Best : O(1) Average : O(logN) Worst : O(N)",
+    "time": " Best : O(1) Average : O(logN) Worst : O(N) ",
     "space": "O(n)"
   },
   "References": [
     "<a href='https://en.wikipedia.org/wiki/Binary_search_tree'>Wikipedia</a>"
   ],
   "files": {
-    "bst_search": "Search in Binary Search Tree"
+    "bst_search": "Search in Binary Search Tree",
+    "bst_insert": "Insert in Binary Search Tree"
   }
 }
