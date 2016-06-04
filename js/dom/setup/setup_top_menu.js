@@ -35,8 +35,8 @@ module.exports = () => {
     }
   });
   $('#btn_pause').click(function() {
-    $('#btn_run').removeClass('active');
-    $(this).addClass('active');
+    $('#btn_run').toggleClass('active');
+    $(this).toggleClass('active');
     if (app.getTracerManager().isPause()) {
       app.getTracerManager().resumeStep();
     } else {
