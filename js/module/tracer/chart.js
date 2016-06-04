@@ -1,3 +1,5 @@
+'use strict';
+
 const Tracer = require('./tracer');
 
 class ChartTracer extends Tracer {

@@ -1,3 +1,5 @@
+'use strict';
+
 const WeightedDirectedGraphTracer = require('./weighted_directed_graph');
 const UndirectedGraphTracer = require('./undirected_graph');
 

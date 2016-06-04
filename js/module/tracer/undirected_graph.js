@@ -1,3 +1,5 @@
+'use strict';
+
 const DirectedGraphTracer = require('./directed_graph');
 
 class UndirectedGraphTracer extends DirectedGraphTracer {
