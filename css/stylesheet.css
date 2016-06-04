@@ -492,8 +492,9 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 0;
 }
 
+.applications li,
 .complexity {
-    margin: 10px 0px;
+	margin: 10px 0px;
 }
 
 .complexity-type {
