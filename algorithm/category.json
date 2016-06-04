@@ -15,7 +15,8 @@
   "tree": {
     "name": "Tree",
     "list": {
-      "binary_search_tree": "Binary Search Tree"
+      "binary_search_tree": "Binary Search Tree",
+      "binary_tree_traversal": "Binary Tree Traversal"
     }
   },
   "number_theory": {
