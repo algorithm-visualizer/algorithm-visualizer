@@ -15,8 +15,8 @@
     "<a href='https://en.wikipedia.org/wiki/Tree_traversal'>Wikipedia</a>"
   ],
   "files": {
-    "inorder": "Traverse Binary Tree Inorder",
-    "postorder": "Traverse Binary Tree Postorder",
-    "preorder": "Traverse Binary Tree Preorder"
+    "in_order": "Traverse Binary Tree In-order",
+    "post_order": "Traverse Binary Tree Post-order",
+    "pre_order": "Traverse Binary Tree Pre-order"
   }
 }
