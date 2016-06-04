@@ -1,5 +1,14 @@
 'use strict';
 
+const ModuleContainer = require('../dom/module_container');
+const TopMenu = require('../dom/top_menu');
+
+const {
+  each,
+  extend,
+  grep
+} = $;
+
 const stepLimit = 1e6;
 
 const TracerManager = function () {
@@ -13,8 +22,7 @@ TracerManager.prototype = {
 
   add(tracer) {
 
-    const $container = $('<section class="module_wrapper">');
-    $('.module_container').append($container);
+    const $container = ModuleContainer.create();
 
     const capsule = {
       module: tracer.module,
@@ -33,7 +41,7 @@ TracerManager.prototype = {
     let selectedCapsule = null;
     let count = 0;
 
-    $.each(this.capsules, (i, capsule) => {
+    each(this.capsules, (i, capsule) => {
       if (capsule.module === newTracer.module) {
         count++;
         if (!capsule.allocated) {
@@ -60,7 +68,7 @@ TracerManager.prototype = {
   deallocateAll() {
     this.order = 0;
     this.reset();
-    $.each(this.capsules, (i, capsule) => {
+    each(this.capsules, (i, capsule) => {
       capsule.allocated = false;
     });
   },
@@ -68,7 +76,7 @@ TracerManager.prototype = {
   removeUnallocated() {
     let changed = false;
 
-    this.capsules = $.grep(this.capsules, (capsule) => {
+    this.capsules = grep(this.capsules, (capsule) => {
       let removed = !capsule.allocated;
 
       if (capsule.isNew || removed) {
@@ -91,7 +99,7 @@ TracerManager.prototype = {
       capsules
     } = this;
 
-    $.each(capsules, (i, capsule) => {
+    each(capsules, (i, capsule) => {
       let width = 100;
       let height = (100 / capsules.length);
       let top = height * capsule.order;
@@ -115,7 +123,7 @@ TracerManager.prototype = {
   },
 
   setInterval(interval) {
-    $('#interval').val(interval);
+    TopMenu.setInterval(interval);
   },
 
   reset() {
@@ -137,7 +145,7 @@ TracerManager.prototype = {
     } else {
       last = this.traces[len - 1];
     }
-    last.push($.extend(step, {
+    last.push(extend(step, {
       capsule
     }));
   },
@@ -152,13 +160,13 @@ TracerManager.prototype = {
     if (this.timer) {
       clearTimeout(this.timer);
     }
-    $('#btn_pause').addClass('active');
+    TopMenu.activateBtnPause();
   },
 
   resumeStep() {
     this.pause = false;
     this.step(this.traceIndex + 1);
-    $('#btn_pause').removeClass('active');
+    TopMenu.deactivateBtnPause();
   },
 
   step(i, options = {}) {
@@ -180,7 +188,7 @@ TracerManager.prototype = {
 
     this.timer = setTimeout(() => {
       if (!tracer.nextStep(options)) {
-        $('#btn_run').removeClass('active');
+        TopMenu.resetTopMenuButtons();
       }
     }, this.interval);
   },
@@ -196,7 +204,7 @@ TracerManager.prototype = {
     }
 
     for (let i = 0; i < finalIndex; i++) {
-      this.step(i, $.extend(options, {
+      this.step(i, extend(options, {
         virtual: true
       }));
     }
@@ -223,7 +231,7 @@ TracerManager.prototype = {
 
   command(...args) {
     const functionName = args.shift();
-    $.each(this.capsules, (i, capsule) => {
+    each(this.capsules, (i, capsule) => {
       if (capsule.allocated) {
         capsule.tracer.module.prototype[functionName].apply(capsule.tracer, args);
       }
@@ -232,7 +240,7 @@ TracerManager.prototype = {
 
   findOwner(container) {
     let selectedCapsule = null;
-    $.each(this.capsules, (i, capsule) => {
+    each(this.capsules, (i, capsule) => {
       if (capsule.$container[0] === container) {
         selectedCapsule = capsule;
         return false;

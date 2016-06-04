@@ -1,3 +1,5 @@
+'use strict';
+
 const random = (N, ratio) => {
   if (!N) N = 5;
   if (!ratio) ratio = .3;
