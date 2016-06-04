@@ -1,3 +1,5 @@
+'use strict';
+
 const Array2DTracer = require('./array2d');
 
 class Array1DTracer extends Array2DTracer {

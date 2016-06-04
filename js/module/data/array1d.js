@@ -1,3 +1,5 @@
+'use strict';
+
 const Array2D = require('./array2d');
 
 const random = (N, min, max) => {

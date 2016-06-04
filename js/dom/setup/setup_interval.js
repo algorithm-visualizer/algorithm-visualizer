@@ -1,3 +1,5 @@
+'use strict';
+
 const app = require('../../app');
 const Toast = require('../toast');
 

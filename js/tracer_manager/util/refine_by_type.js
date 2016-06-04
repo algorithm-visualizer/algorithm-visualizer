@@ -1,3 +1,5 @@
+'use strict';
+
 const refineByType = (item) => {
   switch (typeof(item)) {
     case 'number':
