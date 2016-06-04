@@ -1,4 +1,10 @@
 {
+   "backtracking": {
+      "list": {
+         "n_queens": "N Queens Problem"
+      },
+      "name": "Backtracking"
+   },
    "cryptography": {
       "list": {
          "affine_cipher": "Affine Cipher",
