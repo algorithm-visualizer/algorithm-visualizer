@@ -23,7 +23,7 @@ module.exports = (data) => {
 
     } else if (isArray(value)) {
 
-      const $ul = $('<ul>');
+      const $ul = $('<ul class="applications">');
       $container.append($ul);
 
       value.forEach((li) => {
@@ -32,7 +32,7 @@ module.exports = (data) => {
 
     } else if (typeof value === 'object') {
 
-      const $ul = $('<ul>');
+      const $ul = $('<ul class="complexities">');
       $container.append($ul);
 
       each(value, (prop) => {
