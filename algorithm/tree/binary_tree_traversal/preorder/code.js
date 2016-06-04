@@ -9,12 +9,12 @@ function inorder ( root , parent ) {
 	logger._print( 'Reached ' + root);
 	treeTracer._visit ( root , parent )._wait ();
 
-	logger._print ( ' Going left from ' + root )._wait ();
-	inorder(T[root][0], root);
-
-	logger._print( 'Printing ' + root);
+  logger._print( 'Printing ' + root);
 	treeTracer._leave ( root );
 	arrayTracer._notify ( index++, root )._wait();
+
+	logger._print ( ' Going left from ' + root )._wait ();
+	inorder(T[root][0], root);
 
 	logger._print ( ' Going right from ' + root )._wait ();
 	inorder(T[root][1], root);
