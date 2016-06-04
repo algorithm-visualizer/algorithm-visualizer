@@ -16,6 +16,7 @@
   ],
   "files": {
     "inorder": "Traverse Binary Tree Inorder",
+    "postorder": "Traverse Binary Tree Postorder",
     "preorder": "Traverse Binary Tree Preorder"
   }
 }
