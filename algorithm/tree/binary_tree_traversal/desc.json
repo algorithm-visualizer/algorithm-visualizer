@@ -8,7 +8,7 @@
     "Post-order traversal can also generate a postfix representation of a binary tree."
   ],
   "Complexity": {
-    "time": "Best : O(N) Average : O(logN) Worst : O(N)",
+    "time": "Best : O(N) Average : O(N) Worst : O(N)",
     "space": "Worst: O(N) (recursive), Best: O(1) (iterative)"
   },
   "References": [
