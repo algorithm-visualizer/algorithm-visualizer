@@ -87,7 +87,8 @@
    "tree": {
       "list": {
          "binary_search_tree": "Binary Search Tree",
-         "binary_tree_traversal": "Binary Tree Traversal"
+         "binary_tree_traversal": "Binary Tree Traversal",
+         "lowest_common_ancestor": "Lowest Common Ancestor"
       },
       "name": "Tree"
    },
