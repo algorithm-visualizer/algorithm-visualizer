@@ -1,0 +1,17 @@
+{
+  "N Queens Problem": "The N Queen is the problem of placing N chess queens on an N×N chessboard so that no two queens attack each other.",
+  "Applications": [
+    "Puzzle Solving",
+    "Searching"
+  ],
+  "Complexity": {
+    "time": "Worst O(N!)",
+    "space": "Worst O(N)"
+  },
+  "References": [
+    "<a href='http://www.geeksforgeeks.org/backtracking-set-3-n-queen-problem/'>geeksforgeeks</a>"
+  ],
+  "files": {
+    "n_queens": "Solving the N Queens Puzzle using Backtracking & Recursion"
+  }
+}
