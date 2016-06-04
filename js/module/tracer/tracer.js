@@ -1,3 +1,5 @@
+'use strict';
+
 const app = require('../../app');
 
 const {
@@ -9,7 +11,7 @@ class Tracer {
   static getClassName() {
     return 'Tracer';
   }
-  
+
   constructor(name) {
     this.module = this.constructor;
 

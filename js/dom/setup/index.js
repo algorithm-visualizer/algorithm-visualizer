@@ -1,3 +1,5 @@
+'use strict';
+
 const setupDividers = require('./setup_dividers');
 const setupDocument = require('./setup_document');
 const setupFilesBar = require('./setup_files_bar');
@@ -10,7 +12,7 @@ const setupTopMenu = require('./setup_top_menu');
 const setupWindow = require('./setup_window');
 
 /**
- * Initializes elements once the app loads in the DOM. 
+ * Initializes elements once the app loads in the DOM.
  */
 const setup = () => {
 

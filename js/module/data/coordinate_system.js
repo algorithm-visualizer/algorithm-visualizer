@@ -1,3 +1,5 @@
+'use strict';
+
 const random = (N, min, max) => {
   if (!N) N = 7;
   if (!min) min = 1;

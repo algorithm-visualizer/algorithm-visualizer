@@ -1,3 +1,5 @@
+'use strict';
+
 const definitelyBigger = (x, y) => x > (y + 2);
 
 module.exports = () => {

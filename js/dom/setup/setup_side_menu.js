@@ -1,3 +1,5 @@
+'use strict';
+
 const app = require('../../app');
 
 let sidemenu_percent;
