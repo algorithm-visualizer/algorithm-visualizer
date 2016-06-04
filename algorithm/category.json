@@ -1,100 +1,100 @@
 {
-  "graph_search": {
-    "name": "Graph Search",
-    "list": {
-      "dfs": "DFS",
-      "bfs": "BFS",
-      "dijkstra": "Dijkstra",
-      "bellman_ford": "Bellman-Ford",
-      "floyd_warshall": "Floyd-Warshall",
-      "topological_sort": "Topological-Sort",
-      "bridges": "Find-Bridges",
-      "page_rank": "PageRank Algorithm"
-    }
-  },
-  "tree": {
-    "name": "Tree",
-    "list": {
-      "binary_search_tree": "Binary Search Tree",
-      "binary_tree_traversal": "Binary Tree Traversal"
-    }
-  },
-  "number_theory": {
-    "name": "Number Theory",
-    "list": {
-      "seive_of_erathrones": "Seive of Erathrones",
-	  "euclidean_algorithm": "Euclidean Algorithm"
-    }
-  },
-  "cryptography": {
-    "name": "Cryptography",
-    "list": {
-      "caesar_cipher": "Caesar Cipher",
-      "affine_cipher": "Affine Cipher"
-    }
-  },
-  "mst": {
-    "name": "Minimum Spanning Tree",
-    "list": {
-      "prim": "Prim's Algorithm",
-      "kruskal": "Kruskal's Algorithm"
-    }
-  },
-  "search": {
-    "name": "Search",
-    "list": {
-      "binary_search": "Binary Search"
-    }
-  },
-  "sorting": {
-    "name": "Sorting",
-    "list": {
-      "insertion": "Insertion Sort",
-      "selection": "Selection Sort",
-      "bubble": "Bubble Sort",
-      "merge": "Merge Sort",
-      "radix": "Radix Sort",
-      "quick": "Quicksort",
-      "heap": "Heapsort",
-      "shell": "Shellsort",
-      "cycle": "Cycle Sort",
-      "comb": "Comb Sort"
-    }
-  },
-  "string": {
-    "name": "String",
-    "list": {
-      "edit_distance": "Edit Distance",
-      "knuth_morris_pratt": "KMP Substring Search",
-      "rabin_karp_algorithm": "Rabin-Karp Algorithm",
-      "suffix_array": "Suffix Array (construction & usage)"
-    }
-  },
-  "dp": {
-    "name": "Dynamic Programming",
-    "list": {
-      "fibonacci": "Fibonacci Sequence",
-      "knapsack_problem": "Knapsack Problem",
-      "longest_increasing_subsequence": "Longest Increasing Subsequence",
-      "max_subarray": "Maximum Subarray",
-      "max_sum_path": "Maximum Sum Path",
-      "sliding_window": "Sliding Window",
-      "integer_partition": "Integer Partition",
-      "ugly_numbers": "Ugly Numbers",
-      "pascal_triangle": "Pascal's Trangle",
-      "catalan_number": "Catalan Number"
-    }
-  },
-  "greedy": {
-    "name": "Greedy",
-    "list": {
-      "job_scheduling": "Job Scheduling Problem"
-    }
-  },
-  "etc": {
-    "name": "Uncategorized",
-    "list": {
-      "flood_fill": "Flood Fill"
-    }
-  }
+   "cryptography": {
+      "list": {
+         "affine_cipher": "Affine Cipher",
+         "caesar_cipher": "Caesar Cipher"
+      },
+      "name": "Cryptography"
+   },
+   "dp": {
+      "list": {
+         "catalan_number": "Catalan Number",
+         "fibonacci": "Fibonacci Sequence",
+         "integer_partition": "Integer Partition",
+         "knapsack_problem": "Knapsack Problem",
+         "longest_increasing_subsequence": "Longest Increasing Subsequence",
+         "max_subarray": "Maximum Subarray",
+         "max_sum_path": "Maximum Sum Path",
+         "pascal_triangle": "Pascal's Trangle",
+         "sliding_window": "Sliding Window",
+         "ugly_numbers": "Ugly Numbers"
+      },
+      "name": "Dynamic Programming"
+   },
+   "graph_search": {
+      "list": {
+         "bellman_ford": "Bellman-Ford",
+         "bfs": "BFS",
+         "bridges": "Find-Bridges",
+         "dfs": "DFS",
+         "dijkstra": "Dijkstra",
+         "floyd_warshall": "Floyd-Warshall",
+         "page_rank": "PageRank Algorithm",
+         "topological_sort": "Topological-Sort"
+      },
+      "name": "Graph Search"
+   },
+   "greedy": {
+      "list": {
+         "job_scheduling": "Job Scheduling Problem"
+      },
+      "name": "Greedy"
+   },
+   "mst": {
+      "list": {
+         "kruskal": "Kruskal's Algorithm",
+         "prim": "Prim's Algorithm"
+      },
+      "name": "Minimum Spanning Tree"
+   },
+   "number_theory": {
+      "list": {
+         "euclidean_algorithm": "Euclidean Algorithm",
+         "seive_of_erathrones": "Seive of Erathrones"
+      },
+      "name": "Number Theory"
+   },
+   "search": {
+      "list": {
+         "binary_search": "Binary Search"
+      },
+      "name": "Search"
+   },
+   "sorting": {
+      "list": {
+         "bubble": "Bubble Sort",
+         "comb": "Comb Sort",
+         "cycle": "Cycle Sort",
+         "heap": "Heapsort",
+         "insertion": "Insertion Sort",
+         "merge": "Merge Sort",
+         "quick": "Quicksort",
+         "radix": "Radix Sort",
+         "selection": "Selection Sort",
+         "shell": "Shellsort"
+      },
+      "name": "Sorting"
+   },
+   "string": {
+      "list": {
+         "edit_distance": "Edit Distance",
+         "knuth_morris_pratt": "KMP Substring Search",
+         "rabin_karp_algorithm": "Rabin-Karp Algorithm",
+         "suffix_array": "Suffix Array (construction & usage)"
+      },
+      "name": "String"
+   },
+   "tree": {
+      "list": {
+         "binary_search_tree": "Binary Search Tree",
+         "binary_tree_traversal": "Binary Tree Traversal"
+      },
+      "name": "Tree"
+   },
+   "uncategorized": {
+      "list": {
+         "flood_fill": "Flood Fill"
+      },
+      "name": "Uncategorized"
+   }
 }
