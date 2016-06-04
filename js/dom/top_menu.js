@@ -18,8 +18,23 @@ const resetTopMenuButtons = () => {
   disableFlowControl();
 };
 
+const setInterval = (val) => {
+  $('#interval').val(interval);
+};
+
+const activateBtnPause = () => {
+  $('#btn_pause').addClass('active');
+};
+
+const deactivateBtnPause = () => {
+  $('#btn_pause').removeClass('active');
+};
+
 module.exports = {
   enableFlowControl,
   disableFlowControl,
-  resetTopMenuButtons
+  resetTopMenuButtons,
+  setInterval,
+  activateBtnPause,
+  deactivateBtnPause
 };
