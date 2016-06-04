@@ -1,6 +1,7 @@
 const app = require('../../app');
 const Server = require('../../server');
 const Toast = require('../toast');
+const TopMenu = require('../top_menu');
 
 module.exports = () => {
 
@@ -31,20 +32,14 @@ module.exports = () => {
   const $btnNext  = $('#btn_next');
   const $btnDesc  = $('#btn_desc');
 
-  const flowControlBtns = [ $btnPause, $btnPrev, $btnNext ];
-
-  const setFlowControlState = (isDisabled) => {
-    flowControlBtns.forEach($btn => $btn.attr('disabled', isDisabled));
-  };
-
   // initially, control buttons are disabled
-  setFlowControlState(true);
+  TopMenu.disableFlowControl();
 
   $btnRun.click(() => {
     $btnTrace.click();
     $btnPause.removeClass('active');
     $btnRun.addClass('active');
-    setFlowControlState(false);
+    TopMenu.enableFlowControl();
     var err = app.getEditor().execute();
     if (err) {
       console.error(err);
