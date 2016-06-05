@@ -65,6 +65,9 @@ $(() => {
     } else {
       DOM.showFirstAlgorithm();
     }
-
   });
+
+  Server.loadWikiList().then((data) => {
+    DOM.showWiki('Home');
+  })
 });
