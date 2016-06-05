@@ -8,11 +8,11 @@ const TopMenu = require('../top_menu');
 module.exports = () => {
 
   // shared
-  $('#shared').mouseup(function() {
+  $('#shared').mouseup(function () {
     $(this).select();
   });
 
-  $('#btn_share').click(function() {
+  $('#btn_share').click(function () {
 
     const $icon = $(this).find('.fa-share');
     $icon.addClass('fa-spin fa-spin-faster');
@@ -27,12 +27,11 @@ module.exports = () => {
 
   // control
 
-  const $btnRun   = $('#btn_run');
+  const $btnRun = $('#btn_run');
   const $btnTrace = $('#btn_trace');
   const $btnPause = $('#btn_pause');
-  const $btnPrev  = $('#btn_prev');
-  const $btnNext  = $('#btn_next');
-  const $btnDesc  = $('#btn_desc');
+  const $btnPrev = $('#btn_prev');
+  const $btnNext = $('#btn_next');
 
   // initially, control buttons are disabled
   TopMenu.disableFlowControl();
@@ -75,18 +74,11 @@ module.exports = () => {
 
   // description & trace
 
-  $btnDesc.click(() => {
-    $('.tab_container > .tab').removeClass('active');
-    $('#tab_desc').addClass('active');
+  $('.tab_bar > button').click(function () {
     $('.tab_bar > button').removeClass('active');
-    $btnDesc.addClass('active');
-  });
-
-  $btnTrace.click(() => {
     $('.tab_container > .tab').removeClass('active');
-    $('#tab_module').addClass('active');
-    $('.tab_bar > button').removeClass('active');
-    $btnTrace.addClass('active');
+    $(this).addClass('active');
+    $($(this).attr('data-target')).addClass('active');
   });
 
 };

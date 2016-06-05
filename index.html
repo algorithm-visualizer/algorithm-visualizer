@@ -3,25 +3,25 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Tool for visualizing algorithms." />
-    <meta property="og:title" content="Algorithm Visualizer" />
-    <meta property="og:description" content="Tool for visualizing algorithms." />
-    <meta property="og:image" content="img/image.png" />
-    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="Tool for visualizing algorithms."/>
+    <meta property="og:title" content="Algorithm Visualizer"/>
+    <meta property="og:description" content="Tool for visualizing algorithms."/>
+    <meta property="og:image" content="img/image.png"/>
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon"/>
     <title>Algorithm Visualizer</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
     <link rel="stylesheet" href="public/algorithm_visualizer.min.css">
 </head>
 
 <body>
-    <div id="loading-slider">
-        <div class="line"></div>
-        <div class="break dot1"></div>
-        <div class="break dot2"></div>
-        <div class="break dot3"></div>
-    </div>
-    <nav>
-        <button id="navigation">
+<div id="loading-slider">
+    <div class="line"></div>
+    <div class="break dot1"></div>
+    <div class="break dot2"></div>
+    <div class="break dot3"></div>
+</div>
+<nav>
+    <button id="navigation">
         <h3>
             Algorithm Visualizer
             <i class="fa fa-angle-right nav-arrow" aria-hidden="true"></i>
@@ -31,120 +31,126 @@
             <i class="fa fa-caret-up nav-dropdown" aria-hidden="true"></i>
         </h3>
     </button>
-        <div class="top-menu-buttons">
-            <div class="btn" id="btn_share">
-                <div class="wrapper">
-                    <i class="fa fa-share" aria-hidden="true"></i> Share <input type="text" class="collapse" id="shared">
-                </div>
-            </div>
-            <button id="btn_run">
-                <i class="fa fa-play" aria-hidden="true"></i>
-                <span class="btn-text">Run</span>
-            </button>
-            <button id="btn_prev">
-                <i class="fa fa-chevron-left" aria-hidden="true"></i>
-                <span class="btn-text">Prev</span>
-            </button>
-            <button id="btn_pause">
-                <i class="fa fa-pause" aria-hidden="true"></i>
-                <span class="btn-text"></span>
-            </button>
-            <button id="btn_next">
-                <span class="btn-text">Next</span>
-                <i class="fa fa-chevron-right" aria-hidden="true"></i>
-            </button>
-            <div class="btn">
-                <div class="wrapper">
-                    Interval: <input type="number" value="" id="interval"> sec
-                </div>
+    <div class="top-menu-buttons">
+        <div class="btn" id="btn_share">
+            <div class="wrapper">
+                <i class="fa fa-share" aria-hidden="true"></i> Share <input type="text" class="collapse" id="shared">
             </div>
         </div>
-    </nav>
-    <section class="sidemenu active">
-        <div id="list">
+        <button id="btn_run">
+            <i class="fa fa-play" aria-hidden="true"></i>
+            <span class="btn-text">Run</span>
+        </button>
+        <button id="btn_prev">
+            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+            <span class="btn-text">Prev</span>
+        </button>
+        <button id="btn_pause">
+            <i class="fa fa-pause" aria-hidden="true"></i>
+            <span class="btn-text"></span>
+        </button>
+        <button id="btn_next">
+            <span class="btn-text">Next</span>
+            <i class="fa fa-chevron-right" aria-hidden="true"></i>
+        </button>
+        <div class="btn">
+            <div class="wrapper">
+                Interval: <input type="number" value="" id="interval"> sec
+            </div>
         </div>
-        <div id="footer">
-            <button id="scratch-paper"><i class="fa fa-code"></i> Scratch Paper</button>
-            <a href="https://github.com/parkjs814/AlgorithmVisualizer/wiki">
-                <button><i class="fa fa-book"></i> Documentation</button>
+    </div>
+</nav>
+<section class="sidemenu active">
+    <div id="list">
+    </div>
+    <div id="footer">
+        <button id="scratch-paper"><i class="fa fa-code"></i> Scratch Paper</button>
+        <a href="https://github.com/parkjs814/AlgorithmVisualizer/wiki">
+            <button><i class="fa fa-book"></i> Documentation</button>
+        </a>
+        <button class="category" id="powered-by"><i class="fa fa-github"></i> Powered by ...</button>
+        <div id="powered-by-list">
+            <a href="https://github.com/jquery/jquery">
+                <button class="indent collapse">jquery/jquery</button>
             </a>
-            <button class="category" id="powered-by"><i class="fa fa-github"></i> Powered by ...</button>
-            <div id="powered-by-list">
-                <a href="https://github.com/jquery/jquery">
-                    <button class="indent collapse">jquery/jquery</button>
-                </a>
-                <a href="https://github.com/ajaxorg/ace">
-                    <button class="indent collapse">ajaxorg/ace</button>
-                </a>
-                <a href="https://github.com/jacomyal/sigma.js">
-                    <button class="indent collapse">jacomyal/sigma.js</button>
-                </a>
-                <a href="https://github.com/FortAwesome/Font-Awesome">
-                    <button class="indent collapse">FortAwesome/Font-Awesome</button>
-                </a>
-                <a href="https://github.com/simonwhitaker/github-fork-ribbon-css">
-                    <button class="indent collapse">simonwhitaker/github-fork-ribbon-css</button>
-                </a>
+            <a href="https://github.com/ajaxorg/ace">
+                <button class="indent collapse">ajaxorg/ace</button>
+            </a>
+            <a href="https://github.com/jacomyal/sigma.js">
+                <button class="indent collapse">jacomyal/sigma.js</button>
+            </a>
+            <a href="https://github.com/FortAwesome/Font-Awesome">
+                <button class="indent collapse">FortAwesome/Font-Awesome</button>
+            </a>
+            <a href="https://github.com/simonwhitaker/github-fork-ribbon-css">
+                <button class="indent collapse">simonwhitaker/github-fork-ribbon-css</button>
+            </a>
+        </div>
+    </div>
+    <a class="github-fork-ribbon left-bottom" href="http://github.com/parkjs814/AlgorithmVisualizer"
+       title="Fork me on GitHub">Fork me on GitHub</a>
+</section>
+<div class="workspace">
+    <div class="viewer_container">
+        <section class="tab_bar">
+            <button id="btn_doc" data-target="#tab_doc">Documentation</button>
+            <button class="active" id="btn_desc" data-target="#tab_desc">Description</button>
+            <button id="btn_trace" data-target="#tab_module">Trace</button>
+        </section>
+        <section class="tab_container">
+            <div class="tab" id="tab_doc">
+                <div class="wrapper">
+                </div>
             </div>
-        </div>
-        <a class="github-fork-ribbon left-bottom" href="http://github.com/parkjs814/AlgorithmVisualizer" title="Fork me on GitHub">Fork me on GitHub</a>
-    </section>
-    <div class="workspace">
-        <div class="viewer_container">
-            <section class="tab_bar">
-                <button class="active" id="btn_desc">Description</button>
-                <button id="btn_trace">Trace</button>
-            </section>
-            <section class="tab_container">
-                <div class="tab active" id="tab_desc">
-                    <div class="wrapper">
-                    </div>
+            <div class="tab active" id="tab_desc">
+                <div class="wrapper">
                 </div>
-                <div class="tab module_container" id="tab_module">
-                </div>
-            </section>
-        </div>
-        <div class="editor_container">
-            <section class="files_bar">
-                <button class="btn-left"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
-                <div class="wrapper"></div>
-                <button class="btn-right"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
-            </section>
-            <section class="explanation_container">
-                <span id="explanation"></span>
-            </section>
-            <section class="data_container">
-                <pre id="data"></pre>
-            </section>
-            <section class="code_container">
-                <pre id="code"></pre>
-            </section>
-        </div>
+            </div>
+            <div class="tab module_container" id="tab_module">
+            </div>
+        </section>
     </div>
-    <div class="toast_container">
+    <div class="editor_container">
+        <section class="files_bar">
+            <button class="btn-left"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
+            <div class="wrapper"></div>
+            <button class="btn-right"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
+        </section>
+        <section class="explanation_container">
+            <span id="explanation"></span>
+        </section>
+        <section class="data_container">
+            <pre id="data"></pre>
+        </section>
+        <section class="code_container">
+            <pre id="code"></pre>
+        </section>
     </div>
-    <script src="public/lib/jquery-2.2.3.min.js"></script>
-    <script src="public/lib/sigma/sigma.min.js"></script>
-    <script src="public/lib/sigma/plugins/sigma.plugins.dragNodes.min.js"></script>
-    <script src="public/lib/ace/ace.js"></script>
-    <script src="public/lib/ace/ext-language_tools.js"></script>
-    <script src="public/lib/Chart-2.1.3.min.js"></script>
-    <script src="public/algorithm_visualizer.min.js"></script>
-    <script>
-        (function(i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function() {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
-            a = s.createElement(o),
+</div>
+<div class="toast_container">
+</div>
+<script src="public/lib/jquery-2.2.3.min.js"></script>
+<script src="public/lib/sigma/sigma.min.js"></script>
+<script src="public/lib/sigma/plugins/sigma.plugins.dragNodes.min.js"></script>
+<script src="public/lib/ace/ace.js"></script>
+<script src="public/lib/ace/ext-language_tools.js"></script>
+<script src="public/lib/Chart-2.1.3.min.js"></script>
+<script src="public/algorithm_visualizer.min.js"></script>
+<script>
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
                 m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-        ga('create', 'UA-78128848-1', 'auto');
-        ga('send', 'pageview');
-    </script>
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    ga('create', 'UA-78128848-1', 'auto');
+    ga('send', 'pageview');
+</script>
 </body>
 
 </html>
