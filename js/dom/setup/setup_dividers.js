@@ -98,4 +98,4 @@ module.exports = () => {
   for (let i = 0; i < dividers.length; i++) {
     addDividerToDom(dividers[i]);
   }
-}
+};
