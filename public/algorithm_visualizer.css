@@ -359,7 +359,8 @@ section {
     margin: 2px;
 }
 
-#tab_desc > .wrapper a {
+#tab_desc > .wrapper a,
+#tab_doc > .wrapper a {
     text-decoration: underline;
 }
 
@@ -623,7 +624,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 .applications li,
 .complexity {
-	margin: 10px 0px;
+    margin: 10px 0px;
 }
 
 .complexity-type {
@@ -647,20 +648,20 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 button[disabled] {
-  cursor: not-allowed;
-  opacity: 0.6;
+    cursor: not-allowed;
+    opacity: 0.6;
 }
 
 #btn_pause {
-  width: 86px;
+    width: 86px;
 }
 
 .top-menu-buttons button.active {
-  background: rgba(0, 0, 0, .15);
-  box-shadow: 0px 0px 10px 3px #1a1a1a inset;
+    background: rgba(0, 0, 0, .15);
+    box-shadow: 0px 0px 10px 3px #1a1a1a inset;
 }
 
 .top-menu-buttons button:active {
-  background: rgba(0, 0, 0, .15);
-  box-shadow: 0px 0px 10px 3px #1a1a1a inset;
+    background: rgba(0, 0, 0, .15);
+    box-shadow: 0px 0px 10px 3px #1a1a1a inset;
 }
