@@ -69,7 +69,7 @@ $(() => {
 
   Server.loadWikiList().then((data) => {
     app.setWikiList(data.wikis);
-    
-    DOM.showWiki('Home');
+
+    DOM.showWiki('Tracer');
   })
 });
