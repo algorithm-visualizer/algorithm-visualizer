@@ -3,6 +3,7 @@
 const app = require('../app');
 const createEditor = require('./create');
 const Executor = require('./executor');
+const TopMenu = require('../dom/top_menu');
 
 function Editor(tracerManager) {
   if (!tracerManager) {
@@ -10,6 +11,7 @@ function Editor(tracerManager) {
   }
 
   ace.require('ace/ext/language_tools');
+  const Range = ace.require("ace/range").Range;
 
   this.dataEditor = createEditor('data');
   this.codeEditor = createEditor('code');
@@ -53,6 +55,17 @@ function Editor(tracerManager) {
     return Executor.executeDataAndCode(tracerManager, data, code);
   };
 
+  this.highlightLine = (lineNumber) => {
+    const session = this.codeEditor.getSession();
+    if (this.marker) session.removeMarker(this.marker);
+    this.marker = session.addMarker(new Range(lineNumber, 0, lineNumber, Infinity), "executing", "line", true);
+  };
+
+  this.unhighlightLine = () => {
+    const session = this.codeEditor.getSession();
+    if (this.marker) session.removeMarker(this.marker);
+  };
+
   // listeners
 
   this.dataEditor.on('change', () => {
@@ -74,7 +87,9 @@ function Editor(tracerManager) {
         code
       });
     }
+    tracerManager.reset();
+    TopMenu.resetTopMenuButtons();
   });
-};
+}
 
 module.exports = Editor;

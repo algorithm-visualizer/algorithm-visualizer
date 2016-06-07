@@ -37,8 +37,8 @@ class Tracer {
     return this;
   }
 
-  _wait() {
-    this.manager.newStep();
+  _wait(line) {
+    this.manager.newStep(line);
     return this;
   }
 
