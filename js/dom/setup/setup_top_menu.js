@@ -45,6 +45,7 @@ module.exports = () => {
     if (err) {
       console.error(err);
       Toast.showErrorToast(err);
+      TopMenu.resetTopMenuButtons();
     }
   });
 

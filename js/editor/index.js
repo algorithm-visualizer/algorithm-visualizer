@@ -77,6 +77,7 @@ function Editor(tracerManager) {
       });
     }
     Executor.executeData(tracerManager, data);
+    TopMenu.resetTopMenuButtons();
   });
 
   this.codeEditor.on('change', () => {
