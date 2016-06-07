@@ -1,5 +1,6 @@
 'use strict';
 
+const app = require('../app');
 const ModuleContainer = require('../dom/module_container');
 const TopMenu = require('../dom/top_menu');
 
@@ -139,19 +140,19 @@ TracerManager.prototype = {
   pushStep(capsule, step) {
     if (this.stepCnt++ > stepLimit) throw "Tracer's stack overflow";
     let len = this.traces.length;
-    let last = [];
-    if (len === 0) {
-      this.traces.push(last);
-    } else {
-      last = this.traces[len - 1];
-    }
+    if (len == 0) len += this.newStep();
+    const last = this.traces[len - 1];
     last.push(extend(step, {
       capsule
     }));
   },
 
-  newStep() {
-    this.traces.push([]);
+  newStep(line = -1) {
+    let len = this.traces.length;
+    if (len > 0 && ~line) {
+      this.traces[len - 1].push(line);
+    }
+    return this.traces.push([]);
   },
 
   pauseStep() {
@@ -177,6 +178,10 @@ TracerManager.prototype = {
     this.traceIndex = i;
     const trace = this.traces[i];
     trace.forEach((step) => {
+      if (typeof step === 'number') {
+        app.getEditor().highlightLine(step);
+        return;
+      }
       step.capsule.tracer.processStep(step, options);
     });
 

@@ -1,10 +1,15 @@
 'use strict';
 
-const execute = (tracerManager, code) => {
+const execute = (tracerManager, code, dataLines) => {
   // all modules available to eval are obtained from window
   try {
     tracerManager.deallocateAll();
-    eval(code);
+    const lines = code.split('\n');
+    const newLines = [];
+    lines.forEach((line, i) => {
+      newLines.push(line.replace(/(.+\. *_wait *)(\( *\))/g, `$1(${i - dataLines})`));
+    });
+    eval(newLines.join('\n'));
     tracerManager.visualize();
   } catch (err) {
     return err;
@@ -18,7 +23,8 @@ const executeData = (tracerManager, algoData) => {
 };
 
 const executeDataAndCode = (tracerManager, algoData, algoCode) => {
-  return execute(tracerManager, `${algoData};${algoCode}`);
+  const dataLines = algoData.split('\n').length;
+  return execute(tracerManager, `${algoData}\n${algoCode}`, dataLines);
 };
 
 module.exports = {

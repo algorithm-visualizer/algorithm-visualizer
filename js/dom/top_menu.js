@@ -1,5 +1,7 @@
 'use strict';
 
+const app = require('../app');
+
 const flowControlBtns = [ $('#btn_pause'), $('#btn_prev'), $('#btn_next') ];
 const setFlowControlState = (isDisabled) => {
   flowControlBtns.forEach($btn => $btn.attr('disabled', isDisabled));
@@ -16,6 +18,7 @@ const disableFlowControl = () => {
 const resetTopMenuButtons = () => {
   $('.top-menu-buttons button').removeClass('active');
   disableFlowControl();
+  app.getEditor().unhighlightLine();
 };
 
 const setInterval = (val) => {

@@ -203,9 +203,11 @@ class DirectedGraphTracer extends Tracer {
     super.clear();
 
     this.clearGraphColor();
+    this.refresh();
   }
 
   clearGraphColor() {
+    console.log('clearGraphColor');
     var tracer = this;
 
     this.graph.nodes().forEach(function (node) {
