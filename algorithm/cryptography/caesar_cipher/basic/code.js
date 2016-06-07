@@ -23,17 +23,20 @@ function cipher(str, rotation, direction, cipherTracer) {
     cipherTracer._wait();
 
     var currChar = str.charAt(i);
-    var r = rotation;
+    if ( currChar !== ' ' ) { // do not encrpt/decrypt spaces 
+      var r = rotation;
 
-    logger._print('Rotating ' + currChar + ' ' + direction + ' ' + rotation + ' times');
-    cipherTracer._select(i)._wait();
+      logger._print('Rotating ' + currChar + ' ' + direction + ' ' + rotation + ' times');
+      cipherTracer._select(i)._wait();
 
-    // perform given amount of rotations in the given direction
-    while (r-- > 0) {
-      currChar = getNextChar(currChar, direction);
-      cipherTracer._notify(i, currChar)._wait();
+      // perform given amount of rotations in the given direction
+      while (r-- > 0) {
+        currChar = getNextChar(currChar, direction);
+        cipherTracer._notify(i, currChar)._wait();
+      }
+    } else {
+      logger._print('Ignore space');
     }
-
     str = str.substring(0, i) + currChar + str.substring(i + 1);
     logger._print('Current result: ' + str);
   }

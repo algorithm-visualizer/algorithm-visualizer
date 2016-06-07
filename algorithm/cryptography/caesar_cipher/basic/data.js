@@ -1,4 +1,4 @@
-var string = 'secret';
+var string = 'secret msg';
 var rotation = 5;
 var alphabet = 'abcdefghijklmnopqrstuvwxyz';
 // create a map of char -> position to improve run time
