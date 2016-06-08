@@ -9,7 +9,7 @@ const {
 } = $;
 
 const getAlgorithmDOM = (category, subList, algorithm) => {
-  return $('<button class="indent collapse">')
+  return $('<button class="indent">')
     .append(subList[algorithm])
     .attr('data-algorithm', algorithm)
     .attr('data-category', category)
