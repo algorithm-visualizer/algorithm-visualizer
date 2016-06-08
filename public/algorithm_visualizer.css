@@ -273,7 +273,7 @@ button.indent {
     padding-left: 28px;
 }
 
-button.collapse {
+.algorithms.collapse {
     display: none;
 }
 
