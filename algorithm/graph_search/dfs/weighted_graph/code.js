@@ -1,5 +1,4 @@
 function DFS(node, parent, weight) { // node = current node, parent = previous node
-    logger._print((parent === undefined ? '' : parent) + ' -> ' + node);
     tracer._visit(node, parent, weight)._wait();
     D[node] = true; // label current node as discovered
     for (var i = 0; i < G[node].length; i++) {
@@ -10,7 +9,6 @@ function DFS(node, parent, weight) { // node = current node, parent = previous n
         }
     }
     D[node] = false; // label current node as undiscovered
-    logger._print(node + ' <- ' + (parent === undefined ? '' : parent));
     tracer._leave(node, parent, 0)._wait();
 }
 var D; // D[i] indicates whether the i-th node is discovered or not

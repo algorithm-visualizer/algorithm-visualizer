@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Tool for visualizing algorithms."/>
@@ -9,11 +10,16 @@
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon"/>
     <title>Algorithm Visualizer</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-    <link rel="stylesheet" href="css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/gh-fork-ribbon.css"/>
-    <link rel="stylesheet" href="css/stylesheet.css">
+    <link rel="stylesheet" href="public/algorithm_visualizer.min.css">
 </head>
+
 <body>
+<div id="loading-slider">
+    <div class="line"></div>
+    <div class="break dot1"></div>
+    <div class="break dot2"></div>
+    <div class="break dot3"></div>
+</div>
 <nav>
     <button id="navigation">
         <h3>
@@ -25,12 +31,33 @@
             <i class="fa fa-caret-up nav-dropdown" aria-hidden="true"></i>
         </h3>
     </button>
-    <div class="buttons">
-        <button id="btn_run"><i class="fa fa-play" aria-hidden="true"></i> Run</button>
-        <button id="btn_prev"><i class="fa fa-chevron-left" aria-hidden="true"></i> Prev</button>
-        <button id="btn_pause"><i class="fa fa-pause" aria-hidden="true"></i> Pause</button>
-        <button id="btn_next">Next <i class="fa fa-chevron-right" aria-hidden="true"></i></button>
-        <button id="btn_interval">Interval: <input type="text" value="0.5"> sec</button>
+    <div class="top-menu-buttons">
+        <div class="btn" id="btn_share">
+            <div class="wrapper">
+                <i class="fa fa-share" aria-hidden="true"></i> Share <input type="text" class="collapse" id="shared">
+            </div>
+        </div>
+        <button id="btn_run">
+            <i class="fa fa-play" aria-hidden="true"></i>
+            <span class="btn-text">Run</span>
+        </button>
+        <button id="btn_prev">
+            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+            <span class="btn-text">Prev</span>
+        </button>
+        <button id="btn_pause">
+            <i class="fa fa-pause" aria-hidden="true"></i>
+            <span class="btn-text"></span>
+        </button>
+        <button id="btn_next">
+            <span class="btn-text">Next</span>
+            <i class="fa fa-chevron-right" aria-hidden="true"></i>
+        </button>
+        <div class="btn">
+            <div class="wrapper">
+                Interval: <input type="number" value="" id="interval"> sec
+            </div>
+        </div>
     </div>
 </nav>
 <section class="sidemenu active">
@@ -38,25 +65,29 @@
     </div>
     <div id="footer">
         <button id="scratch-paper"><i class="fa fa-code"></i> Scratch Paper</button>
-        <a href="https://github.com/parkjs814/AlgorithmVisualizer/wiki">
-            <button><i class="fa fa-book"></i> Documentation</button>
-        </a>
+        <button id="documentation"><i class="fa fa-book"></i> Tracer API</button>
         <button class="category" id="powered-by"><i class="fa fa-github"></i> Powered by ...</button>
         <div id="powered-by-list">
             <a href="https://github.com/jquery/jquery">
-                <button class="indent">jquery/jquery</button>
+                <button class="indent collapse">jquery/jquery</button>
             </a>
             <a href="https://github.com/ajaxorg/ace">
-                <button class="indent">ajaxorg/ace</button>
+                <button class="indent collapse">ajaxorg/ace</button>
             </a>
             <a href="https://github.com/jacomyal/sigma.js">
-                <button class="indent">jacomyal/sigma.js</button>
+                <button class="indent collapse">jacomyal/sigma.js</button>
+            </a>
+            <a href="https://github.com/chartjs/Chart.js">
+                <button class="indent collapse">chartjs/Chart.js</button>
+            </a>
+            <a href="https://github.com/showdownjs/showdown">
+                <button class="indent collapse">showdownjs/showdown</button>
             </a>
             <a href="https://github.com/FortAwesome/Font-Awesome">
-                <button class="indent">FortAwesome/Font-Awesome</button>
+                <button class="indent collapse">FortAwesome/Font-Awesome</button>
             </a>
             <a href="https://github.com/simonwhitaker/github-fork-ribbon-css">
-                <button class="indent">simonwhitaker/github-fork-ribbon-css</button>
+                <button class="indent collapse">simonwhitaker/github-fork-ribbon-css</button>
             </a>
         </div>
     </div>
@@ -66,10 +97,15 @@
 <div class="workspace">
     <div class="viewer_container">
         <section class="tab_bar">
-            <button class="active" id="btn_desc">Description</button>
-            <button id="btn_trace">Trace</button>
+            <button id="btn_doc" data-target="#tab_doc">Tracer API</button>
+            <button class="active" id="btn_desc" data-target="#tab_desc">Description</button>
+            <button id="btn_trace" data-target="#tab_module">Trace</button>
         </section>
         <section class="tab_container">
+            <div class="tab" id="tab_doc">
+                <div class="wrapper">
+                </div>
+            </div>
             <div class="tab active" id="tab_desc">
                 <div class="wrapper">
                 </div>
@@ -80,6 +116,9 @@
     </div>
     <div class="editor_container">
         <section class="files_bar">
+            <button class="btn-left"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
+            <div class="wrapper"></div>
+            <button class="btn-right"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
         </section>
         <section class="explanation_container">
             <span id="explanation"></span>
@@ -94,21 +133,14 @@
 </div>
 <div class="toast_container">
 </div>
-<script src="js/jquery-2.2.3.min.js"></script>
-<script src="js/sigma/sigma.min.js"></script>
-<script src="js/sigma/plugins/sigma.plugins.dragNodes.min.js"></script>
-<script src="js/ace/ace.js"></script>
-<script src="js/ace/ext-language_tools.js"></script>
-<script src="js/module/tracer_manager.js"></script>
-<script src="js/module/tracer.js"></script>
-<script src="js/module/log_tracer.js"></script>
-<script src="js/module/array2d.js"></script>
-<script src="js/module/array1d.js"></script>
-<script src="js/module/directed_graph.js"></script>
-<script src="js/module/undirected_graph.js"></script>
-<script src="js/module/weighted_directed_graph.js"></script>
-<script src="js/module/weighted_undirected_graph.js"></script>
-<script src="js/script.js"></script>
+<script src="public/lib/jquery-2.2.3.min.js"></script>
+<script src="public/lib/showdown.min.js"></script>
+<script src="public/lib/ace/ace.js"></script>
+<script src="public/lib/ace/ext-language_tools.js"></script>
+<script src="public/lib/sigma/sigma.min.js"></script>
+<script src="public/lib/sigma/plugins/sigma.plugins.dragNodes.min.js"></script>
+<script src="public/lib/Chart-2.1.3.min.js"></script>
+<script src="public/algorithm_visualizer.min.js"></script>
 <script>
     (function (i, s, o, g, r, a, m) {
         i['GoogleAnalyticsObject'] = r;
@@ -125,4 +157,5 @@
     ga('send', 'pageview');
 </script>
 </body>
+
 </html>

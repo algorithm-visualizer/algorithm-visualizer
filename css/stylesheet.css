@@ -6,7 +6,7 @@ body {
 }
 
 body {
-    background: rgb(60, 63, 65);
+    background: rgb(63, 63, 63);
     font-family: 'Roboto', sans-serif;
     color: rgb(187, 187, 187);
     -webkit-font-smoothing: subpixel-antialiased;
@@ -33,7 +33,18 @@ a {
     user-select: none;
 }
 
+.btn {
+    display: inline-table;
+}
+
+.btn > .wrapper {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.btn,
 button {
+    vertical-align: top;
     border: none;
     height: 100%;
     padding: 0 12px;
@@ -46,13 +57,23 @@ button {
     text-overflow: ellipsis;
 }
 
-button:hover {
+.btn:hover,
+button:not([disabled]):hover {
     background: rgba(0, 0, 0, .15) !important;
     cursor: pointer;
 }
 
+.btn.active,
 button.active {
-    background: rgb(44, 44, 44);
+    background: rgb(38, 38, 38);
+}
+
+.btn input,
+button input {
+    outline: none;
+    background: rgba(0, 0, 0, .3);
+    padding: 4px;
+    border: none;
 }
 
 .divider {
@@ -82,16 +103,25 @@ nav h3 {
     padding: 0 4px;
 }
 
-.buttons {
+#navigation span:empty + .nav-arrow {
+    display: none;
+}
+
+.top-menu-buttons {
     float: right;
     height: 100%;
 }
 
-button input {
-    outline: none;
-    background: none;
-    border: none;
-    width: 20px;
+#shared {
+    width: 128px;
+}
+
+#shared.collapse {
+    display: none;
+}
+
+#interval {
+    width: 24px;
     text-align: right;
 }
 
@@ -108,7 +138,7 @@ button input {
 }
 
 .sidemenu #footer {
-    border-top: 2px solid rgb(44, 44, 44);
+    border-top: 2px solid rgb(38, 38, 38);
 }
 
 .sidemenu button {
@@ -124,11 +154,10 @@ button.category {
 
 button.indent {
     padding-left: 28px;
-    display: none;
 }
 
 button.collapse {
-    display: block;
+    display: none;
 }
 
 .workspace {
@@ -152,7 +181,7 @@ section,
 
 nav,
 section {
-    border: 1px solid rgb(44, 44, 44);
+    border: 1px solid rgb(38, 38, 38);
     box-sizing: border-box;
 }
 
@@ -178,6 +207,7 @@ section {
     width: 100%;
     height: 100%;
     visibility: hidden;
+    overflow: scroll;
 }
 
 .tab > .wrapper {
@@ -198,10 +228,10 @@ section {
     z-index: 5;
     padding: 4px;
     font-size: 14px;
-    background: rgb(44, 44, 44);
+    background: rgba(0, 0, 0, .4);
 }
 
-.module_wrapper .wrapper {
+.module_wrapper > .wrapper {
     padding: 24px 16px;
     box-sizing: border-box;
 }
@@ -212,7 +242,8 @@ section {
     margin: 2px;
 }
 
-#tab_desc > .wrapper a {
+#tab_desc > .wrapper a,
+#tab_doc > .wrapper a {
     text-decoration: underline;
 }
 
@@ -224,11 +255,56 @@ section {
     height: 30px;
 }
 
+.files_bar > * {
+    position: absolute;
+    height: 100%
+}
+
+.files_bar > button {
+    width: 30px;
+}
+
+.files_bar > button:disabled {
+    background: rgba(0, 0, 0, .15);
+}
+
+.files_bar > .btn-left {
+    left: 0;
+}
+
+.files_bar > .btn-right {
+    right: 0;
+}
+
+.files_bar > .wrapper {
+    left: 30px;
+    right: 30px;
+    overflow: scroll;
+    white-space: nowrap;
+}
+
+.files_bar > .wrapper > button {
+    max-width: 80%;
+}
+
+.files_bar > .wrapper.shadow-left {
+    box-shadow: inset 16px 0 16px -16px rgba(0, 0, 0, .6);
+}
+
+.files_bar > .wrapper.shadow-right {
+    box-shadow: inset -16px 0 16px -16px rgba(0, 0, 0, .6);
+}
+
+.files_bar > .wrapper.shadow-left.shadow-right {
+    box-shadow: inset 16px 0 16px -16px rgba(0, 0, 0, .6), inset -16px 0 16px -16px rgba(0, 0, 0, .6);
+}
+
 .explanation_container {
+    border: none;
     top: 30px;
     height: 30px;
-    background: rgb(44, 44, 44);
-    padding: 7px;
+    background: rgb(38, 38, 38);
+    padding: 8px;
     font-size: 12px;
 }
 
@@ -310,6 +386,11 @@ pre {
     background-color: #333;
 }
 
+.fa-spin-faster {
+    -webkit-animation: fa-spin 1s infinite ease-in-out;
+    animation: fa-spin 1s infinite ease-in-out;
+}
+
 .mtbl-wrapper {
     width: 100%;
     height: 100%;
@@ -325,17 +406,175 @@ pre {
     display: table-row;
 }
 
-.mtbl-cell {
+.mtbl-col {
     display: table-cell;
     vertical-align: middle;
     text-align: center;
     background: #888;
 }
 
-.mtbl-cell.selected {
+.mtbl-empty-row {
+    display: table-row;
+    background: rgb(63, 63, 63);
+    height: 2px;
+}
+
+.mtbl-empty-col {
+    display: table-cell;
+    background: rgb(63, 63, 63);
+    width: 2px;
+}
+
+.mtbl-col.selected {
     background: #00f;
 }
 
-.mtbl-cell.notified {
+.mtbl-col.notified {
     background: #f00;
+}
+
+.mchrt-chart {
+    width: 100%;
+    height: 100%;
+}
+
+#loading-slider {
+    z-index: 6;
+    position: absolute;
+    width: 100%;
+    height: 2px;
+}
+
+#loading-slider.loaded {
+    visibility: hidden;
+}
+
+.line {
+    position: absolute;
+    background: #4a8df8;
+    width: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 3px;
+}
+
+.break {
+    position: absolute;
+    background: #222;
+    width: 6px;
+    height: 2px;
+}
+
+.dot1 {
+    animation: loading 2s infinite;
+}
+
+.dot2 {
+    animation: loading 2s 0.5s infinite;
+}
+
+.dot3 {
+    animation: loading 2s 1s infinite;
+}
+
+@keyframes loading {
+    from {
+        left: 0;
+    }
+    to {
+        left: 100%;
+    }
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.applications li,
+.complexity {
+    margin: 10px 0px;
+}
+
+.complexity-type {
+    font-weight: bold;
+}
+
+.top-menu-buttons button.active {
+    font-weight: bold;
+}
+
+.top-menu-buttons button.active .fa {
+    color: #00e676;
+}
+
+#btn_pause > .btn-text:before {
+    content: 'Pause'
+}
+
+#btn_pause.active > .btn-text:before {
+    content: 'Resume'
+}
+
+button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+#btn_pause {
+    width: 86px;
+}
+
+.top-menu-buttons button.active {
+    background: rgba(0, 0, 0, .15);
+    box-shadow: 0px 0px 10px 3px #1a1a1a inset;
+}
+
+.top-menu-buttons button:active {
+    background: rgba(0, 0, 0, .15);
+    box-shadow: 0px 0px 10px 3px #1a1a1a inset;
+}
+
+.executing {
+    background: rgba(255, 0, 0, .3);
+    position: absolute;
+    width: 100% !important;
+    left: 0 !important;
+
+    -webkit-animation: line_highlight .1s;
+    -moz-animation: line_highlight .1s;
+    -ms-animation: line_highlight .1s;
+    -o-animation: line_highlight .1s;
+    animation: line_highlight .1s;
+}
+
+@keyframes line_highlight {
+    from { background: rgba(255, 0, 0, .1); }
+    to   { background: rgba(255, 0, 0, .3); }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes line_highlight {
+    from { background: rgba(255, 0, 0, .1); }
+    to   { background: rgba(255, 0, 0, .3); }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes line_highlight {
+    from { background: rgba(255, 0, 0, .1); }
+    to   { background: rgba(255, 0, 0, .3); }
+}
+
+/* Internet Explorer */
+@-ms-keyframes line_highlight {
+    from { background: rgba(255, 0, 0, .1); }
+    to   { background: rgba(255, 0, 0, .3); }
+}
+
+/* Opera < 12.1 */
+@-o-keyframes line_highlight {
+    from { background: rgba(255, 0, 0, .1); }
+    to   { background: rgba(255, 0, 0, .3); }
 }
