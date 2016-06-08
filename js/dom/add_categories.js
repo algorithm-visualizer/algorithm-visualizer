@@ -8,8 +8,8 @@ const {
   each
 } = $;
 
-const addAlgorithmToCategoryDOM = (category, subList, algorithm) => {
-  const $algorithm = $('<button class="indent collapse">')
+const getAlgorithmDOM = (category, subList, algorithm) => {
+  return $('<button class="indent collapse">')
     .append(subList[algorithm])
     .attr('data-algorithm', algorithm)
     .attr('data-category', category)
@@ -35,14 +35,18 @@ const addCategoryToDOM = (category) => {
     .attr('data-category', category);
 
   $category.click(function () {
-    $(`.indent[data-category="${category}"]`).toggleClass('collapse');
-    $(this).find('i.fa').toggleClass('fa-caret-right fa-caret-down');
+    const $self = $(this);
+    $self.toggleClass('open');
+    $self.next().toggleClass('collapse');
+    $self.find('i.fa').toggleClass('fa-caret-right fa-caret-down');
   });
 
-  $('#list').append($category);
+  const $algorithms = $('<div class="algorithms collapse">');
+  $('#list').append($category).append($algorithms);
 
   each(categorySubList, (algorithm) => {
-    addAlgorithmToCategoryDOM(category, categorySubList, algorithm);
+    const $algorithm = getAlgorithmDOM(category, categorySubList, algorithm);
+    $algorithms.append($algorithm);
   });
 };
 
