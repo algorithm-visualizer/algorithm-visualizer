@@ -690,8 +690,8 @@ button[disabled] {
 
 /* Safari, Chrome and Opera > 12.1 */
 @-webkit-keyframes line_highlight {
-    from { background: rgba(255, 0, 0, .1); }
-    to   { background: rgba(255, 0, 0, .3); }
+  from { background: rgba(0, 174, 255, 0.1); }
+  to   { background: rgba(0, 174, 255, 0.4); }
 }
 
 /* Internet Explorer */
