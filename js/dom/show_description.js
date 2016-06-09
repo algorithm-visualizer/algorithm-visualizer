@@ -9,7 +9,7 @@ const {
 } = $;
 
 module.exports = (data) => {
-  const $container = $('#tab_desc > .wrapper');
+  const $container = $('#tab_desc > .tab_inner > .wrapper');
   $container.empty();
 
   each(data, (key, value) => {

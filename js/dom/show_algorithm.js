@@ -30,7 +30,7 @@ module.exports = (category, algorithm, data, requestedFile) => {
 
   $('#category').html(category_name);
   $('#algorithm').html(algorithm_name);
-  $('#tab_desc > .wrapper').empty();
+  $('#tab_desc > .tab_inner > .wrapper').empty();
   $('.files_bar > .wrapper').empty();
   $('#explanation').html('');
 

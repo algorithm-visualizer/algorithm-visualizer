@@ -16,6 +16,7 @@ const getAlgorithmDOM = (category, subList, algorithm) => {
     .click(function () {
       Server.loadAlgorithm(category, algorithm).then((data) => {
         showAlgorithm(category, algorithm, data);
+        console.log("하하하")
       });
     });
 
