@@ -39,6 +39,23 @@ class Array1DTracer extends Array2DTracer {
     return this;
   }
 
+  processStep(step, options) {
+    super.processStep(step, options);
+    if (this.chartTracer) {
+      const newStep = $.extend(true, {}, step);
+      newStep.capsule = this.chartTracer.capsule;
+      newStep.s = newStep.y || newStep.sy;
+      newStep.e = newStep.ey;
+      delete newStep.x;
+      delete newStep.y;
+      delete newStep.sx;
+      delete newStep.sy;
+      delete newStep.ex;
+      delete newStep.ey;
+      this.chartTracer.processStep(newStep, options);
+    }
+  }
+
   setData(D) {
     return super.setData([D]);
   }

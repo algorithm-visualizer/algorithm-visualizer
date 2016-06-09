@@ -88,8 +88,13 @@ class Tracer {
   }
 
   attach(tracer) {
-    if (tracer.module === LogTracer) {
-      this.logTracer = tracer;
+    switch (tracer.module) {
+      case LogTracer:
+        this.logTracer = tracer;
+        break;
+      case ChartTracer:
+        this.chartTracer = tracer;
+        break;
     }
     return this;
   }
