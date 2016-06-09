@@ -23,7 +23,7 @@ function cipher(str, rotation, direction, cipherTracer) {
     cipherTracer._wait();
 
     var currChar = str.charAt(i);
-    if ( currChar !== ' ' ) { // do not encrpt/decrypt spaces 
+    if (typeof alphabetMap[currChar] === 'number') { // don't encrpt/decrypt characters not in  alphabetMap
       var r = rotation;
 
       logger._print('Rotating ' + currChar + ' ' + direction + ' ' + rotation + ' times');
@@ -35,7 +35,7 @@ function cipher(str, rotation, direction, cipherTracer) {
         cipherTracer._notify(i, currChar)._wait();
       }
     } else {
-      logger._print('Ignore space');
+      logger._print('Ignore this character');
     }
     str = str.substring(0, i) + currChar + str.substring(i + 1);
     logger._print('Current result: ' + str);
