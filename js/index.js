@@ -22,6 +22,8 @@ const {
 } = require('./utils');
 
 const {
+  getHashValue,
+  getParameterByName,
   getPath
 } = require('./server/helpers');
 
@@ -71,5 +73,13 @@ $(() => {
     app.setWikiList(data.wikis);
 
     DOM.showWiki('Tracer');
-  })
+  });
+
+  var v1LoadedScratch = getHashValue('scratch-paper');
+  var v2LoadedScratch = getParameterByName('scratch-paper');
+  var vLoadedScratch = v1LoadedScratch || v2LoadedScratch;
+  if (vLoadedScratch) {
+    window.location.href = window.location.protocol + '//' + window.location.host + window.location.pathname + '#path=scratch/' + vLoadedScratch;
+  }
+
 });
