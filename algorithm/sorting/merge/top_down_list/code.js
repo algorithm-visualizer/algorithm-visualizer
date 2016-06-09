@@ -12,10 +12,10 @@ function mergeSort(start, end) {
 }
 
 mergeSort.merge = function (start, middle, end) {
-    const leftSize = middle - start;
-    const rightSize = end - middle;
-    const maxSize = Math.max(leftSize, rightSize);
-    const size = end - start;
+    var leftSize = middle - start;
+    var rightSize = end - middle;
+    var maxSize = Math.max(leftSize, rightSize);
+    var size = end - start;
     var left = [];
     var right = [];
     var i;

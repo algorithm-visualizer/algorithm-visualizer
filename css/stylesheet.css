@@ -542,7 +542,8 @@ button[disabled] {
 }
 
 .executing {
-    background: rgba(255, 0, 0, .3);
+  	background: rgba(0, 174, 255, 0.4);
+    border: 1px solid #0091ea;
     position: absolute;
     width: 100% !important;
     left: 0 !important;
@@ -555,30 +556,30 @@ button[disabled] {
 }
 
 @keyframes line_highlight {
-    from { background: rgba(255, 0, 0, .1); }
-    to   { background: rgba(255, 0, 0, .3); }
+    from { background: rgba(0, 174, 255, 0.1); }
+    to   { background: rgba(0, 174, 255, 0.4); }
 }
 
 /* Firefox < 16 */
 @-moz-keyframes line_highlight {
-    from { background: rgba(255, 0, 0, .1); }
-    to   { background: rgba(255, 0, 0, .3); }
+  from { background: rgba(0, 174, 255, 0.1); }
+  to   { background: rgba(0, 174, 255, 0.4); }
 }
 
 /* Safari, Chrome and Opera > 12.1 */
 @-webkit-keyframes line_highlight {
-    from { background: rgba(255, 0, 0, .1); }
-    to   { background: rgba(255, 0, 0, .3); }
+  from { background: rgba(0, 174, 255, 0.1); }
+  to   { background: rgba(0, 174, 255, 0.4); }
 }
 
 /* Internet Explorer */
 @-ms-keyframes line_highlight {
-    from { background: rgba(255, 0, 0, .1); }
-    to   { background: rgba(255, 0, 0, .3); }
+  from { background: rgba(0, 174, 255, 0.1); }
+  to   { background: rgba(0, 174, 255, 0.4); }
 }
 
 /* Opera < 12.1 */
 @-o-keyframes line_highlight {
-    from { background: rgba(255, 0, 0, .1); }
-    to   { background: rgba(255, 0, 0, .3); }
+  from { background: rgba(0, 174, 255, 0.1); }
+  to   { background: rgba(0, 174, 255, 0.4); }
 }

@@ -11,16 +11,20 @@ class ChartTracer extends Tracer {
     super(name);
 
     this.color = {
-      selected: 'rgba(255, 0, 0, 1)',
-      notified: 'rgba(0, 0, 255, 1)',
-      default: 'rgba(136, 136, 136, 1)'
+      selected: 'rgb(0, 0, 255)',
+      notified: 'rgb(255, 0, 0)',
+      default: 'rgb(136, 136, 136)'
     };
 
     if (this.isNew) initView(this);
   }
 
   setData(C) {
-    if (super.setData.apply(this, arguments)) return true;
+    if (super.setData.apply(this, arguments)) {
+      this.chart.config.data.datasets[0].data = C;
+      this.chart.update();
+      return true;
+    }
 
     var color = [];
     for (var i = 0; i < C.length; i++) color.push(this.color.default);
@@ -77,8 +81,8 @@ class ChartTracer extends Tracer {
           this.chart.config.data.labels[step.s] = step.v.toString();
         }
       case 'denotify':
-      case 'deselect':
       case 'select':
+      case 'deselect':
         let color = step.type == 'notify' ? this.color.notified : step.type == 'select' ? this.color.selected : this.color.default;
         if (step.e !== undefined)
           for (var i = step.s; i <= step.e; i++)
