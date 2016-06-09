@@ -44,8 +44,9 @@ class Array1DTracer extends Array2DTracer {
     if (this.chartTracer) {
       const newStep = $.extend(true, {}, step);
       newStep.capsule = this.chartTracer.capsule;
-      newStep.s = newStep.y || newStep.sy;
+      newStep.s = newStep.sy;
       newStep.e = newStep.ey;
+      if (newStep.s === undefined) newStep.s = newStep.y;
       delete newStep.x;
       delete newStep.y;
       delete newStep.sx;
