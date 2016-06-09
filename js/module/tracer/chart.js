@@ -20,7 +20,11 @@ class ChartTracer extends Tracer {
   }
 
   setData(C) {
-    if (super.setData.apply(this, arguments)) return true;
+    if (super.setData.apply(this, arguments)) {
+      this.chart.config.data.datasets[0].data = C;
+      this.chart.update();
+      return true;
+    }
 
     var color = [];
     for (var i = 0; i < C.length; i++) color.push(this.color.default);
