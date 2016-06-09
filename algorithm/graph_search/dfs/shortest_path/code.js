@@ -20,10 +20,10 @@ function DFS(node, parent, weight) { // node = current node, parent = previous n
     D[node] = false; // label current node as undiscovered
     tracer._leave(node, parent, 0)._wait();
 }
-var s = Math.random() * G.length | 0; // s = start node
+var s = Integer.random(0, G.length - 1); // s = start node
 var e; // e = end node
 do {
-    e = Math.random() * G.length | 0;
+    e = Integer.random(0, G.length - 1);
 } while (s == e);
 var MAX_VALUE = Infinity;
 var minWeight = MAX_VALUE;

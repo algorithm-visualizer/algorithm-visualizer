@@ -39,10 +39,10 @@ function Dijkstra(start, end) {
     }
 }
 
-var s = Math.random() * G.length | 0; // s = start node
+var s = Integer.random(0, G.length - 1); // s = start node
 var e; // e = end node
 do {
-    e = Math.random() * G.length | 0;
+    e = Integer.random(0, G.length - 1);
 } while (s == e);
 logger._print('finding the shortest path from ' + s + ' to ' + e)._wait();
 Dijkstra(s, e);

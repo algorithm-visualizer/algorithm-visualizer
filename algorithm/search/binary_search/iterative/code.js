@@ -37,7 +37,7 @@ function BinarySearch(array, element) { // array = sorted array, element = eleme
     return -1;
 }
 
-var element = D[Math.random() * D.length | 0];
+var element = D[Integer.random(0, D.length - 1)];
 
 logger._print('Using iterative binary search to find ' + element);
 BinarySearch(D, element, 0, D.length - 1);

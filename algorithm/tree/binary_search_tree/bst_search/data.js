@@ -27,7 +27,7 @@ var T = [ // mapping to G as a binary tree , [i][0] indicates left child, [i][1]
   [9, -1]
 ];
 
-var key = Math.random() * G.length | 0; // item to be searched
+var key = Integer.random(0, G.length - 1); // item to be searched
 var tracer = new DirectedGraphTracer(" Binary Search Tree ")._setTreeData(G, 5);
 var logger = new LogTracer(" Log ");
 tracer.attach(logger);

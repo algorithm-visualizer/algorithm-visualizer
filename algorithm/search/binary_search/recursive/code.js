@@ -33,7 +33,7 @@ function BinarySearch(array, element, minIndex, maxIndex) { // array = sorted ar
     return -1;
 }
 
-var element = D[Math.random() * D.length | 0];
+var element = D[Integer.random(0, D.length - 1)];
 
 logger._print('Using binary search to find ' + element);
 BinarySearch(D, element, 0, D.length - 1);

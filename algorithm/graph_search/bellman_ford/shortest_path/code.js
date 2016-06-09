@@ -52,7 +52,7 @@ function BELLMAN_FORD(src, dest) {
   return weights[dest];
 }
 
-var src = Math.random() * G.length | 0, dest;
+var src = Integer.random(0, G.length - 1), dest;
 var MAX_VALUE = Infinity;
 var minWeight;
 
@@ -62,7 +62,7 @@ var minWeight;
  */
 
 do {
-  dest = Math.random() * G.length | 0;
+  dest = Integer.random(0, G.length - 1);
 }
 while (src === dest);
 

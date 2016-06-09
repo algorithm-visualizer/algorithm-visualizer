@@ -1,5 +1,7 @@
 'use strict';
 
+const Integer = require('./integer');
+
 const random = (N, min, max) => {
   if (!N) N = 7;
   if (!min) min = 1;
@@ -8,7 +10,7 @@ const random = (N, min, max) => {
   for (var i = 0; i < N; i++) C[i] = new Array(2);
   for (var i = 0; i < N; i++)
     for (var j = 0; j < C[i].length; j++)
-      C[i][j] = (Math.random() * (max - min + 1) | 0) + min;
+      C[i][j] = Integer.random(min, max);
   return C;
 };
 
