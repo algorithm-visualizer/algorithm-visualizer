@@ -77,8 +77,8 @@ class ChartTracer extends Tracer {
           this.chart.config.data.labels[step.s] = step.v.toString();
         }
       case 'denotify':
-      case 'deselect':
       case 'select':
+      case 'deselect':
         let color = step.type == 'notify' ? this.color.notified : step.type == 'select' ? this.color.selected : this.color.default;
         if (step.e !== undefined)
           for (var i = step.s; i <= step.e; i++)
