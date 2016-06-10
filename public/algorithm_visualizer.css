@@ -183,7 +183,6 @@ button:not([disabled]):hover {
 button.active {
     background: rgb(38, 38, 38);
 }
-
 .btn input,
 button input {
     outline: none;
@@ -320,6 +319,9 @@ section {
 
 .tab_container {
     top: 30px;
+    background: #242424;
+    border: 1px solid #505050;
+    border-top: none;
 }
 
 .tab {
@@ -341,6 +343,9 @@ section {
 
 .module_wrapper {
     overflow: scroll;
+    font-family: monospace;
+    border: none;
+    border-bottom: 1px solid #505050;
 }
 
 .module_wrapper .name {
@@ -369,6 +374,19 @@ section {
 
 .tab_bar {
     height: 30px;
+    border-left: none;
+    border-bottom: 1px solid #505050;
+}
+
+.tab_bar button {
+  position: relative;
+  float: left;
+  height: 29px;
+}
+
+.tab_bar button.active {
+  border: 1px solid #505050;
+  border-bottom: none;
 }
 
 .files_bar {
@@ -520,6 +538,7 @@ pre {
     display: inline-table;
     color: white;
     table-layout: fixed;
+    border: 1px solid #505050;
 }
 
 .mtbl-row {
