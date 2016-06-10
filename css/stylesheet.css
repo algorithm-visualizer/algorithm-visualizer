@@ -63,7 +63,6 @@ button:not([disabled]):hover {
 button.active {
     background: rgb(38, 38, 38);
 }
-
 .btn input,
 button input {
     outline: none;
@@ -89,6 +88,7 @@ nav {
     height: 30px;
     width: 100%;
     padding: 0 16px;
+    box-shadow: 0px 0px 3px 1px black;
 }
 
 nav h3 {
@@ -200,6 +200,9 @@ section {
 
 .tab_container {
     top: 30px;
+    background: #242424;
+    border: 1px solid #505050;
+    border-top: none;
 }
 
 .tab {
@@ -221,6 +224,9 @@ section {
 
 .module_wrapper {
     overflow: scroll;
+    font-family: monospace;
+    border: none;
+    border-bottom: 1px solid #505050;
 }
 
 .module_wrapper .name {
@@ -249,15 +255,28 @@ section {
 
 .tab_bar {
     height: 30px;
+    border-left: none;
+    border-bottom: 1px solid #505050;
+}
+
+.tab_bar button,
+.files_bar button {
+  height: 29px;
+  float: left;
+  position: relative;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+.tab_bar button.active,
+.files_bar button.active {
+  border: 1px solid #505050;
+  border-bottom: none;
 }
 
 .files_bar {
     height: 30px;
-}
-
-.files_bar > * {
-    position: absolute;
-    height: 100%
+    border-bottom: 1px solid #505050;
 }
 
 .files_bar > button {
@@ -268,12 +287,12 @@ section {
     background: rgba(0, 0, 0, .15);
 }
 
-.files_bar > .btn-left {
-    left: 0;
+.files_bar .btn-right {
+    float: right;
 }
 
-.files_bar > .btn-right {
-    right: 0;
+.files_bar .btn-left {
+    float: left;
 }
 
 .files_bar > .wrapper {
@@ -399,6 +418,7 @@ pre {
     display: inline-table;
     color: white;
     table-layout: fixed;
+    border: 1px solid #505050;
 }
 
 .mtbl-row {
@@ -425,11 +445,11 @@ pre {
 }
 
 .mtbl-col.selected {
-    background: #00f;
+    background: #2962ff;
 }
 
 .mtbl-col.notified {
-    background: #f00;
+    background: #c51162;
 }
 
 .mchrt-chart {
@@ -549,4 +569,9 @@ button[disabled] {
 @keyframes line_highlight {
     from { background: rgba(0, 174, 255, 0.1); }
     to   { background: rgba(0, 174, 255, 0.4); }
+}
+
+.ace_editor {
+  border-left: none;
+  border-bottom: none;
 }
