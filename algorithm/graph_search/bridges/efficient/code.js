@@ -8,7 +8,7 @@ var util = function (u, disc, low, parent) {
 	//u is the node that is currently being processed in the DFS (depth-first search)
 	//disc is the numbering of the vertices in the DFS, starting at 0
 	//low[v] is the lowest numbered vertex that can be reached from vertex v along the DFS
-	//parent is the node that u came from 
+	//parent is the node that u came from
 	logger._print ('');
 	logger._print ('Visiting node ' + u);
 	graphTracer._visit (u)._wait ();
@@ -28,10 +28,10 @@ var util = function (u, disc, low, parent) {
 	}
 
 	adj [u].forEach (function (v) {
-		if (disc [v] > -1 && v == parent) {
+		if (disc [v] > -1 && v === parent) {
 			trace(v);
 			logger._print (u + '\'s neighbor ' + v + ' is u\'s parent. Not visiting it.');
-			
+
 		}
 		else if (disc[v] > -1 && v != parent) {
 			trace(v);
@@ -42,7 +42,7 @@ var util = function (u, disc, low, parent) {
 		    }
 		}
 
-		if (disc[v] == -1) {
+		if (disc[v] === -1) {
 			trace(v);
 			logger._print (u + '\'s neighbor ' + v + ' has not been visited yet');
 
@@ -54,18 +54,18 @@ var util = function (u, disc, low, parent) {
 			logger._print ('Setting low [' + u + '] to ' + Math.min (low [u], low [v]));
 			low [u] = Math.min (low [u], low [v]);
 
-			if (low [v] == disc [v]) {
+			if (low [v] === disc [v]) {
 				logger._print ('low [' + v + '] == disc [' + v + '], low[' + v + ']=' + low[v] + ', disc[' + v + ']=' + disc[v]);
 				logger._print (u + ' -> ' + v + ' is a bridge. Adding ' + u + '->' + v + 'to the set of bridges found');
 				bridges.push ([u, v]);
 			}
 		}
-		
+
 	});
 };
 
 (function findBridges (graph) {
-	
+
 	var disc = filledArray (graph.length, -1);
 	var low = filledArray (graph.length, -1);
 
@@ -92,7 +92,7 @@ var util = function (u, disc, low, parent) {
 
 	logger._print ('Starting the main for loop (for each node)');
 	for (var v = 0; v < graph.length; v++) {
-		if (disc[v] == -1) {
+		if (disc[v] === -1) {
 			logger._print (v + ' has not been visited yet. Calling util (' + v + ',  [' + disc + '], [' + low + '],' + v + ') from the for loop');
 			util (v, disc, low, v);
 			logger._print ('Returned in for loop after util (' + v + ', [' + disc + '], [' + low + '], [' + v + '])');
