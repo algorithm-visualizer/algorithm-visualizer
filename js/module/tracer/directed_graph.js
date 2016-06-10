@@ -15,8 +15,8 @@ class DirectedGraphTracer extends Tracer {
     super(name);
 
     this.color = {
-      selected: '#0f0',
-      visited: '#f00',
+      selected: '#2962ff',
+      visited: '#f50057',
       left: '#000',
       default: '#888'
     };
