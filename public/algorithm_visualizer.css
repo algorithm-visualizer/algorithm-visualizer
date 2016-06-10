@@ -568,11 +568,11 @@ pre {
 }
 
 .mtbl-col.selected {
-    background: #00f;
+    background: #2962ff;
 }
 
 .mtbl-col.notified {
-    background: #f00;
+    background: #f50057;
 }
 
 .mchrt-chart {
