@@ -26,10 +26,6 @@ a {
 
 *:not(input) {
     -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    -o-user-select: none;
     user-select: none;
 }
 
@@ -391,7 +387,6 @@ pre {
 }
 
 .fa-spin-faster {
-    -webkit-animation: fa-spin 1s infinite ease-in-out;
     animation: fa-spin 1s infinite ease-in-out;
 }
 
@@ -548,38 +543,10 @@ button[disabled] {
     width: 100% !important;
     left: 0 !important;
 
-    -webkit-animation: line_highlight .1s;
-    -moz-animation: line_highlight .1s;
-    -ms-animation: line_highlight .1s;
-    -o-animation: line_highlight .1s;
     animation: line_highlight .1s;
 }
 
 @keyframes line_highlight {
     from { background: rgba(0, 174, 255, 0.1); }
     to   { background: rgba(0, 174, 255, 0.4); }
-}
-
-/* Firefox < 16 */
-@-moz-keyframes line_highlight {
-  from { background: rgba(0, 174, 255, 0.1); }
-  to   { background: rgba(0, 174, 255, 0.4); }
-}
-
-/* Safari, Chrome and Opera > 12.1 */
-@-webkit-keyframes line_highlight {
-  from { background: rgba(0, 174, 255, 0.1); }
-  to   { background: rgba(0, 174, 255, 0.4); }
-}
-
-/* Internet Explorer */
-@-ms-keyframes line_highlight {
-  from { background: rgba(0, 174, 255, 0.1); }
-  to   { background: rgba(0, 174, 255, 0.4); }
-}
-
-/* Opera < 12.1 */
-@-o-keyframes line_highlight {
-  from { background: rgba(0, 174, 255, 0.1); }
-  to   { background: rgba(0, 174, 255, 0.4); }
 }

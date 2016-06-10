@@ -144,10 +144,9 @@ a {
 *:not(input) {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    -o-user-select: none;
-    user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
 }
 
 .btn {
@@ -509,7 +508,7 @@ pre {
 
 .fa-spin-faster {
     -webkit-animation: fa-spin 1s infinite ease-in-out;
-    animation: fa-spin 1s infinite ease-in-out;
+            animation: fa-spin 1s infinite ease-in-out;
 }
 
 .mtbl-wrapper {
@@ -678,22 +677,16 @@ button[disabled] {
     left: 0 !important;
 
     -webkit-animation: line_highlight .1s;
-    animation: line_highlight .1s;
+
+            animation: line_highlight .1s;
+}
+
+@-webkit-keyframes line_highlight {
+    from { background: rgba(0, 174, 255, 0.1); }
+    to   { background: rgba(0, 174, 255, 0.4); }
 }
 
 @keyframes line_highlight {
     from { background: rgba(0, 174, 255, 0.1); }
     to   { background: rgba(0, 174, 255, 0.4); }
 }
-
-/* Firefox < 16 */
-
-/* Safari, Chrome and Opera > 12.1 */
-@-webkit-keyframes line_highlight {
-  from { background: rgba(0, 174, 255, 0.1); }
-  to   { background: rgba(0, 174, 255, 0.4); }
-}
-
-/* Internet Explorer */
-
-/* Opera < 12.1 */
