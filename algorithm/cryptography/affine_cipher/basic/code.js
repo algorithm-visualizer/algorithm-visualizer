@@ -42,7 +42,7 @@ function decrypt (cypherText) {
 	var plainText = '';
 	var aInverse = (function () {
 		for (var i = 1; i < N; i++) {
-			if ( ((keys.a * i).mod (N)) == 1 ) {
+			if ( ((keys.a * i).mod (N)) === 1 ) {
 				return i;
 			}
 		}

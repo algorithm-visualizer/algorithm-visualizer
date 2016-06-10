@@ -19,13 +19,13 @@ for (var cycleStart = 0; cycleStart <= N - 2; cycleStart++) {
   }
 
   // if the item is already there, this is not a circle
-  if (pos == cycleStart) {
+  if (pos === cycleStart) {
     tracer._deselect(cycleStart);
     continue;
   }
 
   // otherwise put the item there or right after any duplicates
-  while (item == D[pos]) {
+  while (item === D[pos]) {
     pos++;
   }
 
@@ -46,7 +46,7 @@ for (var cycleStart = 0; cycleStart <= N - 2; cycleStart++) {
   tracer._denotify(pos)._denotify(cycleStart);
 
   // rotate the rest of the cycle
-  while (pos != cycleStart) {
+  while (pos !== cycleStart) {
     pos = cycleStart;
 
     for (i = cycleStart + 1; i <= N - 1; i++) {
@@ -56,7 +56,7 @@ for (var cycleStart = 0; cycleStart <= N - 2; cycleStart++) {
       }
     }
 
-    while (item == D[pos]) {
+    while (item === D[pos]) {
       pos++;
     }
 

@@ -9,13 +9,13 @@ function update(i, j, value) {
 }
 for (var i = 0; i < N; i++) {
     for (var j = 0; j < M; j++) {
-        if (i == 0 && j == 0) {
+        if (i === 0 && j === 0) {
             update(i, j, D[i][j]);
-        } else if (i == 0) {
+        } else if (i === 0) {
             tracer._select(i, j - 1);
             update(i, j, DP[i][j - 1] + D[i][j]);
             tracer._deselect(i, j - 1);
-        } else if (j == 0) {
+        } else if (j === 0) {
             tracer._select(i - 1, j);
             update(i, j, DP[i - 1][j] + D[i][j]);
             tracer._deselect(i - 1, j);

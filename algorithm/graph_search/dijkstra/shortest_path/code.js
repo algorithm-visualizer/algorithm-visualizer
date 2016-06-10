@@ -15,7 +15,7 @@ function Dijkstra(start, end) {
                 minIndex = i;
             }
         }
-        if (minDistance == MAX_VALUE) break; // If there is no edge from current node, jump out of loop
+        if (minDistance === MAX_VALUE) break; // If there is no edge from current node, jump out of loop
         D[minIndex] = true;
         tracerS._select(minIndex);
         tracer._visit(minIndex)._wait();
@@ -32,7 +32,7 @@ function Dijkstra(start, end) {
         }
         tracer._leave(minIndex)._wait();
     }
-    if (S[end] == MAX_VALUE) {
+    if (S[end] === MAX_VALUE) {
         logger._print('there is no path from ' + start + ' to ' + end);
     } else {
         logger._print('the shortest path from ' + start + ' to ' + end + ' is ' + S[end]);
@@ -43,6 +43,6 @@ var s = Integer.random(0, G.length - 1); // s = start node
 var e; // e = end node
 do {
     e = Integer.random(0, G.length - 1);
-} while (s == e);
+} while (s === e);
 logger._print('finding the shortest path from ' + s + ' to ' + e)._wait();
 Dijkstra(s, e);
