@@ -88,6 +88,7 @@ nav {
     height: 30px;
     width: 100%;
     padding: 0 16px;
+    box-shadow: 0px 0px 3px 1px black;
 }
 
 nav h3 {
@@ -274,15 +275,19 @@ section {
     border-bottom: 1px solid #505050;
 }
 
-.files_bar > * {
-    position: absolute;
-    height: 100%
+.files_bar button {
+	height: 29px;
+  float: left;
+  position: relative;
+}
+
+.files_bar button.active {
+  border: 1px solid #505050;
+  border-bottom: none;
 }
 
 .files_bar > button {
     width: 30px;
-    float: left;
-    position: relative;
 }
 
 .files_bar > button:disabled {
