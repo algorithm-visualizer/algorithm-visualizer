@@ -3,12 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <meta name="description" content="Tool for visualizing algorithms."/>
     <meta property="og:title" content="Algorithm Visualizer"/>
     <meta property="og:description" content="Tool for visualizing algorithms."/>
     <meta property="og:image" content="img/image.png"/>
-    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon"/>
     <title>Algorithm Visualizer</title>
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
     <link rel="stylesheet" href="public/algorithm_visualizer.min.css">
 </head>
@@ -20,16 +22,18 @@
     <div class="break dot2"></div>
     <div class="break dot3"></div>
 </div>
-<nav>
+<header>
     <button id="navigation">
-        <h3>
+        <h1>
             Algorithm Visualizer
+        </h1>
+        <span>
             <i class="fa fa-angle-right nav-arrow" aria-hidden="true"></i>
             <span id="category"></span>
             <i class="fa fa-angle-right nav-arrow" aria-hidden="true"></i>
             <span id="algorithm"></span>
             <i class="fa fa-caret-up nav-dropdown" aria-hidden="true"></i>
-        </h3>
+        </span>
     </button>
     <div class="top-menu-buttons">
         <div class="btn" id="btn_share">
@@ -59,42 +63,44 @@
             </div>
         </div>
     </div>
-</nav>
-<section class="sidemenu active">
-    <div id="list">
+</header>
+<aside class="sidemenu active">
+    <div class="sidemenu_container">
+        <nav id="list">
+        </nav>
+        <footer id="footer">
+            <button id="scratch-paper"><i class="fa fa-code"></i> Scratch Paper</button>
+            <button id="documentation"><i class="fa fa-book"></i> Tracer API</button>
+            <button class="category" id="powered-by"><i class="fa fa-github"></i> Powered by ...</button>
+            <div id="powered-by-list">
+                <a href="https://github.com/jquery/jquery">
+                    <button class="indent collapse">jquery/jquery</button>
+                </a>
+                <a href="https://github.com/ajaxorg/ace">
+                    <button class="indent collapse">ajaxorg/ace</button>
+                </a>
+                <a href="https://github.com/jacomyal/sigma.js">
+                    <button class="indent collapse">jacomyal/sigma.js</button>
+                </a>
+                <a href="https://github.com/chartjs/Chart.js">
+                    <button class="indent collapse">chartjs/Chart.js</button>
+                </a>
+                <a href="https://github.com/showdownjs/showdown">
+                    <button class="indent collapse">showdownjs/showdown</button>
+                </a>
+                <a href="https://github.com/FortAwesome/Font-Awesome">
+                    <button class="indent collapse">FortAwesome/Font-Awesome</button>
+                </a>
+                <a href="https://github.com/simonwhitaker/github-fork-ribbon-css">
+                    <button class="indent collapse">simonwhitaker/github-fork-ribbon-css</button>
+                </a>
+            </div>
+        </footer>
+        <a class="github-fork-ribbon left-bottom" href="http://github.com/parkjs814/AlgorithmVisualizer"
+           title="Fork me on GitHub">Fork me on GitHub</a>
     </div>
-    <div id="footer">
-        <button id="scratch-paper"><i class="fa fa-code"></i> Scratch Paper</button>
-        <button id="documentation"><i class="fa fa-book"></i> Tracer API</button>
-        <button class="category" id="powered-by"><i class="fa fa-github"></i> Powered by ...</button>
-        <div id="powered-by-list">
-            <a href="https://github.com/jquery/jquery">
-                <button class="indent collapse">jquery/jquery</button>
-            </a>
-            <a href="https://github.com/ajaxorg/ace">
-                <button class="indent collapse">ajaxorg/ace</button>
-            </a>
-            <a href="https://github.com/jacomyal/sigma.js">
-                <button class="indent collapse">jacomyal/sigma.js</button>
-            </a>
-            <a href="https://github.com/chartjs/Chart.js">
-                <button class="indent collapse">chartjs/Chart.js</button>
-            </a>
-            <a href="https://github.com/showdownjs/showdown">
-                <button class="indent collapse">showdownjs/showdown</button>
-            </a>
-            <a href="https://github.com/FortAwesome/Font-Awesome">
-                <button class="indent collapse">FortAwesome/Font-Awesome</button>
-            </a>
-            <a href="https://github.com/simonwhitaker/github-fork-ribbon-css">
-                <button class="indent collapse">simonwhitaker/github-fork-ribbon-css</button>
-            </a>
-        </div>
-    </div>
-    <a class="github-fork-ribbon left-bottom" href="http://github.com/parkjs814/AlgorithmVisualizer"
-       title="Fork me on GitHub">Fork me on GitHub</a>
-</section>
-<div class="workspace">
+</aside>
+<main class="workspace">
     <div class="viewer_container">
         <section class="tab_bar">
             <button id="btn_doc" data-target="#tab_doc">Tracer API</button>
@@ -103,34 +109,45 @@
         </section>
         <section class="tab_container">
             <div class="tab" id="tab_doc">
-                <div class="wrapper">
+                <div class="tab_inner">
+                    <div class="wrapper">
+                    </div>
                 </div>
             </div>
             <div class="tab active" id="tab_desc">
-                <div class="wrapper">
+                <div class="tab_inner">
+                    <div class="wrapper">
+                    </div>
                 </div>
             </div>
-            <div class="tab module_container" id="tab_module">
+            <div class="tab" id="tab_module">
+                <div class="tab_inner">
+                    <div class="module_container"></div>
+                </div>
             </div>
         </section>
     </div>
     <div class="editor_container">
         <section class="files_bar">
             <button class="btn-left"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
-            <button class="btn-right"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
             <div class="wrapper"></div>
+            <button class="btn-right"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
         </section>
         <section class="explanation_container">
             <span id="explanation"></span>
         </section>
         <section class="data_container">
-            <pre id="data"></pre>
+            <div class="data_inner_container">
+                <pre id="data"></pre>
+            </div>
         </section>
         <section class="code_container">
-            <pre id="code"></pre>
+            <div class="code_inner_container">
+                <pre id="code"></pre>
+            </div>
         </section>
     </div>
-</div>
+</main>
 <div class="toast_container">
 </div>
 <script src="public/lib/jquery-2.2.3.min.js"></script>
