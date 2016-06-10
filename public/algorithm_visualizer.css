@@ -558,6 +558,7 @@ a {
 }
 
 * {
+    box-sizing: border-box;
     color: inherit;
 }
 
@@ -632,6 +633,7 @@ header {
     height: 30px;
     width: 100%;
     padding: 0 16px;
+    box-shadow: 0px 0px 3px 1px black;
 }
 
 header h1 {
@@ -1023,7 +1025,7 @@ pre {
 }
 
 .mtbl-col.notified {
-    background: #f50057;
+    background: #c51162;
 }
 
 .mchrt-chart {
