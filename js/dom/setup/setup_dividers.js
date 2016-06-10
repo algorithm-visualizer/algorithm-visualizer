@@ -10,10 +10,9 @@ const addDividerToDom = (divider) => {
   const $divider = $('<div class="divider">');
 
   let dragging = false;
-  if (vertical) {
+  if (vertical === 'v') {
     $divider.addClass('vertical');
-
-    let _left = -thickness / 2;
+    const _left = -thickness / 2;
     $divider.css({
       top: 0,
       bottom: 0,
@@ -49,7 +48,6 @@ const addDividerToDom = (divider) => {
     });
 
   } else {
-
     $divider.addClass('horizontal');
     const _top = -thickness / 2;
     $divider.css({
