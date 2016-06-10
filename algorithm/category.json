@@ -100,7 +100,8 @@
    },
    "etc": {
       "list": {
-         "flood_fill": "Flood Fill"
+         "flood_fill": "Flood Fill",
+		 "cellular_automata": "Cellular Automata"
       },
       "name": "Uncategorized"
    }
