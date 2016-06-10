@@ -259,13 +259,17 @@ section {
     border-bottom: 1px solid #505050;
 }
 
-.tab_bar button {
-  position: relative;
-  float: left;
+.tab_bar button,
+.files_bar button {
   height: 29px;
+  float: left;
+  position: relative;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
 }
 
-.tab_bar button.active {
+.tab_bar button.active,
+.files_bar button.active {
   border: 1px solid #505050;
   border-bottom: none;
 }
@@ -273,17 +277,6 @@ section {
 .files_bar {
     height: 30px;
     border-bottom: 1px solid #505050;
-}
-
-.files_bar button {
-	height: 29px;
-  float: left;
-  position: relative;
-}
-
-.files_bar button.active {
-  border: 1px solid #505050;
-  border-bottom: none;
 }
 
 .files_bar > button {
