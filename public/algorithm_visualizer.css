@@ -391,6 +391,8 @@ section {
 
 .files_bar {
     height: 30px;
+    border: none;
+    border-bottom: 1px solid #505050;
 }
 
 .files_bar > * {
@@ -400,18 +402,20 @@ section {
 
 .files_bar > button {
     width: 30px;
+    float: left;
+    position: relative;
 }
 
 .files_bar > button:disabled {
     background: rgba(0, 0, 0, .15);
 }
 
-.files_bar > .btn-left {
-    left: 0;
+.files_bar .btn-right {
+    float: right;
 }
 
-.files_bar > .btn-right {
-    right: 0;
+.files_bar .btn-left {
+    float: left;
 }
 
 .files_bar > .wrapper {
@@ -708,4 +712,9 @@ button[disabled] {
 @keyframes line_highlight {
     from { background: rgba(0, 174, 255, 0.1); }
     to   { background: rgba(0, 174, 255, 0.4); }
+}
+
+.ace_editor {
+  border-left: none;
+  border-bottom: none;
 }
