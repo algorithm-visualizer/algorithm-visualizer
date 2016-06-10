@@ -208,7 +208,6 @@ nav {
     height: 30px;
     width: 100%;
     padding: 0 16px;
-    box-shadow: 0px 0px 3px 1px black;
 }
 
 nav h3 {
@@ -382,8 +381,6 @@ section {
 .tab_bar button,
 .files_bar button {
   height: 29px;
-  float: left;
-  position: relative;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
 }
@@ -399,6 +396,10 @@ section {
     border-bottom: 1px solid #505050;
 }
 
+.files_bar > * {
+    position: absolute;
+}
+
 .files_bar > button {
     width: 30px;
 }
@@ -408,11 +409,11 @@ section {
 }
 
 .files_bar .btn-right {
-    float: right;
+    right: 0;
 }
 
 .files_bar .btn-left {
-    float: left;
+    left: 0;
 }
 
 .files_bar > .wrapper {
