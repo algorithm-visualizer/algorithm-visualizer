@@ -11,8 +11,8 @@ class ChartTracer extends Tracer {
     super(name);
 
     this.color = {
-      selected: 'rgb(0, 0, 255)',
-      notified: 'rgb(255, 0, 0)',
+      selected: '#2962ff',
+      notified: '#c51162',
       default: 'rgb(136, 136, 136)'
     };
 
