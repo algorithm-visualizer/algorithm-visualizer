@@ -40,6 +40,7 @@ a {
 
 .btn,
 button {
+    cursor: pointer;
     vertical-align: top;
     border: none;
     height: 100%;
@@ -57,7 +58,6 @@ button {
 .btn:hover,
 button:hover {
     background: rgba(0, 0, 0, .15);
-    cursor: pointer;
 }
 
 .btn.active,
@@ -155,6 +155,19 @@ nav h3 {
     width: 100%;
     height: 30px;
     text-align: left;
+    background: rgba(0, 0, 0, .15);
+}
+
+.sidemenu button:hover {
+  background: rgb(63, 63, 63);
+}
+
+.sidemenu button.active {
+    background: rgb(38, 38, 38);
+}
+
+.sidemenu button.active:hover {
+    background: rgb(38, 38, 38);
 }
 
 .sidemenu button.indent {
@@ -162,7 +175,9 @@ nav h3 {
 }
 
 .sidemenu .algorithms {
-    box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.36), inset 0 -2px 2px rgba(0, 0, 0, 0.24);
+    padding: 3px;
+    display: none;
+    box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.48), inset 0 -2px 2px rgba(0, 0, 0, 0.36);
 }
 
 .workspace {
