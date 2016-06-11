@@ -9,7 +9,7 @@
       "list": {
          "affine_cipher": "Affine Cipher",
          "caesar_cipher": "Caesar Cipher"
-      },
+      },t
       "name": "Cryptography"
    },
    "dp": {
@@ -21,7 +21,7 @@
          "longest_increasing_subsequence": "Longest Increasing Subsequence",
          "max_subarray": "Maximum Subarray",
          "max_sum_path": "Maximum Sum Path",
-         "pascal_triangle": "Pascal's Trangle",
+         "pascal_triangle": "Pascal's Triangle",
          "sliding_window": "Sliding Window",
          "ugly_numbers": "Ugly Numbers"
       },
