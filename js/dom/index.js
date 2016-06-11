@@ -7,6 +7,7 @@ const addFiles = require('./add_files');
 const showFirstAlgorithm = require('./show_first_algorithm');
 const showRequestedAlgorithm = require('./show_requested_algorithm');
 const showWiki = require('./show_wiki');
+const enableSearch = require('./enable_search');
 
 module.exports = {
   showAlgorithm,
@@ -15,5 +16,6 @@ module.exports = {
   addFiles,
   showFirstAlgorithm,
   showRequestedAlgorithm,
-  showWiki
+  showWiki,
+  enableSearch
 };
