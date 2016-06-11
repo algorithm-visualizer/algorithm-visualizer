@@ -32,8 +32,8 @@ module.exports = () => {
   });
 
   $('#powered-by').click(function() {
-    $(this).toggleClass('active');
-    $('#powered-by-list button').toggle(300);
+    $(this).toggleClass('open')
+    $('#powered-by-list').toggle(300);
   });
 
   $('#scratch-paper').click(() => {
