@@ -31,7 +31,8 @@ module.exports = () => {
     $('#btn_doc').click();
   });
 
-  $('#powered-by').click(() => {
+  $('#powered-by').click(function() {
+    $(this).toggleClass('active');
     $('#powered-by-list button').toggle(300);
   });
 
