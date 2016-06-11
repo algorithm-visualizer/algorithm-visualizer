@@ -9,7 +9,7 @@
       "list": {
          "affine_cipher": "Affine Cipher",
          "caesar_cipher": "Caesar Cipher"
-      },t
+      },
       "name": "Cryptography"
    },
    "dp": {
