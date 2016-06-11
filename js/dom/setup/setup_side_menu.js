@@ -32,7 +32,7 @@ module.exports = () => {
   });
 
   $('#powered-by').click(() => {
-    $('#powered-by-list button').toggleClass('collapse');
+    $('#powered-by-list button').toggle(300);
   });
 
   $('#scratch-paper').click(() => {
