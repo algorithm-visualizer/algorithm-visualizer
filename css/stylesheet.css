@@ -51,17 +51,29 @@ button {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    background: rgb(63, 63, 63);
 }
 
 .btn:hover,
-button:not([disabled]):hover {
-    background: rgba(0, 0, 0, .15) !important;
+button:hover {
+    background: rgba(0, 0, 0, .15);
     cursor: pointer;
 }
 
 .btn.active,
 button.active {
     background: rgb(38, 38, 38);
+}
+
+.btn.active:hover,
+button.active:hover {
+    background: rgba(38, 38, 38, .8);
+}
+
+button[disabled] {
+    background: rgb(63, 63, 63);
+    cursor: not-allowed;
+    opacity: 0.6;
 }
 
 .btn input,
@@ -144,19 +156,15 @@ nav h3 {
     text-align: left;
 }
 
-button.category {
-    background: rgba(0, 0, 0, .10);
-}
-
-button.indent {
+.sidemenu button.indent {
     padding-left: 28px;
 }
 
-.algorithms {
+.sidemenu .algorithms {
     box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.36), inset 0 -2px 2px rgba(0, 0, 0, 0.24);
 }
 
-.algorithms.collapse {
+.sidemenu .algorithms.collapse {
     display: none;
 }
 
@@ -283,10 +291,6 @@ section {
 
 .files_bar > button {
     width: 30px;
-}
-
-.files_bar > button:disabled {
-    background: rgba(0, 0, 0, .15);
 }
 
 .files_bar .btn-left {
@@ -539,22 +543,15 @@ input[type=number]::-webkit-outer-spin-button {
     content: 'Resume'
 }
 
-button[disabled] {
-    cursor: not-allowed;
-    opacity: 0.6;
-}
-
 #btn_pause {
     width: 86px;
 }
 
 .top-menu-buttons button.active {
-    background: rgba(0, 0, 0, .15);
     box-shadow: 0px 0px 10px 3px #1a1a1a inset;
 }
 
 .top-menu-buttons button:active {
-    background: rgba(0, 0, 0, .15);
     box-shadow: 0px 0px 10px 3px #1a1a1a inset;
 }
 
