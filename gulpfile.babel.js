@@ -16,6 +16,7 @@ import babelify from 'babelify';
 import source from 'vinyl-source-stream';
 import buffer from 'vinyl-buffer';
 import pkg from './package.json';
+if (Number (process.version.match (/^v(\d+\.\d+)/) [1]) <= 0.10) var Promise = require ('es6-promise').Promise;
 
 const appName = 'algorithm_visualizer';
 const appEntryPoint = './js/index.js';

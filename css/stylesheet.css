@@ -180,6 +180,21 @@ nav h3 {
     box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.48), inset 0 -2px 2px rgba(0, 0, 0, 0.36);
 }
 
+input.search_bar {
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, .10);
+    border: none;
+    border-bottom: 2px solid rgb(38, 38, 38);
+    width: 100%;
+    height: 30px;
+    color: white;
+    padding-left: 10px;
+}
+
+input.search_bar:focus {
+    outline: none;
+}
+
 .workspace {
     position: absolute;
     top: 30px;
