@@ -37,8 +37,8 @@ const addCategoryToDOM = (category) => {
   $category.click(function () {
     const $self = $(this);
     $self.toggleClass('open');
-    $self.next().toggleClass('collapse');
     $self.find('i.fa').toggleClass('fa-caret-right fa-caret-down');
+    $self.next().toggle(300);
   });
 
   const $algorithms = $('<div class="algorithms collapse">');
