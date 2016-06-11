@@ -67,7 +67,8 @@ button.active {
 
 .btn.active:hover,
 button.active:hover {
-    background: rgba(38, 38, 38, .8);
+    background: rgba(38, 38, 38);
+    color: rgba(187, 187, 187, .8);
 }
 
 button[disabled] {
@@ -162,10 +163,6 @@ nav h3 {
 
 .sidemenu .algorithms {
     box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.36), inset 0 -2px 2px rgba(0, 0, 0, 0.24);
-}
-
-.sidemenu .algorithms.collapse {
-    display: none;
 }
 
 .workspace {
