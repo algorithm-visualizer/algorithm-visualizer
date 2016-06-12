@@ -1,6 +1,7 @@
 'use strict';
 
 const app = require('../../app');
+const resizeWorkspace = require('../resize_workspace');
 
 const addDividerToDom = (divider) => {
   const [vertical, $first, $second] = divider;
@@ -38,9 +39,7 @@ const addDividerToDom = (divider) => {
         $first.css('right', (100 - percent) + '%');
         $second.css('left', percent + '%');
         x = pageX;
-        app.getTracerManager().resize();
-        app.getEditor().resize();
-        $('.files_bar > .wrapper').scroll();
+        resizeWorkspace();
       }
     });
 
@@ -76,8 +75,7 @@ const addDividerToDom = (divider) => {
         $first.css('bottom', (100 - percent) + '%');
         $second.css('top', percent + '%');
         y = pageY;
-        app.getTracerManager().resize();
-        app.getEditor().resize();
+        resizeWorkspace();
       }
     });
 
