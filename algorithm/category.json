@@ -70,6 +70,7 @@
       "list": {
          "bubble": "Bubble Sort",
          "comb": "Comb Sort",
+		 "counting": "Counting Sort",
          "cycle": "Cycle Sort",
          "heap": "Heapsort",
          "insertion": "Insertion Sort",
