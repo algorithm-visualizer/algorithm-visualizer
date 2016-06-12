@@ -14,7 +14,6 @@ module.exports = () => {
 	}
 
 	$('#btn_fullscreen').click (function () {
-		console.log ('callinggggg', $func);
 		db [$func] ();
 	});
 };
