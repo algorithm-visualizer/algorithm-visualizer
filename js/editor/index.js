@@ -66,6 +66,11 @@ function Editor(tracerManager) {
     if (this.marker) session.removeMarker(this.marker);
   };
 
+  this.resize = () => {
+    this.dataEditor.resize();
+    this.codeEditor.resize();
+  };
+
   // listeners
 
   this.dataEditor.on('change', () => {
