@@ -181,19 +181,29 @@ nav h3 {
     box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.48), inset 0 -2px 2px rgba(0, 0, 0, 0.36);
 }
 
-input.search_bar {
-    box-sizing: border-box;
+.search_bar_container {
     background: rgba(0, 0, 0, .10);
-    border: none;
     border-bottom: 2px solid rgb(38, 38, 38);
-    width: 100%;
     height: 30px;
-    color: white;
-    padding-left: 10px;
+    color: rgb(187, 187, 187);
+    font-size: 12px;
+    padding: 0 8px 0 8px;
 }
 
-input.search_bar:focus {
+.search_bar_container > .fa {
+    position: absolute;
+    line-height: 30px;
+}
+
+#search-bar {
+    box-sizing: border-box;
+    padding-left: 16px;
+    background: none;
+    border: none;
+    width: 100%;
+    height: 100%;
     outline: none;
+    overflow: hidden;
 }
 
 .workspace {
