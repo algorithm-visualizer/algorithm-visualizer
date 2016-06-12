@@ -229,6 +229,10 @@ nav {
     padding: 0 16px;
 }
 
+nav > * {
+    height: 28px;
+}
+
 nav h3 {
     display: inline;
 }
@@ -242,8 +246,10 @@ nav h3 {
 }
 
 .top-menu-buttons {
-    float: right;
-    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0 16px;
 }
 
 #shared {
@@ -259,8 +265,12 @@ nav h3 {
     text-align: right;
 }
 
-.sidemenu {
+.sidemenu,
+.workspace {
     top: 30px;
+}
+
+.sidemenu {
     right: 85%;
     visibility: hidden;
     overflow: scroll;
@@ -333,7 +343,6 @@ nav h3 {
 
 .workspace {
     position: absolute;
-    top: 30px;
     bottom: 0;
     left: 15%;
     right: 0;
@@ -768,4 +777,20 @@ input[type=number]::-webkit-outer-spin-button {
 .ace_editor {
     border-left: none;
     border-bottom: none;
+}
+
+@media (max-width: 1024px) {
+    .sidemenu,
+    .workspace {
+        top: 60px;
+    }
+
+    nav {
+        height: 60px;
+    }
+
+    .top-menu-buttons {
+        top: 30px;
+        left: 0;
+    }
 }
