@@ -16,6 +16,17 @@ body {
     display: none;
 }
 
+@-moz-document url-prefix() {
+	.sidemenu, .viewer_container, .data_container, .code_container {
+		margin-right: -25px;
+		margin-bottom: -25px;
+	}
+	
+	.data_container {
+		z-index: 0;
+	}
+}
+
 a {
     text-decoration: none;
 }
@@ -316,7 +327,7 @@ section {
 .files_bar > .wrapper {
     left: 30px;
     right: 30px;
-    overflow: scroll;
+    overflow: auto;
     white-space: nowrap;
 }
 
