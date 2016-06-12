@@ -45,6 +45,9 @@ $(() => {
     app.setCategories(data);
     DOM.addCategories();
 
+    //enable search feature
+    DOM.enableSearch ();
+
     // determine if the app is loading a pre-existing scratch-pad
     // or the home page
     const {
