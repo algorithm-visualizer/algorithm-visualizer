@@ -9,6 +9,7 @@ const showRequestedAlgorithm = require('./show_requested_algorithm');
 const showWiki = require('./show_wiki');
 const enableSearch = require('./enable_search');
 const resizeWorkspace = require('./resize_workspace');
+const enableFullScreen = require('./enable_fullscreen');
 
 module.exports = {
   showAlgorithm,
@@ -19,5 +20,6 @@ module.exports = {
   showRequestedAlgorithm,
   showWiki,
   enableSearch,
-  resizeWorkspace
+  resizeWorkspace,
+  enableFullScreen
 };
