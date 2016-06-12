@@ -279,7 +279,7 @@ nav h3 {
 }
 
 .sidemenu button:hover {
-  background: rgb(63, 63, 63);
+    background: rgb(63, 63, 63);
 }
 
 .sidemenu button.active {
@@ -294,7 +294,8 @@ nav h3 {
     padding-left: 28px;
 }
 
-.sidemenu .algorithms {
+.sidemenu .algorithms,
+#powered-by-list {
     display: none;
     padding: 3px 2px;
     box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.48), inset 0 -2px 2px rgba(0, 0, 0, 0.36);
