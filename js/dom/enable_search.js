@@ -7,9 +7,7 @@ module.exports = () => {
 		let query = $(this).val ();
 		let re = new RegExp (query, 'i');
 
-		if (query) $('#footer').hide ();
-		else $('#footer').show ();
-
+		query ? $('#footer').hide () : $('#footer').show ();
 		$.each ($('#list .category'), function (i, c) {
 			let $c = $(c);
 			!$c.hasClass ('open') && $c.click ();
