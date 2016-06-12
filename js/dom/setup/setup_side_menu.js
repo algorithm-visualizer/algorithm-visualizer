@@ -3,6 +3,7 @@
 const app = require('../../app');
 const Server = require('../../server');
 const showAlgorithm = require('../show_algorithm');
+const resizeWorkspace = require('../resize_workspace');
 
 let sidemenu_percent;
 
@@ -24,14 +25,14 @@ module.exports = () => {
       $workspace.css('left', 0);
     }
 
-    app.getTracerManager().resize();
+    resizeWorkspace();
   });
 
   $('#documentation').click(function () {
     $('#btn_doc').click();
   });
 
-  $('#powered-by').click(function() {
+  $('#powered-by').click(function () {
     $(this).toggleClass('open')
     $('#powered-by-list').toggle(300);
   });
