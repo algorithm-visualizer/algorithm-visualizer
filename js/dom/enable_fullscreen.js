@@ -1,19 +1,40 @@
 'use strict';
 
 module.exports = () => {
-	let $func = 'requestFullScreen',
-		vendorPrefixes = ['webkit', 'moz', 'ms', 'o'],
-		db = document.body;
+  let reqFunc = null;
+  let extFunc = null;
+  let reqFuncs = [
+    'requestFullscreen',
+    'webkitRequestFullscreen',
+    'mozRequestFullScreen',
+    'msRequestFullscreen',
+  ];
+  let extFuncs = [
+    'exitFullscreen',
+    'webkitExitFullscreen',
+    'mozCancelFullScreen',
+    'msExitFullscreen'
+  ];
 
-	for (let p of vendorPrefixes) {
-		let fName = p + $func [0].toUpperCase () + $func.slice (1);
-		if (db [fName]) {
-			$func = fName;
-			break;
-		}
-	}
+  for (let tmpReqFunc of reqFuncs) {
+    if (document.body[tmpReqFunc]) {
+      reqFunc = tmpReqFunc;
+    }
+  }
 
-	$('#btn_fullscreen').click (function () {
-		db [$func] ();
-	});
+  for (let tmpExtFunc of extFuncs) {
+    if (document[tmpExtFunc]) {
+      extFunc = tmpExtFunc;
+    }
+  }
+
+  const $btnFullscreen = $('#btn_fullscreen');
+
+  $btnFullscreen.click(function () {
+    if (document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen) {
+      if (extFunc) document[extFunc]();
+    } else {
+      if (reqFunc) document.body[reqFunc]();
+    }
+  });
 };
