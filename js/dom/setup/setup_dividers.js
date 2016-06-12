@@ -39,6 +39,7 @@ const addDividerToDom = (divider) => {
         $second.css('left', percent + '%');
         x = pageX;
         app.getTracerManager().resize();
+        app.getEditor().resize();
         $('.files_bar > .wrapper').scroll();
       }
     });
@@ -76,6 +77,7 @@ const addDividerToDom = (divider) => {
         $second.css('top', percent + '%');
         y = pageY;
         app.getTracerManager().resize();
+        app.getEditor().resize();
       }
     });
 
