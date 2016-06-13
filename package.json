@@ -20,7 +20,8 @@
     "url": "https://github.com/parkjs814/AlgorithmVisualizer/issues"
   },
   "homepage": "https://github.com/parkjs814/AlgorithmVisualizer#readme",
-  "devDependencies": {
+  "dependencies": {
+    "rsvp": "^3.2.1"
     "babel-core": "^6.9.0",
     "babel-preset-es2015": "^6.9.0",
     "babelify": "^7.3.0",
@@ -37,9 +38,6 @@
     "gulp-util": "^3.0.7",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
-  },
-  "dependencies": {
-    "rsvp": "^3.2.1"
   },
   "scripts": {
     "start": "gulp"
