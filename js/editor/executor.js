@@ -9,7 +9,7 @@ const execute = (tracerManager, code, dataLines) => {
     lines.forEach((line, i) => {
       newLines.push(line.replace(/(.+\. *_wait *)(\( *\))/g, `$1(${i - dataLines})`));
     });
-    eval(newLines.join('\n'));
+    eval(Babel.transform(newLines.join('\n'), {presets: ['es2015']}).code);
     tracerManager.visualize();
   } catch (err) {
     return err;
