@@ -1,9 +1,0 @@
-{
-  "Flood Fill": "Flood fill, also called seed fill, is an algorithm that determines the area connected to a given node in a multi-dimensional array",
-  "References": [
-    "<a href='https://en.wikipedia.org/wiki/Flood_fill'>Wikipedia</a>"
-  ],
-  "files": {
-    "flood_fill": ""
-  }
-}
