@@ -4,6 +4,7 @@
   "description": "Algorithm Visualizer",
   "main": "index.js",
   "scripts": {
+    "start": "gulp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -38,8 +39,5 @@
     "gulp-util": "^3.0.7",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
-  },
-  "scripts": {
-    "start": "gulp"
   }
 }
