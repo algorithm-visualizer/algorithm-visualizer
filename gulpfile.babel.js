@@ -134,6 +134,7 @@ gulp.task('build', ['compile-css', 'compile-js']);
 gulp.task('connect', function() {
 
   connect.server({
+    port: 80,
     livereload: true
   });
 });
