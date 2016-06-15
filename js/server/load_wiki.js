@@ -3,5 +3,5 @@
 const get = require('./ajax/get');
 
 module.exports = (wiki) => {
-  return get(`./AlgorithmVisualizer.wiki/${wiki}.md`);
+  return get(`http://parkjs814.github.io/AlgorithmVisualizer/AlgorithmVisualizer.wiki/${wiki}.md`);
 };
