@@ -56,7 +56,7 @@
    "number_theory": {
       "list": {
          "euclidean_algorithm": "Euclidean Algorithm",
-         "seive_of_erathrones": "Seive of Erathrones"
+         "sieve_of_erathrones": "Sieve of Eratosthenes"
       },
       "name": "Number Theory"
    },
