@@ -1,21 +1,20 @@
 'use strict';
 
-import path from 'path';
-import gulp from 'gulp';
-import uglify from 'gulp-uglify';
-import cleanCSS from 'gulp-clean-css';
-import autoprefixer from 'gulp-autoprefixer';
-import concat from 'gulp-concat';
-import header from 'gulp-header';
-import babel from 'gulp-babel';
-import gutil from 'gulp-util';
-import sourcemaps from 'gulp-sourcemaps';
-import connect from 'gulp-connect';
-import browserify from 'browserify';
-import babelify from 'babelify';
-import source from 'vinyl-source-stream';
-import buffer from 'vinyl-buffer';
-import pkg from './package.json';
+import path from "path";
+import gulp from "gulp";
+import uglify from "gulp-uglify";
+import cleanCSS from "gulp-clean-css";
+import autoprefixer from "gulp-autoprefixer";
+import concat from "gulp-concat";
+import header from "gulp-header";
+import gutil from "gulp-util";
+import sourcemaps from "gulp-sourcemaps";
+import connect from "gulp-connect";
+import browserify from "browserify";
+import babelify from "babelify";
+import source from "vinyl-source-stream";
+import buffer from "vinyl-buffer";
+import pkg from "./package.json";
 
 const appName = 'algorithm_visualizer';
 const appEntryPoint = './js/index.js';
@@ -80,9 +79,9 @@ gulp.task('minify-js', () => {
   gutil.log('\n\nBuild JS Paths: \n', jsDir, '\n\n');
 
   return browserify({
-      entries: './js/index.js',
-      debug: true
-    })
+    entries: './js/index.js',
+    debug: true
+  })
     .transform('babelify', {
       presets: ['es2015']
     })
@@ -105,9 +104,9 @@ gulp.task('build-js', () => {
   gutil.log('\n\nBuild JS Paths: \n', jsDir, '\n\n');
 
   return browserify({
-      entries: './js/index.js',
-      debug: true
-    })
+    entries: './js/index.js',
+    debug: true
+  })
     .transform('babelify', {
       presets: ['es2015']
     })
@@ -131,7 +130,7 @@ gulp.task('build', ['compile-css', 'compile-js']);
 
 // Server
 
-gulp.task('connect', function() {
+gulp.task('connect', function () {
 
   connect.server({
     port: process.env.PORT || 8080,
@@ -141,9 +140,18 @@ gulp.task('connect', function() {
 
 // Watch
 
-gulp.task('watch', ['build'], function() {
+gulp.task('watch', ['build'], function () {
   gulp.watch(jsDir, ['compile-js']);
   gulp.watch(cssDir, ['compile-css']);
+});
+
+// Heroku Production
+
+gulp.task('prod', ['build'], function () {
+  connect.server({
+    port: process.env.PORT || 8080,
+    livereload: false
+  });
 });
 
 // Default
