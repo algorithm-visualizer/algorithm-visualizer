@@ -1,4 +1,5 @@
-var tracer = new Array2DTracer ();
+var tracer = new Array2DTracer();
+var logger = new LogTracer();
 var n = 6; // rows (change these!)
 var m = 6; // columns (change these!)
 
@@ -7,9 +8,9 @@ var v_end = n * 3 - (n-1);
 
 var G = [];
 
-for (var i = 0; i < v_end; i++) {
+for (var i = 0; i < v_end; i++) { // by row
     G[i] = new Array(h_end);
-    for(var j = 0; j < h_end; j++){
+    for(var j = 0; j < h_end; j++){ // by column
 
         G[i][j] = ' ';
 
@@ -21,14 +22,13 @@ for (var i = 0; i < v_end; i++) {
             G[i][j] = '└';
         }else if(i === v_end - 1 && j === h_end - 1){ // bottom-right corner
             G[i][j] = '┘';
-        }
-        else if( (j % 3 === 0) && (i % v_end !== 0 && i !== v_end-1 && i % 2 == 1)){
+        }else if( (j % 3 === 0) && (i % v_end !== 0 && i !== v_end-1 && i % 2 == 1)){
             G[i][j] = '│';
         }else if (i % 2 === 0){
             G[i][j] = '─';
         }
 
-        if(m > 1){
+        if(m > 1){ // More than one column
             if( j % 3 === 0 && j !== 0 && j !== h_end - 1 && i === 0){
                 G[i][j] = '┬';
             }
@@ -37,7 +37,7 @@ for (var i = 0; i < v_end; i++) {
             }
         }
 
-        if(n > 1){
+        if(n > 1){ // More than one row
             if(i % 2 === 0 && i !== 0 && i !==v_end-1 && j === 0){
                 G[i][j] = '├';
             }
@@ -46,12 +46,11 @@ for (var i = 0; i < v_end; i++) {
             }
         }
 
-        if(n > 1 && m > 1){
+        if(n > 1 && m > 1){ // More than one row and column
             if(i % 2 === 0 && j % 3 === 0 && i !== 0 && j !== 0 && i !== v_end-1 && j !== h_end-1){
                 G[i][j] = '┼';
             }
         }
-
     }
 }
 
