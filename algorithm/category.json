@@ -19,6 +19,7 @@
          "integer_partition": "Integer Partition",
          "knapsack_problem": "Knapsack Problem",
          "longest_increasing_subsequence": "Longest Increasing Subsequence",
+         "longest_common_subsequence": "Longest Common Subsequence",
          "max_subarray": "Maximum Subarray",
          "max_sum_path": "Maximum Sum Path",
          "pascal_triangle": "Pascal's Triangle",
@@ -59,6 +60,11 @@
          "seive_of_erathrones": "Seive of Erathrones"
       },
       "name": "Number Theory"
+   },"recursion": {
+      "list": {
+         "string_permutations": "String Permutations"
+      },
+      "name": "Recursion"
    },
    "search": {
       "list": {
