@@ -60,11 +60,6 @@
          "seive_of_erathrones": "Seive of Erathrones"
       },
       "name": "Number Theory"
-   },"recursion": {
-      "list": {
-         "string_permutations": "String Permutations"
-      },
-      "name": "Recursion"
    },
    "search": {
       "list": {
