@@ -14,11 +14,6 @@ class DirectedGraphTracer extends Tracer {
   constructor(name) {
     super(name);
 
-    this.selectColor = '#2962ff';
-    this.visitedColor = '#f50057';
-    this.leftColor = '#616161';
-    this.defaultColor = '#bdbdbd';
-
     if (this.isNew) initView(this);
   }
 
@@ -57,7 +52,7 @@ class DirectedGraphTracer extends Tracer {
       case 'leave':
         var visit = step.type == 'visit';
         var targetNode = this.graph.nodes(this.n(step.target));
-        var color = visit ? this.visitedColor : this.leftColor;
+        var color = visit ? this.color.visited : this.color.left;
         targetNode.color = color;
         if (step.source !== undefined) {
           var edgeId = this.e(step.source, step.target);
@@ -135,7 +130,7 @@ class DirectedGraphTracer extends Tracer {
         x: .5 + Math.sin(currentAngle) / 2,
         y: .5 + Math.cos(currentAngle) / 2,
         size: 1,
-        color: this.defaultColor,
+        color: this.color.default,
         weight: 0
       });
 
@@ -147,7 +142,7 @@ class DirectedGraphTracer extends Tracer {
               id: this.e(i, j),
               source: this.n(i),
               target: this.n(j),
-              color: this.defaultColor,
+              color: this.color.default,
               size: 1,
               weight: refineByType(value)
             });
@@ -160,7 +155,7 @@ class DirectedGraphTracer extends Tracer {
               id: this.e(i, j),
               source: this.n(i),
               target: this.n(j),
-              color: this.defaultColor,
+              color: this.color.default,
               size: 1,
               weight: refineByType(G[i][j])
             });
@@ -208,10 +203,10 @@ class DirectedGraphTracer extends Tracer {
     var tracer = this;
 
     this.graph.nodes().forEach(function (node) {
-      node.color = tracer.defaultColor;
+      node.color = tracer.color.default;
     });
     this.graph.edges().forEach(function (edge) {
-      edge.color = tracer.defaultColor;
+      edge.color = tracer.color.default;
     });
   }
 
