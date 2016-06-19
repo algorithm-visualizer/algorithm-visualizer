@@ -49,7 +49,7 @@ module.exports = () => {
       TopMenu.resetTopMenuButtons();
     }
     else {
-      $btnRunText.html("Reset");
+      $btnRunText.html("Rerun");
     }
   });
 
