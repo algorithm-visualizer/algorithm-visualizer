@@ -15,6 +15,12 @@ class Tracer {
   constructor(name) {
     this.module = this.constructor;
 
+    this.selectColor;
+    this.notifyColor;
+    this.defaultColor;
+    this.leftColor;
+    this.visitedColor;
+
     this.manager = app.getTracerManager();
     this.capsule = this.manager.allocate(this);
     $.extend(this, this.capsule);
@@ -40,6 +46,26 @@ class Tracer {
   _wait(line) {
     this.manager.newStep(line);
     return this;
+  }
+
+  _setSelectFillColor(c) {
+    this.selectColor = c;
+  }
+
+  _setNotifyFillColor(c) {
+    this.notifyColor = c;
+  }
+
+  _setDefaultFillColor(c){
+    this.defaultColor = c;
+  }
+
+  _setLeftFillColor(c){
+    this.leftColor = c;
+  }
+
+  _setVisitedFillColor(c){
+    this.visitedColor = c;
   }
 
   processStep(step, options) {
