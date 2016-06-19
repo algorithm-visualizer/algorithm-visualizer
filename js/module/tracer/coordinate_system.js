@@ -26,7 +26,7 @@ class CoordinateSystemTracer extends DirectedGraphTracer {
         y: C[i][1],
         label: '' + i,
         size: 1,
-        color: this.color.default
+        color: this.defaultColor
       });
     this.graph.read({
       nodes: nodes,
@@ -49,7 +49,7 @@ class CoordinateSystemTracer extends DirectedGraphTracer {
       case 'leave':
         var visit = step.type == 'visit';
         var targetNode = this.graph.nodes(this.n(step.target));
-        var color = visit ? this.color.visited : this.color.left;
+        var color = visit ? this.visitedColor : this.leftColor;
         targetNode.color = color;
         if (step.source !== undefined) {
           var edgeId = this.e(step.source, step.target);

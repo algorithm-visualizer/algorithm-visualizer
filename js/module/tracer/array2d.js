@@ -14,10 +14,8 @@ class Array2DTracer extends Tracer {
   constructor(name) {
     super(name);
 
-    this.colorClass = {
-      selected: 'selected',
-      notified: 'notified'
-    };
+    this.selectColor = '#2962ff';
+    this.notifyColor = '#c51162';
 
     if (this.isNew) initView(this);
   }
@@ -25,6 +23,7 @@ class Array2DTracer extends Tracer {
   _notify(x, y, v) {
     this.manager.pushStep(this.capsule, {
       type: 'notify',
+      color: this.notifyColor,
       x: x,
       y: y,
       v: v
@@ -146,7 +145,8 @@ class Array2DTracer extends Tracer {
         }
     }
     var step = {
-      type: type
+      type: type,
+      color: this.selectColor
     };
     $.extend(step, coord);
     this.manager.pushStep(this.capsule, step);
@@ -163,7 +163,7 @@ class Array2DTracer extends Tracer {
       case 'denotify':
       case 'select':
       case 'deselect':
-        var colorClass = step.type == 'select' || step.type == 'deselect' ? this.colorClass.selected : this.colorClass.notified;
+        var colorClass = step.color;
         var addClass = step.type == 'select' || step.type == 'notify';
         var sx = step.sx;
         var sy = step.sy;
@@ -297,14 +297,17 @@ class Array2DTracer extends Tracer {
       var $row = this.$table.find('.mtbl-row').eq(i);
       for (var j = sy; j <= ey; j++) {
         var $col = $row.find('.mtbl-col').eq(j);
-        if (addClass) $col.addClass(colorClass);
-        else $col.removeClass(colorClass);
+        if(addClass) $col[0].style.backgroundColor = colorClass;
+        else $col[0].style.backgroundColor = "";
       }
     }
   }
 
   clearColor() {
-    this.$table.find('.mtbl-col').removeClass(Object.keys(this.colorClass).join(' '));
+    var divs = this.$table.find('.mtbl-col');
+    for (var i = 0; i < divs.length; i++){
+      divs[i].style.backgroundColor = "";
+    }
   }
 
   separate(x, y) {
