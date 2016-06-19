@@ -28,6 +28,7 @@ module.exports = () => {
   // control
 
   const $btnRun = $('#btn_run');
+  const $btnRunText=ap=$('#btn_run>span');
   const $btnTrace = $('#btn_trace');
   const $btnPause = $('#btn_pause');
   const $btnPrev = $('#btn_prev');
@@ -46,6 +47,9 @@ module.exports = () => {
       console.error(err);
       Toast.showErrorToast(err);
       TopMenu.resetTopMenuButtons();
+    }
+    else {
+      $btnRunText.html("Rerun");
     }
   });
 
