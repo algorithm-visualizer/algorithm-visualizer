@@ -15,11 +15,13 @@ class Tracer {
   constructor(name) {
     this.module = this.constructor;
 
-    this.selectColor;
-    this.notifyColor;
-    this.defaultColor;
-    this.leftColor;
-    this.visitedColor;
+    this.color = {
+      selected: '#2962ff',
+      notified: '#f50057',
+      visited: '#f50057',
+      left: '#616161',
+      default: '#bdbdbd'
+    };
 
     this.manager = app.getTracerManager();
     this.capsule = this.manager.allocate(this);
@@ -48,24 +50,24 @@ class Tracer {
     return this;
   }
 
-  _setSelectFillColor(c) {
-    this.selectColor = c;
+  _setSelectedColor(c) {
+    this.color.selected = c;
   }
 
-  _setNotifyFillColor(c) {
-    this.notifyColor = c;
+  _setNotifiedColor(c) {
+    this.color.notified = c;
   }
 
-  _setDefaultFillColor(c){
-    this.defaultColor = c;
+  _setVisitedColor(c) {
+    this.color.visited = c;
   }
 
-  _setLeftFillColor(c){
-    this.leftColor = c;
+  _setLeftColor(c) {
+    this.color.left = c;
   }
 
-  _setVisitedFillColor(c){
-    this.visitedColor = c;
+  _setDefaultColor(c) {
+    this.color.default = c;
   }
 
   processStep(step, options) {

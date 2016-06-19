@@ -10,10 +10,6 @@ class ChartTracer extends Tracer {
   constructor(name) {
     super(name);
 
-    this.selectColor = '#2962ff';
-    this.notifyColor = '#c51162';
-    this.defaultColor = 'rgb(136, 136, 136)';
-
     if (this.isNew) initView(this);
   }
 
@@ -25,7 +21,7 @@ class ChartTracer extends Tracer {
     }
 
     var color = [];
-    for (var i = 0; i < C.length; i++) color.push(this.defaultColor);
+    for (var i = 0; i < C.length; i++) color.push(this.color.default);
     this.chart.config.data = {
       labels: C.map(String),
       datasets: [{
@@ -81,7 +77,7 @@ class ChartTracer extends Tracer {
       case 'denotify':
       case 'select':
       case 'deselect':
-        let color = step.type == 'notify' ? this.notifyColor : step.type == 'select' ? this.selectColor : this.defaultColor;
+        let color = step.type == 'notify' ? this.color.notified : step.type == 'select' ? this.color.selected : this.color.default;
         if (step.e !== undefined)
           for (var i = step.s; i <= step.e; i++)
             this.chart.config.data.datasets[0].backgroundColor[i] = color;
@@ -107,7 +103,7 @@ class ChartTracer extends Tracer {
     if (data.datasets.length) {
       const backgroundColor = data.datasets[0].backgroundColor;
       for (let i = 0; i < backgroundColor.length; i++) {
-        backgroundColor[i] = this.defaultColor;
+        backgroundColor[i] = this.color.default;
       }
       this.chart.update();
     }

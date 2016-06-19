@@ -56,7 +56,7 @@ class WeightedDirectedGraphTracer extends DirectedGraphTracer {
       case 'leave':
         var visit = step.type == 'visit';
         var targetNode = this.graph.nodes(this.n(step.target));
-        var color = visit ? step.weight === undefined ? this.selectColor : this.visitedColor : this.leftColor;
+        var color = visit ? step.weight === undefined ? this.color.selected : this.color.visited : this.color.left;
         targetNode.color = color;
         if (step.weight !== undefined) targetNode.weight = refineByType(step.weight);
         if (step.source !== undefined) {

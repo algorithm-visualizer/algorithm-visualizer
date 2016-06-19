@@ -14,16 +14,12 @@ class Array2DTracer extends Tracer {
   constructor(name) {
     super(name);
 
-    this.selectColor = '#2962ff';
-    this.notifyColor = '#c51162';
-
     if (this.isNew) initView(this);
   }
 
   _notify(x, y, v) {
     this.manager.pushStep(this.capsule, {
       type: 'notify',
-      color: this.notifyColor,
       x: x,
       y: y,
       v: v
@@ -145,8 +141,7 @@ class Array2DTracer extends Tracer {
         }
     }
     var step = {
-      type: type,
-      color: this.selectColor
+      type: type
     };
     $.extend(step, coord);
     this.manager.pushStep(this.capsule, step);
@@ -163,8 +158,8 @@ class Array2DTracer extends Tracer {
       case 'denotify':
       case 'select':
       case 'deselect':
-        var colorClass = step.color;
-        var addClass = step.type == 'select' || step.type == 'notify';
+        var color = step.type == 'select' || step.type == 'deselect' ? this.color.selected : this.color.notified;
+        var paint = step.type == 'select' || step.type == 'notify';
         var sx = step.sx;
         var sy = step.sy;
         var ex = step.ex;
@@ -173,7 +168,7 @@ class Array2DTracer extends Tracer {
         if (sy === undefined) sy = step.y;
         if (ex === undefined) ex = step.x;
         if (ey === undefined) ey = step.y;
-        this.paintColor(sx, sy, ex, ey, colorClass, addClass);
+        this.paintColor(sx, sy, ex, ey, color, paint);
         break;
       case 'separate':
         this.deseparate(step.x, step.y);
@@ -292,22 +287,19 @@ class Array2DTracer extends Tracer {
     this.refresh();
   }
 
-  paintColor(sx, sy, ex, ey, colorClass, addClass) {
+  paintColor(sx, sy, ex, ey, color, paint) {
     for (var i = sx; i <= ex; i++) {
       var $row = this.$table.find('.mtbl-row').eq(i);
       for (var j = sy; j <= ey; j++) {
         var $col = $row.find('.mtbl-col').eq(j);
-        if(addClass) $col[0].style.backgroundColor = colorClass;
-        else $col[0].style.backgroundColor = "";
+        if (paint) $col.css('background', color);
+        else $col.css('background', '');
       }
     }
   }
 
   clearColor() {
-    var divs = this.$table.find('.mtbl-col');
-    for (var i = 0; i < divs.length; i++){
-      divs[i].style.backgroundColor = "";
-    }
+    this.$table.find('.mtbl-col').css('background', '');
   }
 
   separate(x, y) {
