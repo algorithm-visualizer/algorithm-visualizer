@@ -14,12 +14,10 @@ class DirectedGraphTracer extends Tracer {
   constructor(name) {
     super(name);
 
-    this.color = {
-      selected: '#2962ff',
-      visited: '#f50057',
-      left: '#616161',
-      default: '#bdbdbd'
-    };
+    this.selectColor = '#2962ff';
+    this.visitedColor = '#f50057';
+    this.leftColor = '#616161';
+    this.defaultColor = '#bdbdbd';
 
     if (this.isNew) initView(this);
   }
@@ -59,7 +57,7 @@ class DirectedGraphTracer extends Tracer {
       case 'leave':
         var visit = step.type == 'visit';
         var targetNode = this.graph.nodes(this.n(step.target));
-        var color = visit ? this.color.visited : this.color.left;
+        var color = visit ? this.visitedColor : this.leftColor;
         targetNode.color = color;
         if (step.source !== undefined) {
           var edgeId = this.e(step.source, step.target);
@@ -137,7 +135,7 @@ class DirectedGraphTracer extends Tracer {
         x: .5 + Math.sin(currentAngle) / 2,
         y: .5 + Math.cos(currentAngle) / 2,
         size: 1,
-        color: this.color.default,
+        color: this.defaultColor,
         weight: 0
       });
 
@@ -149,7 +147,7 @@ class DirectedGraphTracer extends Tracer {
               id: this.e(i, j),
               source: this.n(i),
               target: this.n(j),
-              color: this.color.default,
+              color: this.defaultColor,
               size: 1,
               weight: refineByType(value)
             });
@@ -162,7 +160,7 @@ class DirectedGraphTracer extends Tracer {
               id: this.e(i, j),
               source: this.n(i),
               target: this.n(j),
-              color: this.color.default,
+              color: this.defaultColor,
               size: 1,
               weight: refineByType(G[i][j])
             });
@@ -210,10 +208,10 @@ class DirectedGraphTracer extends Tracer {
     var tracer = this;
 
     this.graph.nodes().forEach(function (node) {
-      node.color = tracer.color.default;
+      node.color = tracer.defaultColor;
     });
     this.graph.edges().forEach(function (edge) {
-      edge.color = tracer.color.default;
+      edge.color = tracer.defaultColor;
     });
   }
 
