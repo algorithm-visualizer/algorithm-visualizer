@@ -591,6 +591,14 @@ input[type=number]::-webkit-outer-spin-button {
     color: #00e676;
 }
 
+#btn_run > .btn-text:before {
+    content: 'Run'
+}
+
+#btn_run.active > .btn-text:before {
+    content: 'Rerun'
+}
+
 #btn_pause > .btn-text:before {
     content: 'Pause'
 }
