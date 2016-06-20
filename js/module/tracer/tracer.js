@@ -50,26 +50,6 @@ class Tracer {
     return this;
   }
 
-  _setSelectedColor(c) {
-    this.color.selected = c;
-  }
-
-  _setNotifiedColor(c) {
-    this.color.notified = c;
-  }
-
-  _setVisitedColor(c) {
-    this.color.visited = c;
-  }
-
-  _setLeftColor(c) {
-    this.color.left = c;
-  }
-
-  _setDefaultColor(c) {
-    this.color.default = c;
-  }
-
   processStep(step, options) {
     const {
       type,
@@ -124,6 +104,11 @@ class Tracer {
         this.chartTracer = tracer;
         break;
     }
+    return this;
+  }
+
+  palette(color) {
+    $.extend(this.color, color);
     return this;
   }
 
