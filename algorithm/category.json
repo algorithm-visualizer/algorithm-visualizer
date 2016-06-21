@@ -69,6 +69,7 @@
    },
    "sorting": {
       "list": {
+         "bucket": "Bucket Sort",
          "bubble": "Bubble Sort",
          "comb": "Comb Sort",
 		 "counting": "Counting Sort",
