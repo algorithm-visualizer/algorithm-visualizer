@@ -1,0 +1,13 @@
+{
+  "Bucket Sort": "Bucket sort, or bin sort, is a sorting algorithm that works by distributing the elements of an array into a number of buckets. Each bucket is then sorted individually, either using a different sorting algorithm, or by recursively applying the bucket sorting algorithm.",
+  "Complexity": {
+    "time": "worst O(n<sup>2</sup>), best O(n+k), average O(n+k) where n is the number of buckets and k is the range of the input",
+    "space": "worst O(n*k)"
+  },
+  "References": [
+    "<a href='https://en.wikipedia.org/wiki/Bucket_sort'>Wikipedia</a>"
+  ],
+  "files": {
+    "basic": "Bucket sort"
+  }
+}
