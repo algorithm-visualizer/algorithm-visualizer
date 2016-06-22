@@ -23,6 +23,7 @@
          "max_subarray": "Maximum Subarray",
          "max_sum_path": "Maximum Sum Path",
          "pascal_triangle": "Pascal's Triangle",
+         "shortest_common_supersequence": "Shortest Common Supersequence",
          "sliding_window": "Sliding Window",
          "ugly_numbers": "Ugly Numbers"
       },
