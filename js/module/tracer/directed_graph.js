@@ -14,8 +14,6 @@ class DirectedGraphTracer extends Tracer {
   constructor(name) {
     super(name);
 
-    this.nodePositions = [];
-
     if (this.isNew) initView(this);
   }
 
@@ -45,17 +43,26 @@ class DirectedGraphTracer extends Tracer {
     return this;
   }
 
-  _setNodePositions(obj){
-    for(var i = 0; i < obj.length; i++){
-        this.nodePositions.push(obj[i]);
-    }
-    super.dirtyData();
+  _setNodePositions(positions) {
+    this.manager.pushStep(this.capsule, {
+      type: 'setNodePositions',
+      positions: positions
+    });
+    return this;
   }
 
   processStep(step, options) {
     switch (step.type) {
       case 'setTreeData':
         this.setTreeData.apply(this, step.arguments);
+        break;
+      case 'setNodePositions':
+        $.each(this.graph.nodes(), (i, node) => {
+          if (i >= step.positions.length) return false;
+          const position = step.positions[i];
+          node.x = position.x;
+          node.y = position.y;
+        });
         break;
       case 'visit':
       case 'leave':
@@ -135,8 +142,8 @@ class DirectedGraphTracer extends Tracer {
       nodes.push({
         id: this.n(i),
         label: '' + i,
-        x: (this.nodePositions[i]) ? this.nodePositions[i].x : .5 + Math.sin(currentAngle) / 2,
-        y: (this.nodePositions[i]) ? this.nodePositions[i].y : .5 + Math.cos(currentAngle) / 2,
+        x: .5 + Math.sin(currentAngle) / 2,
+        y: .5 + Math.cos(currentAngle) / 2,
         size: 1,
         color: this.color.default,
         weight: 0
