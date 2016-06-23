@@ -77,21 +77,12 @@ class Tracer {
     $name.text(name || this.defaultName);
   }
 
-  dirtyData(){
-      this.isNew = true;
-  }
-
-  cleanData(){
-      this.isNew = false;
-  }
-
   setData() {
     const data = toJSON(arguments);
     if (!this.isNew && this.lastData === data) {
       return true;
     }
     this.lastData = this.capsule.lastData = data;
-    this.cleanData();
     return false;
   }
 
