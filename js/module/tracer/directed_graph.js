@@ -14,6 +14,8 @@ class DirectedGraphTracer extends Tracer {
   constructor(name) {
     super(name);
 
+    this.nodePositions = [];
+
     if (this.isNew) initView(this);
   }
 
@@ -41,6 +43,13 @@ class DirectedGraphTracer extends Tracer {
       source: source
     });
     return this;
+  }
+
+  _setNodePositions(obj){
+    for(var i = 0; i < obj.length; i++){
+        this.nodePositions.push(obj[i]);
+    }
+    super.dirtyData();
   }
 
   processStep(step, options) {
@@ -116,7 +125,6 @@ class DirectedGraphTracer extends Tracer {
 
   setData(G, undirected) {
     if (super.setData.apply(this, arguments)) return true;
-
     this.graph.clear();
     const nodes = [];
     const edges = [];
@@ -127,8 +135,8 @@ class DirectedGraphTracer extends Tracer {
       nodes.push({
         id: this.n(i),
         label: '' + i,
-        x: .5 + Math.sin(currentAngle) / 2,
-        y: .5 + Math.cos(currentAngle) / 2,
+        x: (this.nodePositions[i]) ? this.nodePositions[i].x : .5 + Math.sin(currentAngle) / 2,
+        y: (this.nodePositions[i]) ? this.nodePositions[i].y : .5 + Math.cos(currentAngle) / 2,
         size: 1,
         color: this.color.default,
         weight: 0
