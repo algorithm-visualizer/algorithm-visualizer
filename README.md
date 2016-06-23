@@ -13,6 +13,9 @@ http://parkjs814.github.io/AlgorithmVisualizer
 We encourage you to check out [**Wiki**](https://github.com/parkjs814/AlgorithmVisualizer/wiki) before you get started.
 
 If in need of any help, join our [Gitter](https://gitter.im/parkjs814/AlgorithmVisualizer?utm_source=share-link&utm_medium=link&utm_campaign=share-link) chatroom!
+
+Special thanks to our [Top Contributors](CONTRIBUTORS.md)!
+
 ### Backers
 
 Support us with a monthly donation and help us continue our activities. [[Become a backer](https://opencollective.com/algorithmvisualizer#backer)]
