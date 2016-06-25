@@ -13,16 +13,15 @@ module.exports = () => {
     const $workspace = $('.workspace');
 
     $sidemenu.toggleClass('active');
-    $('.nav-dropdown').toggleClass('fa-caret-down fa-caret-up');
 
+    $('.nav-dropdown').toggleClass('fa-caret-down fa-caret-right');
     if ($sidemenu.hasClass('active')) {
-      $sidemenu.css('right', (100 - sidemenu_percent) + '%');
-      $workspace.css('left', sidemenu_percent + '%');
-
+        $sidemenu.animate({ "right": (100 - sidemenu_percent) + '%'}, "fast" );
+        $workspace.animate({ "left": sidemenu_percent + '%' }, "fast" );
     } else {
-      sidemenu_percent = $workspace.position().left / $('body').width() * 100;
-      $sidemenu.css('right', 0);
-      $workspace.css('left', 0);
+        sidemenu_percent = $workspace.position().left / $('body').width() * 100;
+        $sidemenu.animate({ "right": "0%" }, "fast" );
+        $workspace.animate({ "left": "0%" }, "fast" );
     }
 
     resizeWorkspace();
