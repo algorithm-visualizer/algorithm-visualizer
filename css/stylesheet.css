@@ -230,6 +230,7 @@ nav h3 {
 
 nav,
 section,
+.sandbox_container,
 .viewer_container,
 .editor_container {
     position: absolute;
@@ -249,8 +250,13 @@ section {
     right: 50%;
 }
 
+.sandbox_container{
+    left: 50%;
+}
+
 .editor_container {
     left: 50%;
+    display: none;
 }
 
 .module_container {
@@ -657,4 +663,13 @@ input[type=number]::-webkit-outer-spin-button {
         top: 30px;
         left: 0;
     }
+}
+
+.buttonContainer{
+    width: 75px;
+    height: 25px;
+    display: block;
+    position: relative;
+    z-index: 100;
+    background-color: white;
 }
