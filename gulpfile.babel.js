@@ -1,3 +1,4 @@
+var Promise = require ('es6-promise').Promise;
 'use strict';
 
 import path from "path";
