@@ -20,6 +20,7 @@
          "knapsack_problem": "Knapsack Problem",
          "longest_common_subsequence": "Longest Common Subsequence",
          "longest_increasing_subsequence": "Longest Increasing Subsequence",
+         "longest_palindromic_subsequence": "Longest Palindromic Subsequence",
          "max_subarray": "Maximum Subarray",
          "max_sum_path": "Maximum Sum Path",
          "pascal_triangle": "Pascal's Triangle",
@@ -57,8 +58,8 @@
    },
    "number_theory": {
       "list": {
-         "euclidean_algorithm": "Euclidean Algorithm",
-         "sieve_of_eratosthenes": "Sieve of Eratosthenes"
+        "euclidean_algorithm": "Euclidean Algorithm",
+        "sieve_of_eratosthenes": "Sieve of Eratosthenes"
       },
       "name": "Number Theory"
    },
