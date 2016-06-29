@@ -79,11 +79,12 @@
          "bucket": "Bucket Sort",
          "bubble": "Bubble Sort",
          "comb": "Comb Sort",
-		 "counting": "Counting Sort",
+         "counting": "Counting Sort",
          "cycle": "Cycle Sort",
          "heap": "Heapsort",
          "insertion": "Insertion Sort",
          "merge": "Merge Sort",
+         "pigeonhole": "Pigeonhole Sort",
          "quick": "Quicksort",
          "radix": "Radix Sort",
          "selection": "Selection Sort",
@@ -112,8 +113,9 @@
    "etc": {
       "list": {
          "flood_fill": "Flood Fill",
-	 "cellular_automata": "Cellular Automata",
-         "create_maze": "Create Maze"
+         "cellular_automata": "Cellular Automata",
+         "create_maze": "Create Maze",
+         "magic_square": "Magic Square"
       },
       "name": "Uncategorized"
    }
