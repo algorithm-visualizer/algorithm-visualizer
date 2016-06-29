@@ -5,7 +5,7 @@ const app = require('./app');
 const AppConstructor = require('./app/constructor');
 const DOM = require('./dom');
 const Server = require('./server');
-
+const Sandbox= require('./create');
 const modules = require('./module');
 
 const {
@@ -40,6 +40,7 @@ $(() => {
 
   // load modules to the global scope so they can be evaled
   extend(true, window, modules);
+  extend(true, window, Sandbox);
 
   Server.loadCategories().then((data) => {
     app.setCategories(data);
