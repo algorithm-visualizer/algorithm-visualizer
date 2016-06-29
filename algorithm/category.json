@@ -68,6 +68,12 @@
       },
       "name": "Search"
    },
+   "sandbox": {
+      "list": {
+         "sandbox": "Sand Box"
+      },
+      "name": "Sandbox"
+   },
    "sorting": {
       "list": {
          "bucket": "Bucket Sort",
