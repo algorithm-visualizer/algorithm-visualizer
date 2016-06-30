@@ -30,8 +30,8 @@ const makeInputFields = () =>{
 
     var table = document.querySelector('.mtbl-table');
 
-    var numRows = getNumRows();
-    var numColumns = getNumColumns();
+    var numRows = table.childNodes.length;
+    var numColumns = table.childNodes[0].childNodes.length;
 
     for(var i = 0; i < numRows; i++){
         for(var j = 0; j < numColumns; j++){
@@ -48,6 +48,20 @@ const makeInputFields = () =>{
 
 const generateJS = () =>{
     var logger = new modules.LogTracer('Generated Javascript');
+    var table = document.querySelector('.mtbl-table');
+
+    var numRows = table.childNodes.length;
+    var numColumns = table.childNodes[0].childNodes.length;
+
+    var line = '';
+    for(var i = 0; i < numRows; i++){
+        line = '';
+        for(var j = 0; j < numColumns; j++){
+            line += table.childNodes[i].childNodes[j].childNodes[0].value + ',';
+        }
+        logger.print(line);
+    }
+
 };
 
 const positionModules = () =>{
@@ -81,6 +95,7 @@ const setupButtons = () => {
         arr2DTracer.setData(data);
         makeInputFields();
         generateJS();
+        positionModules();
     },false);
 
 };
