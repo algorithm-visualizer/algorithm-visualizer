@@ -73,6 +73,9 @@ $(() => {
     } else {
       DOM.showFirstAlgorithm();
     }
+
+    Sandbox.setupButtons();
+
   });
 
   Server.loadWikiList().then((data) => {
