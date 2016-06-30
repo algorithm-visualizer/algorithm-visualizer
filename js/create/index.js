@@ -46,6 +46,29 @@ const makeInputFields = () =>{
 
 };
 
+const generateJS = () =>{
+    var logger = new modules.LogTracer('Generated Javascript');
+};
+
+const positionModules = () =>{
+    var elems = document.getElementsByClassName('module_wrapper');
+    if(elems <= 0) return;
+
+    var n = elems.length;
+    var spacing = (100/n);
+
+    for (var i = 0; i < n; i++) {
+        if( i === 0){
+            elems[i].style.bottom = (spacing * (n-1)) + '%';
+        }else if(i === n - 1){
+            elems[i].style.top = (spacing * i) + '%';
+        }else{
+            elems[i].style.top = (spacing * i) + '%';
+            elems[i].style.bottom = (spacing * i) + '%';
+        }
+    }
+}
+
 const setupButtons = () => {
 
     var button_2DMatrix = document.getElementById("button-2DMatrix");
@@ -57,7 +80,9 @@ const setupButtons = () => {
 
         arr2DTracer.setData(data);
         makeInputFields();
+        generateJS();
     },false);
+
 };
 
 module.exports = {
