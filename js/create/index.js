@@ -26,6 +26,26 @@ const fauxData = (r, c) => {
     return arr;
 };
 
+const makeInputFields = () =>{
+
+    var table = document.querySelector('.mtbl-table');
+
+    var numRows = getNumRows();
+    var numColumns = getNumColumns();
+
+    for(var i = 0; i < numRows; i++){
+        for(var j = 0; j < numColumns; j++){
+            var elem = document.createElement('input');
+            elem.type = 'Number';
+            elem.value = 1;
+            elem.classList.add('mtbl-col','inputField');
+            table.childNodes[i].childNodes[j].innerHTML = '';
+            table.childNodes[i].childNodes[j].appendChild(elem);
+        }
+    }
+
+};
+
 const setupButtons = () => {
 
     var button_2DMatrix = document.getElementById("button-2DMatrix");
@@ -34,8 +54,9 @@ const setupButtons = () => {
         var numRows = getNumRows();
         var numColumns = getNumColumns();
         var data = fauxData(numRows, numColumns);
-        console.log(data);
+
         arr2DTracer.setData(data);
+        makeInputFields();
     },false);
 };
 
