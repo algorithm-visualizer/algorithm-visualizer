@@ -673,3 +673,7 @@ input[type=number]::-webkit-outer-spin-button {
     z-index: 100;
     background-color: white;
 }
+
+.inputField{
+    width: 16px;
+}
