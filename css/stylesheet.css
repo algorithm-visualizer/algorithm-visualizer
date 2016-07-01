@@ -675,6 +675,20 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .inputField{
-    width: 16px;
+    width: 25px;
     border: 0;
+}
+
+.sb-button{
+    border: 1px solid #515151;
+}
+
+.inputContainer{
+    position: relative;
+    width: 100%;
+}
+
+.inputs{
+    position: relative;
+    display: block;
 }
