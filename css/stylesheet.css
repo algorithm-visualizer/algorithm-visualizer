@@ -676,4 +676,5 @@ input[type=number]::-webkit-outer-spin-button {
 
 .inputField{
     width: 16px;
+    border: 0;
 }
