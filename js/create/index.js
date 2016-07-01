@@ -102,12 +102,35 @@ const positionModules = () =>{
     }
 }
 
+const clearModules = () =>{
+    var elems = document.getElementsByClassName('module_wrapper');
+    if(elems.length > 0){
+        var parent = elems[0].parentElement;
+        var numChild = parent.childNodes.length;
+        for(var i = 0; i < numChild; i++){
+            parent.removeChild(parent.firstChild);
+        }
+    }
+}
+
+const enabledHightlighting = () =>{
+    var elems = document.getElementsByClassName('module_wrapper');
+    var logger = elems[1];
+    var wrapper = logger.childNodes[1];
+    console.log(elems);
+    console.log(wrapper);
+    for (var i = 0; i < wrapper.childNodes.length; i++) {
+        wrapper.childNodes[i].style["-webkit-user-select"] = "all";
+    }
+}
+
 const setupButtons = () => {
 
     var button_2DMatrix = document.getElementById("button-2DMatrix");
     var logger;
     var arr2DTracer;
     button_2DMatrix.addEventListener('click',function(){
+        clearModules();
         arr2DTracer = new modules.Array2DTracer();
         logger = new modules.LogTracer('Generated Javascript');
 
@@ -123,6 +146,7 @@ const setupButtons = () => {
     var button_JS = document.getElementById('button-generateJS');
     button_JS.addEventListener('click',function(){
         generateJS(logger);
+        enabledHightlighting();
     },false);
 
 };
