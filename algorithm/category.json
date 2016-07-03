@@ -46,7 +46,8 @@
    },
    "greedy": {
       "list": {
-         "job_scheduling": "Job Scheduling Problem"
+         "job_scheduling": "Job Scheduling Problem",
+         "majority_element": "Majority Element(Boyer–Moore majority vote algorithm)"
       },
       "name": "Greedy"
    },
