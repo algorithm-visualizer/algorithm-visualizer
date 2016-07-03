@@ -256,12 +256,15 @@ section {
 
 .editor_container {
     left: 50%;
-    display: none;
 }
 
 .module_container {
     overflow: hidden;
     border: none;
+}
+
+.hide{
+    display: none;
 }
 
 .tab_container {

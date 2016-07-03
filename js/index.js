@@ -40,7 +40,6 @@ $(() => {
 
   // load modules to the global scope so they can be evaled
   extend(true, window, modules);
-  extend(true, window, Sandbox);
 
   Server.loadCategories().then((data) => {
     app.setCategories(data);
