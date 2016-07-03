@@ -1,6 +1,7 @@
 {
    "backtracking": {
       "list": {
+         "knight's_tour": "Knight’s tour problem",
          "n_queens": "N Queens Problem"
       },
       "name": "Backtracking"
