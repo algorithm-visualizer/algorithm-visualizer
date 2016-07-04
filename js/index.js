@@ -73,7 +73,7 @@ $(() => {
       DOM.showFirstAlgorithm();
     }
 
-    Sandbox.setupButtons();
+    Sandbox.init();
 
   });
 

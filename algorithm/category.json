@@ -70,7 +70,7 @@
    },
    "sandbox": {
       "list": {
-         "2DMatrix": "2D Matrix"
+         "create_mode": "Create Mode"
       },
       "name": "Sandbox"
    },
