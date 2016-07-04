@@ -697,7 +697,6 @@ input[type=number]::-webkit-outer-spin-button {
 
 .auto-gen{
     height: 34%;
-    /*border: 1px solid #515151;*/
     text-align: center;
     background-color: #262626;
     display: flex;
