@@ -14,17 +14,14 @@ const getNumColumns = () => {
 }
 
 const fauxData = (r, c) => {
-    var arr = new Array(r);
-    for (var i = 0; i < c; i++) {
-        arr[i] = new Array(c);
-    }
-
+    var D = [];
     for (var i = 0; i < r; i++) {
-        for(var j = 0; j < c; j++){
-            arr[i][j] = 0;
-        }
+      D.push([]);
+      for (var j = 0; j < c; j++) {
+        D[i].push(Math.floor(Math.random()* 10 + 1));
+      }
     }
-    return arr;
+    return D;
 }
 
 const tableToInputFields = () => {

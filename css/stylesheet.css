@@ -684,14 +684,35 @@ input[type=number]::-webkit-outer-spin-button {
 
 .sb-button{
     border: 1px solid #515151;
+    height: 25px;
+    margin: 0 auto;
 }
 
-.inputContainer{
-    position: relative;
-    width: 100%;
+.auto-gen{
+    height: 33%;
+    border: 1px solid #515151;
+    text-align: center;
+    background-color: #262626;
+    display: flex;
+    align-items: center;
+}
+
+.auto-gen-tracers{
+    bottom: 66%;
+}
+
+.auto-gen-options{
+    top: 33%;
+    bottom: 33%;
+}
+
+.auto-gen-generate{
+    top: 66%;
 }
 
 .inputs{
-    position: relative;
-    display: block;
+    display: inline-block;
+    border: 0;
+    background-color: #505050;
+    height: 25px;
 }
