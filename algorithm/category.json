@@ -68,12 +68,6 @@
       },
       "name": "Search"
    },
-   "sandbox": {
-      "list": {
-         "create_mode": "Create Mode"
-      },
-      "name": "Sandbox"
-   },
    "sorting": {
       "list": {
          "bucket": "Bucket Sort",

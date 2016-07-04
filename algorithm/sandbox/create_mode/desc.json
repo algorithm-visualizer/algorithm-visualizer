@@ -1,8 +1,0 @@
-{
-  "create_mode": "Create Mode is a sandbox editor for creating tracers and auto generating the javascript code for your algorithms. i.g. when selecting Array2DTracer, a tracer will appear and you will have the ability to edit each element in the matrix then generate the javascript code to include in your algorithm. ",
-  "References": [
-  ],
-  "files": {
-    "normal": "Create Mode"
-  }
-}

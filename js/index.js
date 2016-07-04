@@ -5,7 +5,6 @@ const app = require('./app');
 const AppConstructor = require('./app/constructor');
 const DOM = require('./dom');
 const Server = require('./server');
-const Sandbox= require('./create');
 const modules = require('./module');
 
 const {
@@ -72,8 +71,6 @@ $(() => {
     } else {
       DOM.showFirstAlgorithm();
     }
-
-    Sandbox.init();
 
   });
 
