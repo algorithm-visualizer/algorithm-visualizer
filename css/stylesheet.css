@@ -252,6 +252,7 @@ section {
 
 .sandbox_container{
     left: 50%;
+    z-index:  100;
 }
 
 .editor_container {
@@ -341,6 +342,7 @@ section {
     border-bottom: none;
 }
 
+.close_bar,
 .files_bar {
     height: 30px;
     border-bottom: 1px solid #505050;
@@ -383,6 +385,11 @@ section {
 
 .files_bar > .wrapper.shadow-left.shadow-right {
     box-shadow: inset 16px 0 16px -16px rgba(0, 0, 0, .6), inset -16px 0 16px -16px rgba(0, 0, 0, .6);
+}
+
+.close_bar {
+    width: 100%;
+    background-color: #3f3f3f;
 }
 
 .explanation_container {
@@ -689,8 +696,8 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .auto-gen{
-    height: 33%;
-    border: 1px solid #515151;
+    height: 34%;
+    /*border: 1px solid #515151;*/
     text-align: center;
     background-color: #262626;
     display: flex;
@@ -698,6 +705,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .auto-gen-tracers{
+    top: 30px;
     bottom: 66%;
 }
 

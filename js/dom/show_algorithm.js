@@ -25,14 +25,6 @@ module.exports = (category, algorithm, data, requestedFile) => {
     algorithm_name = categoryObj.list[algorithm];
   }
 
-  if(category_name === 'Sandbox'){
-      $('.editor_container').addClass('hide');
-      $('.sandbox_container').removeClass('hide');
-  }else{
-      $('.editor_container').removeClass('hide');
-      $('.sandbox_container').addClass('hide');
-  }
-
   $('.sidemenu button').removeClass('active');
   $menu.addClass('active');
 
