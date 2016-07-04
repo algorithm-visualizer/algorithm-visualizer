@@ -32,7 +32,6 @@ RSVP.on('error', function (reason) {
 });
 
 $(() => {
-
   // initialize the application and attach in to the instance module
   const appConstructor = new AppConstructor();
   extend(true, app, appConstructor);

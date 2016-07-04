@@ -3,29 +3,39 @@
 const modules = require('../module');
 const array2d = require('./array2d');
 const util = require('./util');
+const Server = require('../server');
+const DOM = require('../dom');
 
-const closeCreate = (modules) => {
+const {
+  getPath
+} = require('../server/helpers');
+
+const closeCreate = () => {
         const $btnClose = $('#btn_close');
 
         $btnClose.click(() => {
             $('.sandbox_container').remove();
             util.clearModules();
-            restoreModules(modules);
+            reloadAlgorithm();
         });
 };
 
-const restoreModules = (modules) => {
-    for (var i = 0; i < modules.length; i++) {
-        $('.module_container').append(modules[i]);
-    }
+const reloadAlgorithm = () => {
+    const {
+      category,
+      algorithm,
+      file
+    } = getPath();
+
+    Server.loadAlgorithm(category, algorithm).then((data) => {
+      DOM.showAlgorithm(category, algorithm, data);
+    });
 };
 
-const saveModules = () => {
-    return $('.module_wrapper')
-};
+
 
 const init = () => {
-    var moduleWrappers = saveModules();
+
     var check = $('.sandbox_container');
     if(!check.length){
         util.clearModules();
