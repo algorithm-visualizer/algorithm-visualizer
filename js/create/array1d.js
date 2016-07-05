@@ -35,7 +35,7 @@ const setup = () => {
     },false);
     var button_JS = document.getElementById('button-generateJS-1D');
     button_JS.addEventListener('click',function(){
-        array2D.generateJS(logger, 'Array1DTracer');
+        array2D.generateJS(logger, 'Array1DTracer',getTracerName());
     },false);
 };
 

@@ -44,7 +44,7 @@ const tableToInputFields = (numRows, numColumns) => {
     }
 }
 
-const generateJS = (logger, tracer) => {
+const generateJS = (logger, tracer, tracerName) => {
     if(!logger) return;
 
     logger.clear();
@@ -74,7 +74,7 @@ const generateJS = (logger, tracer) => {
     logger.print(']');
 
 
-    logger.print("let myTableTracer = new "+ tracer +" ('"+getTracerName()+"')");
+    logger.print("let myTableTracer = new "+ tracer +" ('"+tracerName+"')");
     logger.print('myTableTracer._setData (myTable)');
 
     util.enabledHightlighting();
@@ -115,7 +115,7 @@ const setup = () => {
     },false);
     var button_JS = document.getElementById('button-generateJS-2D');
     button_JS.addEventListener('click',function(){
-        generateJS(logger, 'Array2DTracer');
+        generateJS(logger, 'Array2DTracer', getTracerName());
     },false);
 }
 
