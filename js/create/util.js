@@ -1,10 +1,5 @@
 'use strict';
 
-
-const getTracerName = () =>{
-    return document.getElementById("tracerName").value;
-}
-
 const positionModules = () =>{
     var elems = document.getElementsByClassName('module_wrapper');
     if(elems <= 0) return;
@@ -47,6 +42,5 @@ const enabledHightlighting = () =>{
 module.exports = {
     enabledHightlighting,
     positionModules,
-    clearModules,
-    getTracerName
+    clearModules
 };

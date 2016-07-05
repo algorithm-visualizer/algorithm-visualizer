@@ -3,13 +3,18 @@
 const modules = require('../module');
 const util = require('./util');
 
+
+const getTracerName = () =>{
+    return document.getElementById("tracerName-2D").value;
+}
+
 const getNumRows = () => {
-    var row_field = document.getElementById('numRows');
+    var row_field = document.getElementById('numRows-2D');
     return row_field.value;
 }
 
 const getNumColumns = () => {
-    var column_field = document.getElementById('numColumns');
+    var column_field = document.getElementById('numColumns-2D');
     return column_field.value;
 }
 
@@ -24,11 +29,8 @@ const fauxData = (r, c) => {
     return D;
 }
 
-const tableToInputFields = () => {
+const tableToInputFields = (numRows, numColumns) => {
     var table = document.querySelector('.mtbl-table');
-
-    var numRows = table.childNodes.length;
-    var numColumns = table.childNodes[0].childNodes.length;
 
     for(var i = 0; i < numRows; i++){
         for(var j = 0; j < numColumns; j++){
@@ -42,7 +44,9 @@ const tableToInputFields = () => {
     }
 }
 
-const generateJS = (logger) => {
+const generateJS = (logger, tracer) => {
+    if(!logger) return;
+
     logger.clear();
     var table = document.querySelector('.mtbl-table');
 
@@ -70,8 +74,10 @@ const generateJS = (logger) => {
     logger.print(']');
 
 
-    logger.print("let myTableTracer = new Array2DTracer ('"+util.getTracerName()+"')");
+    logger.print("let myTableTracer = new "+ tracer +" ('"+getTracerName()+"')");
     logger.print('myTableTracer._setData (myTable)');
+
+    util.enabledHightlighting();
 }
 
 const mousescroll = (e) =>{
@@ -103,17 +109,20 @@ const setup = () => {
         var data = fauxData(numRows, numColumns);
 
         arr2DTracer.setData(data);
-        tableToInputFields();
+        tableToInputFields(numRows, numColumns);
         util.positionModules();
         arr2DTracer.refresh();
     },false);
-    var button_JS = document.getElementById('button-generateJS');
+    var button_JS = document.getElementById('button-generateJS-2D');
     button_JS.addEventListener('click',function(){
-        generateJS(logger);
-        util.enabledHightlighting();
+        generateJS(logger, 'Array2DTracer');
     },false);
 }
 
 module.exports = {
-    setup
+    setup,
+    mousescroll,
+    fauxData,
+    tableToInputFields,
+    generateJS
 };

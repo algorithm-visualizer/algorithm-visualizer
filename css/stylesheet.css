@@ -675,7 +675,7 @@ input[type=number]::-webkit-outer-spin-button {
     }
 }
 
-.buttonContainer{
+.buttonContainer {
     width: 75px;
     height: 25px;
     display: block;
@@ -684,42 +684,44 @@ input[type=number]::-webkit-outer-spin-button {
     background-color: white;
 }
 
-.inputField{
+.inputField {
     width: 25px;
     border: 0;
 }
 
-.sb-button{
+.sb-button {
     border: 1px solid #515151;
     height: 25px;
     margin: 0 auto;
 }
 
-.auto-gen{
-    height: 34%;
+.auto-gen {
+    top: 30px;
+    height: 100%;
+    width: 100%;
     text-align: center;
     background-color: #262626;
-    display: flex;
     align-items: center;
 }
 
-.auto-gen-tracers{
-    top: 30px;
-    bottom: 66%;
-}
-
-.auto-gen-options{
-    top: 33%;
-    bottom: 33%;
-}
-
-.auto-gen-generate{
-    top: 66%;
-}
-
-.inputs{
+.inputs {
     display: inline-block;
     border: 0;
     background-color: #505050;
     height: 25px;
+    width: 75px;
+}
+
+.grid {
+    width: 50%;
+    height: 50%;
+    float: left;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.fields {
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
