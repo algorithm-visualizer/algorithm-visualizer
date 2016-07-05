@@ -27,7 +27,7 @@ const setup = () => {
 
         var numColumns = getNumColumns();
         var data = array2D.fauxData(1,numColumns)[0];
-        console.log(data);
+
         arr1DTracer.setData(data);
         array2D.tableToInputFields(1, numColumns);
         util.positionModules();
