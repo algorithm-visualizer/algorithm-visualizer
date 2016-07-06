@@ -230,6 +230,7 @@ nav h3 {
 
 nav,
 section,
+.sandbox_container,
 .viewer_container,
 .editor_container {
     position: absolute;
@@ -249,6 +250,11 @@ section {
     right: 50%;
 }
 
+.sandbox_container{
+    left: 50%;
+    z-index:  100;
+}
+
 .editor_container {
     left: 50%;
 }
@@ -256,6 +262,10 @@ section {
 .module_container {
     overflow: hidden;
     border: none;
+}
+
+.hide{
+    display: none;
 }
 
 .tab_container {
@@ -332,6 +342,7 @@ section {
     border-bottom: none;
 }
 
+.close_bar,
 .files_bar {
     height: 30px;
     border-bottom: 1px solid #505050;
@@ -374,6 +385,11 @@ section {
 
 .files_bar > .wrapper.shadow-left.shadow-right {
     box-shadow: inset 16px 0 16px -16px rgba(0, 0, 0, .6), inset -16px 0 16px -16px rgba(0, 0, 0, .6);
+}
+
+.close_bar {
+    width: 100%;
+    background-color: #3f3f3f;
 }
 
 .explanation_container {
@@ -657,4 +673,55 @@ input[type=number]::-webkit-outer-spin-button {
         top: 30px;
         left: 0;
     }
+}
+
+.buttonContainer {
+    width: 75px;
+    height: 25px;
+    display: block;
+    position: relative;
+    z-index: 100;
+    background-color: white;
+}
+
+.inputField {
+    width: 25px;
+    border: 0;
+}
+
+.sb-button {
+    border: 1px solid #515151;
+    height: 25px;
+    margin: 0 auto;
+}
+
+.auto-gen {
+    top: 30px;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    background-color: #262626;
+    align-items: center;
+}
+
+.inputs {
+    display: inline-block;
+    border: 0;
+    background-color: #505050;
+    height: 25px;
+    width: 75px;
+}
+
+.grid {
+    width: 50%;
+    height: 50%;
+    float: left;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.fields {
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
