@@ -64,15 +64,27 @@ const generateJS = (logger, tracer, tracerName) => {
     var i;
     var j;
     var comma = ',';
+    var currVal;
+    var nors;
     for(i = 0; i < numRows; i++){
         if(numRows > 1){
             line = '[';
         }
         for(j = 0; j < numColumns-1; j++){
-            line += table.childNodes[i].childNodes[j].childNodes[0].value + ',';
+            currVal = table.childNodes[i].childNodes[j].childNodes[0].value;
+            nors = Number(currVal);
+            if(isNaN(nors)){
+                currVal = "'" + currVal + "'";
+            }
+            line += currVal + ',';
         }
         if(i === numRows - 1){comma = '';}
-        line += table.childNodes[i].childNodes[j++].childNodes[0].value + ']' + comma;
+        currVal = table.childNodes[i].childNodes[j++].childNodes[0].value;
+        nors = Number(currVal);
+        if(isNaN(nors)){
+            currVal = "'" + currVal + "'";
+        }
+        line += currVal + ']' + comma;
         logger.print(line);
     }
     if(numRows > 1){
