@@ -1,6 +1,7 @@
 {
    "backtracking": {
       "list": {
+         "knight's_tour": "Knight’s tour problem",
          "n_queens": "N Queens Problem"
       },
       "name": "Backtracking"
@@ -20,6 +21,7 @@
          "knapsack_problem": "Knapsack Problem",
          "longest_common_subsequence": "Longest Common Subsequence",
          "longest_increasing_subsequence": "Longest Increasing Subsequence",
+         "longest_palindromic_subsequence": "Longest Palindromic Subsequence",
          "max_subarray": "Maximum Subarray",
          "max_sum_path": "Maximum Sum Path",
          "pascal_triangle": "Pascal's Triangle",
@@ -44,7 +46,8 @@
    },
    "greedy": {
       "list": {
-         "job_scheduling": "Job Scheduling Problem"
+         "job_scheduling": "Job Scheduling Problem",
+         "majority_element": "Majority Element(Boyer–Moore majority vote algorithm)"
       },
       "name": "Greedy"
    },
@@ -57,8 +60,8 @@
    },
    "number_theory": {
       "list": {
-         "euclidean_algorithm": "Euclidean Algorithm",
-         "sieve_of_eratosthenes": "Sieve of Eratosthenes"
+        "euclidean_algorithm": "Euclidean Algorithm",
+        "sieve_of_eratosthenes": "Sieve of Eratosthenes"
       },
       "name": "Number Theory"
    },

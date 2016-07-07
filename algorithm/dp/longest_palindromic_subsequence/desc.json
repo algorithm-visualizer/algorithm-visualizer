@@ -1,0 +1,13 @@
+{
+  "Longest Palindromic Subsequence": "Find the length of the longest palindromic subsequence in a given sequence",
+  "Complexity": {
+    "time": "O(n<sup>2</sup>)",
+    "space": "O(n<sup>2</sup>)"
+  },
+  "References": [
+    "<a href='http://www.geeksforgeeks.org/dynamic-programming-set-12-longest-palindromic-subsequence/'>GeeksForGeeks</a>"
+  ],
+  "files": {
+    "basic": "Longest Palindromic Subsequence"
+  }
+}
