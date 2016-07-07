@@ -5,7 +5,6 @@ const app = require('./app');
 const AppConstructor = require('./app/constructor');
 const DOM = require('./dom');
 const Server = require('./server');
-
 const modules = require('./module');
 
 const {
@@ -33,7 +32,6 @@ RSVP.on('error', function (reason) {
 });
 
 $(() => {
-
   // initialize the application and attach in to the instance module
   const appConstructor = new AppConstructor();
   extend(true, app, appConstructor);
@@ -72,6 +70,7 @@ $(() => {
     } else {
       DOM.showFirstAlgorithm();
     }
+
   });
 
   Server.loadWikiList().then((data) => {

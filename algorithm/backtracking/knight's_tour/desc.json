@@ -1,0 +1,13 @@
+{
+  "Knight’s tour problem": "A knight's tour is a sequence of moves of a knight on a chessboard such that the knight visits every square only once. If the knight ends on a square that is one knight's move from the beginning square (so that it could tour the board again immediately, following the same path), the tour is closed, otherwise it is open.",
+  "Complexity": {
+    "time": "Worst O(8<sup>N<sup>2</sup></sup>)",
+    "space": "Worst O(N<sup>2</sup>)"
+  },
+  "References": [
+    "<a href='https://en.wikipedia.org/wiki/Knight%27s_tour'>Wikipedia</a>"
+  ],
+  "files": {
+    "basic": "Solving the Knight’s tour problem using Backtracking & Recursion"
+  }
+}

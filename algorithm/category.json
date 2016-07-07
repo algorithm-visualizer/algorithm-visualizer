@@ -1,6 +1,7 @@
 {
    "backtracking": {
       "list": {
+         "knight's_tour": "Knight’s tour problem",
          "n_queens": "N Queens Problem"
       },
       "name": "Backtracking"
@@ -20,6 +21,7 @@
          "knapsack_problem": "Knapsack Problem",
          "longest_common_subsequence": "Longest Common Subsequence",
          "longest_increasing_subsequence": "Longest Increasing Subsequence",
+         "longest_palindromic_subsequence": "Longest Palindromic Subsequence",
          "max_subarray": "Maximum Subarray",
          "max_sum_path": "Maximum Sum Path",
          "pascal_triangle": "Pascal's Triangle",
@@ -44,7 +46,8 @@
    },
    "greedy": {
       "list": {
-         "job_scheduling": "Job Scheduling Problem"
+         "job_scheduling": "Job Scheduling Problem",
+         "majority_element": "Majority Element(Boyer–Moore majority vote algorithm)"
       },
       "name": "Greedy"
    },
@@ -57,8 +60,8 @@
    },
    "number_theory": {
       "list": {
-         "euclidean_algorithm": "Euclidean Algorithm",
-         "sieve_of_eratosthenes": "Sieve of Eratosthenes"
+        "euclidean_algorithm": "Euclidean Algorithm",
+        "sieve_of_eratosthenes": "Sieve of Eratosthenes"
       },
       "name": "Number Theory"
    },
@@ -73,11 +76,12 @@
          "bucket": "Bucket Sort",
          "bubble": "Bubble Sort",
          "comb": "Comb Sort",
-		 "counting": "Counting Sort",
+         "counting": "Counting Sort",
          "cycle": "Cycle Sort",
          "heap": "Heapsort",
          "insertion": "Insertion Sort",
          "merge": "Merge Sort",
+         "pigeonhole": "Pigeonhole Sort",
          "quick": "Quicksort",
          "radix": "Radix Sort",
          "selection": "Selection Sort",
@@ -90,7 +94,8 @@
          "edit_distance": "Edit Distance",
          "knuth_morris_pratt": "KMP Substring Search",
          "rabin_karp_algorithm": "Rabin-Karp Algorithm",
-         "suffix_array": "Suffix Array (construction & usage)"
+         "suffix_array": "Suffix Array (construction & usage)",
+         "z_algorithm": "Z Algorithm"
       },
       "name": "String"
    },
@@ -105,8 +110,9 @@
    "etc": {
       "list": {
          "flood_fill": "Flood Fill",
-	 "cellular_automata": "Cellular Automata",
-         "create_maze": "Create Maze"
+         "cellular_automata": "Cellular Automata",
+         "create_maze": "Create Maze",
+         "magic_square": "Magic Square"
       },
       "name": "Uncategorized"
    }
