@@ -39,8 +39,16 @@ const enabledHightlighting = () =>{
     }
 }
 
+const clickTraceTab = () => {
+    var btn = document.getElementById('btn_trace');
+    if(btn){
+        btn.click();
+    }
+}
+
 module.exports = {
     enabledHightlighting,
     positionModules,
-    clearModules
+    clearModules,
+    clickTraceTab
 };
