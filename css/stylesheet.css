@@ -63,6 +63,7 @@ button {
 .btn:hover,
 button:hover {
     background: rgba(0, 0, 0, .15);
+    border-bottom: 0px solid #505050;
 }
 
 .btn.active,
@@ -88,6 +89,10 @@ button input {
     background: rgba(0, 0, 0, .3);
     padding: 4px;
     border: none;
+}
+
+.tab_button{
+  border-bottom: 1px solid #505050;
 }
 
 .divider {
