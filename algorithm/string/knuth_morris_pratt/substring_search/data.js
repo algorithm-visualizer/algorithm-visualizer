@@ -3,7 +3,11 @@ function randString(length) {
   return result.substring(result.length - length);
 }
 
-var string = randString(15), substring = randString(5);
+var string = randString(15);
+
+var startIndex = Math.floor(Math.random() * 10); // Random start index from 0 to 9
+var substring = string.substr(startIndex, 5); // Substring of `string` of length 5
+
 //var string = 'abcxabcdabxabcdabcdabxabcda', substring = 'xabcda';
 //var string = 'abcxabcdabxabcdabcdabcyiuhsiuhduiahdubhbuuabcdabcysbhbh', substring = 'abcdabcy';
 
