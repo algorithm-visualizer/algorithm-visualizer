@@ -24,6 +24,7 @@ module.exports = (category, algorithm, files, requestedFile) => {
 
   each(files, (file, explanation) => {
     var $file = addFileToDOM(category, algorithm, file, explanation);
+    $file.addClass('tab_button');
     if (requestedFile && requestedFile == file) $file.click();
   });
 
