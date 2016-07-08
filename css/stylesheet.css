@@ -63,17 +63,16 @@ button {
 .btn:hover,
 button:hover {
     background: rgba(0, 0, 0, .15);
-    border-bottom: 0px solid #505050;
 }
 
 .btn.active,
 button.active {
-    background: rgb(38, 38, 38);
+    background: rgb(36, 36, 36);
 }
 
 .btn.active:hover,
 button.active:hover {
-    background: rgba(38, 38, 38);
+    background: rgba(36, 36, 36);
     color: rgba(187, 187, 187, .8);
 }
 
@@ -401,7 +400,7 @@ section {
     border: none;
     top: 30px;
     height: 30px;
-    background: rgb(38, 38, 38);
+    background: rgb(36, 36, 36);
     padding: 8px;
     font-size: 12px;
 }
