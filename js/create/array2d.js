@@ -35,7 +35,7 @@ const tableToInputFields = (numRows, numColumns) => {
     for(var i = 0; i < numRows; i++){
         for(var j = 0; j < numColumns; j++){
             var elem = document.createElement('input');
-            elem.type = 'Number';
+            elem.type = 'Text';
             elem.value = Math.floor(Math.random() * 10 + 1);
             elem.classList.add('mtbl-col','inputField');
             table.childNodes[i].childNodes[j].innerHTML = '';
@@ -56,22 +56,40 @@ const generateJS = (logger, tracer, tracerName) => {
     logger.print('Copy and paste this code in your data.js file!');
     logger.print('');
 
-    logger.print('let myTable = [');
+    if(numRows > 1) {
+        logger.print('let myTable = [');
+    }
 
-    var line = '';
+    var line = 'let myTable = [';
     var i;
     var j;
     var comma = ',';
+    var currVal;
+    var nors;
     for(i = 0; i < numRows; i++){
-        line = '[';
+        if(numRows > 1){
+            line = '[';
+        }
         for(j = 0; j < numColumns-1; j++){
-            line += table.childNodes[i].childNodes[j].childNodes[0].value + ',';
+            currVal = table.childNodes[i].childNodes[j].childNodes[0].value;
+            nors = Number(currVal);
+            if(isNaN(nors)){
+                currVal = "'" + currVal + "'";
+            }
+            line += currVal + ',';
         }
         if(i === numRows - 1){comma = '';}
-        line += table.childNodes[i].childNodes[j++].childNodes[0].value + ']' + comma;
+        currVal = table.childNodes[i].childNodes[j++].childNodes[0].value;
+        nors = Number(currVal);
+        if(isNaN(nors)){
+            currVal = "'" + currVal + "'";
+        }
+        line += currVal + ']' + comma;
         logger.print(line);
     }
-    logger.print(']');
+    if(numRows > 1){
+        logger.print(']');
+    }
 
 
     logger.print("let myTableTracer = new "+ tracer +" ('"+tracerName+"')");

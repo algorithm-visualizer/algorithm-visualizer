@@ -85,6 +85,7 @@ const init = () => {
         array2d.setup();
         array1d.setup();
         closeCreate();
+        util.clickTraceTab();
     }
 };
 
