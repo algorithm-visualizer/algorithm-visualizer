@@ -33,4 +33,25 @@ var i,j;
  	}
  }
 
- logger._print ( 'Longest Common Subsequence is ' + A[m][n] );
+var finalString = '';
+i=m;
+j=n;
+while( i>=1 && j>=1 ) {
+
+	tracer3._select ( i, j )._wait ();
+	if( string1[i-1] == string2[j-1] ) {
+		tracer1._select ( i-1 )._wait ();
+ 		tracer2._select ( j-1 )._wait ();
+ 		
+		finalString = string1[i-1] + finalString;
+		i--;
+		j--;
+	} else if( A[i-1][j] > A[i][j-1] ) {
+		i--;
+	} else {
+		j--;
+	}
+}
+
+logger._print ( 'Longest Common Subsequence Length is ' + A[m][n] );
+logger._print ( 'Longest Common Subsequence is ' + finalString );
