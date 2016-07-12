@@ -11,6 +11,20 @@
     <title>Algorithm Visualizer</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
     <link rel="stylesheet" href="public/algorithm_visualizer.min.css">
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+            styles: {
+                ".MJXc-display": {
+                    "display": "inline !important",
+                    "margin": "0 !important"
+                },
+            }
+        });
+    </script>
+    <script type="text/javascript" async
+      src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
 </head>
 
 <body>
@@ -36,7 +50,6 @@
                 <span class="btn-text">Generate</span>
             </div>
         </div>
-
         <div class="btn" id="btn_share">
             <div class="wrapper">
                 <i class="fa fa-share" aria-hidden="true"></i> Share <input type="text" class="collapse" id="shared">
