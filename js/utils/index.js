@@ -14,8 +14,13 @@ const getFileDir = (category, algorithm, file) => {
   return `./algorithm/${category}/${algorithm}/${file}/`;
 };
 
+const renderMathJax = () =>{
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+};
+
 module.exports = {
   isScratchPaper,
   getAlgorithmDir,
-  getFileDir
+  getFileDir,
+  renderMathJax
 };
