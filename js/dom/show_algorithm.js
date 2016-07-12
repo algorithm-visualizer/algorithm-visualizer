@@ -1,11 +1,7 @@
 'use strict';
 
 const app = require('../app');
-
-const {
-  isScratchPaper
-} = require('../utils');
-
+const utils = require('../utils');
 const showDescription = require('./show_description');
 const addFiles = require('./add_files');
 
@@ -14,7 +10,7 @@ module.exports = (category, algorithm, data, requestedFile) => {
   let category_name;
   let algorithm_name;
 
-  if (isScratchPaper(category)) {
+  if (utils.isScratchPaper(category)) {
     $menu = $('#scratch-paper');
     category_name = 'Scratch Paper';
     algorithm_name = algorithm ? 'Shared' : 'Temporary';
@@ -45,4 +41,5 @@ module.exports = (category, algorithm, data, requestedFile) => {
 
   showDescription(data);
   addFiles(category, algorithm, files, requestedFile);
+  utils.renderMathJax();
 };

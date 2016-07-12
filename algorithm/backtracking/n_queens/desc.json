@@ -5,8 +5,8 @@
     "Searching"
   ],
   "Complexity": {
-    "time": "Worst O(N!)",
-    "space": "Worst O(N)"
+    "time": "Worst $$O(N!)$$",
+    "space": "Worst $$O(N)$$"
   },
   "References": [
     "<a href='http://www.geeksforgeeks.org/backtracking-set-3-n-queen-problem/'>geeksforgeeks</a>"
