@@ -21,5 +21,5 @@ function lcaBT (parent, root, a, b) {
     return (left !== null ? left : right);
 }
 
-var a = 7, b = 9;
+var a = 7, b = 2;
 logger._print ('Lowest common ancestor of ' + a + ' & ' + b + ' is: ' + lcaBT (null, 5, a, b));
