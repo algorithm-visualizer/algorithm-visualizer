@@ -1,134 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <meta name="description" content="Tool for visualizing algorithms."/>
+    <meta property="og:title" content="Algorithm Visualizer"/>
+    <meta property="og:description" content="Tool for visualizing algorithms."/>
+    <meta property="og:image" content="img/image.png"/>
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon"/>
     <title>Algorithm Visualizer</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-    <link rel="stylesheet" href="css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/gh-fork-ribbon.css"/>
-    <link rel="stylesheet" href="css/stylesheet.css">
 </head>
-<body>
-<nav>
-    <button id="navigation">
-        <h3>
-            Algorithm Visualizer
-            <i class="fa fa-angle-right nav-arrow" aria-hidden="true"></i>
-            <span id="category"></span>
-            <i class="fa fa-angle-right nav-arrow" aria-hidden="true"></i>
-            <span id="algorithm"></span>
-            <i class="fa fa-caret-up nav-dropdown" aria-hidden="true"></i>
-        </h3>
-    </button>
-    <div class="buttons">
-        <button id="btn_run"><i class="fa fa-play" aria-hidden="true"></i> Run</button>
-        <button id="btn_prev"><i class="fa fa-chevron-left" aria-hidden="true"></i> Prev</button>
-        <button id="btn_pause"><i class="fa fa-pause" aria-hidden="true"></i> Pause</button>
-        <button id="btn_next">Next <i class="fa fa-chevron-right" aria-hidden="true"></i></button>
-    </div>
-</nav>
-<section class="sidemenu active">
-    <div id="list">
-    </div>
-    <div id="header">
-        <a href="https://github.com/parkjs814/AlgorithmVisualizer/wiki">
-            <button><i class="fa fa-book"></i> Documentation</button>
-        </a>
-        <button class="category"><i class="fa fa-github"></i> Powered by ...</button>
-        <a href="https://github.com/jquery/jquery">
-            <button class="indent">jquery/jquery</button>
-        </a>
-        <a href="https://github.com/ajaxorg/ace">
-            <button class="indent">ajaxorg/ace</button>
-        </a>
-        <a href="https://github.com/jacomyal/sigma.js">
-            <button class="indent">jacomyal/sigma.js</button>
-        </a>
-        <a href="https://github.com/FortAwesome/Font-Awesome">
-            <button class="indent">FortAwesome/Font-Awesome</button>
-        </a>
-        <a href="https://github.com/simonwhitaker/github-fork-ribbon-css">
-            <button class="indent">simonwhitaker/github-fork-ribbon-css</button>
-        </a>
 
-    </div>
-    <a class="github-fork-ribbon left-bottom" href="http://github.com/parkjs814/AlgorithmVisualizer"
-       title="Fork me on GitHub">Fork me on GitHub</a>
-</section>
-<div class="workspace">
-    <div class="viewer_container">
-        <section class="module_container"></section>
-        <section class="tab_container">
-            <div class="tab active" id="tab_desc">
-                <div class="wrapper">
-                    <h2 id="desc_title"></h2>
-                    <p id="desc_def"></p>
-                    <hr/>
-                    <h3>Application</h3>
-                    <ul id="desc_app"></ul>
-                    <hr/>
-                    <h3>Complexity</h3>
-                    <p>
-                        <strong>Time</strong> <span id="desc_time"></span><br/>
-                        <strong>Space</strong> <span id="desc_space"></span>
-                    </p>
-                    <hr/>
-                    <h3>Reference</h3>
-                    <ul id="desc_ref"></ul>
-                </div>
-            </div>
-            <div class="tab" id="tab_trace">
-                <div class="wrapper">
-                </div>
-            </div>
-        </section>
-        <section class="tab_bar">
-            <button class="active" id="btn_desc">Description</button>
-            <button id="btn_trace">Trace</button>
-        </section>
-    </div>
-    <div class="editor_container">
-        <section class="files_bar">
-        </section>
-        <section class="explanation_container">
-            <i class="fa fa-info-circle" aria-hidden="true"></i> <span id="explanation"></span>
-        </section>
-        <section class="data_container">
-            <pre id="data"></pre>
-        </section>
-        <section class="code_container">
-            <pre id="code"></pre>
-        </section>
-    </div>
-</div>
-<div class="toast_container">
-</div>
-<script src="js/jquery-2.2.3.min.js"></script>
-<script src="js/sigma/sigma.min.js"></script>
-<script src="js/sigma/plugins/sigma.plugins.dragNodes.min.js"></script>
-<script src="js/ace/ace.js"></script>
-<script src="js/module/tracer.js"></script>
-<script src="js/module/directed_graph.js"></script>
-<script src="js/module/undirected_graph.js"></script>
-<script src="js/module/weighted_directed_graph.js"></script>
-<script src="js/module/weighted_undirected_graph.js"></script>
-<script src="js/module/array2d.js"></script>
-<script src="js/module/array1d.js"></script>
-<script src="js/script.js"></script>
+<body>
 <script>
-    (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-    ga('create', 'UA-78128848-1', 'auto');
-    ga('send', 'pageview');
+    window.location = "http://algo-visualizer.jasonpark.me";
 </script>
 </body>
+
 </html>
