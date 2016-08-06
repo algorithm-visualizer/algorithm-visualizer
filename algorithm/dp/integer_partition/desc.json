@@ -1,8 +1,8 @@
 {
   "Integer Partition": "In number theory and combinatorics, a partition of a positive integer n, also called an integer partition, is a way of writing n as a sum of positive integers.",
   "Complexity": {
-    "time": "O(n(log n))",
-    "space": "O(n<sup>2</sup>)"
+    "time": "$O(n(log \\, n))$",
+    "space": "$O(n^2)$"
   },
   "References": [
     "<a href='https://en.wikipedia.org/wiki/Partition_(number_theory)'>Wikipedia</a>"

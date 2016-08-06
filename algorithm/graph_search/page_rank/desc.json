@@ -4,8 +4,8 @@
     "Web Page Indexing for refining search results"
   ],
   "Complexity": {
-    "time": "worst O(|V|+|E|)",
-    "space": "worst O(|V|)"
+    "time": "worst $O(|V|+|E|)$",
+    "space": "worst $O(|V|)$"
   },
   "References": [
     "<a href='http://www.cs.princeton.edu/~chazelle/courses/BIB/pagerank.htm'>Princeton university</a>",

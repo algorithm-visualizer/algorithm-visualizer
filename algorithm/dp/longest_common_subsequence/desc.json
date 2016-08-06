@@ -1,8 +1,8 @@
 {
   "Longest Common Subsequence": "The longest common subsequence (LCS) problem is the problem of finding the longest subsequence common to all sequences in a set of sequences (often just two sequences)." ,
   "Complexity": {
-    "time": "O(mn)",
-    "space": "O(mn)"
+    "time": "$O(m\\cdot n)$",
+    "space": "$O(m\\cdot n)$"
   },
   "References": [
     "<a href='https://en.wikipedia.org/wiki/Longest_common_subsequence_problem'>Wikipedia</a>"

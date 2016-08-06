@@ -4,8 +4,8 @@
     "Ar."
   ],
   "Complexity": {
-    "time": "worst O(|V|<sup>2</sup>)",
-    "space": "worst O(|V|)"
+    "time": "worst $O(|V|^2)$",
+    "space": "worst $O(|V|)$"
   },
   "References": [
     "<a href='https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm'>Wikipedia</a>"

@@ -5,8 +5,8 @@
     "Probability"
   ],
   "Complexity": {
-    "time": " O(N<sup>2</sup>)",
-    "space": "O(N<sup>2</sup>)"
+    "time": " $O(N^2)$",
+    "space": "$O(N^2)$"
   },
   "References": [
     "<a href='https://en.wikipedia.org/wiki/Pascal%27s_triangle'>Wikipedia</a>"

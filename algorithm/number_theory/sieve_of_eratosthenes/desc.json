@@ -1,8 +1,8 @@
 {
   "Sieve of Eratosthenes": "Finding all prime numbers up to a given range.",
   "Complexity": {
-    "time": "$$O(n\\,(log\\,n)(log\\,log\\,n))$$",
-    "space": "$$O(n^{\\frac{1}{2}})$$"
+    "time": "$O(n\\,(log\\,n)(log\\,log\\,n))$",
+    "space": "$O(n^{\\frac{1}{2}})$"
   },
   "References": [
     "<a href='https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes'>Wikipedia</a>"

@@ -10,8 +10,8 @@
     "Construction of the failure function of the Aho-Corasick pattern matcher."
   ],
   "Complexity": {
-    "time": "worst O(|E|)",
-    "space": "worst O(|V|)"
+    "time": "worst $O(|E|)$",
+    "space": "worst $O(|V|)$"
   },
   "References": [
     "<a href='https://en.wikipedia.org/wiki/Breadth-first_search'>Wikipedia</a>"

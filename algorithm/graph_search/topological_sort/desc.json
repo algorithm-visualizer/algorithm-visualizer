@@ -8,8 +8,8 @@
     "Data serialization"
   ],
   "Complexity": {
-    "time": "worst O(|V|+|E|)",
-    "space": "worst O(|V|)"
+    "time": "worst $O(|V|+|E|)$",
+    "space": "worst $O(|V|)$"
   },
   "References": [
     "<a href='http://www.geeksforgeeks.org/topological-sorting-indegree-based-solution/'>GeeksForGeeks</a>",

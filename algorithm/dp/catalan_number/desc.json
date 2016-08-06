@@ -6,8 +6,8 @@
     "The number of ways to cut an n+2-sided convex polygon in a plane into triangles by connecting vertices with straight, non-intersecting lines is the nth Catalan number. This is the application in which Euler was interested."
   ],
   "Complexity": {
-    "time": " O(N<sup>2</sup>)",
-    "space": "O(N)"
+    "time": " $O(N^2)$",
+    "space": "$O(N)$"
   },
   "References": [
     "<a href='https://en.wikipedia.org/wiki/Catalan_number'>Wikipedia</a>",

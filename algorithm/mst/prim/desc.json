@@ -3,7 +3,7 @@
   "Applications": [
   ],
   "Complexity": {
-    "time": "worst O(|V|<sup>2</sup>)"
+    "time": "worst $O(|V|^2)$"
   },
   "References": [
     "<a href='https://en.wikipedia.org/wiki/Prim%27s_algorithm'>Wikipedia</a>"

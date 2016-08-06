@@ -3,7 +3,7 @@
   "Applications": [
   ],
   "Complexity": {
-    "time": "worst O(E log(E))"
+    "time": "worst $O(E\\, log(E))$"
   },
   "References": [
     "<a href='https://en.wikipedia.org/wiki/Kruskal%27s_algorithm'>Wikipedia</a>"

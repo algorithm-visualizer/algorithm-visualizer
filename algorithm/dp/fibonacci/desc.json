@@ -1,8 +1,8 @@
 {
   "Fibonacci Sequence": "Finding Fibonacci sequence using dynamic programming.",
   "Complexity": {
-    "time": "O(n)",
-    "space": "O(n)"
+    "time": "$O(n)$",
+    "space": "$O(n)$"
   },
   "References": [
     "<a href='https://en.wikipedia.org/wiki/Dynamic_programming#Fibonacci_sequence'>Wikipedia</a>"

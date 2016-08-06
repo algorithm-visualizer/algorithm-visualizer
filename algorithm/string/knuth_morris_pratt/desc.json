@@ -4,8 +4,8 @@
     "Substring Search"
   ],
   "Complexity": {
-    "time": "worst O(|N|+|K|)",
-    "space": "worst O(|K|)"
+    "time": "worst $O(|N|+|K|)$",
+    "space": "worst $O(|K|)$"
   },
   "References": [
     "<a href='https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm'>Wikipedia</a>"

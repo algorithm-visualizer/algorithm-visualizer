@@ -5,8 +5,8 @@
     "More complex Variations of Affine Cipher are used in practical cryptography"
   ],
   "Complexity": {
-    "time": "worst O(N), N = length of plain/cipher text",
-    "space": "worst O(N), to create the new mapping (plain->cipher, cipher->plain)"
+    "time": "worst $O(N)$, $N$ = length of plain/cipher text",
+    "space": "worst $O(N)$, to create the new mapping (plain->cipher, cipher->plain)"
   },
   "References": [
     "<a href='http://practicalcryptography.com/ciphers/affine-cipher/'>Practicalcryptography</a>"

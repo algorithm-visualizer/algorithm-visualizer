@@ -4,8 +4,8 @@
     "Packet Routing - A variation of BF is used in the Distance vector Routing Protocol"
   ],
   "Complexity": {
-    "time": "worst O(|V|.|E|)",
-    "space": "worst O(|V|)"
+    "time": "worst $O(|V|\\cdot |E|)$",
+    "space": "worst $O(|V|)$"
   },
   "References": [
     "<a href='https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm'>Wikipedia</a>"
