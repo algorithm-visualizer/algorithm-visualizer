@@ -11,6 +11,20 @@
     <title>Algorithm Visualizer</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
     <link rel="stylesheet" href="public/algorithm_visualizer.min.css">
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+            styles: {
+                ".MJXc-display": {
+                    "display": "inline !important",
+                    "margin": "0 !important"
+                },
+            }
+        });
+    </script>
+    <script type="text/javascript" async
+      src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
 </head>
 
 <body>
@@ -36,7 +50,6 @@
                 <span class="btn-text">Generate</span>
             </div>
         </div>
-
         <div class="btn" id="btn_share">
             <div class="wrapper">
                 <i class="fa fa-share" aria-hidden="true"></i> Share <input type="text" class="collapse" id="shared">
@@ -109,6 +122,9 @@
             <a href="https://github.com/simonwhitaker/github-fork-ribbon-css">
                 <button class="indent">simonwhitaker/github-fork-ribbon-css</button>
             </a>
+            <a href="https://github.com/mathjax/MathJax">
+                <button class="indent">mathjax/MathJax</button>
+            </a>
         </div>
     </div>
     <a class="github-fork-ribbon left-bottom" href="http://github.com/parkjs814/AlgorithmVisualizer"
@@ -117,9 +133,9 @@
 <div class="workspace">
     <div class="viewer_container">
         <section class="tab_bar">
-            <button id="btn_doc" data-target="#tab_doc">Tracer API</button>
-            <button class="active" id="btn_desc" data-target="#tab_desc">Description</button>
-            <button id="btn_trace" data-target="#tab_module">Trace</button>
+            <button class="tab_button" id="btn_doc" data-target="#tab_doc">Tracer API</button>
+            <button class="tab_button active" id="btn_desc" data-target="#tab_desc">Description</button>
+            <button class="tab_button" id="btn_trace" data-target="#tab_module">Trace</button>
         </section>
         <section class="tab_container">
             <div class="tab" id="tab_doc">
@@ -136,8 +152,8 @@
     </div>
     <div class="editor_container">
         <section class="files_bar">
-            <button class="btn-left"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
-            <button class="btn-right"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
+            <button class="tab_button btn-left"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
+            <button class="tab_button btn-right"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
             <div class="wrapper"></div>
         </section>
         <section class="explanation_container">
