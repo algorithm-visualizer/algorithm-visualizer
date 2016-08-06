@@ -4,8 +4,8 @@
     ""
   ],
   "Complexity": {
-    "time": "worst O(|V|<sup>3</sup>)",
-    "space": "worst O(|V|<sup>2</sup>)"
+    "time": "worst $O(|V|^3)$",
+    "space": "worst $O(|V|^2)$"
   },
   "References": [
     "<a href='https://en.wikipedia.org/wiki/Floyd–Warshall_algorithm'>Wikipedia</a>"

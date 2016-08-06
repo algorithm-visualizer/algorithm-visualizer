@@ -4,8 +4,8 @@
     "Finding vulnerabilities in Graphs and Electrical Circuits"
   ],
   "Complexity": {
-    "time": "worst Naive: O(|E|.(|V|+|E|)), Efficient: O(|V|+|E|)",
-    "space": "worst O(|V|.|E|)"
+    "time": "worst Naive: $O(|E| \\cdot (|V|+|E|))$, Efficient: $O(|V|+|E|)$",
+    "space": "worst $O(|V| \\cdot |E|)$"
   },
   "References": [
     "<a href='https://en.wikipedia.org/wiki/Bridge_(graph_theory)'>Wikipedia</a>"

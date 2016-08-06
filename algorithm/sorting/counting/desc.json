@@ -1,8 +1,8 @@
 {
   "Counting Sort": "Counting sort is a sorting algorithm for a collection of objects. Sorting is done according to the keys (small integers) of the objects. This works by counting the number of objects that have each distinct key value, and then using those counts to determine the positions of each key value.",
   "Complexity": {
-    "time": "worst O(n+k), best O(n), average O(n+k) where n is the number of elements in the input array and k is the range of the output",
-    "space": "worst O(n+k)"
+    "time": "worst $O(n+k)$, best $O(n)$, average $O(n+k)$ where $n$ is the number of elements in the input array and $k$ is the range of the output",
+    "space": "worst $O(n+k)$"
   },
   "References": [
     "<a href='https://en.wikipedia.org/wiki/Counting_sort'>Wikipedia</a>"

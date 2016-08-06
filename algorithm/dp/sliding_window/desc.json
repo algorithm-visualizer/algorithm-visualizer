@@ -1,8 +1,8 @@
 {
   "Sliding Window": "Finding the largest sum of three contiguous number",
   "Complexity": {
-    "time": "O(n)",
-    "space": "O(n)"
+    "time": "$O(n)$",
+    "space": "$O(n)$"
   },
   "References": [
   ],

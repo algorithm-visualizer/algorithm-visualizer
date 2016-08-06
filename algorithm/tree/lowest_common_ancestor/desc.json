@@ -3,8 +3,8 @@
   "Applications": [
   ],
   "Complexity": {
-    "time": "Worst: O(N)",
-    "space": "Worst: O(1)"
+    "time": "Worst: $O(N)$",
+    "space": "Worst: $O(1)$"
   },
   "References": [
     "<a href='http://www.geeksforgeeks.org/lowest-common-ancestor-binary-tree-set-1/'>GeeksForGeeks</a>"

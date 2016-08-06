@@ -5,8 +5,8 @@
     "Traversing binary search trees"
   ],
   "Complexity": {
-    "time": "worst O(log(N)), best O(1), average O(log(N))",
-    "space": "worst O(log(N)) - recursive, O(1) - iterative"
+    "time": "worst $O(log(N))$, best $O(1)$, average $O(log(N))$",
+    "space": "worst $O(log(N))$ - recursive, $O(1)$ - iterative"
   },
   "References": [
     "<a href='https://en.wikipedia.org/wiki/Binary_search_algorithm'>Wikipedia</a>"

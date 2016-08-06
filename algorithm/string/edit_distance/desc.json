@@ -6,8 +6,8 @@
     "Natural Language Processing"
   ],
   "Complexity": {
-    "time": "worst O(|M|.|N|)",
-    "space": "worst O(|M|.|N|)"
+    "time": "worst $O(|M| \\cdot |N|)$",
+    "space": "worst $O(|M| \\cdot |N|)$"
   },
   "References": [
     "<a href='https://en.wikipedia.org/wiki/Edit_distance'>Wikipedia</a>"
