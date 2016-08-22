@@ -1,0 +1,14 @@
+{
+  "Pancake Sort": "Pancake Sort,inspired from sorting a stack of pancake using spatula, is a simple sorting algorithm that only have 1 operation called flip. </br> flip (i) : Reverse array from i to N where N is length of array ",
+  "Complexity": {
+    "time": "worst $O(n^2)$",
+    "space": "worst $O(1)$ auxiliary"
+  },
+  "References": [
+    "<a href='https://en.wikipedia.org/wiki/Pancake_sorting'>Wikipedia</a>",
+    "<a href='http://www.geeksforgeeks.org/pancake-sorting/'>Geeksforgeeks</a>"
+  ],
+  "files": {
+    "basic": "Pancake sort"
+  }
+}

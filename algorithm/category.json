@@ -85,7 +85,8 @@
          "quick": "Quicksort",
          "radix": "Radix Sort",
          "selection": "Selection Sort",
-         "shell": "Shellsort"
+         "shell": "Shellsort",
+         "pancake": "Pancake Sort"
       },
       "name": "Sorting"
    },
