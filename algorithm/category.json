@@ -37,6 +37,7 @@
          "bfs": "BFS",
          "bridges": "Find-Bridges",
          "dfs": "DFS",
+         "dls": "Depth-Limited Search",
          "dijkstra": "Dijkstra",
          "floyd_warshall": "Floyd-Warshall",
          "page_rank": "PageRank Algorithm",
