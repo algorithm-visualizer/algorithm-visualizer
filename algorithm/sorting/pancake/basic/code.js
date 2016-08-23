@@ -21,7 +21,7 @@ for (var i=0;i<N-1;i++) {
   var currMax = currArr.reduce((prev, curr, idx) => {
     return (curr > prev.val) ? { idx: idx, val: curr} : prev;
   }, {idx: 0, val: currArr[0]});
-  if (currMax.idx !== i) {
+  if (currMax.idx !== 0) { // if currMax.idx === 0 that means max element already at the bottom, no flip required
     logger._print('flip at ' + (currMax.idx+i) + ' (step 1)');
     flip(currMax.idx+i, N);
     logger._print('flip at ' + (i) + ' (step 2)');
