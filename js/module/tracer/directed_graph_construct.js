@@ -14,10 +14,19 @@ class DirectedGraphConstructTracer extends Tracer {
   constructor(name, nodePlacement = null) {
     super(name);
     this.nodePlacement = nodePlacement;
+    this.nodeCollection = [];
     if (this.isNew) initView(this);
   }
 
-  _addNode(G, root, element, parentElement = null) {
+  _addRoot(root) {
+    this.manager.pushStep(this.capsule, {
+      type: 'addRoot',
+      arguments: arguments
+    });
+    return this;
+  }
+
+  _addNode(element, parentElement = null) {
     this.manager.pushStep(this.capsule, {
       type: 'addNode',
       arguments: arguments
@@ -25,8 +34,9 @@ class DirectedGraphConstructTracer extends Tracer {
     return this;
   }
 
-  _findNode(G, val) {
+  _findNode(val) {
     var idToFind = this.n(val);
+    var G = this.nodeCollection;
     var result = null;
     for (let i = 0; i < G.length; i++) {
       if(G[i].id === idToFind) {
@@ -37,10 +47,9 @@ class DirectedGraphConstructTracer extends Tracer {
     return result;
   }
 
-  _visit(G, target, source) {
+  _visit(target, source) {
     this.manager.pushStep(this.capsule, {
       type: 'visit',
-      G: G,
       target: target,
       source: source
     });
@@ -77,13 +86,16 @@ class DirectedGraphConstructTracer extends Tracer {
           node.y = position.y;
         });
         break;
+      case 'addRoot':
+        this.addRoot.apply(this, step.arguments);
+        break;
       case 'addNode':
         this.addNode.apply(this, step.arguments);
         break;
       case 'visit':
       case 'leave':
         var visit = step.type == 'visit';
-        var nodeObject = this._findNode(step.G, step.target);
+        var nodeObject = this._findNode(step.target);
         nodeObject.visited = visit;
         nodeObject.isNew = false;
         var targetNode = this.graph.nodes(this.n(step.target));
@@ -108,9 +120,20 @@ class DirectedGraphConstructTracer extends Tracer {
     }
   }
 
-  addNode(G, root, node, parent) {
+  addRoot(root) {
+    if(this.rootObject) throw 'Root for this graph is already added';
+    this.rootObject = this.createGraphNode(root);
+    this.drawGraph(this.rootObject.level);
+  }
+
+  addNode(node, parent) {
+    var nodeObject = this.createGraphNode(node, parent)
+    this.drawGraph(nodeObject.level);
+  }
+
+  createGraphNode(node, parent) {
     var nodeObject = this.nodeConstruct(node);
-    var parentObject = this._findNode(G, parent);
+    var parentObject = this._findNode(parent);
     if (parentObject) {
       nodeObject.parent = parentObject;
       nodeObject.level = parentObject.level + 1;
@@ -131,18 +154,14 @@ class DirectedGraphConstructTracer extends Tracer {
         }
         if(isSpliced) {
           parentObject.children.splice(insertIndex, 0, nodeObject);
-          console.log('exchange Happened');
         } else {
           parentObject.children.push(nodeObject);
         }
       }
     }
     nodeObject.updateBreadth();
-    G.push(nodeObject);
-    this.drawGraph(G, root, nodeObject.level);
-    if(node === 4) {
-      console.log(this.graph.nodes);
-    }
+    this.nodeCollection.push(nodeObject);
+    return nodeObject;
   }
 
   nodeConstruct(val) {
@@ -171,7 +190,7 @@ class DirectedGraphConstructTracer extends Tracer {
     return nodeObject;
   }
   
-  drawGraph(G, root, nodeLevel) {
+  drawGraph(nodeLevel) {
     const nodes = [];
     const edges = [];
     var tracer = this;
@@ -210,9 +229,8 @@ class DirectedGraphConstructTracer extends Tracer {
           occupiedBreadth += node.breadth;
         }
       }
-    }
-    var rootObject = this._findNode(G, root);
-    drawNode(rootObject);
+    };
+    drawNode(this.rootObject);
     
     this.graph.clear();
     this.graph.read({
@@ -251,8 +269,10 @@ class DirectedGraphConstructTracer extends Tracer {
   }
 
   clearGraphColor() {
-    var tracer = this;
-
+    this.nodeCollection.forEach(function(node){
+      node.isNew = false;
+    });
+    
     this.graph.nodes().forEach(function (node) {
       node.color = tracer.color.default;
     });
