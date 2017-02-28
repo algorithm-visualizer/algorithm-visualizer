@@ -72,11 +72,18 @@ class DirectedGraphConstructTracer extends Tracer {
     });
     return this;
   }
+  
+  _clearTraversal() {
+    this.manager.pushStep(this.capsule, {
+      type: 'clear'
+    });
+    return this;
+  }
 
   processStep(step, options) {
     switch (step.type) {
-      case 'setTreeData':
-        this.setTreeData.apply(this, step.arguments);
+      case 'clear':
+        this.clear.apply(this);
         break;
       case 'setNodePositions':
         $.each(this.graph.nodes(), (i, node) => {
@@ -101,13 +108,13 @@ class DirectedGraphConstructTracer extends Tracer {
         var targetNode = this.graph.nodes(this.n(step.target));
         var color = visit ? this.color.visited : this.color.left;
         if(targetNode) {
-        targetNode.color = color;
-        if (step.source !== undefined) {
-          var edgeId = this.e(step.source, step.target);
-          var edge = this.graph.edges(edgeId);
-          edge.color = color;
-          this.graph.dropEdge(edgeId).addEdge(edge);
-        }
+          targetNode.color = color;
+          if (step.source !== undefined) {
+            var edgeId = this.e(step.source, step.target);
+            var edge = this.graph.edges(edgeId);
+            edge.color = color;
+            this.graph.dropEdge(edgeId).addEdge(edge);
+          }
         }
         if (this.logTracer) {
           var source = step.source;
@@ -159,7 +166,6 @@ class DirectedGraphConstructTracer extends Tracer {
         }
       }
     }
-    nodeObject.updateBreadth();
     this.nodeCollection.push(nodeObject);
     return nodeObject;
   }
@@ -169,23 +175,10 @@ class DirectedGraphConstructTracer extends Tracer {
       id: this.n(val),
       originalVal: val,
       isNew: true,
-      children: [],
-      breadth: 0,
-      level: 1,
-      parent: null,
       visited: false,
-      updateBreadth: function() {
-        var oldBreadth = nodeObject.breadth;
-        if ( nodeObject.children.length > 0 ) {
-          nodeObject.breadth = nodeObject.children.length % 2 ? 0 : 1;
-          for (let j = 0; j < nodeObject.children.length; j++) {
-            nodeObject.breadth += nodeObject.children[j].breadth;
-          }
-        } else { nodeObject.breadth = 1; }
-        if ( oldBreadth !== nodeObject.breadth && nodeObject.parent ) {
-          nodeObject.parent.updateBreadth();
-        }
-      }
+      children: [],
+      level: 1,
+      parent: null
     }
     return nodeObject;
   }
@@ -194,43 +187,60 @@ class DirectedGraphConstructTracer extends Tracer {
     const nodes = [];
     const edges = [];
     var tracer = this;
-    var drawNode = function (node, parentNode, occupiedBreadth) {
-      var calculatedX = node.breadth;
-      if (parentNode) {
-        calculatedX = parentNode.breadth + occupiedBreadth - node.breadth;
-      } else if (node.children.length > 0) {
-        calculatedX = Math.ceil(calculatedX/node.children.length);
+
+    var arrangeChildNodes = function(node, offsetWidth) {
+      if(node.children.length > 1){
+        var midPoint = Math.floor(node.children.length / 2);
+        for (let i = 0; i < node.children.length; i++) {
+          if (i===midPoint) {
+            offsetWidth += (node.children.length % 2 === 0 ? 1 : 0);
+            addGraphNode(node, offsetWidth);
+          }
+          offsetWidth = arrangeChildNodes(node.children[i], offsetWidth);
+          addEdge(node, node.children[i]);
+        } 
+      } else {
+        if (node.children.length === 0) {        
+          offsetWidth += 1;
+        } else {
+          offsetWidth = arrangeChildNodes(node.children[0], offsetWidth);
+          addEdge(node, node.children[0]);
+        }
+        addGraphNode(node, offsetWidth);
       }
-      
+      return offsetWidth;
+    };
+
+    var addGraphNode = function (node, calculatedX) {
+      var color = getColor(node.isNew, node.visited, tracer.color);
       nodes.push({
         id: node.id,
         label: '' + node.originalVal,
         x: calculatedX,
         y: node.level - 1,
         size: 1,
-        color: node.isNew ? tracer.color.selected : (node.visited ? tracer.color.visited : tracer.color.default),
+        color: color,
         weight: 0
       });
-
-      if ( node.children.length > 0 ) {
-        var midPoint = node.children.length / 2;
-        var occupiedBreadth = 0;
-        for (let j = 0; j < node.children.length; j++) {
-          var childNode = node.children[j];
-          edges.push({
-            id: tracer.e(node.originalVal, childNode.originalVal),
-            source: node.id,
-            target: childNode.id,
-            color: node.visited && childNode.visited ? tracer.color.visited : tracer.color.default,
-            size: 1,
-            weight: refineByType(childNode.originalVal)
-          });
-          drawNode(childNode, node, occupiedBreadth);
-          occupiedBreadth += node.breadth;
-        }
-      }
     };
-    drawNode(this.rootObject);
+
+    var addEdge = function (node, childNode) {
+      var color = getColor(node.visited && childNode.isNew, node.visited && childNode.visited, tracer.color);
+      edges.push({
+        id: tracer.e(node.originalVal, childNode.originalVal),
+        source: node.id,
+        target: childNode.id,
+        color: color,
+        size: 1,
+        weight: refineByType(childNode.originalVal)
+      });
+    };
+
+    var getColor = function (isNew, isVisited, colorPalete) {
+      return isNew ? colorPalete.selected :
+              (isVisited ? colorPalete.visited : colorPalete.default);
+    };
+    arrangeChildNodes(this.rootObject, 0);
     
     this.graph.clear();
     this.graph.read({
@@ -269,8 +279,9 @@ class DirectedGraphConstructTracer extends Tracer {
   }
 
   clearGraphColor() {
+    var tracer = this;
     this.nodeCollection.forEach(function(node){
-      node.isNew = false;
+      node.visited = node.isNew = false;
     });
     
     this.graph.nodes().forEach(function (node) {
