@@ -11,7 +11,7 @@ function bst_insert ( root, element, parent ) { // root = current node , parent 
         if ( !treeNode.hasOwnProperty(propName) ) {  // insert as left child of root
             treeNode[propName] = element;
             T[element] = {};
-            tracer._addNode(element, root);
+            tracer._addNode(element, root)._wait();
             logger._print( element + ' Inserted ');
         } else {
             bst_insert ( treeNode[propName], element, root );
@@ -27,6 +27,6 @@ logger._print ( Root + ' Inserted as root of tree ');
 for (var i = 1; i < elements.length; i++) {
     tracer2._select ( i )._wait();
     bst_insert ( Root, elements[i] ); // insert ith element
-    tracer2._deselect( i );
-    tracer.clear();
+    tracer2._deselect( i )._wait();
+    tracer._clearTraversal();
 }
