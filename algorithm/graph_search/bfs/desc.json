@@ -10,7 +10,7 @@
     "Construction of the failure function of the Aho-Corasick pattern matcher."
   ],
   "Complexity": {
-    "time": "worst $O(|E|)$",
+    "time": "worst $O(|V|+|E|)$",
     "space": "worst $O(|V|)$"
   },
   "References": [
