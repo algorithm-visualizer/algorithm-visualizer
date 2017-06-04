@@ -18,6 +18,7 @@
   ],
   "files": {
     "tree": "Searching a tree",
-    "shortest_path": "Finding the shortest path"
+    "shortest_path": "Finding the shortest path",
+    "test_bipartiteness": "Test if graph is biparted (or 2-colorable)"
   }
 }
