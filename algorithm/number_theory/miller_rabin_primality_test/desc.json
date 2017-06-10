@@ -1,0 +1,13 @@
+{
+  "Miller-Rabin primality test": "Determines whether a given number is prime",
+  "Complexity": {
+    "time": "$O(klog^{3}(n)))$",
+    "probability": "$1 - (1/(4^{k}))$"
+  },
+  "References": [
+    "<a href='https://www.wikiwand.com/en/Miller%E2%80%93Rabin_primality_test'>Wikipedia</a>"
+  ],
+  "files": {
+    "basic": "Miller Rabin primality test"
+  }
+}
