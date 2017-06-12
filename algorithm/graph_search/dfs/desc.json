@@ -14,7 +14,7 @@
     "Finding biconnectivity in graphs."
   ],
   "Complexity": {
-    "time": "worst $O(|E|)$",
+    "time": "worst $O(|V|+|E|)$",
     "space": "worst $O(|V|)$"
   },
   "References": [

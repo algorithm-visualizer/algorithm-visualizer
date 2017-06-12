@@ -63,7 +63,8 @@
       "list": {
         "euclidean_algorithm": "Euclidean Algorithm",
         "sieve_of_eratosthenes": "Sieve of Eratosthenes",
-        "freivalds_algorithm": "Freivalds Algorithm"
+        "freivalds_algorithm": "Freivalds Algorithm",
+        "miller_rabin_primality_test": "Miller-Rabin primality test"
       },
       "name": "Number Theory"
    },
@@ -115,7 +116,8 @@
          "flood_fill": "Flood Fill",
          "cellular_automata": "Cellular Automata",
          "create_maze": "Create Maze",
-         "magic_square": "Magic Square"
+         "magic_square": "Magic Square",
+         "stable_matching": "Stable Matching"
       },
       "name": "Uncategorized"
    }
