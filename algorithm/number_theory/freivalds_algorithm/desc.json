@@ -1,0 +1,12 @@
+{
+  "Freivalds Algorithm": "Freivalds' algorithm is a probabilistic randomized algorithm used to verify matrix multiplication. Given three n × n matrices A, B, and C, a general problem is to verify whether A*B=C",
+  "Complexity": {
+    "time": "$O(n^2)$"
+  },
+  "References": [
+    "<a href='https://www.wikiwand.com/en/Freivalds%27_algorithm'>Wikipedia</a>"
+  ],
+  "files": {
+    "basic": "Freivalds Algorithm"
+  }
+}
