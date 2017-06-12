@@ -41,7 +41,8 @@
          "dijkstra": "Dijkstra",
          "floyd_warshall": "Floyd-Warshall",
          "page_rank": "PageRank Algorithm",
-         "topological_sort": "Topological-Sort"
+         "topological_sort": "Topological-Sort",
+         "tarjan": "Tarjan"
       },
       "name": "Graph Search"
    },
