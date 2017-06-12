@@ -62,7 +62,8 @@
    "number_theory": {
       "list": {
         "euclidean_algorithm": "Euclidean Algorithm",
-        "sieve_of_eratosthenes": "Sieve of Eratosthenes"
+        "sieve_of_eratosthenes": "Sieve of Eratosthenes",
+        "freivalds_algorithm": "Freivalds Algorithm"
       },
       "name": "Number Theory"
    },
