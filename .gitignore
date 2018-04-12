@@ -1,6 +1,5 @@
 .idea
-.DS_Store
 node_modules
-_*
 npm-debug.log
-public/*.*
+.DS_Store
+built

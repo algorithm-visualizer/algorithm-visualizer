@@ -1,0 +1,28 @@
+@import "~/common/stylesheet/index";
+
+.description_viewer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 16px;
+  font-size: $font-size-large;
+
+  li {
+    margin: 10px 0px;
+  }
+
+  .complexity_type {
+    font-weight: bold;
+  }
+
+  a {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  h3 {
+    border-bottom: 1px solid rgb(81, 81, 81);
+    padding: 5px;
+    margin: 2px;
+  }
+}

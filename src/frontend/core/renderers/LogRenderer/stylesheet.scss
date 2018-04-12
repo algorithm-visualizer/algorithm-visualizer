@@ -1,0 +1,14 @@
+@import "~/common/stylesheet/index";
+
+.log {
+  flex: 1;
+  align-self: stretch;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+
+  .message {
+    margin: 2px 0;
+  }
+}

@@ -1,0 +1,17 @@
+@import "~/common/stylesheet/index";
+
+.wiki_viewer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  .markdown {
+    padding: 16px;
+    font-size: $font-size-large;
+
+    a {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+}

@@ -1,0 +1,26 @@
+@import "~/common/stylesheet/index";
+
+.toast_container {
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 16px;
+}
+
+.toast {
+  width: 280px;
+  border: 1px solid;
+  border-radius: 4px;
+  padding: 16px;
+  margin: 8px;
+  font-size: $font-size-large;
+
+  &.success {
+    border-color: rgb(0, 150, 0);
+    background: rgba(0, 120, 0, .8);
+  }
+
+  &.error {
+    border-color: rgb(150, 0, 0);
+    background: rgba(120, 0, 0, .8);
+  }
+}

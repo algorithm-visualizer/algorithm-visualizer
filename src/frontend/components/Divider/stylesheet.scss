@@ -1,0 +1,26 @@
+@import "~/common/stylesheet/index";
+
+.divider {
+  position: relative;
+  z-index: 99;
+
+  &.vertical:after {
+    position: absolute;
+    content: '';
+    top: 0;
+    bottom: 0;
+    left: -3px;
+    width: 6px;
+    cursor: ew-resize;
+  }
+
+  &.horizontal:after {
+    position: absolute;
+    content: '';
+    left: 0;
+    right: 0;
+    top: -3px;
+    height: 6px;
+    cursor: ns-resize;
+  }
+}

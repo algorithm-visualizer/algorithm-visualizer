@@ -1,0 +1,74 @@
+@import "~/common/stylesheet/index";
+
+.editor_section {
+  display: flex;
+  flex-direction: column;
+
+  .info_container {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+
+    &:hover {
+      position: relative;
+      z-index: 99;
+      height: auto;
+      bottom: auto;
+      box-shadow: 0 8px 8px -8px $color-shadow;
+
+      .info_text {
+        white-space: normal;
+      }
+    }
+
+    .info_icon {
+      margin-right: 8px;
+    }
+
+    .info_text {
+      display: block;
+    }
+  }
+
+  .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    .data_container {
+      border-bottom: 1px solid $theme-light;
+    }
+
+    .code_container {
+      flex: 1;
+    }
+
+    .data_container,
+    .code_container {
+      min-height: $resizeable-min;
+
+      .editor {
+        width: 100% !important;
+        height: 100% !important;
+
+        .current_line_marker {
+          background: rgba(#29d, 0.4);
+          border: 1px solid #29d;
+          position: absolute;
+          width: 100% !important;
+
+          animation: line_highlight .1s;
+        }
+
+        @keyframes line_highlight {
+          from {
+            background: rgba(#29d, 0.1);
+          }
+          to {
+            background: rgba(#29d, 0.4);
+          }
+        }
+      }
+    }
+  }
+}

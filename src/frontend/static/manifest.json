@@ -1,0 +1,21 @@
+{
+  "name": "Algorithm Visualizer",
+  "short_name": "Algorithm Visualizer",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#393939",
+  "background_color": "#393939",
+  "description": "Algorithm Visualizer",
+  "icons": [
+    {
+      "src": "img/favicon.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ],
+  "related_applications": [
+    {
+      "platform": "web"
+    }
+  ]
+}

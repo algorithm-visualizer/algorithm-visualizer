@@ -1,0 +1,8 @@
+@import "~/common/stylesheet/index";
+
+.renderer_container {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+}

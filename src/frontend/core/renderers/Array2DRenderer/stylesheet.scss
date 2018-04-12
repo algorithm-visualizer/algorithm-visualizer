@@ -1,0 +1,35 @@
+@import "~/common/stylesheet/index";
+
+.array_2d {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+
+  .row {
+    display: flex;
+
+    .col {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28em;
+      height: 28em;
+      background-color: $theme-normal;
+      border: 1em solid $theme-light;
+      margin-right: -1em;
+      margin-bottom: -1em;
+
+      .value {
+        font-size: 12em;
+      }
+
+      &.selected {
+        background-color: $color-selected;
+      }
+
+      &.notified {
+        background-color: $color-notified;
+      }
+    }
+  }
+}

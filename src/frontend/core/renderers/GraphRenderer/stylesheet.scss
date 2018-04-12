@@ -1,0 +1,73 @@
+@import "~/common/stylesheet/index";
+
+.graph {
+  flex: 1;
+  align-self: stretch;
+
+  .node {
+    .circle {
+      fill: $theme-light;
+      stroke: $color-font;
+      stroke-width: 1;
+    }
+
+    .id {
+      fill: $color-font;
+      alignment-baseline: central;
+      text-anchor: middle;
+    }
+
+    .weight {
+      fill: white;
+      font-weight: bold;
+      alignment-baseline: central;
+      text-anchor: left;
+    }
+
+    &.visited {
+      .circle {
+        fill: $color-notified;
+        stroke: $color-notified;
+      }
+    }
+  }
+
+  .edge {
+    .line {
+      stroke: $color-font;
+      stroke-width: 2;
+
+      &.directed {
+        marker-end: url(#markerArrow);
+      }
+    }
+
+    .weight {
+      fill: $color-font;
+      alignment-baseline: baseline;
+      text-anchor: middle;
+    }
+
+    &.visited {
+      .line {
+        stroke: $color-notified;
+
+        &.directed {
+          marker-end: url(#markerArrowVisited);
+        }
+      }
+
+      .weight {
+        fill: $color-notified;
+      }
+    }
+  }
+
+  .arrow {
+    fill: $color-font;
+
+    &.visited {
+      fill: $color-notified;
+    }
+  }
+}

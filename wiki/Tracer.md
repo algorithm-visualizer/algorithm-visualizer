@@ -4,10 +4,10 @@
 
 | Method | Description |
 |--------|-------------|
-| **Tracer**((String) name)| create Tracer and set its name |
-| **_setData**(args) | set data to visualize |
-| **_clear**() | clear the tracer |
-| **_wait**() | wait for a certain amount of time |
+| `Tracer((String) name)` | create Tracer and set its name |
+| `_setData(args) ` | set data to visualize |
+| `_clear() ` | clear the tracer |
+| `_wait() ` | wait for a certain amount of time |
 
 ## Child Modules
 

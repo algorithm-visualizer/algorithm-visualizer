@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+
+const http = require('http');
+
+const app = require('../app');
+const {
+  httpPort,
+} = require('../environment');
+
+const httpServer = http.createServer(app);
+httpServer.listen(httpPort);
+console.info(`http: listening on port ${httpPort}`);

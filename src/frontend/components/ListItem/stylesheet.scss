@@ -1,0 +1,9 @@
+@import "~/common/stylesheet/index";
+
+.list_item {
+  height: $line-height;
+
+  &.indent {
+    padding-left: 24px;
+  }
+}

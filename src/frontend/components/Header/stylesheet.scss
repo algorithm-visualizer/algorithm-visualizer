@@ -1,0 +1,81 @@
+@import "~/common/stylesheet/index";
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  height: $line-height;
+  padding: 0 16px;
+
+  .title_bar {
+    font-size: $font-size-large;
+    font-weight: bold;
+    min-width: 0;
+    overflow: hidden;
+
+    .nav_arrow {
+      margin: 0 4px;
+    }
+
+    .nav_caret {
+      margin-left: 4px;
+    }
+  }
+
+  .top_menu_buttons {
+    display: flex;
+    align-items: stretch;
+
+    .shared.collapse {
+      display: none;
+    }
+
+    .interval {
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      white-space: nowrap;
+
+      &:hover {
+        background: $color-shadow;
+      }
+
+      .range {
+        position: relative;
+        height: 16px;
+        width: 60px;
+        margin-left: 8px;
+
+        .range_label_container {
+          display: none;
+        }
+
+        .range_track {
+          top: 50%;
+          height: 6px;
+          margin-top: -3px;
+          background-color: $theme-light;
+          cursor: pointer;
+          display: block;
+          position: relative;
+          transition: left 0.3s ease-out, width 0.3s ease-out;
+        }
+
+        .range_slider {
+          top: 0;
+          width: 6px;
+          height: 12px;
+          margin-left: -3px;
+          margin-top: -3px;
+          appearance: none;
+          background: $color-font;
+          cursor: pointer;
+          display: block;
+          outline: none;
+          position: absolute;
+          transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+        }
+      }
+    }
+  }
+}

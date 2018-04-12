@@ -1,0 +1,50 @@
+@import "~/common/stylesheet/index";
+
+.navigator {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  .search_bar_container {
+    height: $line-height;
+    padding: 0 8px;
+    display: flex;
+    align-items: stretch;
+    border-top: 1px solid $theme-light;
+
+    &:focus-within {
+      background-color: $color-overlay;
+    }
+
+    .search_icon {
+      align-self: center;
+      margin-right: 8px;
+    }
+
+    .search_bar {
+      flex: 1;
+      box-sizing: border-box;
+      background: none;
+      border: none;
+      outline: none;
+      overflow: hidden;
+    }
+  }
+
+  .algorithm_list {
+    flex: 1;
+    border-bottom: 1px solid $theme-light;
+    overflow-y: scroll;
+    border-top: 1px solid $theme-light;
+  }
+
+  :global(.github-fork-ribbon) {
+    &:before {
+      background-color: $theme-normal;
+    }
+
+    &:after {
+      color: $color-font;
+    }
+  }
+}

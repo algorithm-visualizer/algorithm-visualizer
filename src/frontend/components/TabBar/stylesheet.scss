@@ -1,0 +1,47 @@
+@import "~/common/stylesheet/index";
+
+.tab_bar {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  height: $line-height;
+  background-color: $theme-normal;
+
+  &:before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: $theme-light;
+  }
+
+  .wrapper {
+    position: relative;
+    flex: 1;
+    display: flex;
+    overflow-x: scroll;
+    white-space: nowrap;
+
+    .tab {
+      &.selected {
+        border-left: 1px solid $theme-light;
+        border-right: 1px solid $theme-light;
+        background-color: $theme-dark;
+      }
+    }
+
+    &.shadow-left {
+      box-shadow: inset 16px 0 16px -16px $color-shadow;
+    }
+
+    &.shadow-right {
+      box-shadow: inset -16px 0 16px -16px $color-shadow;
+    }
+
+    &.shadow-left.shadow-right {
+      box-shadow: inset 16px 0 16px -16px $color-shadow, inset -16px 0 16px -16px $color-shadow;
+    }
+  }
+}

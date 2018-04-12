@@ -1,0 +1,27 @@
+@import "~/common/stylesheet/index";
+
+.renderer {
+  position: relative;
+  flex: 1;
+  flex-direction: column-reverse;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-bottom: 1px solid $theme-light;
+  font-family: 'Roboto Mono', monospace;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: $color-shadow;
+    color: $color-font;
+    padding: 4px;
+    font-size: $font-size-large;
+  }
+}

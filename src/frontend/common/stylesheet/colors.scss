@@ -1,0 +1,19 @@
+$theme-dark: #242424;
+$theme-normal: #393939;
+$theme-light: #505050;
+$color-font: #bbbbbb;
+$color-shadow: rgba(#000000, .2);
+$color-overlay: rgba(#ffffff, .1);
+$color-selected: #2962ff;
+$color-notified: #c51162;
+
+:export {
+  themeDark: $theme-dark;
+  themeNormal: $theme-normal;
+  themeLight: $theme-light;
+  colorFont: $color-font;
+  colorShadow: $color-shadow;
+  colorOverlay: $color-overlay;
+  colorSelected: $color-selected;
+  colorNotified: $color-notified;
+}

@@ -1,0 +1,15 @@
+@import "~/common/stylesheet/index";
+
+.category {
+  justify-content: space-between;
+
+  .label {
+    flex: 1;
+    margin-right: 4px;
+  }
+}
+
+.expandable_list_item {
+  background-color: $color-shadow;
+  border-bottom: 1px solid $theme-dark;
+}
