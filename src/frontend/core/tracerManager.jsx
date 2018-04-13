@@ -15,7 +15,7 @@ class TracerManager {
     this.paused = false;
     this.started = false;
     this.lineIndicator = null;
-    this.reset(new Seed());
+    this.reset();
   }
 
   setOnRender(onRender) {
@@ -32,10 +32,6 @@ class TracerManager {
 
   setOnError(onError) {
     this.onError = onError;
-  }
-
-  setDataGetter(dataGetter) {
-    this.dataGetter = dataGetter;
   }
 
   setCodeGetter(codeGetter) {
@@ -66,17 +62,12 @@ class TracerManager {
     if (this.onUpdateLineIndicator) this.onUpdateLineIndicator(lineIndicator);
   }
 
-  getData() {
-    if (this.dataGetter) return this.dataGetter();
-    return null;
-  }
-
   getCode() {
     if (this.codeGetter) return this.codeGetter();
     return null;
   }
 
-  reset(seed) {
+  reset(seed = new Seed()) {
     this.traces = seed.traces;
     this.resetCursor();
     this.stopTimer();
@@ -158,15 +149,13 @@ class TracerManager {
     }
   }
 
-  execute(data, code, callback) {
+  execute(callback) {
     try {
-      const dataLines = data.split('\n');
-      const codeLines = code.split('\n');
-      const lines = [...dataLines, ...codeLines];
-      const newLines = lines.map((line, i) => line.replace(/(.+\. *wait *)(\( *\))/g, `$1(${i - dataLines.length})`));
+      const code = this.getCode();
+      const lines = code.split('\n').map((line, i) => line.replace(/(.+\. *wait *)(\( *\))/g, `$1(${i})`));
       const seed = new Seed();
       Tracer.seed = seed;
-      eval(Babel.transform(newLines.join('\n'), { presets: ['es2015'] }).code);
+      eval(Babel.transform(lines.join('\n'), { presets: ['es2015'] }).code);
       this.reset(seed);
       if (callback) callback();
     } catch (error) {
@@ -174,16 +163,19 @@ class TracerManager {
     }
   }
 
-  runData() {
-    const data = this.getData();
-    this.execute(data, '', () => this.applyTraceChunk());
+  runInitial() {
+    const error = this.execute(() => this.applyTraceChunk());
+    if (error) {
+      this.reset();
+      this.render();
+    }
   }
 
   run() {
-    const data = this.getData();
-    const code = this.getCode();
-    const error = this.execute(data, code, () => this.resume());
+    const error = this.execute(() => this.resume());
     if (error) {
+      this.reset();
+      this.render();
       this.handleError(error);
     } else {
       this.setStarted(true);
@@ -217,7 +209,6 @@ class TracerManager {
 
   handleError(error) {
     console.error(error);
-    this.reset(new Seed());
     if (this.onError) this.onError(error);
   }
 }

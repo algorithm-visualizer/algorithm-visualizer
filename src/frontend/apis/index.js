@@ -48,8 +48,7 @@ const PUT = URL => {
 
 const DirectoryApi = {
   getCategories: GET('/directory'),
-  getDescription: GET('/directory/description/:categoryKey/:algorithmKey'),
-  getFile: GET('/directory/:categoryKey/:algorithmKey/:fileKey'),
+  getFile: GET('/directory/:categoryKey/:algorithmKey/:fileName'),
 };
 
 const WikiApi = {

@@ -38,11 +38,10 @@ class App extends React.Component {
     DirectoryApi.getCategories()
       .then(({ categories }) => {
         this.props.setCategories(categories);
-        const { categoryKey, algorithmKey, fileKey } = this.props.env;
+        const { categoryKey, algorithmKey } = this.props.env;
         const category = categories.find(category => category.key === categoryKey) || categories[0];
         const algorithm = category.algorithms.find(algorithm => algorithm.key === algorithmKey) || category.algorithms[0];
-        const file = algorithm.files.find(file => file.key === fileKey) || algorithm.files[0];
-        this.props.history.push(`/${category.key}/${algorithm.key}/${file.key}`);
+        this.props.history.push(`/${category.key}/${algorithm.key}`);
       });
 
     tracerManager.setOnError(error => this.props.showErrorToast(error.message));
@@ -58,8 +57,8 @@ class App extends React.Component {
     tracerManager.setOnError(null);
   }
 
-  updateDirectory({ categoryKey = null, algorithmKey = null, fileKey = null }) {
-    this.props.setDirectory(categoryKey, algorithmKey, fileKey);
+  updateDirectory({ categoryKey = null, algorithmKey = null }) {
+    this.props.setDirectory(categoryKey, algorithmKey);
   }
 
   toggleNavigator(navigatorOpened = !this.state.navigatorOpened) {
@@ -78,9 +77,9 @@ class App extends React.Component {
 
   render() {
     const { navigatorOpened, navigatorWidth, viewerSectionWidth } = this.state;
-    const { categories, categoryKey, algorithmKey, fileKey } = this.props.env;
+    const { categories, categoryKey, algorithmKey } = this.props.env;
 
-    return categories && categoryKey && algorithmKey && fileKey && (
+    return categories && categoryKey && algorithmKey && (
       <div className={styles.app}>
         <Header onClickTitleBar={() => this.toggleNavigator()} navigatorOpened={navigatorOpened} />
         <main className={styles.main} ref={ref => this.elMain = ref}>

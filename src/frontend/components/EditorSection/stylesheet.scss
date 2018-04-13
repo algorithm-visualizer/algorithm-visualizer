@@ -35,38 +35,25 @@
     display: flex;
     flex-direction: column;
 
-    .data_container {
-      border-bottom: 1px solid $theme-light;
-    }
+    .editor {
+      width: 100% !important;
+      height: 100% !important;
 
-    .code_container {
-      flex: 1;
-    }
-
-    .data_container,
-    .code_container {
-      min-height: $resizeable-min;
-
-      .editor {
+      .current_line_marker {
+        background: rgba(#29d, 0.4);
+        border: 1px solid #29d;
+        position: absolute;
         width: 100% !important;
-        height: 100% !important;
 
-        .current_line_marker {
-          background: rgba(#29d, 0.4);
-          border: 1px solid #29d;
-          position: absolute;
-          width: 100% !important;
+        animation: line_highlight .1s;
+      }
 
-          animation: line_highlight .1s;
+      @keyframes line_highlight {
+        from {
+          background: rgba(#29d, 0.1);
         }
-
-        @keyframes line_highlight {
-          from {
-            background: rgba(#29d, 0.1);
-          }
-          to {
-            background: rgba(#29d, 0.4);
-          }
+        to {
+          background: rgba(#29d, 0.4);
         }
       }
     }

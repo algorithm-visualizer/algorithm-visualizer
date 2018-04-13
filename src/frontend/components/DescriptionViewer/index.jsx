@@ -35,8 +35,8 @@ class DescriptionViewer extends React.Component {
   }
 
   loadDescription(categoryKey, algorithmKey) {
-    DirectoryApi.getDescription(categoryKey, algorithmKey)
-      .then(({ description }) => this.setState({ description }));
+    DirectoryApi.getFile(categoryKey, algorithmKey, 'desc.json')
+      .then(description => this.setState({ description }));
   }
 
   getChild(value) {

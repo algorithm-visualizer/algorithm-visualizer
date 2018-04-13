@@ -5,8 +5,8 @@ import 'brace/mode/javascript';
 import 'brace/theme/tomorrow_night_eighties';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faInfoCircle from '@fortawesome/fontawesome-free-solid/faInfoCircle';
-import { calculatePercentageHeight, classes } from '/common/util';
-import { Divider, Ellipsis, TabBar } from '/components';
+import { classes } from '/common/util';
+import { Ellipsis, TabBar } from '/components';
 import { actions as envActions } from '/reducers/env';
 import { tracerManager } from '/core';
 import { DirectoryApi } from '/apis';
@@ -25,34 +25,29 @@ class EditorSection extends React.Component {
 
     const { lineIndicator } = tracerManager;
     this.state = {
-      dataContainerHeight: '30%',
       lineMarker: this.createLineMarker(lineIndicator),
-      data: '',
       code: '',
     };
   }
 
   componentDidMount() {
-    tracerManager.setDataGetter(() => this.state.data);
     tracerManager.setCodeGetter(() => this.state.code);
     tracerManager.setOnUpdateLineIndicator(lineIndicator => this.setState({ lineMarker: this.createLineMarker(lineIndicator) }));
 
-    const { categoryKey, algorithmKey, fileKey } = this.props.env;
-    this.loadCodeAndData(categoryKey, algorithmKey, fileKey);
+    const { categoryKey, algorithmKey } = this.props.env;
+    this.loadCode(categoryKey, algorithmKey);
   }
 
   componentWillUnmount() {
-    tracerManager.setDataGetter(null);
     tracerManager.setCodeGetter(null);
     tracerManager.setOnUpdateLineIndicator(null);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { categoryKey, algorithmKey, fileKey } = nextProps.env;
+    const { categoryKey, algorithmKey } = nextProps.env;
     if (categoryKey !== this.props.env.categoryKey ||
-      algorithmKey !== this.props.env.algorithmKey ||
-      fileKey !== this.props.env.fileKey) {
-      this.loadCodeAndData(categoryKey, algorithmKey, fileKey);
+      algorithmKey !== this.props.env.algorithmKey) {
+      this.loadCode(categoryKey, algorithmKey);
     }
   }
 
@@ -71,40 +66,31 @@ class EditorSection extends React.Component {
     };
   }
 
-  loadCodeAndData(categoryKey, algorithmKey, fileKey) {
-    DirectoryApi.getFile(categoryKey, algorithmKey, fileKey)
-      .then(({ data, code }) => {
-        this.setState({ data, code }, () => tracerManager.runData());
+  loadCode(categoryKey, algorithmKey) {
+    DirectoryApi.getFile(categoryKey, algorithmKey, 'code.js')
+      .then(code => {
+        this.setState({ code }, () => tracerManager.runInitial());
       });
   }
 
-  handleResizeDataContainer(x, y) {
-    const dataContainerHeight = calculatePercentageHeight(this.elContent, y);
-    this.setState({ dataContainerHeight });
-  }
-
-  handleChangeData(data) {
-    this.setState({ data }, () => tracerManager.runData());
-  }
-
   handleChangeCode(code) {
-    this.setState({ code }, () => tracerManager.runData());
+    this.setState({ code }, () => tracerManager.runInitial());
   }
 
   render() {
-    const { dataContainerHeight, lineMarker, data, code } = this.state;
+    const { lineMarker, code } = this.state;
     const { className } = this.props;
-    const { categories, categoryKey, algorithmKey, fileKey } = this.props.env;
+    const { categories, categoryKey, algorithmKey } = this.props.env;
 
     const category = categories.find(category => category.key === categoryKey);
     const algorithm = category.algorithms.find(algorithm => algorithm.key === algorithmKey);
-    const tabs = algorithm.files.map(file => ({
-      title: file.name,
+    const tabs = ['code.js'].map(fileName => ({
+      title: fileName,
       props: {
-        to: `/${category.key}/${algorithm.key}/${file.key}`
+        to: `/${category.key}/${algorithm.key}`
       },
     }));
-    const tabIndex = algorithm.files.findIndex(file => file.key === fileKey);
+    const tabIndex = 0; // TODO
     const fileInfo = ''; // TODO
 
     return (
@@ -114,29 +100,16 @@ class EditorSection extends React.Component {
           <FontAwesomeIcon fixedWidth icon={faInfoCircle} className={styles.info_icon} />
           <Ellipsis className={styles.info_text}>{fileInfo}</Ellipsis>
         </div>
-        <div className={styles.content} ref={ref => this.elContent = ref}>
-          <div className={styles.data_container} style={{ height: dataContainerHeight }}>
-            <AceEditor
-              className={styles.editor}
-              mode="javascript"
-              theme="tomorrow_night_eighties"
-              name="data_editor"
-              editorProps={{ $blockScrolling: true }}
-              onChange={value => this.handleChangeData(value)}
-              value={data} />
-          </div>
-          <Divider horizontal onResize={(x, y) => this.handleResizeDataContainer(x, y)} />
-          <div className={styles.code_container}>
-            <AceEditor
-              className={styles.editor}
-              mode="javascript"
-              theme="tomorrow_night_eighties"
-              name="code_editor"
-              editorProps={{ $blockScrolling: true }}
-              onChange={value => this.handleChangeCode(value)}
-              markers={lineMarker ? [lineMarker] : []}
-              value={code} />
-          </div>
+        <div className={styles.content}>
+          <AceEditor
+            className={styles.editor}
+            mode="javascript"
+            theme="tomorrow_night_eighties"
+            name="code_editor"
+            editorProps={{ $blockScrolling: true }}
+            onChange={value => this.handleChangeCode(value)}
+            markers={lineMarker ? [lineMarker] : []}
+            value={code} />
         </div>
       </section>
     );

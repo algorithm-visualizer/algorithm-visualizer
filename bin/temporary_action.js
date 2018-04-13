@@ -5,11 +5,11 @@ const getPath = (...args) => path.resolve(__dirname, '..', 'algorithm', ...args)
 
 const readCategories = () => {
   const createKey = name => name.toLowerCase().replace(/ /g, '-');
-  const subdirectories = dirPath => fs.readdirSync(dirPath).filter(subdir => !subdir.startsWith('.'));
+  const list = dirPath => fs.readdirSync(dirPath).filter(filename => !filename.startsWith('.'));
   const getCategory = categoryName => {
-    const categoryPath = getPath(categoryName);
     const categoryKey = createKey(categoryName);
-    const algorithms = subdirectories(categoryPath).map(algorithmName => getAlgorithm(categoryName, algorithmName));
+    const categoryPath = getPath(categoryName);
+    const algorithms = list(categoryPath).map(algorithmName => getAlgorithm(categoryName, algorithmName));
     return {
       key: categoryKey,
       name: categoryName,
@@ -17,29 +17,30 @@ const readCategories = () => {
     };
   };
   const getAlgorithm = (categoryName, algorithmName) => {
-    const algorithmPath = getPath(categoryName, algorithmName);
     const algorithmKey = createKey(algorithmName);
-    const files = subdirectories(algorithmPath).filter(fileName => fileName !== 'desc.json');
+    const algorithmPath = getPath(categoryName, algorithmName);
+    const files = list(algorithmPath);
     return {
       key: algorithmKey,
       name: algorithmName,
       files,
     }
   };
-  return subdirectories(getPath()).map(getCategory);
+  return list(getPath()).map(getCategory);
 };
 
 const categories = readCategories();
 
 categories.forEach(category => {
+  console.error('===', category.name, '===');
   category.algorithms.forEach(algorithm => {
-    algorithm.files.forEach(fileKey => {
-      const fileName = ['basic', 'normal'].includes(fileKey) ? algorithm.name : fileKey.split('_').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
-      const oldPath = getPath(category.name, algorithm.name, fileKey);
-      const newPath = getPath(category.name, algorithm.name, fileName);
-      //fs.renameSync(oldPath, newPath);
-      console.log(oldPath + '->', newPath);
-    })
+    const fileName = algorithm.files.find(file => file !== 'desc.json');
+    const oldFilePath = getPath(category.name, algorithm.name, fileName);
+    const oldCodePath = getPath(category.name, algorithm.name, fileName, 'code.js');
+    const newCodePath = getPath(category.name, algorithm.name, 'code.js');
+    //console.log(oldCodePath, ' ==> ', newCodePath);
+    //fs.renameSync(oldCodePath, newCodePath);
+    //fs.rmdirSync(oldFilePath);
   })
 });
 

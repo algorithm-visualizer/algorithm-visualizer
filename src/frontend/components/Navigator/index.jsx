@@ -91,10 +91,9 @@ class Navigator extends React.Component {
                   {
                     algorithms.map(algorithm => {
                       const selected = category.key === selectedCategoryKey && algorithm.key === selectedAlgorithmKey;
-                      const [file] = algorithm.files;
                       return (
                         <ListItem indent key={algorithm.key} selected={selected}
-                                  to={`/${category.key}/${algorithm.key}/${file.key}`}>
+                                  to={`/${category.key}/${algorithm.key}`}>
                           <Ellipsis>{algorithm.name}</Ellipsis>
                         </ListItem>
                       )
