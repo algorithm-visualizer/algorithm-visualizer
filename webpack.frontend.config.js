@@ -13,11 +13,7 @@ const {
   __PROD__,
   __DEV__,
   frontendBuiltPath: builtPath,
-  algorithmApiBuiltPath,
-  wikiApiBuiltPath,
   frontendSrcPath: srcPath,
-  algorithmApiSrcPath,
-  wikiApiSrcPath,
 } = require('./environment');
 
 const filter = arr => arr.filter(v => v);
@@ -102,11 +98,7 @@ module.exports = {
   },
   plugins: filter([
     new CleanWebpackPlugin([builtPath]),
-    new CopyWebpackPlugin([
-      { from: path.resolve(srcPath, 'static'), to: builtPath },
-      { from: algorithmApiSrcPath, to: algorithmApiBuiltPath },
-      { from: wikiApiSrcPath, to: wikiApiBuiltPath },
-    ]),
+    new CopyWebpackPlugin([{ from: path.resolve(srcPath, 'static'), to: builtPath }]),
     new HtmlWebpackPlugin({
       template: path.resolve(srcPath, 'template.html'),
       hash: false,

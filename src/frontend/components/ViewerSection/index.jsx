@@ -1,17 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { classes } from '/common/util';
 import { DescriptionViewer, RendererContainer, TabBar, WikiViewer } from '/components';
-import { actions as envActions } from '/reducers/env';
 import styles from './stylesheet.scss';
 
-@connect(
-  ({ env }) => ({
-    env
-  }), {
-    ...envActions
-  }
-)
 class ViewerSection extends React.Component {
   constructor(props) {
     super(props);
@@ -19,13 +10,6 @@ class ViewerSection extends React.Component {
     this.state = {
       tabIndex: 0,
     };
-  }
-
-  componentWillReceiveProps(nextProp) {
-    const { algorithm } = nextProp.env;
-    if (algorithm !== this.props.env.algorithm) {
-      this.setTabIndex(0);
-    }
   }
 
   setTabIndex(tabIndex) {

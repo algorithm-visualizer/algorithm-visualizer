@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { classes } from '/common/util';
 import { actions as envActions } from '/reducers/env';
 import styles from './stylesheet.scss';
+import { DirectoryApi } from '/apis/index';
 
 @connect(
   ({ env }) => ({
@@ -12,6 +13,32 @@ import styles from './stylesheet.scss';
   }
 )
 class DescriptionViewer extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      description: null,
+    };
+  }
+
+  componentDidMount() {
+    const { categoryKey, algorithmKey } = this.props.env;
+    this.loadDescription(categoryKey, algorithmKey);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { categoryKey, algorithmKey } = nextProps.env;
+    if (categoryKey !== this.props.env.categoryKey ||
+      algorithmKey !== this.props.env.algorithmKey) {
+      this.loadDescription(categoryKey, algorithmKey);
+    }
+  }
+
+  loadDescription(categoryKey, algorithmKey) {
+    DirectoryApi.getDescription(categoryKey, algorithmKey)
+      .then(({ description }) => this.setState({ description }));
+  }
+
   getChild(value) {
     if (typeof value === 'string') {
       return (
@@ -44,15 +71,15 @@ class DescriptionViewer extends React.Component {
   }
 
   render() {
+    const { description } = this.state;
     const { className } = this.props;
-    const { algorithm } = this.props.env;
 
-    return (
+    return description && (
       <div className={classes(styles.description_viewer, className)}>
         {
-          Object.keys(algorithm).map((key, i) => {
+          Object.keys(description).map((key, i) => {
             if (key === 'files') return null;
-            const value = algorithm[key];
+            const value = description[key];
             return (
               <div key={i}>
                 <h3>{key}</h3>

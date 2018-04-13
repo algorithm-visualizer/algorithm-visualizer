@@ -21,8 +21,6 @@ if (__DEV__) {
   const compiler = webpack(webpackConfig);
   const app = express();
 
-  app.use(apiEndpoint + '/algorithm', express.static(algorithmApiSrcPath));
-  app.use(apiEndpoint + '/wiki', express.static(wikiApiSrcPath));
   app.use(express.static(path.resolve(frontendSrcPath, 'static')));
   app.use(webpackDev(compiler, {
     stats: {

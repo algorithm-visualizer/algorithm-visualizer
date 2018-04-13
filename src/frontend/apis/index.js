@@ -46,23 +46,23 @@ const PUT = URL => {
   });
 };
 
-const AlgorithmApi = {
-  getCategories: GET('/algorithm/category.json'),
-  getAlgorithm: GET('/algorithm/:category/:algorithm/desc.json'),
-  getDataFile: GET('/algorithm/:category/:algorithm/:file/data.js'),
-  getCodeFile: GET('/algorithm/:category/:algorithm/:file/code.js'),
+const DirectoryApi = {
+  getCategories: GET('/directory'),
+  getDescription: GET('/directory/description/:categoryKey/:algorithmKey'),
+  getFile: GET('/directory/:categoryKey/:algorithmKey/:fileKey'),
+};
+
+const WikiApi = {
+  getWikis: GET('/wiki'),
+  getWiki: GET('/wiki/:wiki'),
 };
 
 const ScratchApi = {
   getScratch: GET('https://api.github.com/gists/:gist_id'),
 };
 
-const WikiApi = {
-  getWiki: GET('/wiki/:wiki'),
-};
-
 export {
-  AlgorithmApi,
-  ScratchApi,
+  DirectoryApi,
   WikiApi,
+  ScratchApi,
 };

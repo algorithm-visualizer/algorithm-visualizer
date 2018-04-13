@@ -12,8 +12,10 @@ body {
 body {
   font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: subpixel-antialiased;
-  color: $color-font;
   user-select: none;
+  background-color: $theme-normal;
+  color: $color-font;
+  font-size: $font-size-normal;
 }
 
 a {
@@ -34,8 +36,6 @@ input {
   flex-direction: column;
   align-items: stretch;
   height: 100%;
-  background-color: $theme-normal;
-  font-size: $font-size-normal;
 
   .loading_slider {
     position: absolute;

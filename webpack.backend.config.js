@@ -18,6 +18,9 @@ fs.readdirSync(srcPath).forEach(name => {
 
 module.exports = {
   target: 'node',
+  node: {
+    __dirname: true,
+  },
   entry: srcPath,
   externals: [nodeExternals()],
   resolve: {

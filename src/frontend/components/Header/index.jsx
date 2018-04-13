@@ -13,19 +13,16 @@ import faChevronLeft from '@fortawesome/fontawesome-free-solid/faChevronLeft';
 import faPause from '@fortawesome/fontawesome-free-solid/faPause';
 import faExpandArrowsAlt from '@fortawesome/fontawesome-free-solid/faExpandArrowsAlt';
 import { actions as envActions } from '/reducers/env';
-import { actions as tracerActions } from '/reducers/tracer';
 import { classes } from '/common/util';
 import { Button, Ellipsis } from '/components';
 import { tracerManager } from '/core';
 import styles from './stylesheet.scss';
 
 @connect(
-  ({ env, tracer }) => ({
+  ({ env }) => ({
     env,
-    tracer,
   }), {
     ...envActions,
-    ...tracerActions,
   }
 )
 class Header extends React.Component {
@@ -58,17 +55,16 @@ class Header extends React.Component {
     const { interval, paused, started } = this.state;
     const { className, onClickTitleBar, navigatorOpened } = this.props;
     const { categories, categoryKey, algorithmKey } = this.props.env;
-    const { data, code } = this.props.tracer;
 
-    const { name: categoryName, list: algorithmList } = categories[categoryKey];
-    const algorithmName = algorithmList[algorithmKey];
+    const category = categories.find(category => category.key === categoryKey);
+    const algorithm = category.algorithms.find(algorithm => algorithm.key === algorithmKey);
 
     return (
       <header className={classes(styles.header, className)}>
         <Button className={styles.title_bar} onClick={onClickTitleBar}>
-          <Ellipsis>{categoryName}</Ellipsis>
+          <Ellipsis>{category.ame}</Ellipsis>
           <FontAwesomeIcon className={styles.nav_arrow} fixedWidth icon={faAngleRight} />
-          <Ellipsis>{algorithmName}</Ellipsis>
+          <Ellipsis>{algorithm.name}</Ellipsis>
           <FontAwesomeIcon className={styles.nav_caret} fixedWidth
                            icon={navigatorOpened ? faCaretDown : faCaretRight} />
         </Button>
@@ -80,9 +76,9 @@ class Header extends React.Component {
           </Button>
           {
             started ? (
-              <Button icon={faPlay} primary onClick={() => tracerManager.run(data, code)} active>Rerun</Button>
+              <Button icon={faPlay} primary onClick={() => tracerManager.run()} active>Rerun</Button>
             ) : (
-              <Button icon={faPlay} primary onClick={() => tracerManager.run(data, code)}>Run</Button>
+              <Button icon={faPlay} primary onClick={() => tracerManager.run()}>Run</Button>
             )
           }
           <Button icon={faChevronLeft} primary disabled={!started}

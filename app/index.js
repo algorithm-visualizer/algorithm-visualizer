@@ -8,8 +8,8 @@ const {
 } = require('../environment');
 
 const frontend = require('./frontend');
-//const backend = require('./backend');
-//app.use(apiEndpoint, backend);
+const backend = require('./backend');
+app.use(apiEndpoint, backend);
 app.use(history());
 app.use(compression());
 app.use(frontend);

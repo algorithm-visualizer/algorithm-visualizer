@@ -5,7 +5,7 @@ import { Divider, EditorSection, Header, Navigator, ToastContainer, ViewerSectio
 import { actions as toastActions } from '/reducers/toast';
 import { actions as envActions } from '/reducers/env';
 import { calculatePercentageWidth } from '/common/util';
-import { AlgorithmApi } from '/apis';
+import { DirectoryApi } from '/apis';
 import { tracerManager } from '/core';
 import styles from './stylesheet.scss';
 import 'axios-progress-bar/dist/nprogress.css'
@@ -33,30 +33,19 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    AlgorithmApi.getCategories()
-      .then(categories => {
+    DirectoryApi.getCategories()
+      .then(({ categories }) => {
         this.props.setCategories(categories);
-        const categoryKey = Object.keys(categories)[0];
-        const algorithmKey = Object.keys(categories[categoryKey].list)[0];
-        this.props.selectAlgorithm(categoryKey, algorithmKey);
+        const [category] = categories;
+        const [algorithm] = category.algorithms;
+        const [file] = algorithm.files;
+        this.props.selectFile(category.key, algorithm.key, file.key);
       });
     tracerManager.setOnError(error => this.props.showErrorToast(error.message));
   }
 
   componentWillUnmount() {
     tracerManager.setOnError(null);
-  }
-
-  componentWillReceiveProps(nextProp) {
-    const { categoryKey, algorithmKey } = nextProp.env;
-    if (categoryKey !== this.props.env.categoryKey || algorithmKey !== this.props.env.algorithmKey) {
-      AlgorithmApi.getAlgorithm(categoryKey, algorithmKey)
-        .then(algorithm => {
-          this.props.setAlgorithm(algorithm);
-          const fileKey = Object.keys(algorithm.files)[0];
-          this.props.selectFile(categoryKey, algorithmKey, fileKey);
-        });
-    }
   }
 
   toggleNavigator(navigatorOpened = !this.state.navigatorOpened) {
@@ -75,15 +64,9 @@ class App extends React.Component {
 
   render() {
     const { navigatorOpened, navigatorWidth, viewerSectionWidth } = this.state;
-    const { categories, algorithm } = this.props.env;
+    const { categories, categoryKey, algorithmKey, fileKey } = this.props.env;
 
-    if (!categories || !algorithm) {
-      return (
-        <div className={styles.app} />
-      );
-    }
-
-    return (
+    return categories && categoryKey && algorithmKey && fileKey && (
       <div className={styles.app}>
         <Header onClickTitleBar={() => this.toggleNavigator()} navigatorOpened={navigatorOpened} />
         <main className={styles.main} ref={ref => this.elMain = ref}>

@@ -8,18 +8,15 @@ import faInfoCircle from '@fortawesome/fontawesome-free-solid/faInfoCircle';
 import { calculatePercentageHeight, classes } from '/common/util';
 import { Divider, Ellipsis, TabBar } from '/components';
 import { actions as envActions } from '/reducers/env';
-import { actions as tracerActions } from '/reducers/tracer';
 import { tracerManager } from '/core';
-import { AlgorithmApi } from '/apis';
+import { DirectoryApi } from '/apis';
 import styles from './stylesheet.scss';
 
 @connect(
-  ({ env, tracer }) => ({
+  ({ env }) => ({
     env,
-    tracer,
   }), {
     ...envActions,
-    ...tracerActions,
   }
 )
 class EditorSection extends React.Component {
@@ -30,16 +27,22 @@ class EditorSection extends React.Component {
     this.state = {
       dataContainerHeight: '30%',
       lineMarker: this.createLineMarker(lineIndicator),
+      data: '',
+      code: '',
     };
   }
 
   componentDidMount() {
     const { categoryKey, algorithmKey, fileKey } = this.props.env;
     this.loadCodeAndData(categoryKey, algorithmKey, fileKey);
+    tracerManager.setDataGetter(() => this.state.data);
+    tracerManager.setCodeGetter(() => this.state.code);
     tracerManager.setOnUpdateLineIndicator(lineIndicator => this.setState({ lineMarker: this.createLineMarker(lineIndicator) }));
   }
 
   componentWillUnmount() {
+    tracerManager.setDataGetter(null);
+    tracerManager.setCodeGetter(null);
     tracerManager.setOnUpdateLineIndicator(null);
   }
 
@@ -68,11 +71,11 @@ class EditorSection extends React.Component {
   }
 
   loadCodeAndData(categoryKey, algorithmKey, fileKey) {
-    if (!fileKey) return;
-    AlgorithmApi.getDataFile(categoryKey, algorithmKey, fileKey)
-      .then(data => this.handleChangeData(data))
-      .then(() => AlgorithmApi.getCodeFile(categoryKey, algorithmKey, fileKey))
-      .then(code => this.handleChangeCode(code));
+    DirectoryApi.getFile(categoryKey, algorithmKey, fileKey)
+      .then(({ data, code }) => {
+        this.handleChangeData(data);
+        this.handleChangeCode(code);
+      });
   }
 
   handleResizeDataContainer(x, y) {
@@ -81,29 +84,23 @@ class EditorSection extends React.Component {
   }
 
   handleChangeData(data) {
-    this.props.setData(data);
-    this.executeData(data);
+    this.setState({ data }, () => tracerManager.runData());
   }
 
   handleChangeCode(code) {
-    this.props.setCode(code);
-    const { data } = this.props.tracer;
-    this.executeData(data);
-  }
-
-  executeData(data) {
-    tracerManager.runData(data);
+    this.setState({ code }, () => tracerManager.runData());
   }
 
   render() {
-    const { dataContainerHeight, lineMarker } = this.state;
+    const { dataContainerHeight, lineMarker, data, code } = this.state;
     const { className } = this.props;
-    const { categoryKey, algorithmKey, fileKey, algorithm } = this.props.env;
-    const { data, code } = this.props.tracer;
+    const { categories, categoryKey, algorithmKey, fileKey } = this.props.env;
 
-    const fileKeys = Object.keys(algorithm.files);
+    const category = categories.find(category => category.key === categoryKey);
+    const algorithm = category.algorithms.find(algorithm => algorithm.key === algorithmKey);
+    const fileKeys = algorithm.files.map(file => file.key);
     const tabIndex = fileKeys.findIndex(v => v === fileKey);
-    const fileInfo = algorithm.files[fileKey];
+    const fileInfo = ''; // TODO
 
     return (
       <section className={classes(styles.editor_section, className)}>

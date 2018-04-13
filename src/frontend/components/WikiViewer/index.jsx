@@ -14,12 +14,12 @@ class WikiViewer extends React.Component {
   }
 
   componentDidMount() {
-    this.load('Tracer');
+    this.loadWiki('Tracer');
   }
 
-  load(wikiKey) {
-    WikiApi.getWiki(wikiKey + '.md')
-      .then(wiki => this.setState({ wiki: `# ${wikiKey}\n${wiki}` }));
+  loadWiki(wikiKey) {
+    WikiApi.getWiki(wikiKey)
+      .then(({ wiki }) => this.setState({ wiki: `# ${wikiKey}\n${wiki}` }));
   }
 
   render() {
@@ -28,7 +28,7 @@ class WikiViewer extends React.Component {
 
     const InnerLink = ({ href, ...rest }) => {
       return /^\w+$/.test(href) ? (
-        <a {...rest} onClick={() => this.load(href)} />
+        <a {...rest} onClick={() => this.loadWiki(href)} />
       ) : (
         <a href={href} rel="noopener" target="_blank" {...rest} />
       );

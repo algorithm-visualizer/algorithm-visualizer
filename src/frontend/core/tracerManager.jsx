@@ -1,10 +1,10 @@
 import React from 'react';
 import { Seed } from '/core';
 import * as Tracers from '/core/tracers';
-import * as Datas from '/core/datas';
 import { Tracer } from '/core/tracers';
-import { Array1DRenderer, Array2DRenderer, ChartRenderer, GraphRenderer, LogRenderer, Renderer } from '/core/renderers';
+import * as Datas from '/core/datas';
 import { Array1DData, Array2DData, ChartData, Data, GraphData, LogData } from '/core/datas';
+import { Array1DRenderer, Array2DRenderer, ChartRenderer, GraphRenderer, LogRenderer, Renderer } from '/core/renderers';
 
 Object.assign(window, Tracers);
 Object.assign(window, Datas);
@@ -34,6 +34,14 @@ class TracerManager {
     this.onError = onError;
   }
 
+  setDataGetter(dataGetter) {
+    this.dataGetter = dataGetter;
+  }
+
+  setCodeGetter(codeGetter) {
+    this.codeGetter = codeGetter;
+  }
+
   render() {
     if (this.onRender) this.onRender(this.renderers);
   }
@@ -56,6 +64,16 @@ class TracerManager {
   setLineIndicator(lineIndicator) {
     this.lineIndicator = lineIndicator;
     if (this.onUpdateLineIndicator) this.onUpdateLineIndicator(lineIndicator);
+  }
+
+  getData(){
+    if(this.dataGetter) return this.dataGetter();
+    return null;
+  }
+
+  getCode(){
+    if(this.codeGetter) return this.codeGetter();
+    return null;
   }
 
   reset(seed) {
@@ -156,11 +174,14 @@ class TracerManager {
     }
   }
 
-  runData(data) {
+  runData() {
+    const data = this.getData();
     this.execute(data, '', () => this.applyTraceChunk());
   }
 
-  run(data, code) {
+  run() {
+    const data = this.getData();
+    const code = this.getCode();
     const error = this.execute(data, code, () => this.resume());
     if (error) {
       this.handleError(error);

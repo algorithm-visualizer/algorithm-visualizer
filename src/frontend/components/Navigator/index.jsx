@@ -49,11 +49,9 @@ class Navigator extends React.Component {
     const { categories } = this.props.env;
     const categoriesOpened = {};
     const query = e.target.value;
-    Object.keys(categories).forEach(categoryKey => {
-      const { name, list } = categories[categoryKey];
-      let algorithmKeys = Object.keys(list);
-      if (this.testQuery(name) || algorithmKeys.find(algorithmKey => this.testQuery(list[algorithmKey]))) {
-        categoriesOpened[categoryKey] = true;
+    categories.forEach(category => {
+      if (this.testQuery(name) || category.algorithms.find(algorithm => this.testQuery(algorithm.name))) {
+        categoriesOpened[category.key] = true;
       }
     });
 
@@ -79,25 +77,25 @@ class Navigator extends React.Component {
         </div>
         <div className={styles.algorithm_list}>
           {
-            Object.keys(categories).map(categoryKey => {
-              const { name, list } = categories[categoryKey];
-              const categoryOpened = categoriesOpened[categoryKey];
-              let algorithmKeys = Object.keys(list);
-              if (!this.testQuery(name)) {
-                algorithmKeys = algorithmKeys.filter(algorithmKey => this.testQuery(list[algorithmKey]));
-                if (!algorithmKeys.length) return null;
+            categories.map(category => {
+              const categoryOpened = categoriesOpened[category.key];
+              let algorithms = category.algorithms;
+              if (!this.testQuery(category.name)) {
+                algorithms = algorithms.filter(algorithm => this.testQuery(algorithm.name));
+                if (!algorithms.length) return null;
               }
               return (
-                <ExpandableListItem key={categoryKey} onClick={() => this.toggleCategory(categoryKey)} label={name}
+                <ExpandableListItem key={category.key} onClick={() => this.toggleCategory(category.key)}
+                                    label={category.name}
                                     opened={categoryOpened}>
                   {
-                    algorithmKeys.map(algorithmKey => {
-                      const name = list[algorithmKey];
-                      const selected = categoryKey === selectedCategoryKey && algorithmKey === selectedAlgorithmKey;
+                    algorithms.map(algorithm => {
+                      const selected = category.key === selectedCategoryKey && algorithm.key === selectedAlgorithmKey;
+                      const [file] = algorithm.files;
                       return (
-                        <ListItem indent key={algorithmKey} selected={selected}
-                                  onClick={() => this.props.selectAlgorithm(categoryKey, algorithmKey)}>
-                          <Ellipsis>{name}</Ellipsis>
+                        <ListItem indent key={algorithm.key} selected={selected}
+                                  onClick={() => this.props.selectFile(category.key, algorithm.key, file.key)}>
+                          <Ellipsis>{algorithm.name}</Ellipsis>
                         </ListItem>
                       )
                     })
