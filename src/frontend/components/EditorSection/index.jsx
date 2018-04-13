@@ -33,11 +33,12 @@ class EditorSection extends React.Component {
   }
 
   componentDidMount() {
-    const { categoryKey, algorithmKey, fileKey } = this.props.env;
-    this.loadCodeAndData(categoryKey, algorithmKey, fileKey);
     tracerManager.setDataGetter(() => this.state.data);
     tracerManager.setCodeGetter(() => this.state.code);
     tracerManager.setOnUpdateLineIndicator(lineIndicator => this.setState({ lineMarker: this.createLineMarker(lineIndicator) }));
+
+    const { categoryKey, algorithmKey, fileKey } = this.props.env;
+    this.loadCodeAndData(categoryKey, algorithmKey, fileKey);
   }
 
   componentWillUnmount() {
@@ -73,8 +74,7 @@ class EditorSection extends React.Component {
   loadCodeAndData(categoryKey, algorithmKey, fileKey) {
     DirectoryApi.getFile(categoryKey, algorithmKey, fileKey)
       .then(({ data, code }) => {
-        this.handleChangeData(data);
-        this.handleChangeCode(code);
+        this.setState({ data, code }, () => tracerManager.runData());
       });
   }
 
@@ -98,14 +98,18 @@ class EditorSection extends React.Component {
 
     const category = categories.find(category => category.key === categoryKey);
     const algorithm = category.algorithms.find(algorithm => algorithm.key === algorithmKey);
-    const fileKeys = algorithm.files.map(file => file.key);
-    const tabIndex = fileKeys.findIndex(v => v === fileKey);
+    const tabs = algorithm.files.map(file => ({
+      title: file.name,
+      props: {
+        to: `/${category.key}/${algorithm.key}/${file.key}`
+      },
+    }));
+    const tabIndex = algorithm.files.findIndex(file => file.key === fileKey);
     const fileInfo = ''; // TODO
 
     return (
       <section className={classes(styles.editor_section, className)}>
-        <TabBar titles={fileKeys} selectedIndex={tabIndex}
-                onClickTab={tabIndex => this.props.selectFile(categoryKey, algorithmKey, fileKeys[tabIndex])} />
+        <TabBar tabs={tabs} tabIndex={tabIndex} />
         <div className={styles.info_container}>
           <FontAwesomeIcon fixedWidth icon={faInfoCircle} className={styles.info_icon} />
           <Ellipsis className={styles.info_text}>{fileInfo}</Ellipsis>

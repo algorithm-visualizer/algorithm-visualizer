@@ -66,13 +66,13 @@ class TracerManager {
     if (this.onUpdateLineIndicator) this.onUpdateLineIndicator(lineIndicator);
   }
 
-  getData(){
-    if(this.dataGetter) return this.dataGetter();
+  getData() {
+    if (this.dataGetter) return this.dataGetter();
     return null;
   }
 
-  getCode(){
-    if(this.codeGetter) return this.codeGetter();
+  getCode() {
+    if (this.codeGetter) return this.codeGetter();
     return null;
   }
 

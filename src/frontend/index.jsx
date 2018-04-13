@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { combineReducers, createStore } from 'redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { routerReducer } from 'react-router-redux';
 import App from '/components/App';
@@ -15,7 +15,10 @@ const render = (Component) => {
   ReactDOM.render(
     <Provider store={store}>
       <BrowserRouter>
-        <Component />
+        <Switch>
+          <Route exact path="/:categoryKey/:algorithmKey/:fileKey" component={Component} />
+          <Route path="/" component={Component} />
+        </Switch>
       </BrowserRouter>
     </Provider>,
     MOUNT_NODE

@@ -20,10 +20,16 @@ class ViewerSection extends React.Component {
     const { className, style } = this.props;
     const { tabIndex } = this.state;
 
+    const tabs = ['Visualization', 'Description', 'Tracer API'].map((title, i) => ({
+      title,
+      props: {
+        onClick: () => this.setTabIndex(i)
+      },
+    }));
+
     return (
       <section className={classes(styles.viewer_section, className)} style={style}>
-        <TabBar titles={['Visualization', 'Description', 'Tracer API']} selectedIndex={tabIndex}
-                onClickTab={tabIndex => this.setTabIndex(tabIndex)} />
+        <TabBar tabs={tabs} tabIndex={tabIndex} />
         <div className={styles.content} data-tab_index={tabIndex}>
           <RendererContainer className={styles.tab} />
           <DescriptionViewer className={styles.tab} />

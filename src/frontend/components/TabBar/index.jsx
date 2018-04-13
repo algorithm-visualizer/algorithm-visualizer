@@ -7,25 +7,26 @@ import styles from './stylesheet.scss';
 
 class TabBar extends React.Component {
   render() {
-    const { className, titles, selectedIndex, onClickTab } = this.props;
+    const { className, tabs, tabIndex } = this.props;
+
+    const prevIndex = (tabIndex - 1 + tabs.length) % tabs.length;
+    const nextIndex = (tabIndex + 1) % tabs.length;
 
     return (
       <div className={classes(styles.tab_bar, className)}>
-        <Button className={styles.tab} icon={faAngleLeft}
-                onClick={() => onClickTab((selectedIndex - 1 + titles.length) % titles.length)} />
+        <Button className={styles.tab} icon={faAngleLeft} {...tabs[prevIndex].props} />
         <div className={styles.wrapper}>
           {
-            titles.map((title, i) => {
-              const selected = selectedIndex === i;
+            tabs.map((tab, i) => {
+              const { title, props } = tab;
+              const selected = tabIndex === i;
               return (
-                <Button className={classes(styles.tab, selected && styles.selected)}
-                        onClick={() => onClickTab(i)} key={i}>{title}</Button>
+                <Button className={classes(styles.tab, selected && styles.selected)} key={i} {...props}>{title}</Button>
               )
             })
           }
         </div>
-        <Button className={styles.tab} icon={faAngleRight}
-                onClick={() => onClickTab((selectedIndex + 1) % titles.length)} />
+        <Button className={styles.tab} icon={faAngleRight} {...tabs[nextIndex].props} />
       </div>
     );
   }

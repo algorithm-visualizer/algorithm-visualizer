@@ -62,7 +62,7 @@ class Header extends React.Component {
     return (
       <header className={classes(styles.header, className)}>
         <Button className={styles.title_bar} onClick={onClickTitleBar}>
-          <Ellipsis>{category.ame}</Ellipsis>
+          <Ellipsis>{category.name}</Ellipsis>
           <FontAwesomeIcon className={styles.nav_arrow} fixedWidth icon={faAngleRight} />
           <Ellipsis>{algorithm.name}</Ellipsis>
           <FontAwesomeIcon className={styles.nav_caret} fixedWidth

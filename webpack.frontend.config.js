@@ -41,6 +41,7 @@ module.exports = {
   output: {
     filename: __DEV__ ? '[name].js' : '[name].[chunkhash].js',
     path: builtPath,
+    publicPath: '/',
   },
   module: {
     rules: [

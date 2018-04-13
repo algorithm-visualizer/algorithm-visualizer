@@ -3,7 +3,7 @@ import { combineActions, createAction, handleActions } from 'redux-actions';
 const prefix = 'ENV';
 
 const setCategories = createAction(`${prefix}/SET_CATEGORIES`, categories => ({ categories }));
-const selectFile = createAction(`${prefix}/SELECT_FILE`, (categoryKey, algorithmKey, fileKey) => ({
+const setDirectory = createAction(`${prefix}/SELECT_FILE`, (categoryKey, algorithmKey, fileKey) => ({
   categoryKey,
   algorithmKey,
   fileKey,
@@ -11,7 +11,7 @@ const selectFile = createAction(`${prefix}/SELECT_FILE`, (categoryKey, algorithm
 
 export const actions = {
   setCategories,
-  selectFile,
+  setDirectory,
 };
 
 const immutables = {};
@@ -26,7 +26,7 @@ const mutables = {
 export default handleActions({
   [combineActions(
     setCategories,
-    selectFile,
+    setDirectory,
   )]: (state, { payload }) => ({
     ...state,
     ...payload,

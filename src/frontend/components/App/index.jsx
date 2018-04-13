@@ -33,19 +33,33 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    this.updateDirectory(this.props.match.params);
+
     DirectoryApi.getCategories()
       .then(({ categories }) => {
         this.props.setCategories(categories);
-        const [category] = categories;
-        const [algorithm] = category.algorithms;
-        const [file] = algorithm.files;
-        this.props.selectFile(category.key, algorithm.key, file.key);
+        const { categoryKey, algorithmKey, fileKey } = this.props.env;
+        const category = categories.find(category => category.key === categoryKey) || categories[0];
+        const algorithm = category.algorithms.find(algorithm => algorithm.key === algorithmKey) || category.algorithms[0];
+        const file = algorithm.files.find(file => file.key === fileKey) || algorithm.files[0];
+        this.props.history.push(`/${category.key}/${algorithm.key}/${file.key}`);
       });
+
     tracerManager.setOnError(error => this.props.showErrorToast(error.message));
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.match.params !== this.props.match.params) {
+      this.updateDirectory(nextProps.match.params);
+    }
   }
 
   componentWillUnmount() {
     tracerManager.setOnError(null);
+  }
+
+  updateDirectory({ categoryKey = null, algorithmKey = null, fileKey = null }) {
+    this.props.setDirectory(categoryKey, algorithmKey, fileKey);
   }
 
   toggleNavigator(navigatorOpened = !this.state.navigatorOpened) {

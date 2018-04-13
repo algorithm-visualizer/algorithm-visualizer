@@ -2,10 +2,11 @@ import React from 'react';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import styles from './stylesheet.scss';
 import { classes } from '/common/util';
+import { Link } from 'react-router-dom';
 
 class Button extends React.Component {
   render() {
-    const { className, children, onClick, href, icon, reverse, selected, disabled, primary, active } = this.props;
+    const { className, children, onClick, to, href, icon, reverse, selected, disabled, primary, active } = this.props;
 
     const iconOnly = !children;
     const props = {
@@ -18,7 +19,9 @@ class Button extends React.Component {
       ]
     };
 
-    return href ? (
+    return to ? (
+      <Link to={to} {...props} />
+    ) : href ? (
       <a href={href} rel="noopener" target="_blank" {...props} />
     ) : (
       <div {...props} />

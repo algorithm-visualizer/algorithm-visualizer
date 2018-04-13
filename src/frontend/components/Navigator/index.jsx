@@ -94,7 +94,7 @@ class Navigator extends React.Component {
                       const [file] = algorithm.files;
                       return (
                         <ListItem indent key={algorithm.key} selected={selected}
-                                  onClick={() => this.props.selectFile(category.key, algorithm.key, file.key)}>
+                                  to={`/${category.key}/${algorithm.key}/${file.key}`}>
                           <Ellipsis>{algorithm.name}</Ellipsis>
                         </ListItem>
                       )
