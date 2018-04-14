@@ -4,23 +4,53 @@
   position: relative;
   z-index: 99;
 
-  &.vertical:after {
-    position: absolute;
-    content: '';
-    top: 0;
-    bottom: 0;
-    left: -3px;
-    width: 6px;
-    cursor: ew-resize;
+  &:before {
+    background-color: $theme-light;
   }
 
-  &.horizontal:after {
+  &:before,
+  &:after {
     position: absolute;
     content: '';
-    left: 0;
-    right: 0;
-    top: -3px;
-    height: 6px;
-    cursor: ns-resize;
+  }
+
+  &.horizontal {
+    &:before,
+    &:after {
+      top: 0;
+      bottom: 0;
+    }
+
+    &:before {
+      width: 1px;
+    }
+
+    &:after {
+      left: -3px;
+      width: 6px;
+      cursor: ew-resize;
+    }
+  }
+
+  &.vertical {
+    &:before,
+    &:after {
+      left: 0;
+      right: 0;
+    }
+
+    &:before {
+      height: 1px;
+    }
+
+    &:after {
+      top: -3px;
+      height: 6px;
+      cursor: ns-resize;
+    }
+  }
+
+  &:last-child {
+    display: none;
   }
 }

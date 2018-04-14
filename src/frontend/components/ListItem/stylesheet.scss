@@ -3,6 +3,10 @@
 .list_item {
   height: $line-height;
 
+  .label {
+    flex: 1;
+  }
+
   &.indent {
     padding-left: 24px;
   }

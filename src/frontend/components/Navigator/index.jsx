@@ -5,10 +5,9 @@ import faSearch from '@fortawesome/fontawesome-free-solid/faSearch';
 import faCode from '@fortawesome/fontawesome-free-solid/faCode';
 import faBook from '@fortawesome/fontawesome-free-solid/faBook';
 import faGithub from '@fortawesome/fontawesome-free-brands/faGithub';
-import { Ellipsis, ExpandableListItem, ListItem } from '/components';
+import { ExpandableListItem, ListItem } from '/components';
 import { classes } from '/common/util';
 import { actions as envActions } from '/reducers/env';
-import 'github-fork-ribbon-css/gh-fork-ribbon.css';
 import styles from './stylesheet.scss';
 
 @connect(
@@ -93,9 +92,7 @@ class Navigator extends React.Component {
                       const selected = category.key === selectedCategoryKey && algorithm.key === selectedAlgorithmKey;
                       return (
                         <ListItem indent key={algorithm.key} selected={selected}
-                                  to={`/${category.key}/${algorithm.key}`}>
-                          <Ellipsis>{algorithm.name}</Ellipsis>
-                        </ListItem>
+                                  to={`/${category.key}/${algorithm.key}`} label={algorithm.name} />
                       )
                     })
                   }
@@ -105,25 +102,10 @@ class Navigator extends React.Component {
           }
         </div>
         <div className={styles.footer}>
-          <ListItem className={styles.scratch_paper} icon={faCode}>Scratch Paper</ListItem>
-          <ListItem className={styles.documentation} icon={faBook}>Tracer API</ListItem>
-          <ExpandableListItem icon={faGithub} onClick={() => this.togglePoweredBy()} label="Powered by ..."
-                              opened={poweredByOpened}>
-            <ListItem indent href="https://github.com/jquery/jquery">jquery/jquery</ListItem>
-            <ListItem indent href="https://github.com/ajaxorg/ace">ajaxorg/ace</ListItem>
-            <ListItem indent href="https://github.com/jacomyal/sigma.js">jacomyal/sigma.js</ListItem>
-            <ListItem indent href="https://github.com/chartjs/Chart.js">chartjs/Chart.js</ListItem>
-            <ListItem indent href="https://github.com/Daniel15/babel-standalone">Daniel15/babel-standalone</ListItem>
-            <ListItem indent href="https://github.com/showdownjs/showdown">showdownjs/showdown</ListItem>
-            <ListItem indent href="https://github.com/FortAwesome/Font-Awesome">FortAwesome/Font-Awesome</ListItem>
-            <ListItem indent href="https://github.com/simonwhitaker/github-fork-ribbon-css">simonwhitaker/github-fork-ribbon-css</ListItem>
-            <ListItem indent href="https://github.com/mathjax/MathJax">mathjax/MathJax</ListItem>
-          </ExpandableListItem>
+          <ListItem icon={faCode} label="Scratch Paper" />
+          <ListItem icon={faBook} label="Tracer API" />
+          <ListItem icon={faGithub} label="Fork me on GitHub" href="https://github.com/parkjs814/AlgorithmVisualizer" />
         </div>
-        <a className={classes('github-fork-ribbon', 'right-bottom')}
-           href="http://github.com/parkjs814/AlgorithmVisualizer" data-ribbon="Fork me on GitHub"
-           title="Fork me on GitHub">Fork me on GitHub
-        </a>
       </nav>
     );
   }

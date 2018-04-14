@@ -12,13 +12,14 @@ class Divider extends React.Component {
   }
 
   handleMouseDown(e) {
+    this.target = e.target;
     document.addEventListener('mousemove', this.handleMouseMove);
     document.addEventListener('mouseup', this.handleMouseUp);
   }
 
   handleMouseMove(e) {
     const { onResize } = this.props;
-    onResize(e.clientX, e.clientY);
+    onResize(this.target, e.clientX, e.clientY);
   }
 
   handleMouseUp(e) {
@@ -27,11 +28,11 @@ class Divider extends React.Component {
   }
 
   render() {
-    const { className, vertical, horizontal } = this.props;
+    const { className, horizontal } = this.props;
 
     return (
       <div
-        className={classes(styles.divider, vertical && styles.vertical, horizontal && styles.horizontal, className)}
+        className={classes(styles.divider, horizontal ? styles.horizontal : styles.vertical, className)}
         onMouseDown={this.handleMouseDown} />
     );
   }

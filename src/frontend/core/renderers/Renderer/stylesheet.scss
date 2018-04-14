@@ -8,11 +8,11 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border-bottom: 1px solid $theme-light;
+  border-top: 1px solid $theme-light;
   font-family: 'Roboto Mono', monospace;
 
-  &:last-child {
-    border-bottom: none;
+  &:first-child {
+    border-top: none;
   }
 
   .title {

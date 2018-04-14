@@ -4,14 +4,12 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  padding: 16px;
+  font-size: $font-size-large;
+  overflow-y: scroll;
 
-  .markdown {
-    padding: 16px;
-    font-size: $font-size-large;
-
-    a {
-      text-decoration: underline;
-      cursor: pointer;
-    }
+  a {
+    text-decoration: underline;
+    cursor: pointer;
   }
 }

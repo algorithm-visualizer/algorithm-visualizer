@@ -13,9 +13,7 @@ export const actions = {
   setDirectory,
 };
 
-const immutables = {};
-
-const mutables = {
+const defaultState = {
   categories: null,
   categoryKey: null,
   algorithmKey: null,
@@ -29,7 +27,4 @@ export default handleActions({
     ...state,
     ...payload,
   }),
-}, {
-  ...immutables,
-  ...mutables,
-});
+}, defaultState);

@@ -3,13 +3,10 @@ import { connect } from 'react-redux';
 import AceEditor from 'react-ace';
 import 'brace/mode/javascript';
 import 'brace/theme/tomorrow_night_eighties';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faInfoCircle from '@fortawesome/fontawesome-free-solid/faInfoCircle';
-import { classes } from '/common/util';
-import { Ellipsis, TabBar } from '/components';
 import { actions as envActions } from '/reducers/env';
 import { tracerManager } from '/core';
 import { DirectoryApi } from '/apis';
+import { classes } from '/common/util';
 import styles from './stylesheet.scss';
 
 @connect(
@@ -19,7 +16,7 @@ import styles from './stylesheet.scss';
     ...envActions,
   }
 )
-class EditorSection extends React.Component {
+class CodeEditor extends React.Component {
   constructor(props) {
     super(props);
 
@@ -79,42 +76,22 @@ class EditorSection extends React.Component {
 
   render() {
     const { lineMarker, code } = this.state;
-    const { className } = this.props;
-    const { categories, categoryKey, algorithmKey } = this.props.env;
-
-    const category = categories.find(category => category.key === categoryKey);
-    const algorithm = category.algorithms.find(algorithm => algorithm.key === algorithmKey);
-    const tabs = ['code.js'].map(fileName => ({
-      title: fileName,
-      props: {
-        to: `/${category.key}/${algorithm.key}`
-      },
-    }));
-    const tabIndex = 0; // TODO
-    const fileInfo = ''; // TODO
+    const { className, relativeWeight } = this.props;
 
     return (
-      <section className={classes(styles.editor_section, className)}>
-        <TabBar tabs={tabs} tabIndex={tabIndex} />
-        <div className={styles.info_container}>
-          <FontAwesomeIcon fixedWidth icon={faInfoCircle} className={styles.info_icon} />
-          <Ellipsis className={styles.info_text}>{fileInfo}</Ellipsis>
-        </div>
-        <div className={styles.content}>
-          <AceEditor
-            className={styles.editor}
-            mode="javascript"
-            theme="tomorrow_night_eighties"
-            name="code_editor"
-            editorProps={{ $blockScrolling: true }}
-            onChange={value => this.handleChangeCode(value)}
-            markers={lineMarker ? [lineMarker] : []}
-            value={code} />
-        </div>
-      </section>
+      <AceEditor
+        className={classes(styles.code_editor, className)}
+        mode="javascript"
+        theme="tomorrow_night_eighties"
+        name="code_editor"
+        editorProps={{ $blockScrolling: true }}
+        onChange={value => this.handleChangeCode(value)}
+        markers={lineMarker ? [lineMarker] : []}
+        value={code}
+        width={relativeWeight} /> // trick to update on resize
     );
   }
 }
 
-export default EditorSection;
+export default CodeEditor;
 

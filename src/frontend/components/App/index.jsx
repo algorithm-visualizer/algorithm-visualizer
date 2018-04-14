@@ -1,12 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { loadProgressBar } from 'axios-progress-bar'
-import { Divider, EditorSection, Header, Navigator, ToastContainer, ViewerSection } from '/components';
+import {
+  CodeEditor,
+  DescriptionViewer,
+  Header,
+  Navigator,
+  RendererContainer,
+  ToastContainer,
+  WikiViewer
+} from '/components';
 import { actions as toastActions } from '/reducers/toast';
 import { actions as envActions } from '/reducers/env';
-import { calculatePercentageWidth } from '/common/util';
 import { DirectoryApi } from '/apis';
-import { tracerManager } from '/core';
+import { tracerManager, Workspace } from '/core';
 import styles from './stylesheet.scss';
 import 'axios-progress-bar/dist/nprogress.css'
 
@@ -25,11 +32,14 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      navigatorOpened: true,
-      navigatorWidth: '16%',
-      viewerSectionWidth: '50%',
-    }
+    this.workspace = new Workspace();
+    this.navigator = this.workspace.addBasicSection(Navigator, 2);
+    const leftTabSection = this.workspace.addTabSection(5);
+    leftTabSection.addTab('Visualization', RendererContainer);
+    leftTabSection.addTab('Description', DescriptionViewer);
+    leftTabSection.addTab('Tracer API', WikiViewer);
+    const rightTabSection = this.workspace.addTabSection(5);
+    rightTabSection.addTab('code.js', CodeEditor);
   }
 
   componentDidMount() {
@@ -45,6 +55,12 @@ class App extends React.Component {
       });
 
     tracerManager.setOnError(error => this.props.showErrorToast(error.message));
+    this.workspace.setOnChange(() => this.forceUpdate());
+  }
+
+  componentWillUnmount() {
+    tracerManager.setOnError(null);
+    this.workspace.setOnChange(null);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -53,47 +69,21 @@ class App extends React.Component {
     }
   }
 
-  componentWillUnmount() {
-    tracerManager.setOnError(null);
-  }
-
   updateDirectory({ categoryKey = null, algorithmKey = null }) {
     this.props.setDirectory(categoryKey, algorithmKey);
   }
 
-  toggleNavigator(navigatorOpened = !this.state.navigatorOpened) {
-    this.setState({ navigatorOpened });
-  }
-
-  handleResizeNavigator(x, y) {
-    const navigatorWidth = calculatePercentageWidth(this.elMain, x);
-    this.setState({ navigatorWidth });
-  }
-
-  handleResizeViewerSection(x, y) {
-    const viewerSectionWidth = calculatePercentageWidth(this.elWorkspace, x);
-    this.setState({ viewerSectionWidth });
-  }
-
   render() {
-    const { navigatorOpened, navigatorWidth, viewerSectionWidth } = this.state;
     const { categories, categoryKey, algorithmKey } = this.props.env;
+
+    const navigatorOpened = this.navigator.isVisible();
 
     return categories && categoryKey && algorithmKey && (
       <div className={styles.app}>
-        <Header onClickTitleBar={() => this.toggleNavigator()} navigatorOpened={navigatorOpened} />
-        <main className={styles.main} ref={ref => this.elMain = ref}>
-          {
-            navigatorOpened &&
-            <Navigator className={styles.navigator} style={{ width: navigatorWidth }} />
-          }
-          <Divider vertical onResize={(x, y) => this.handleResizeNavigator(x, y)} />
-          <div className={styles.workspace} ref={ref => this.elWorkspace = ref}>
-            <ViewerSection className={styles.viewer_section} style={{ width: viewerSectionWidth }} />
-            <Divider vertical onResize={(x, y) => this.handleResizeViewerSection(x, y)} />
-            <EditorSection className={styles.editor_section} />
-          </div>
-        </main>
+        <Header onClickTitleBar={() => this.navigator.setVisible(!navigatorOpened)} navigatorOpened={navigatorOpened} />
+        {
+          this.workspace.render({ className: styles.workspace })
+        }
         <ToastContainer className={styles.toast_container} />
       </div>
     );

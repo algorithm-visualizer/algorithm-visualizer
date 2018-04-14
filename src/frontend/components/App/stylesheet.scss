@@ -37,41 +37,10 @@ input {
   align-items: stretch;
   height: 100%;
 
-  .loading_slider {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-  }
-
-  .main {
+  .workspace {
     flex: 1;
-    display: flex;
-    align-items: stretch;
-
-    .navigator {
-      min-width: $resizeable-min;
-    }
-
-    .workspace {
-      flex: 1;
-      display: flex;
-      align-items: stretch;
-      background-color: $theme-dark;
-      min-width: $resizeable-min * 2;
-
-      .viewer_section {
-        border: 1px solid $theme-light;
-        min-width: $resizeable-min;
-      }
-
-      .editor_section {
-        flex: 1;
-        margin-left: -1px;
-        border: 1px solid $theme-light;
-        min-width: $resizeable-min;
-      }
-    }
+    background-color: $theme-dark;
+    border-top: 1px solid $theme-light;
   }
 
   .toast_container {
@@ -80,67 +49,4 @@ input {
     right: 0;
     z-index: 99;
   }
-}
-
-//----!!!
-
-.fa-spin-faster {
-  animation: fa-spin 1s infinite ease-in-out;
-}
-
-.mchrt-chart {
-  width: 100%;
-  height: 100%;
-}
-
-//------???
-.buttonContainer {
-  width: 75px;
-  height: 25px;
-  display: block;
-  position: relative;
-  z-index: 100;
-  background-color: white;
-}
-
-.inputField {
-  width: 25px;
-  border: 0;
-}
-
-.sb-button {
-  border: 1px solid $theme-light;
-  height: 25px;
-  margin: 0 auto;
-}
-
-.auto-gen {
-  top: 30px;
-  height: 100%;
-  width: 100%;
-  text-align: center;
-  background-color: $theme-dark;
-  align-items: center;
-}
-
-.inputs {
-  display: inline-block;
-  border: 0;
-  background-color: $theme-light;
-  height: 25px;
-  width: 75px;
-}
-
-.grid {
-  width: 50%;
-  height: 50%;
-  float: left;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-.fields {
-  margin-top: 5px;
-  margin-bottom: 5px;
 }

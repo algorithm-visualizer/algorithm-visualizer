@@ -17,6 +17,7 @@ const render = (Component) => {
       <BrowserRouter>
         <Switch>
           <Route exact path="/:categoryKey/:algorithmKey" component={Component} />
+          <Route exact path="/:categoryKey" component={Component} />
           <Route path="/" component={Component} />
         </Switch>
       </BrowserRouter>

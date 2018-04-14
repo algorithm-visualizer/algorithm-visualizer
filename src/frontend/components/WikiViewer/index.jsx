@@ -35,9 +35,8 @@ class WikiViewer extends React.Component {
     };
 
     return (
-      <div className={classes(styles.wiki_viewer, className)}>
-        <ReactMarkdown className={styles.markdown} source={wiki} renderers={{ link: InnerLink }} />
-      </div>
+      <ReactMarkdown className={classes(styles.wiki_viewer, className)} source={wiki} renderers={{ link: InnerLink }}>
+      </ReactMarkdown>
     );
   }
 }

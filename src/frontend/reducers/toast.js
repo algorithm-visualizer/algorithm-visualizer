@@ -13,9 +13,7 @@ export const actions = {
   hideToast,
 };
 
-const immutables = {};
-
-const mutables = {
+const defaultState = {
   toasts: [],
 };
 
@@ -38,9 +36,7 @@ export default handleActions({
       toasts,
     };
   },
-  [combineActions(
-    hideToast,
-  )]: (state, { payload }) => {
+  [hideToast]: (state, { payload }) => {
     const { id } = payload;
     const toasts = state.toasts.filter(toast => toast.id !== id);
     return {
@@ -48,7 +44,4 @@ export default handleActions({
       toasts,
     };
   },
-}, {
-  ...immutables,
-  ...mutables,
-});
+}, defaultState);
