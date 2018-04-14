@@ -15,27 +15,35 @@ class TracerManager {
     this.paused = false;
     this.started = false;
     this.lineIndicator = null;
+    this.code = '';
     this.reset();
   }
 
   setOnRender(onRender) {
     this.onRender = onRender;
+    this.render();
   }
 
   setOnUpdateStatus(onUpdateStatus) {
     this.onUpdateStatus = onUpdateStatus;
+    if (this.onUpdateStatus) {
+      const { interval, paused, started } = this;
+      this.onUpdateStatus({ interval, paused, started });
+    }
   }
 
   setOnUpdateLineIndicator(onUpdateLineIndicator) {
     this.onUpdateLineIndicator = onUpdateLineIndicator;
+    if (this.onUpdateLineIndicator) this.onUpdateLineIndicator(this.lineIndicator);
   }
 
   setOnError(onError) {
     this.onError = onError;
   }
 
-  setCodeGetter(codeGetter) {
-    this.codeGetter = codeGetter;
+  setOnUpdateCode(onUpdateCode) {
+    this.onUpdateCode = onUpdateCode;
+    if (this.onUpdateCode) this.onUpdateCode(this.code);
   }
 
   render() {
@@ -62,9 +70,10 @@ class TracerManager {
     if (this.onUpdateLineIndicator) this.onUpdateLineIndicator(lineIndicator);
   }
 
-  getCode() {
-    if (this.codeGetter) return this.codeGetter();
-    return null;
+  setCode(code) {
+    this.code = code;
+    this.runInitial();
+    if (this.onUpdateCode) this.onUpdateCode(code);
   }
 
   reset(seed = new Seed()) {
@@ -94,7 +103,11 @@ class TracerManager {
     }[className];
     const data = new DataClass(options);
     this.datas[tracerKey] = data;
-    const renderer = <RendererClass key={tracerKey} title={title} data={data} />;
+    const renderer = {
+      title,
+      tracerKey,
+      Component: props => <RendererClass data={data} {...props} />
+    };
     this.renderers.push(renderer);
   }
 
@@ -151,8 +164,7 @@ class TracerManager {
 
   execute(callback) {
     try {
-      const code = this.getCode();
-      const lines = code.split('\n').map((line, i) => line.replace(/(.+\. *wait *)(\( *\))/g, `$1(${i})`));
+      const lines = this.code.split('\n').map((line, i) => line.replace(/(.+\. *wait *)(\( *\))/g, `$1(${i})`));
       const seed = new Seed();
       Tracer.seed = seed;
       eval(Babel.transform(lines.join('\n'), { presets: ['es2015'] }).code);

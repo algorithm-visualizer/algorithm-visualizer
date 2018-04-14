@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './stylesheet.scss';
 import { Ellipsis } from '/components';
+import { classes } from '/common/util';
 
 class Renderer extends React.Component {
   constructor(props) {
@@ -97,11 +98,11 @@ class Renderer extends React.Component {
   }
 
   render() {
-    const { title } = this.props;
+    const { className } = this.props;
 
     return (
-      <div className={styles.renderer} onMouseDown={this.handleMouseDown} onWheel={this.handleWheel}>
-        <Ellipsis className={styles.title}>{title}</Ellipsis>
+      <div className={classes(styles.renderer, className)} onMouseDown={this.handleMouseDown}
+           onWheel={this.handleWheel}>
         {
           this.renderData()
         }

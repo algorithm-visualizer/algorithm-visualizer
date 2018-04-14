@@ -5,11 +5,12 @@ import { BasicSection, Divider, SectionContainer, TabSection } from '/components
 const minSize = 20;
 
 class UISection {
-  constructor(parent = null, weight = 1, visible = true) {
+  constructor(parent = null, { weight = 1, visible = true, removable = true } = {}) {
     this.id = uuid.v4();
     this.parent = parent;
     this.weight = weight;
     this.visible = visible;
+    this.removable = removable;
   }
 
   setVisible(visible) {
@@ -19,6 +20,13 @@ class UISection {
 
   isVisible() {
     return this.visible;
+  }
+
+  remove() {
+    if (!this.removable) return;
+    this.parent.sections = this.parent.sections.filter(section => section !== this);
+    if (this.parent.sections.length) this.change();
+    else this.parent.remove();
   }
 
   handleResize(target, clientX, clientY) {
@@ -80,8 +88,8 @@ class UISection {
 }
 
 class UIBasicSection extends UISection {
-  constructor(parent, Component, weight, visible) {
-    super(parent, weight, visible);
+  constructor(parent, Component, options) {
+    super(parent, options);
     this.Component = Component;
   }
 
@@ -92,16 +100,41 @@ class UIBasicSection extends UISection {
   }
 }
 
+class UITab extends UISection {
+  constructor(parent, title, Component, options) {
+    super(parent, options);
+    this.title = title;
+    this.Component = Component;
+  }
+
+  setTitle(title) {
+    this.title = title;
+    this.change();
+  }
+
+  setComponent(Component) {
+    this.Component = Component;
+    this.change();
+  }
+
+  render(props) {
+    const { Component } = this;
+    return (
+      <Component {...props} />
+    );
+  }
+}
+
 class UITabSection extends UISection {
-  constructor(parent, weight, visible) {
-    super(parent, weight, visible);
-    this.tabs = [];
+  constructor(parent, options) {
+    super(parent, options);
+    this.sections = [];
     this.tabIndex = 0;
   }
 
-  addTab(title, Component) {
-    const tab = { id: uuid.v4(), title, Component };
-    this.tabs.push(tab);
+  addTab(title, Component, options) {
+    const tab = new UITab(this, title, Component, options);
+    this.sections.push(tab);
     this.change();
     return tab;
   }
@@ -112,16 +145,21 @@ class UITabSection extends UISection {
   }
 
   render(props) {
+    const titles = this.sections.map(tab => tab.title);
     return (
-      <TabSection {...props} tabs={this.tabs} tabIndex={this.tabIndex}
-                  onChangeTabIndex={tabIndex => this.setTabIndex(tabIndex)} />
+      <TabSection {...props} titles={titles} tabIndex={this.tabIndex}
+                  onChangeTabIndex={tabIndex => this.setTabIndex(tabIndex)}>
+        {
+          this.sections[this.tabIndex].render({})
+        }
+      </TabSection>
     );
   }
 }
 
 class UIContainer extends UISection {
-  constructor(parent, horizontal = true, weight, visible) {
-    super(parent, weight, visible);
+  constructor(parent, { horizontal = true, ...options } = {}) {
+    super(parent, options);
     this.horizontal = horizontal;
     this.sections = [];
   }
@@ -131,22 +169,22 @@ class UIContainer extends UISection {
     this.change();
   }
 
-  addBasicSection(Component, weight) {
-    const section = new UIBasicSection(this, Component, weight);
+  addBasicSection(Component, options) {
+    const section = new UIBasicSection(this, Component, options);
     this.sections.push(section);
     this.change();
     return section;
   }
 
-  addTabSection(weight) {
-    const section = new UITabSection(this, weight);
+  addTabSection(options) {
+    const section = new UITabSection(this, options);
     this.sections.push(section);
     this.change();
     return section;
   }
 
-  addContainer(horizontal, weight) {
-    const container = new UIContainer(this, horizontal, weight);
+  addContainer(options) {
+    const container = new UIContainer(this, options);
     this.sections.push(container);
     this.change();
     return container;
@@ -178,8 +216,9 @@ class UIContainer extends UISection {
 
 class Workspace {
   constructor(horizontal) {
-    this.rootContainer = new UIContainer(this, horizontal);
+    this.rootContainer = new UIContainer(this, { horizontal });
     this.onChange = null;
+    this.shouldChange = true;
   }
 
   getRootContainer() {
@@ -190,16 +229,16 @@ class Workspace {
     this.rootContainer.setHorizontal(horizontal);
   }
 
-  addBasicSection(Component, weight) {
-    return this.rootContainer.addBasicSection(Component, weight);
+  addBasicSection(Component, options) {
+    return this.rootContainer.addBasicSection(Component, options);
   }
 
-  addTabSection(weight) {
-    return this.rootContainer.addTabSection(weight);
+  addTabSection(options) {
+    return this.rootContainer.addTabSection(options);
   }
 
-  addContainer(horizontal, weight) {
-    return this.rootContainer.addContainer(horizontal, weight);
+  addContainer(options) {
+    return this.rootContainer.addContainer(options);
   }
 
   render(props) {
@@ -212,8 +251,17 @@ class Workspace {
   }
 
   change() {
-    if (this.onChange) this.onChange(this.rootContainer);
+    if (this.shouldChange && this.onChange) this.onChange(this.rootContainer);
+  }
+
+  disableChange() {
+    this.shouldChange = false;
+  }
+
+  enableChange() {
+    this.shouldChange = true;
   }
 }
 
-export default Workspace;
+const workspace = new Workspace();
+export default workspace;

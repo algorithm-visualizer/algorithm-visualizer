@@ -9,7 +9,6 @@ export { default as ExpandableListItem } from './ExpandableListItem';
 export { default as Header } from './Header';
 export { default as ListItem } from './ListItem';
 export { default as Navigator } from './Navigator';
-export { default as RendererContainer } from './RendererContainer';
 export { default as Section } from './Section';
 export { default as SectionContainer } from './SectionContainer';
 export { default as TabSection } from './TabSection';

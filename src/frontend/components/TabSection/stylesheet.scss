@@ -7,6 +7,9 @@
     align-items: stretch;
     height: $line-height;
     background-color: $theme-normal;
+    overflow-x: scroll;
+    white-space: nowrap;
+    flex-shrink: 0;
 
     &:before {
       content: '';
@@ -18,19 +21,13 @@
       background-color: $theme-light;
     }
 
-    .wrapper {
+    .title {
       position: relative;
-      flex: 1;
-      display: flex;
-      overflow-x: scroll;
-      white-space: nowrap;
 
-      .title {
-        &.selected {
-          border-left: 1px solid $theme-light;
-          border-right: 1px solid $theme-light;
-          background-color: $theme-dark;
-        }
+      &.selected {
+        border-left: 1px solid $theme-light;
+        border-right: 1px solid $theme-light;
+        background-color: $theme-dark;
       }
     }
   }

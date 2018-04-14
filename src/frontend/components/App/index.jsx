@@ -1,19 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { loadProgressBar } from 'axios-progress-bar'
-import {
-  CodeEditor,
-  DescriptionViewer,
-  Header,
-  Navigator,
-  RendererContainer,
-  ToastContainer,
-  WikiViewer
-} from '/components';
+import { CodeEditor, DescriptionViewer, Header, Navigator, ToastContainer, WikiViewer } from '/components';
 import { actions as toastActions } from '/reducers/toast';
 import { actions as envActions } from '/reducers/env';
 import { DirectoryApi } from '/apis';
-import { tracerManager, Workspace } from '/core';
+import { tracerManager, workspace } from '/core';
 import styles from './stylesheet.scss';
 import 'axios-progress-bar/dist/nprogress.css'
 
@@ -32,14 +24,12 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.workspace = new Workspace();
-    this.navigator = this.workspace.addBasicSection(Navigator, 2);
-    const leftTabSection = this.workspace.addTabSection(5);
-    leftTabSection.addTab('Visualization', RendererContainer);
-    leftTabSection.addTab('Description', DescriptionViewer);
-    leftTabSection.addTab('Tracer API', WikiViewer);
-    const rightTabSection = this.workspace.addTabSection(5);
-    rightTabSection.addTab('code.js', CodeEditor);
+    this.navigator = workspace.addBasicSection(Navigator, { weight: 2, removable: false });
+    this.leftContainer = workspace.addContainer({ horizontal: false, weight: 5, removable: false });
+    this.rightTabSection = workspace.addTabSection({ weight: 5, removable: false });
+    this.rightTabSection.addTab('Description', DescriptionViewer);
+    this.rightTabSection.addTab('Tracer API', WikiViewer);
+    this.rightTabSection.addTab('code.js', CodeEditor);
   }
 
   componentDidMount() {
@@ -54,13 +44,15 @@ class App extends React.Component {
         this.props.history.push(`/${category.key}/${algorithm.key}`);
       });
 
+    workspace.setOnChange(() => this.forceUpdate());
+    tracerManager.setOnRender(renderers => this.handleChangeRenderers(renderers));
     tracerManager.setOnError(error => this.props.showErrorToast(error.message));
-    this.workspace.setOnChange(() => this.forceUpdate());
   }
 
   componentWillUnmount() {
+    workspace.setOnChange(null);
+    tracerManager.setOnRender(null);
     tracerManager.setOnError(null);
-    this.workspace.setOnChange(null);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -70,7 +62,33 @@ class App extends React.Component {
   }
 
   updateDirectory({ categoryKey = null, algorithmKey = null }) {
-    this.props.setDirectory(categoryKey, algorithmKey);
+    if (categoryKey && algorithmKey) {
+      this.props.setDirectory(categoryKey, algorithmKey);
+      DirectoryApi.getFile(categoryKey, algorithmKey, 'code.js').then(code => tracerManager.setCode(code));
+    }
+  }
+
+  handleChangeRenderers(renderers) {
+    workspace.disableChange();
+    const oldTabs = this.rendererTabs || {};
+    const newTabs = {};
+    for (const renderer of renderers) {
+      const { title, tracerKey, Component } = renderer;
+      let tab = null;
+      if (tracerKey in oldTabs) {
+        tab = oldTabs[tracerKey];
+        tab.setTitle(title);
+        tab.setComponent(Component);
+        delete oldTabs[tracerKey];
+      } else {
+        tab = this.leftContainer.addTabSection().addTab(title, Component);
+      }
+      newTabs[tracerKey] = tab;
+    }
+    Object.values(oldTabs).forEach(tab => tab.remove());
+    this.rendererTabs = newTabs;
+    workspace.enableChange();
+    workspace.change();
   }
 
   render() {
@@ -82,7 +100,7 @@ class App extends React.Component {
       <div className={styles.app}>
         <Header onClickTitleBar={() => this.navigator.setVisible(!navigatorOpened)} navigatorOpened={navigatorOpened} />
         {
-          this.workspace.render({ className: styles.workspace })
+          workspace.render({ className: styles.workspace })
         }
         <ToastContainer className={styles.toast_container} />
       </div>
