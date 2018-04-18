@@ -26,7 +26,7 @@ class WSTabContainer extends React.Component {
     e.stopPropagation();
     draggingData.set(e, {
       type: 'section',
-      section: this.section,
+      section: this.core,
     })
   }
 

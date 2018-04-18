@@ -23,18 +23,26 @@ class WSSectionContainer extends React.Component {
 
   handleDropTabToContainer(tab, index) {
     const tabContainer = new TabContainer();
-    this.core.addChild(tabContainer, index);
+    this.handleDropSectionToContainer(tabContainer, index);
     tabContainer.addChild(tab);
   }
 
+  handleDropSectionToContainer(section, index) {
+    this.core.addChild(section, index);
+  }
+
   handleDropTabToSection(tab, index, before = false) {
-    const child = this.core.children[index];
     const tabContainer = new TabContainer();
+    this.handleDropSectionToSection(tabContainer, index, before);
+    tabContainer.addChild(tab);
+  }
+
+  handleDropSectionToSection(section, index, before = false) {
+    const child = this.core.children[index];
     const sectionContainer = new SectionContainer({ horizontal: !this.core.horizontal });
     this.core.addChild(sectionContainer, index);
     sectionContainer.addChild(child);
-    sectionContainer.addChild(tabContainer, before ? 0 : 1);
-    tabContainer.addChild(tab);
+    sectionContainer.addChild(section, before ? 0 : 1);
   }
 
   render() {
@@ -54,41 +62,41 @@ class WSSectionContainer extends React.Component {
         elements.push(
           <Divider key={`divider-${i}`} horizontal={horizontal}
                    onResize={(target, x, y) => this.handleResize(visibleIndex - 1, target, x, y)}
-                   onDropTab={tab => this.handleDropTabToContainer(tab, i)} />
+                   onDropTab={tab => this.handleDropTabToContainer(tab, i)}
+                   onDropSection={section => this.handleDropSectionToContainer(section, i)} />
         );
       }
-      if (child instanceof SectionContainer || visibleChildren.length === 1) {
-        elements.push(
-          <div key={child.key} className={styles.wrapper} style={style}>
-            {child.element}
-          </div>
-        );
-      } else {
-        elements.push(
-          <div key={child.key} className={classes(styles.wrapper, !horizontal && styles.horizontal)}
-               style={style}>
-            <Divider horizontal={!horizontal} onDrop={data => this.handleDropToSection(data, i, true)} />
-            {child.element}
-            <Divider horizontal={!horizontal} onDrop={data => this.handleDropToSection(data, i)} />
-          </div>
-        );
-      }
+      elements.push(
+        <div key={child.key} className={classes(styles.wrapper, !horizontal && styles.horizontal)}
+             style={style}>
+          <Divider horizontal={!horizontal}
+                   onDropTab={tab => this.handleDropTabToSection(tab, i, true)}
+                   onDropSection={section => this.handleDropSectionToSection(section, i, true)} />
+          {child.element}
+          <Divider horizontal={!horizontal}
+                   onDropTab={tab => this.handleDropTabToSection(tab, i)}
+                   onDropSection={section => this.handleDropSectionToSection(section, i)} />
+        </div>
+      );
     });
     if (elements.length) {
       const firstIndex = children.indexOf(visibleChildren[0]);
       const lastIndex = children.indexOf(visibleChildren[visibleChildren.length - 1]);
       elements.unshift(
         <Divider key="divider-first" horizontal={horizontal}
-                 onDropTab={tab => this.handleDropTabToContainer(tab, firstIndex)} />
+                 onDropTab={tab => this.handleDropTabToContainer(tab, firstIndex)}
+                 onDropSection={section => this.handleDropSectionToContainer(section, firstIndex)} />
       );
       elements.push(
         <Divider key="divider-last" horizontal={horizontal}
-                 onDropTab={tab => this.handleDropTabToContainer(tab, lastIndex + 1)} />
+                 onDropTab={tab => this.handleDropTabToContainer(tab, lastIndex + 1)}
+                 onDropSection={section => this.handleDropSectionToContainer(section, lastIndex + 1)} />
       );
     } else {
       elements.push(
         <Droppable key="empty" className={styles.wrapper} droppingClassName={styles.dropping}
-                   onDropTab={tab => this.handleDropTabToContainer(tab)} />
+                   onDropTab={tab => this.handleDropTabToContainer(tab)}
+                   onDropSection={section => this.handleDropSectionToContainer(section)} />
       );
     }
 

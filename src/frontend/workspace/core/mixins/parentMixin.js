@@ -14,8 +14,15 @@ const parentMixin = (Base = Child) => class Parent extends Base {
   }
 
   addChild(child, index = this.children.length) {
-    this.children.splice(index, 0, child);
-    child.setParent(this);
+    if (child.parent === this) {
+      const oldIndex = this.children.indexOf(child);
+      this.children[oldIndex] = null;
+      this.children.splice(index, 0, child);
+      this.children = this.children.filter(child => child);
+    } else {
+      this.children.splice(index, 0, child);
+      child.setParent(this);
+    }
     this.render();
   }
 

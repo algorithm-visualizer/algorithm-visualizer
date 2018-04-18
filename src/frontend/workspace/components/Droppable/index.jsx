@@ -37,10 +37,10 @@ class Droppable extends React.Component {
       const { onDropTab, onDropSection } = this.props;
       switch (data.type) {
         case 'tab':
-          onDropTab(data.tab);
+          onDropTab && onDropTab(data.tab);
           break;
         case 'section':
-          onDropSection(data.section);
+          onDropSection && onDropSection(data.section);
           break;
       }
     }

@@ -43,6 +43,7 @@
 
       &.fake {
         &:first-child {
+          flex-shrink: 0;
           width: $line-height / 2;
         }
 
