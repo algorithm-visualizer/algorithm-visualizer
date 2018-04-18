@@ -1,0 +1,48 @@
+@import "~/common/stylesheet/index";
+
+.divider {
+  position: relative;
+  z-index: 98;
+
+  &.dropping {
+    background-color: rgba($color-highlight, .4);
+  }
+
+  &.horizontal {
+    width: 7px;
+    margin: 0 -3px;
+    cursor: ew-resize;
+
+    &:first-child {
+      width: 5px;
+      margin: 0 -5px 0 0;
+    }
+
+    &:last-child {
+      width: 5px;
+      margin: 0 0 0 -5px;
+    }
+  }
+
+  &.vertical {
+    height: 7px;
+    margin: -3px 0;
+    cursor: ns-resize;
+
+    &:first-child {
+      height: 5px;
+      margin: 0 0 -5px 0;
+    }
+
+    &:last-child {
+      height: 5px;
+      margin: -5px 0 0 0;
+    }
+  }
+
+  &:first-child,
+  &:last-child {
+    z-index: 97;
+    cursor: auto;
+  }
+}

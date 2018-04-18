@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 class Button extends React.Component {
   render() {
-    const { className, children, onClick, to, href, icon, reverse, selected, disabled, primary, active } = this.props;
+    const { className, children, onClick, to, href, icon, reverse, selected, disabled, primary, active, ...rest } = this.props;
 
     const iconOnly = !children;
     const props = {
@@ -16,7 +16,8 @@ class Button extends React.Component {
       children: [
         icon && <FontAwesomeIcon className={styles.icon} fixedWidth icon={icon} key="icon" />,
         children,
-      ]
+      ],
+      ...rest,
     };
 
     return to ? (

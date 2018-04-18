@@ -1,11 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { loadProgressBar } from 'axios-progress-bar'
-import { CodeEditor, DescriptionViewer, Header, Navigator, ToastContainer, WikiViewer } from '/components';
+import { CodeEditor, DescriptionViewer, Header, Navigator, ToastContainer, WikiViewer, } from '/components';
+import { Workspace, WSSectionContainer, WSTabContainer } from '/workspace/components';
+import { Tab, TabContainer } from '/workspace/core';
 import { actions as toastActions } from '/reducers/toast';
 import { actions as envActions } from '/reducers/env';
 import { DirectoryApi } from '/apis';
-import { tracerManager, workspace } from '/core';
+import { tracerManager } from '/core';
 import styles from './stylesheet.scss';
 import 'axios-progress-bar/dist/nprogress.css'
 
@@ -24,12 +26,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.navigator = workspace.addBasicSection(Navigator, { weight: 2, removable: false });
-    this.leftContainer = workspace.addContainer({ horizontal: false, weight: 5, removable: false });
-    this.rightTabSection = workspace.addTabSection({ weight: 5, removable: false });
-    this.rightTabSection.addTab('Description', DescriptionViewer);
-    this.rightTabSection.addTab('Tracer API', WikiViewer);
-    this.rightTabSection.addTab('code.js', CodeEditor);
+    this.spawnReference = Workspace.createReference();
+    this.navigatorReference = Workspace.createReference();
   }
 
   componentDidMount() {
@@ -44,13 +42,11 @@ class App extends React.Component {
         this.props.history.push(`/${category.key}/${algorithm.key}`);
       });
 
-    workspace.setOnChange(() => this.forceUpdate());
     tracerManager.setOnRender(renderers => this.handleChangeRenderers(renderers));
     tracerManager.setOnError(error => this.props.showErrorToast(error.message));
   }
 
   componentWillUnmount() {
-    workspace.setOnChange(null);
     tracerManager.setOnRender(null);
     tracerManager.setOnError(null);
   }
@@ -69,39 +65,53 @@ class App extends React.Component {
   }
 
   handleChangeRenderers(renderers) {
-    workspace.disableChange();
     const oldTabs = this.rendererTabs || {};
     const newTabs = {};
     for (const renderer of renderers) {
-      const { title, tracerKey, Component } = renderer;
+      const { tracerKey, element } = renderer;
       let tab = null;
       if (tracerKey in oldTabs) {
         tab = oldTabs[tracerKey];
-        tab.setTitle(title);
-        tab.setComponent(Component);
+        tab.setElement(element);
         delete oldTabs[tracerKey];
       } else {
-        tab = this.leftContainer.addTabSection().addTab(title, Component);
+        const tabContainer = new TabContainer();
+        tab = new Tab(element);
+        tabContainer.addChild(tab);
+        this.spawnReference.core.addChild(tabContainer);
       }
       newTabs[tracerKey] = tab;
     }
     Object.values(oldTabs).forEach(tab => tab.remove());
     this.rendererTabs = newTabs;
-    workspace.enableChange();
-    workspace.change();
   }
 
   render() {
     const { categories, categoryKey, algorithmKey } = this.props.env;
 
-    const navigatorOpened = this.navigator.isVisible();
+    const navigatorOpened = true;
 
     return categories && categoryKey && algorithmKey && (
       <div className={styles.app}>
-        <Header onClickTitleBar={() => this.navigator.setVisible(!navigatorOpened)} navigatorOpened={navigatorOpened} />
-        {
-          workspace.render({ className: styles.workspace })
-        }
+        <Workspace className={styles.workspace} wsProps={{ horizontal: false }}>
+          <Header wsProps={{ weight: .1, removable: false }}
+                  onClickTitleBar={() => this.navigatorReference.core.setVisible(!this.navigatorReference.core.visible)}
+                  navigatorOpened={navigatorOpened} />
+          <WSSectionContainer>
+            <Navigator wsProps={{ weight: .4, removable: false, reference: this.navigatorReference }} />
+            <WSSectionContainer wsProps={{
+              weight: 1,
+              removable: false,
+              horizontal: false,
+              reference: this.spawnReference,
+            }} />
+            <WSTabContainer wsProps={{ weight: 1 }}>
+              <DescriptionViewer wsProps={{ title: 'Description' }} />
+              <WikiViewer wsProps={{ title: 'Tracer API' }} />
+              <CodeEditor wsProps={{ title: 'code.js' }} />
+            </WSTabContainer>
+          </WSSectionContainer>
+        </Workspace>
         <ToastContainer className={styles.toast_container} />
       </div>
     );

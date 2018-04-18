@@ -24,16 +24,11 @@ class Navigator extends React.Component {
     const { categoryKey } = this.props.env;
 
     this.state = {
-      poweredByOpened: false,
       categoriesOpened: {
         [categoryKey]: true,
       },
       query: '',
     }
-  }
-
-  togglePoweredBy(poweredByOpened = !this.state.poweredByOpened) {
-    this.setState({ poweredByOpened });
   }
 
   toggleCategory(key, categoryOpened = !this.state.categoriesOpened[key]) {
@@ -63,7 +58,7 @@ class Navigator extends React.Component {
   }
 
   render() {
-    const { poweredByOpened, categoriesOpened, query } = this.state;
+    const { categoriesOpened, query } = this.state;
     const { className, style } = this.props;
     const { categoryKey: selectedCategoryKey, algorithmKey: selectedAlgorithmKey, categories } = this.props.env;
 

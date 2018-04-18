@@ -1,6 +1,7 @@
 import React from 'react';
-import styles from './stylesheet.scss';
 import { classes } from '/common/util';
+import { Droppable } from '/workspace/components';
+import styles from './stylesheet.scss';
 
 class Divider extends React.Component {
   constructor(props) {
@@ -19,7 +20,7 @@ class Divider extends React.Component {
 
   handleMouseMove(e) {
     const { onResize } = this.props;
-    onResize(this.target, e.clientX, e.clientY);
+    if (onResize) onResize(this.target.parentElement, e.clientX, e.clientY);
   }
 
   handleMouseUp(e) {
@@ -28,12 +29,14 @@ class Divider extends React.Component {
   }
 
   render() {
-    const { className, horizontal } = this.props;
+    const { className, horizontal, onResize, ...props } = this.props;
 
     return (
-      <div
+      <Droppable
         className={classes(styles.divider, horizontal ? styles.horizontal : styles.vertical, className)}
-        onMouseDown={this.handleMouseDown} />
+        droppingClassName={styles.dropping}
+        onMouseDown={this.handleMouseDown}
+        {...props} />
     );
   }
 }

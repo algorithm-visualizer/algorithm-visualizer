@@ -1,0 +1,32 @@
+@import "~/common/stylesheet/index";
+
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-width: 0;
+  min-height: 0;
+  background-color: $theme-light;
+
+  &.horizontal {
+    flex-direction: row;
+  }
+
+  .wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    overflow: hidden;
+    background-color: $theme-normal;
+
+    &.horizontal {
+      flex-direction: row;
+    }
+
+    &.dropping {
+      background-color: rgba($color-highlight, .4);
+    }
+  }
+}

@@ -7,8 +7,8 @@
   min-height: 0 !important;
 
   .current_line_marker {
-    background: rgba(#29d, 0.4);
-    border: 1px solid #29d;
+    background: rgba($color-highlight, 0.4);
+    border: 1px solid $color-highlight;
     position: absolute;
     width: 100% !important;
 
@@ -17,10 +17,10 @@
 
   @keyframes line_highlight {
     from {
-      background: rgba(#29d, 0.1);
+      background: rgba($color-highlight, 0.1);
     }
     to {
-      background: rgba(#29d, 0.4);
+      background: rgba($color-highlight, 0.4);
     }
   }
 }

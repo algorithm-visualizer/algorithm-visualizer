@@ -1,10 +1,10 @@
 @import "~/common/stylesheet/index";
 
 .header {
+  flex: 1;
   display: flex;
   justify-content: space-between;
   align-items: stretch;
-  height: $line-height;
   padding: 0 16px;
 
   .title_bar {

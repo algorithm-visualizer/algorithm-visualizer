@@ -6,6 +6,7 @@ $color-shadow: rgba(#000000, .2);
 $color-overlay: rgba(#ffffff, .1);
 $color-selected: #2962ff;
 $color-notified: #c51162;
+$color-highlight: #29d;
 
 :export {
   themeDark: $theme-dark;
@@ -16,4 +17,5 @@ $color-notified: #c51162;
   colorOverlay: $color-overlay;
   colorSelected: $color-selected;
   colorNotified: $color-notified;
+  colorHighlight: $color-highlight;
 }
