@@ -22,13 +22,15 @@ class TabContainer extends parentMixin(Section) {
   }
 
   addChild(child, index = this.children.length) {
-    super.addChild(child, index);
-    this.setTabIndex(Math.min(index, this.children.length - 1));
+    super.addChild(child, index, () => {
+      this.setTabIndex(Math.min(index, this.children.length - 1));
+    });
   }
 
   removeChild(index) {
-    super.removeChild(index);
-    this.setTabIndex(Math.min(this.tabIndex, this.children.length - 1));
+    super.removeChild(index, () => {
+      this.setTabIndex(Math.min(this.tabIndex, this.children.length - 1));
+    });
   }
 
   setTabIndex(tabIndex) {

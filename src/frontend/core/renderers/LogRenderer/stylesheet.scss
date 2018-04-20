@@ -6,7 +6,7 @@
   padding: 24px;
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   .message {
     margin: 2px 0;

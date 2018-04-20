@@ -7,6 +7,7 @@ class Child {
     return {
       reference: Workspace.createReference(),
       removable: true,
+      movable: true, // TODO:
     };
   }
 

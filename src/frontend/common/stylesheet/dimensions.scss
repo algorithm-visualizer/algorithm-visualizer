@@ -1,3 +1,9 @@
 $line-height: 32px;
 $font-size-normal: 12px;
 $font-size-large: 14px;
+
+:export {
+  lineHeight: $line-height;
+  fontSizeNormal: $font-size-normal;
+  fontSizeLarge: $font-size-large;
+}

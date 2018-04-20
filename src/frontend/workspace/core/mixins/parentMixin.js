@@ -13,7 +13,7 @@ const parentMixin = (Base = Child) => class Parent extends Base {
     return new Child(element);
   }
 
-  addChild(child, index = this.children.length) {
+  addChild(child, index = this.children.length, beforeRender) {
     if (child.parent === this) {
       const oldIndex = this.children.indexOf(child);
       this.children[oldIndex] = null;
@@ -23,12 +23,14 @@ const parentMixin = (Base = Child) => class Parent extends Base {
       this.children.splice(index, 0, child);
       child.setParent(this);
     }
+    if(beforeRender) beforeRender();
     this.render();
   }
 
-  removeChild(index) {
+  removeChild(index, beforeRender) {
     this.children.splice(index, 1);
     if (this.children.length === 0) this.remove();
+    if(beforeRender) beforeRender();
     this.render();
   }
 

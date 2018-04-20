@@ -37,35 +37,54 @@ class SectionContainer extends parentMixin(Section) {
     }
   }
 
-  resizeChild(index, position, size) {
+  resizeChild(index, position, containerSize) {
     const visibleChildren = this.children.filter(child => child.visible);
-    const weights = visibleChildren.map(child => child.weight);
-    const totalWeight = weights.reduce((sumWeight, weight) => sumWeight + weight, 0);
-
-    const startWeight = weights.slice(0, index).reduce((sumWeight, weight) => sumWeight + weight, 0);
-    const endWeight = position / size * totalWeight;
-
-    const oldWeight = weights[index];
-    const newWeight = endWeight - startWeight;
-
-    const oldScale = totalWeight - startWeight - oldWeight;
-    const newScale = totalWeight - startWeight - newWeight;
-    const ratio = newScale / oldScale;
-
-    weights[index] = newWeight;
-    for (let i = index + 1; i < weights.length; i++) {
-      weights[i] *= ratio;
+    let prevChild = visibleChildren.slice(0, index).reverse().find(child => child.resizable);
+    let nextChild = visibleChildren.slice(index).find(child => child.resizable);
+    if (prevChild && nextChild) {
+      let totalSize = 0;
+      let totalWeight = 0;
+      let subtotalSize = 0;
+      let subtotalWeight = 0;
+      visibleChildren.forEach((child, i) => {
+        if (child.relative) {
+          totalWeight += child.weight;
+          if (i < index) subtotalWeight += child.weight;
+        } else {
+          totalSize += child.size;
+          if (i < index) subtotalSize += child.size;
+        }
+      });
+      const factor = (containerSize - totalSize) / totalWeight;
+      const oldPosition = subtotalSize + subtotalWeight * factor;
+      let deltaSize = position - oldPosition;
+      if (prevChild.relative) {
+        deltaSize = Math.max((prevChild.minWeight - prevChild.weight) * factor, deltaSize);
+        deltaSize = Math.min((prevChild.maxWeight - prevChild.weight) * factor, deltaSize);
+      } else {
+        deltaSize = Math.max(prevChild.minSize - prevChild.size, deltaSize);
+        deltaSize = Math.min(prevChild.maxSize - prevChild.size, deltaSize);
+      }
+      if (nextChild.relative) {
+        deltaSize = Math.min((nextChild.weight - nextChild.minWeight) * factor, deltaSize);
+        deltaSize = Math.max((nextChild.weight - nextChild.maxWeight) * factor, deltaSize);
+      } else {
+        deltaSize = Math.min(nextChild.size - nextChild.minSize, deltaSize);
+        deltaSize = Math.max(nextChild.size - nextChild.maxSize, deltaSize);
+      }
+      const deltaWeight = deltaSize / factor;
+      if (prevChild.relative) {
+        prevChild.weight += deltaWeight;
+      } else {
+        prevChild.size += deltaSize;
+      }
+      if (nextChild.relative) {
+        nextChild.weight -= deltaWeight;
+      } else {
+        nextChild.size -= deltaSize;
+      }
+      this.render();
     }
-
-    for (let i = index; i < weights.length; i++) {
-      if (weights[i] / totalWeight * size < 20) return;
-    }
-
-    for (let i = index; i < weights.length; i++) {
-      visibleChildren[i].weight = weights[i];
-    }
-
-    this.render();
   }
 }
 

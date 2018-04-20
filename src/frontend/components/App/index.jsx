@@ -94,13 +94,22 @@ class App extends React.Component {
     return categories && categoryKey && algorithmKey && (
       <div className={styles.app}>
         <Workspace className={styles.workspace} wsProps={{ horizontal: false }}>
-          <Header wsProps={{ weight: .1, removable: false }}
+          <Header wsProps={{
+            removable: false,
+            size: 32,
+            minSize: 32,
+            maxSize: 64,
+          }}
                   onClickTitleBar={() => this.navigatorReference.core.setVisible(!this.navigatorReference.core.visible)}
                   navigatorOpened={navigatorOpened} />
           <WSSectionContainer>
-            <Navigator wsProps={{ weight: .4, removable: false, reference: this.navigatorReference }} />
+            <Navigator wsProps={{
+              removable: false,
+              size: 240,
+              minSize: 120,
+              reference: this.navigatorReference
+            }} />
             <WSSectionContainer wsProps={{
-              weight: 1,
               removable: false,
               horizontal: false,
               reference: this.spawnReference,
