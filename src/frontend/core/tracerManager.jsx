@@ -1,5 +1,5 @@
 import React from 'react';
-import { Seed } from '/core';
+import { Randomize, Seed } from '/core';
 import * as Tracers from '/core/tracers';
 import { Tracer } from '/core/tracers';
 import * as Datas from '/core/datas';
@@ -8,6 +8,7 @@ import { Array1DRenderer, Array2DRenderer, ChartRenderer, GraphRenderer, LogRend
 
 Object.assign(window, Tracers);
 Object.assign(window, Datas);
+Object.assign(window, { Randomize });
 
 class TracerManager {
   constructor() {

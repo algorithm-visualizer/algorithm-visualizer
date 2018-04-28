@@ -1,5 +1,9 @@
 class Tracer {
   constructor(title = this.constructor.name, options = {}) {
+    if (typeof title === 'object') {
+      options = title;
+      title = this.constructor.name;
+    }
     this.key = Tracer.seed.addTracer(this.constructor.name, title, options);
     this.register(
       'reset',

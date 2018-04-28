@@ -18,7 +18,7 @@ class Array2DData extends Data {
     super.set();
   }
 
-  notify(x, y, v) {
+  notify(x, y, v = this.data[x][y].value) {
     this.data[x][y].value = v;
     this.data[x][y].notified = true;
     this.render();

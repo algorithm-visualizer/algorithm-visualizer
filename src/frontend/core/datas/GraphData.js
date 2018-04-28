@@ -108,12 +108,12 @@ class Graph {
   }
 
   addNode(id, weight, visited, x = 0, y = 0) {
-    if (this.findNode(id)) throw new Error(`Node '${id}' is already added.`);
+    if (this.findNode(id)) return;
     this.nodes.push({ id, weight, visited, x, y });
   }
 
   addEdge(source, target, weight, visited) {
-    if (this.findEdge(source, target)) throw new Error(`Edge from '${source}' to '${target}' is already added.`);
+    if (this.findEdge(source, target)) return;
     this.edges.push({ source, target, weight, visited });
   }
 
