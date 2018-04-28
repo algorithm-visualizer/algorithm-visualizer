@@ -8,10 +8,23 @@
     background-color: rgba($color-highlight, .4);
   }
 
+  &:after {
+    position: absolute;
+    background-color: $theme-light;
+    content: '';
+  }
+
   &.horizontal {
     width: 7px;
     margin: 0 -3px;
     cursor: ew-resize;
+
+    &:after {
+      top: 0;
+      bottom: 0;
+      left: 3px;
+      width: 1px;
+    }
 
     &:first-child {
       width: 5px;
@@ -29,6 +42,13 @@
     margin: -3px 0;
     cursor: ns-resize;
 
+    &:after {
+      left: 0;
+      right: 0;
+      top: 3px;
+      height: 1px;
+    }
+
     &:first-child {
       height: 5px;
       margin: 0 0 -5px 0;
@@ -44,5 +64,9 @@
   &:last-child {
     z-index: 97;
     cursor: auto;
+
+    &:after {
+      content: none;
+    }
   }
 }

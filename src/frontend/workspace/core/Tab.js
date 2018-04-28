@@ -1,6 +1,6 @@
-import { Child } from '/workspace/core';
+import { SectionContainer } from './index';
 
-class Tab extends Child {
+class Tab extends SectionContainer {
   getDefaultProps() {
     return {
       ...super.getDefaultProps(),

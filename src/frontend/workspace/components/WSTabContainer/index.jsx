@@ -1,10 +1,22 @@
 import React from 'react';
+import { DropTarget } from 'react-dnd';
 import { classes } from '/common/util';
-import { Button } from '/components';
-import { draggingData } from '/workspace/core';
-import { Droppable } from '/workspace/components';
 import styles from './stylesheet.scss';
+import TabBar from './TabBar';
+import TabTitle from './TabTitle';
 
+const tabContainerTarget = {
+  drop(props, monitor, component) {
+    const item = monitor.getItem();
+    const { tab } = item;
+    component.core.addChild(tab);
+  }
+};
+
+@DropTarget('tab', tabContainerTarget, (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  isOver: monitor.isOver(),
+}))
 class WSTabContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -14,65 +26,38 @@ class WSTabContainer extends React.Component {
     this.core = core;
   }
 
-  setDraggingTab(e, tab) {
-    e.stopPropagation();
-    draggingData.set(e, {
-      type: 'tab',
-      tab,
-    });
-  }
-
-  setDraggingSection(e) {
-    e.stopPropagation();
-    draggingData.set(e, {
-      type: 'section',
-      section: this.core,
-    })
-  }
-
-
   handleOnClickTab(tabIndex) {
     this.core.setTabIndex(tabIndex);
   }
 
-  handleDropTab(tab) {
-    this.core.addChild(tab);
-  }
-
   render() {
-    const { className } = this.props;
+    const { className, connectDropTarget, isOver } = this.props;
     const { children, tabIndex } = this.core;
 
-    return (
-      <Droppable className={classes(styles.tab_container, className)}
-                 droppingClassName={styles.dropping}
-                 onDropTab={tab => this.handleDropTab(tab)}>
-        <div className={styles.tab_bar}
-             draggable={true}
-             onDragStart={e => this.setDraggingSection(e)}>
+    return connectDropTarget(
+      <div className={classes(styles.tab_container, isOver && styles.dropping, className)}>
+        <TabBar className={styles.tab_bar} section={this.core}>
           <div className={classes(styles.title, styles.fake)} />
           {
             children.map((tab, i) => {
               const { title } = tab;
               const selected = i === tabIndex;
               return (
-                <Button className={classes(styles.title, selected && styles.selected)}
-                        onClick={() => this.handleOnClickTab(i)}
-                        draggable={true} key={i}
-                        onDragStart={e => this.setDraggingTab(e, tab)}>
+                <TabTitle className={classes(styles.title, selected && styles.selected)} key={i}
+                          onClick={() => this.handleOnClickTab(i)} tab={tab}>
                   {title}
-                </Button>
+                </TabTitle>
               );
             })
           }
           <div className={classes(styles.title, styles.fake)} />
-        </div>
+        </TabBar>
         <div className={styles.content}>
           {
             ~tabIndex ? children[tabIndex].element : null
           }
         </div>
-      </Droppable>
+      </div>
     );
   }
 }

@@ -12,6 +12,7 @@ class Section extends Child {
       size: -1,
       minSize: 0,
       maxSize: Number.MAX_VALUE,
+      fixed: false,
     };
   }
 

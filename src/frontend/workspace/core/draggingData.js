@@ -8,9 +8,9 @@ class DraggingData {
     this.data = null;
   }
 
-  set(e, data) {
+  set(e, type, child) {
     this.id = uuid.v4();
-    this.data = data;
+    this.data = { type, child };
     e.dataTransfer.dropEffect = 'move';
     e.dataTransfer.setData(key, this.id);
   }

@@ -31,6 +31,11 @@
     cursor: move;
 
     .title {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 0 12px;
+      margin: 0;
       border-bottom: 1px solid $theme-light;
 
       &.selected {

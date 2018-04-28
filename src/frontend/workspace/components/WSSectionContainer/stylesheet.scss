@@ -7,7 +7,6 @@
   align-items: stretch;
   min-width: 0;
   min-height: 0;
-  background-color: $theme-light;
 
   &.horizontal {
     flex-direction: row;
@@ -19,7 +18,6 @@
     flex-direction: column;
     align-items: stretch;
     overflow: hidden;
-    background-color: $theme-normal;
 
     &.horizontal {
       flex-direction: row;

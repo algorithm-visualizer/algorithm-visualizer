@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { loadProgressBar } from 'axios-progress-bar'
 import { CodeEditor, DescriptionViewer, Header, Navigator, ToastContainer, WikiViewer, } from '/components';
 import { Workspace, WSSectionContainer, WSTabContainer } from '/workspace/components';
-import { Tab, TabContainer } from '/workspace/core';
+import { Section } from '/workspace/core';
 import { actions as toastActions } from '/reducers/toast';
 import { actions as envActions } from '/reducers/env';
 import { DirectoryApi } from '/apis';
@@ -65,25 +65,23 @@ class App extends React.Component {
   }
 
   handleChangeRenderers(renderers) {
-    const oldTabs = this.rendererTabs || {};
-    const newTabs = {};
+    const oldSections = this.rendererSections || {};
+    const newSections = {};
     for (const renderer of renderers) {
       const { tracerKey, element } = renderer;
-      let tab = null;
-      if (tracerKey in oldTabs) {
-        tab = oldTabs[tracerKey];
-        tab.setElement(element);
-        delete oldTabs[tracerKey];
+      let section = null;
+      if (tracerKey in oldSections) {
+        section = oldSections[tracerKey];
+        section.setElement(element);
+        delete oldSections[tracerKey];
       } else {
-        const tabContainer = new TabContainer();
-        tab = new Tab(element);
-        tabContainer.addChild(tab);
-        this.spawnReference.core.addChild(tabContainer);
+        section = new Section(element);
+        this.spawnReference.core.addChild(section);
       }
-      newTabs[tracerKey] = tab;
+      newSections[tracerKey] = section;
     }
-    Object.values(oldTabs).forEach(tab => tab.remove());
-    this.rendererTabs = newTabs;
+    Object.values(oldSections).forEach(tab => tab.remove());
+    this.rendererSections = newSections;
   }
 
   render() {
@@ -99,22 +97,27 @@ class App extends React.Component {
             size: 32,
             minSize: 32,
             maxSize: 64,
+            fixed: true,
           }}
                   onClickTitleBar={() => this.navigatorReference.core.setVisible(!this.navigatorReference.core.visible)}
                   navigatorOpened={navigatorOpened} />
-          <WSSectionContainer>
+          <WSSectionContainer wsProps={{ fixed: true }}>
             <Navigator wsProps={{
               removable: false,
               size: 240,
               minSize: 120,
-              reference: this.navigatorReference
+              reference: this.navigatorReference,
+              fixed: true,
             }} />
-            <WSSectionContainer wsProps={{
-              removable: false,
-              horizontal: false,
-              reference: this.spawnReference,
-            }} />
-            <WSTabContainer wsProps={{ weight: 1 }}>
+            <WSTabContainer>
+              <WSSectionContainer wsProps={{
+                title: 'Visualization',
+                removable: false,
+                horizontal: false,
+                reference: this.spawnReference
+              }} />
+            </WSTabContainer>
+            <WSTabContainer>
               <DescriptionViewer wsProps={{ title: 'Description' }} />
               <WikiViewer wsProps={{ title: 'Tracer API' }} />
               <CodeEditor wsProps={{ title: 'code.js' }} />

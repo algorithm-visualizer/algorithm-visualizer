@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import HTML5Backend from 'react-dnd-html5-backend';
+import { DragDropContext } from 'react-dnd';
 import { combineReducers, createStore } from 'redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -8,12 +10,12 @@ import App from '/components/App';
 import * as reducers from '/reducers';
 
 const MOUNT_NODE = document.getElementById('root');
-
 const store = createStore(combineReducers({ ...reducers, routing: routerReducer }));
+const Root = DragDropContext(HTML5Backend)(Provider);
 
 const render = (Component) => {
   ReactDOM.render(
-    <Provider store={store}>
+    <Root store={store}>
       <BrowserRouter>
         <Switch>
           <Route exact path="/:categoryKey/:algorithmKey" component={Component} />
@@ -21,7 +23,7 @@ const render = (Component) => {
           <Route path="/" component={Component} />
         </Switch>
       </BrowserRouter>
-    </Provider>,
+    </Root>,
     MOUNT_NODE
   );
 };

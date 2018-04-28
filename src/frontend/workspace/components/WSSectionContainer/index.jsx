@@ -1,6 +1,6 @@
 import React from 'react';
 import { classes } from '/common/util';
-import { Divider, Droppable } from '/workspace/components';
+import { Divider } from '/workspace/components';
 import { SectionContainer, TabContainer } from '/workspace/core';
 import styles from './stylesheet.scss';
 
@@ -14,9 +14,10 @@ class WSSectionContainer extends React.Component {
   }
 
   handleResize(index, targetElement, clientX, clientY) {
-    const { offsetLeft, offsetTop, offsetWidth, offsetHeight } = targetElement.parentElement;
+    const { left, top } = targetElement.getBoundingClientRect();
+    const { offsetWidth, offsetHeight } = targetElement.parentElement;
     const { horizontal } = this.core;
-    const position = horizontal ? clientX - offsetLeft : clientY - offsetTop;
+    const position = horizontal ? clientX - left : clientY - top;
     const containerSize = horizontal ? offsetWidth : offsetHeight;
     this.core.resizeChild(index, position, containerSize);
   }
@@ -52,13 +53,15 @@ class WSSectionContainer extends React.Component {
     const visibleChildren = children.filter(child => child.visible);
     const totalWeight = visibleChildren.reduce((sumWeight, child) => sumWeight + (child.relative ? child.weight : 0), 0);
     const elements = [];
+    let prevFixed = true;
     visibleChildren.forEach((child, visibleIndex) => {
       const index = children.indexOf(child);
       elements.push(
         <Divider key={`divider-before-${child.key}`} horizontal={horizontal}
                  onResize={visibleIndex > 0 && ((target, dx, dy) => this.handleResize(visibleIndex, target, dx, dy))}
                  onDropTab={tab => this.handleDropTabToContainer(tab, index)}
-                 onDropSection={section => this.handleDropSectionToContainer(section, index)} />
+                 onDropSection={section => this.handleDropSectionToContainer(section, index)}
+                 disableDrop={prevFixed && child.fixed} />
       );
       const style = child.relative ? {
         flexGrow: child.weight / totalWeight,
@@ -75,13 +78,19 @@ class WSSectionContainer extends React.Component {
       } else {
         elements.push(
           <div key={child.key} className={classes(styles.wrapper, !horizontal && styles.horizontal)} style={style}>
-            <Divider horizontal={!horizontal}
-                     onDropTab={tab => this.handleDropTabToSection(tab, index, true)}
-                     onDropSection={section => this.handleDropSectionToSection(section, index, true)} />
+            {
+              !child.fixed &&
+              <Divider horizontal={!horizontal}
+                       onDropTab={tab => this.handleDropTabToSection(tab, index, true)}
+                       onDropSection={section => this.handleDropSectionToSection(section, index, true)} />
+            }
             {child.element}
-            <Divider horizontal={!horizontal}
-                     onDropTab={tab => this.handleDropTabToSection(tab, index)}
-                     onDropSection={section => this.handleDropSectionToSection(section, index)} />
+            {
+              !child.fixed &&
+              <Divider horizontal={!horizontal}
+                       onDropTab={tab => this.handleDropTabToSection(tab, index)}
+                       onDropSection={section => this.handleDropSectionToSection(section, index)} />
+            }
           </div>
         );
       }
@@ -89,20 +98,17 @@ class WSSectionContainer extends React.Component {
         elements.push(
           <Divider key={`divider-after-${child.key}`} horizontal={horizontal}
                    onDropTab={tab => this.handleDropTabToContainer(tab, index + 1)}
-                   onDropSection={section => this.handleDropSectionToContainer(section, index + 1)} />
+                   onDropSection={section => this.handleDropSectionToContainer(section, index + 1)}
+                   disableDrop={child.fixed} />
         );
       }
+      prevFixed = child.fixed;
     });
 
     return (
       <div className={classes(styles.container, horizontal && styles.horizontal, className)}>
         {
-          elements.length ?
-            elements : (
-              <Droppable key="empty" className={styles.wrapper} droppingClassName={styles.dropping}
-                         onDropTab={tab => this.handleDropTabToContainer(tab)}
-                         onDropSection={section => this.handleDropSectionToContainer(section)} />
-            )
+          elements
         }
       </div>
     );
