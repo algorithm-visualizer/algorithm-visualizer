@@ -9,8 +9,8 @@
     "build:frontend": "NODE_ENV=production node ./node_modules/webpack/bin/webpack --bail --progress --config webpack.frontend.config.js",
     "build:backend": "NODE_ENV=production node ./node_modules/webpack/bin/webpack --bail --progress --config webpack.backend.config.js",
     "lint": "npm run lint:src && npm run lint:algorithm",
-    "lint:src": "./node_modules/.bin/eslint src",
-    "lint:algorithm": "./node_modules/.bin/eslint algorithm",
+    "lint:src": "./node_modules/.bin/eslint --fix src",
+    "lint:algorithm": "./node_modules/.bin/eslint --fix algorithm",
     "publish": "npm run lint && npm run build && git add . && git commit && git push"
   },
   "repository": {
