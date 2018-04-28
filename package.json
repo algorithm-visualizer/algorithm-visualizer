@@ -8,7 +8,10 @@
     "build": "npm run build:frontend && npm run build:backend",
     "build:frontend": "NODE_ENV=production node ./node_modules/webpack/bin/webpack --bail --progress --config webpack.frontend.config.js",
     "build:backend": "NODE_ENV=production node ./node_modules/webpack/bin/webpack --bail --progress --config webpack.backend.config.js",
-    "publish": "npm run build && git add . && git commit && git push"
+    "lint": "npm run lint:src && npm run lint:algorithm",
+    "lint:src": "./node_modules/.bin/eslint src",
+    "lint:algorithm": "./node_modules/.bin/eslint algorithm",
+    "publish": "npm run lint && npm run build && git add . && git commit && git push"
   },
   "repository": {
     "type": "git",
@@ -52,6 +55,11 @@
     "copy-webpack-plugin": "^4.0.1",
     "css-hot-loader": "^1.3.9",
     "css-loader": "^0.28.7",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.7.0",
     "express": "^4.15.4",
     "github-fork-ribbon-css": "^0.2.1",
     "html-webpack-plugin": "^3.2.0",
