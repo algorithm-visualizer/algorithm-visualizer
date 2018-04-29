@@ -8,7 +8,6 @@ class LogData extends Data {
 
   print(message) {
     this.messages.push(message);
-    this.render();
   }
 }
 

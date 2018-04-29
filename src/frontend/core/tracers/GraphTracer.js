@@ -5,19 +5,18 @@ class GraphTracer extends Tracer {
     super(title, options);
 
     this.register(
+      'addNode',
+      'addEdge',
+      'layoutCircle',
+      'layoutTree',
+      'layoutRandom',
       'visit',
       'leave',
+      'select',
+      'deselect',
       'log',
     );
   }
 }
-
-GraphTracer.LAYOUT = {
-  CIRCLE: 'circle',
-  TREE: 'tree',
-  RANDOM: 'random',
-  NONE: 'none',
-  // FORCE_DIRECTED: 'force_directed',
-};
 
 export default GraphTracer;

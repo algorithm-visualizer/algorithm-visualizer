@@ -14,15 +14,16 @@ class GraphRenderer extends Renderer {
   handleMouseDown(e) {
     super.handleMouseDown(e);
     const coords = this.computeCoords(e);
-    const { graph, dimensions } = this.props.data;
+    const { nodes, dimensions } = this.props.data;
     const { nodeRadius } = dimensions;
-    this.selectedNode = graph.nodes.find(node => distance(coords, node) <= nodeRadius);
+    this.selectedNode = nodes.find(node => distance(coords, node) <= nodeRadius);
   }
 
   handleMouseMove(e) {
     if (this.selectedNode) {
       const coords = this.computeCoords(e);
       this.props.data.updateNode(this.selectedNode.id, coords);
+      this.refresh();
     } else {
       super.handleMouseMove(e);
     }
@@ -38,7 +39,7 @@ class GraphRenderer extends Renderer {
   }
 
   renderData() {
-    const { graph, options, dimensions } = this.props.data;
+    const { nodes, edges, options, dimensions } = this.props.data;
     const { baseWidth, baseHeight, nodeRadius, arrowGap, nodeWeightGap, edgeWeightGap } = dimensions;
     const { directed, weighted } = options;
     const viewBox = [
@@ -53,15 +54,18 @@ class GraphRenderer extends Renderer {
           <marker id="markerArrow" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto">
             <path d="M0,0 L0,4 L4,2 L0,0" className={styles.arrow} />
           </marker>
+          <marker id="markerArrowSelected" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto">
+            <path d="M0,0 L0,4 L4,2 L0,0" className={classes(styles.arrow, styles.selected)} />
+          </marker>
           <marker id="markerArrowVisited" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto">
             <path d="M0,0 L0,4 L4,2 L0,0" className={classes(styles.arrow, styles.visited)} />
           </marker>
         </defs>
         {
-          graph.edges.sort((a, b) => a.visitedCount - b.visitedCount).map(edge => {
-            const { source, target, weight, visitedCount } = edge;
-            const { x: sx, y: sy } = graph.findNode(source);
-            let { x: ex, y: ey } = graph.findNode(target);
+          edges.sort((a, b) => a.visitedCount - b.visitedCount).map(edge => {
+            const { source, target, weight, visitedCount, selectedCount } = edge;
+            const { x: sx, y: sy } = this.props.data.findNode(source);
+            let { x: ex, y: ey } = this.props.data.findNode(target);
             const mx = (sx + ex) / 2;
             const my = (sy + ey) / 2;
             const dx = ex - sx;
@@ -76,7 +80,7 @@ class GraphRenderer extends Renderer {
             }
 
             return (
-              <g className={classes(styles.edge, visitedCount && styles.visited)} key={`${source}-${target}`}>
+              <g className={classes(styles.edge, selectedCount && styles.selected, visitedCount && styles.visited)} key={`${source}-${target}`}>
                 <path d={`M${sx},${sy} L${ex},${ey}`} className={classes(styles.line, directed && styles.directed)} />
                 {
                   weighted &&
@@ -90,10 +94,10 @@ class GraphRenderer extends Renderer {
           })
         }
         {
-          graph.nodes.map(node => {
-            const { id, x, y, weight, visitedCount } = node;
+          nodes.map(node => {
+            const { id, x, y, weight, visitedCount, selectedCount } = node;
             return (
-              <g className={classes(styles.node, visitedCount && styles.visited)} key={id}
+              <g className={classes(styles.node, selectedCount && styles.selected, visitedCount && styles.visited)} key={id}
                  transform={`translate(${x},${y})`}>
                 <circle className={styles.circle} r={nodeRadius} />
                 <text className={styles.id}>{id}</text>

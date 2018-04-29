@@ -24,6 +24,13 @@
       text-anchor: left;
     }
 
+    &.selected {
+      .circle {
+        fill: $color-selected;
+        stroke: $color-selected;
+      }
+    }
+
     &.visited {
       .circle {
         fill: $color-notified;
@@ -48,6 +55,20 @@
       text-anchor: middle;
     }
 
+    &.selected {
+      .line {
+        stroke: $color-selected;
+
+        &.directed {
+          marker-end: url(#markerArrowSelected);
+        }
+      }
+
+      .weight {
+        fill: $color-selected;
+      }
+    }
+
     &.visited {
       .line {
         stroke: $color-notified;
@@ -65,6 +86,10 @@
 
   .arrow {
     fill: $color-font;
+
+    &.selected {
+      fill: $color-selected;
+    }
 
     &.visited {
       fill: $color-notified;

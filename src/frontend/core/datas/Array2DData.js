@@ -21,12 +21,10 @@ class Array2DData extends Data {
   notify(x, y, v = this.data[x][y].value) {
     this.data[x][y].value = v;
     this.data[x][y].notified = true;
-    this.render();
   }
 
   denotify(x, y) {
     this.data[x][y].notified = false;
-    this.render();
   }
 
   select(sx, sy, ex = sx, ey = sy) {
@@ -35,7 +33,6 @@ class Array2DData extends Data {
         this.data[x][y].selected = true;
       }
     }
-    this.render();
   }
 
   selectRow(x, sy, ey) {
@@ -52,7 +49,6 @@ class Array2DData extends Data {
         this.data[x][y].selected = false;
       }
     }
-    this.render();
   }
 
   deselectRow(x, sy, ey) {

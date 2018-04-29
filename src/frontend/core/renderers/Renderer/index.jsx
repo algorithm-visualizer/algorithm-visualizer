@@ -54,12 +54,6 @@ class Renderer extends React.Component {
     data.setOnRender(null);
   }
 
-  handleDrag(dx, dy) {
-    this.centerX -= dx;
-    this.centerY -= dy;
-    this.refresh();
-  }
-
   handleMouseDown(e) {
     const { clientX, clientY } = e;
     this.lastX = clientX;
@@ -72,7 +66,9 @@ class Renderer extends React.Component {
     const { clientX, clientY } = e;
     const dx = clientX - this.lastX;
     const dy = clientY - this.lastY;
-    this.handleDrag(dx, dy);
+    this.centerX -= dx;
+    this.centerY -= dy;
+    this.refresh();
     this.lastX = clientX;
     this.lastY = clientY;
   }

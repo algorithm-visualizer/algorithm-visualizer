@@ -1,5 +1,4 @@
 import { Data } from '/core/datas';
-import { GraphTracer } from '/core/tracers';
 import { distance } from '/common/util';
 import { tracerManager } from '/core';
 
@@ -24,105 +23,48 @@ class GraphData extends Data {
       edgeWeightGap: 4,
     };
     this.logData = null;
+    this.callLayout = { method: this.layoutCircle, args: [] };
   }
 
-  set(array2d = [], layout = GraphTracer.LAYOUT.CIRCLE, root = 0) {
-    const { directed, weighted } = this.options;
-    const { baseWidth, baseHeight, padding } = this.dimensions;
-    this.graph = new Graph([], [], directed);
+  set(array2d = []) {
+    const { weighted } = this.options;
+    this.nodes = [];
+    this.edges = [];
     for (let i = 0; i < array2d.length; i++) {
-      const id = i;
-      const weight = null;
-      const visitedCount = 0;
-      this.graph.addNode(id, weight, visitedCount);
+      this.addNode(i);
       for (let j = 0; j < array2d.length; j++) {
         const value = array2d[i][j];
         if (value) {
-          const source = i;
-          const target = j;
-          const weight = weighted ? value : null;
-          const visitedCount = 0;
-          this.graph.addEdge(source, target, weight, visitedCount);
+          this.addEdge(i, j, weighted ? value : null);
         }
       }
     }
-    const left = -baseWidth / 2 + padding;
-    const top = -baseHeight / 2 + padding;
-    const right = baseWidth / 2 - padding;
-    const bottom = baseHeight / 2 - padding;
-    const width = right - left;
-    const height = bottom - top;
-    const rect = { left, top, right, bottom, width, height };
-    switch (layout) {
-      case GraphTracer.LAYOUT.CIRCLE:
-        this.graph.layoutCircle(rect);
-        break;
-      case GraphTracer.LAYOUT.TREE:
-        this.graph.layoutTree(rect, root);
-        break;
-      case GraphTracer.LAYOUT.RANDOM:
-        this.graph.layoutRandom(rect);
-        break;
-      case GraphTracer.LAYOUT.NONE:
-      default:
-        break;
-    }
+    this.layout();
     super.set();
   }
 
-  visit(target, source, weight) {
-    this.visitOrLeave(target, source, weight, true);
+  addNode(id, weight = null, visitedCount = 0, selectedCount = 0, x = 0, y = 0) {
+    if (this.findNode(id)) return;
+    this.nodes.push({ id, weight, visitedCount, selectedCount, x, y });
+    this.layout();
   }
 
-  leave(target, source, weight) {
-    this.visitOrLeave(target, source, weight, false);
-  }
-
-  visitOrLeave(target, source, weight, visit) {
-    const edge = this.graph.findEdge(source, target);
-    if (edge) edge.visitedCount += visit ? 1 : -1;
-    const node = this.graph.findNode(target);
-    node.weight = weight;
-    node.visitedCount += visit ? 1 : -1;
-    this.render();
-    if (this.logData) {
-      this.logData.print(visit ? (source || '') + ' -> ' + target : (source || '') + ' <- ' + target);
-    }
+  addEdge(source, target, weight = null, visitedCount = 0, selectedCount = 0) {
+    if (this.findEdge(source, target)) return;
+    this.edges.push({ source, target, weight, visitedCount, selectedCount });
+    this.layout();
   }
 
   updateNode(id, update) {
-    const node = this.graph.findNode(id);
+    const node = this.findNode(id);
     Object.assign(node, update);
-    this.render();
-  }
-
-  log(tracerKey) {
-    this.logData = tracerKey ? tracerManager.datas[tracerKey] : null;
-  }
-}
-
-class Graph {
-  constructor(nodes, edges, directed) {
-    this.nodes = nodes;
-    this.edges = edges;
-    this.directed = directed;
-  }
-
-  addNode(id, weight, visitedCount, x = 0, y = 0) {
-    if (this.findNode(id)) return;
-    this.nodes.push({ id, weight, visitedCount, x, y });
-  }
-
-  addEdge(source, target, weight, visitedCount) {
-    if (this.findEdge(source, target)) return;
-    this.edges.push({ source, target, weight, visitedCount });
   }
 
   findNode(id) {
     return this.nodes.find(node => node.id === id);
   }
 
-  findEdge(source, target, directed = this.directed) {
+  findEdge(source, target, directed = this.options.directed) {
     if (directed) {
       return this.edges.find(edge => edge.source === source && edge.target === target);
     } else {
@@ -132,7 +74,7 @@ class Graph {
     }
   }
 
-  findLinkedEdges(source, directed = this.directed) {
+  findLinkedEdges(source, directed = this.options.directed) {
     if (directed) {
       return this.edges.filter(edge => edge.source === source);
     } else {
@@ -140,17 +82,35 @@ class Graph {
     }
   }
 
-  findLinkedNodeIds(source, directed = this.directed) {
+  findLinkedNodeIds(source, directed = this.options.directed) {
     const edges = this.findLinkedEdges(source, directed);
     return edges.map(edge => edge.source === source ? edge.target : edge.source);
   }
 
-  findLinkedNodes(source, directed = this.directed) {
+  findLinkedNodes(source, directed = this.options.directed) {
     const ids = this.findLinkedNodeIds(source, directed);
     return ids.map(id => this.findNode(id));
   }
 
-  layoutCircle(rect) {
+  getRect() {
+    const { baseWidth, baseHeight, padding } = this.dimensions;
+    const left = -baseWidth / 2 + padding;
+    const top = -baseHeight / 2 + padding;
+    const right = baseWidth / 2 - padding;
+    const bottom = baseHeight / 2 - padding;
+    const width = right - left;
+    const height = bottom - top;
+    return { left, top, right, bottom, width, height };
+  }
+
+  layout() {
+    const { method, args } = this.callLayout;
+    method.apply(this, args);
+  }
+
+  layoutCircle() {
+    this.callLayout = { method: this.layoutCircle, args: arguments };
+    const rect = this.getRect();
     const unitAngle = 2 * Math.PI / this.nodes.length;
     let angle = -Math.PI / 2;
     for (const node of this.nodes) {
@@ -162,7 +122,17 @@ class Graph {
     }
   }
 
-  layoutTree(rect, root) {
+  layoutTree(root = 0, sorted = false) {
+    this.callLayout = { method: this.layoutTree, args: arguments };
+    const rect = this.getRect();
+
+    if (this.nodes.length === 1) {
+      const [node] = this.nodes;
+      node.x = (rect.left + rect.right) / 2;
+      node.y = (rect.top + rect.bottom) / 2;
+      return;
+    }
+
     let maxDepth = 0;
     const leafCounts = {};
     let marked = {};
@@ -188,6 +158,7 @@ class Graph {
       node.x = rect.left + (h + leafCounts[node.id] / 2) * hGap;
       node.y = rect.top + v * vGap;
       const linkedNodes = this.findLinkedNodes(node.id, false);
+      if (sorted) linkedNodes.sort((a, b) => a.id - b.id);
       for (const linkedNode of linkedNodes) {
         if (marked[linkedNode.id]) continue;
         recursivePosition(linkedNode, h, v + 1);
@@ -198,7 +169,9 @@ class Graph {
     recursivePosition(rootNode, 0, 0);
   }
 
-  layoutRandom(rect) {
+  layoutRandom() {
+    this.callLayout = { method: this.layoutRandom, args: arguments };
+    const rect = this.getRect();
     const placedNodes = [];
     for (const node of this.nodes) {
       do {
@@ -207,6 +180,47 @@ class Graph {
       } while (placedNodes.find(placedNode => distance(node, placedNode) < 48));
       placedNodes.push(node);
     }
+  }
+
+  visit(target, source, weight) {
+    this.visitOrLeave(target, source, weight, true);
+  }
+
+  leave(target, source, weight) {
+    this.visitOrLeave(target, source, weight, false);
+  }
+
+  visitOrLeave(target, source, weight, visit) {
+    const edge = this.findEdge(source, target);
+    if (edge) edge.visitedCount += visit ? 1 : -1;
+    const node = this.findNode(target);
+    node.weight = weight;
+    node.visitedCount += visit ? 1 : -1;
+    if (this.logData) {
+      this.logData.print(visit ? (source || '') + ' -> ' + target : (source || '') + ' <- ' + target);
+    }
+  }
+
+  select(target, source) {
+    this.selectOrDeselect(target, source, true);
+  }
+
+  deselect(target, source) {
+    this.selectOrDeselect(target, source, false);
+  }
+
+  selectOrDeselect(target, source, select) {
+    const edge = this.findEdge(source, target);
+    if (edge) edge.selectedCount += select ? 1 : -1;
+    const node = this.findNode(target);
+    node.selectedCount += select ? 1 : -1;
+    if (this.logData) {
+      this.logData.print(select ? (source || '') + ' => ' + target : (source || '') + ' <= ' + target);
+    }
+  }
+
+  log(tracerKey) {
+    this.logData = tracerKey ? tracerManager.datas[tracerKey] : null;
   }
 }
 

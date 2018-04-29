@@ -52,6 +52,7 @@ class TracerManager {
   }
 
   render() {
+    Object.values(this.datas).forEach(data => data.render());
     if (this.onRender) this.onRender(this.renderers);
   }
 
@@ -166,7 +167,7 @@ class TracerManager {
     }
   }
 
-  sandboxEval(code){
+  sandboxEval(code) {
     const require = moduleName => window.modules[moduleName]; // fake require
     eval(code);
   }

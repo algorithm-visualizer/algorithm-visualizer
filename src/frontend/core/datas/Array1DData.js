@@ -7,14 +7,10 @@ class Array1DData extends Array2DData {
     this.chartData = null;
   }
 
-  render() {
-    super.render();
-    this.syncChartData();
-  }
-
   set(array1d = []) {
     const array2d = [array1d];
     super.set(array2d);
+    this.syncChartData();
   }
 
   notify(x, v) {
@@ -39,10 +35,7 @@ class Array1DData extends Array2DData {
   }
 
   syncChartData() {
-    if (this.chartData) {
-      this.chartData.data = this.data;
-      this.chartData.render();
-    }
+    if (this.chartData) this.chartData.data = this.data;
   }
 }
 

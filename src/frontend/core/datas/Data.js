@@ -29,7 +29,6 @@ class Data {
   }
 
   set() {
-    this.render();
   }
 
   wait() {
