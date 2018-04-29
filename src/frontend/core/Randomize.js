@@ -2,6 +2,15 @@ const integer = (min = 1, max = 9) => {
   return (Math.random() * (max - min + 1) | 0) + min;
 };
 
+const string = length => {
+  const choices = 'abcdefghijklmnopqrstuvwxyz';
+  let text = '';
+  for (let i = 0; i < length; i++) {
+    text += choices[integer(0, choices.length - 1)];
+  }
+  return text;
+};
+
 const array1D = (N, options) => {
   return array2D(1, N, options)[0];
 };
@@ -41,6 +50,7 @@ const graph = (N = 5, options = {}) => {
 
 export default {
   integer,
+  string,
   array1D,
   array2D,
   graph,

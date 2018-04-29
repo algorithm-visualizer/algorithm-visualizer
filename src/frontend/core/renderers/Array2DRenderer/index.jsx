@@ -8,23 +8,25 @@ class Array2DRenderer extends Renderer {
     const { data } = this.props.data;
 
     return (
-      <div className={styles.array_2d}
-           style={{ marginLeft: -this.centerX * 2, marginTop: -this.centerY * 2, fontSize: this.zoom }}>
+      <table className={styles.array_2d}
+             style={{ marginLeft: -this.centerX * 2, marginTop: -this.centerY * 2, fontSize: this.zoom }}>
+        <tbody>
         {
           data.map((row, i) => (
-            <div className={styles.row} key={i}>
+            <tr className={styles.row} key={i}>
               {
                 row.map((col, j) => (
-                  <div className={classes(styles.col, col.selected && styles.selected, col.notified && styles.notified)}
-                       key={j}>
-                    <span className={styles.value}>{col.value}</span>
-                  </div>
+                  <td className={classes(styles.col, col.selected && styles.selected, col.notified && styles.notified)}
+                      key={j}>
+                    <span className={styles.value}>{this.toString(col.value)}</span>
+                  </td>
                 ))
               }
-            </div>
+            </tr>
           ))
         }
-      </div>
+        </tbody>
+      </table>
     );
   }
 }

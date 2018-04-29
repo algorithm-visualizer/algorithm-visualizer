@@ -89,6 +89,17 @@ class Renderer extends React.Component {
     this.refresh();
   }
 
+  toString(value) {
+    switch (typeof(value)) {
+      case 'number':
+        return value === Infinity ? '∞' : Number.isInteger(value) ? value.toString() : value.toFixed(3);
+      case 'boolean':
+        return value ? 'T' : 'F';
+      default:
+        return value;
+    }
+  }
+
   refresh() {
     this.forceUpdate();
   }

@@ -58,8 +58,8 @@ class GraphRenderer extends Renderer {
           </marker>
         </defs>
         {
-          graph.edges.sort((a, b) => a.visited - b.visited).map(edge => {
-            const { source, target, weight, visited } = edge;
+          graph.edges.sort((a, b) => a.visitedCount - b.visitedCount).map(edge => {
+            const { source, target, weight, visitedCount } = edge;
             const { x: sx, y: sy } = graph.findNode(source);
             let { x: ex, y: ey } = graph.findNode(target);
             const mx = (sx + ex) / 2;
@@ -76,12 +76,13 @@ class GraphRenderer extends Renderer {
             }
 
             return (
-              <g className={classes(styles.edge, visited && styles.visited)} key={`${source}-${target}`}>
+              <g className={classes(styles.edge, visitedCount && styles.visited)} key={`${source}-${target}`}>
                 <path d={`M${sx},${sy} L${ex},${ey}`} className={classes(styles.line, directed && styles.directed)} />
                 {
                   weighted &&
                   <g transform={`translate(${mx},${my})`}>
-                    <text className={styles.weight} transform={`rotate(${degree})`} y={-edgeWeightGap}>{weight}</text>
+                    <text className={styles.weight} transform={`rotate(${degree})`}
+                          y={-edgeWeightGap}>{this.toString(weight)}</text>
                   </g>
                 }
               </g>
@@ -90,15 +91,15 @@ class GraphRenderer extends Renderer {
         }
         {
           graph.nodes.map(node => {
-            const { id, x, y, weight, visited } = node;
+            const { id, x, y, weight, visitedCount } = node;
             return (
-              <g className={classes(styles.node, visited && styles.visited)} key={id}
+              <g className={classes(styles.node, visitedCount && styles.visited)} key={id}
                  transform={`translate(${x},${y})`}>
                 <circle className={styles.circle} r={nodeRadius} />
                 <text className={styles.id}>{id}</text>
                 {
                   weighted &&
-                  <text className={styles.weight} x={nodeRadius + nodeWeightGap}>{weight}</text>
+                  <text className={styles.weight} x={nodeRadius + nodeWeightGap}>{this.toString(weight)}</text>
                 }
               </g>
             );

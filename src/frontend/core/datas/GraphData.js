@@ -33,16 +33,16 @@ class GraphData extends Data {
     for (let i = 0; i < array2d.length; i++) {
       const id = i;
       const weight = null;
-      const visited = false;
-      this.graph.addNode(id, weight, visited);
+      const visitedCount = 0;
+      this.graph.addNode(id, weight, visitedCount);
       for (let j = 0; j < array2d.length; j++) {
         const value = array2d[i][j];
         if (value) {
           const source = i;
           const target = j;
           const weight = weighted ? value : null;
-          const visited = false;
-          this.graph.addEdge(source, target, weight, visited);
+          const visitedCount = 0;
+          this.graph.addEdge(source, target, weight, visitedCount);
         }
       }
     }
@@ -80,10 +80,10 @@ class GraphData extends Data {
 
   visitOrLeave(target, source, weight, visit) {
     const edge = this.graph.findEdge(source, target);
-    if (edge) edge.visited = visit;
+    if (edge) edge.visitedCount += visit ? 1 : -1;
     const node = this.graph.findNode(target);
     node.weight = weight;
-    node.visited = visit;
+    node.visitedCount += visit ? 1 : -1;
     this.render();
     if (this.logData) {
       this.logData.print(visit ? (source || '') + ' -> ' + target : (source || '') + ' <- ' + target);
@@ -108,14 +108,14 @@ class Graph {
     this.directed = directed;
   }
 
-  addNode(id, weight, visited, x = 0, y = 0) {
+  addNode(id, weight, visitedCount, x = 0, y = 0) {
     if (this.findNode(id)) return;
-    this.nodes.push({ id, weight, visited, x, y });
+    this.nodes.push({ id, weight, visitedCount, x, y });
   }
 
-  addEdge(source, target, weight, visited) {
+  addEdge(source, target, weight, visitedCount) {
     if (this.findEdge(source, target)) return;
-    this.edges.push({ source, target, weight, visited });
+    this.edges.push({ source, target, weight, visitedCount });
   }
 
   findNode(id) {
