@@ -2,13 +2,17 @@ import React from 'react';
 import { Randomize, Seed } from '/core';
 import * as Tracers from '/core/tracers';
 import { Tracer } from '/core/tracers';
-import * as Datas from '/core/datas';
 import { Array1DData, Array2DData, ChartData, Data, GraphData, LogData } from '/core/datas';
 import { Array1DRenderer, Array2DRenderer, ChartRenderer, GraphRenderer, LogRenderer, Renderer } from '/core/renderers';
 
-Object.assign(window, Tracers);
-Object.assign(window, Datas);
-Object.assign(window, { Randomize });
+Object.assign(window, {
+  modules: {
+    'algorithm-visualizer': {
+      ...Tracers,
+      Randomize,
+    },
+  }
+});
 
 class TracerManager {
   constructor() {
@@ -162,12 +166,18 @@ class TracerManager {
     }
   }
 
+  sandboxEval(code){
+    const require = moduleName => window.modules[moduleName]; // fake require
+    eval(code);
+  }
+
   execute(callback) {
     try {
       const lines = this.code.split('\n').map((line, i) => line.replace(/(.+\. *wait *)(\( *\))/g, `$1(${i})`));
       const seed = new Seed();
       Tracer.seed = seed;
-      eval(Babel.transform(lines.join('\n'), { presets: ['es2015'] }).code);
+      const { code } = Babel.transform(lines.join('\n'), { presets: ['es2015'] });
+      this.sandboxEval(code);
       this.reset(seed);
       if (callback) callback();
     } catch (error) {

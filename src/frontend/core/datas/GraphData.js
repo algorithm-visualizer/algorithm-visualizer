@@ -1,4 +1,5 @@
 import { Data } from '/core/datas';
+import { GraphTracer } from '/core/tracers';
 import { distance } from '/common/util';
 import { tracerManager } from '/core';
 
@@ -25,7 +26,7 @@ class GraphData extends Data {
     this.logData = null;
   }
 
-  set(array2d = [], layout = GraphData.LAYOUT.CIRCLE, root = 0) {
+  set(array2d = [], layout = GraphTracer.LAYOUT.CIRCLE, root = 0) {
     const { directed, weighted } = this.options;
     const { baseWidth, baseHeight, padding } = this.dimensions;
     this.graph = new Graph([], [], directed);
@@ -53,16 +54,16 @@ class GraphData extends Data {
     const height = bottom - top;
     const rect = { left, top, right, bottom, width, height };
     switch (layout) {
-      case GraphData.LAYOUT.CIRCLE:
+      case GraphTracer.LAYOUT.CIRCLE:
         this.graph.layoutCircle(rect);
         break;
-      case GraphData.LAYOUT.TREE:
+      case GraphTracer.LAYOUT.TREE:
         this.graph.layoutTree(rect, root);
         break;
-      case GraphData.LAYOUT.RANDOM:
+      case GraphTracer.LAYOUT.RANDOM:
         this.graph.layoutRandom(rect);
         break;
-      case GraphData.LAYOUT.NONE:
+      case GraphTracer.LAYOUT.NONE:
       default:
         break;
     }
@@ -208,13 +209,5 @@ class Graph {
     }
   }
 }
-
-GraphData.LAYOUT = {
-  CIRCLE: 'circle',
-  TREE: 'tree',
-  RANDOM: 'random',
-  NONE: 'none',
-  // FORCE_DIRECTED: 'force_directed',
-};
 
 export default GraphData;

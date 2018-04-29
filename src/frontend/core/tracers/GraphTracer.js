@@ -12,4 +12,12 @@ class GraphTracer extends Tracer {
   }
 }
 
+GraphTracer.LAYOUT = {
+  CIRCLE: 'circle',
+  TREE: 'tree',
+  RANDOM: 'random',
+  NONE: 'none',
+  // FORCE_DIRECTED: 'force_directed',
+};
+
 export default GraphTracer;

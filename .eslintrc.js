@@ -1,3 +1,7 @@
 module.exports = {
-  'extends': 'airbnb'
+  'extends': 'airbnb',
+  'rules': {
+    'no-plusplus': 'off',
+    'no-mixed-operators': 'off',
+  }
 };
