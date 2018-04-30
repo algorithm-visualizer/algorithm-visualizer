@@ -2,7 +2,7 @@
 
 .divider {
   position: relative;
-  z-index: 98;
+  z-index: 97;
 
   &.dropping {
     background-color: rgba($color-highlight, .4);
@@ -62,7 +62,7 @@
 
   &:first-child,
   &:last-child {
-    z-index: 97;
+    z-index: 96;
     cursor: auto;
 
     &:after {

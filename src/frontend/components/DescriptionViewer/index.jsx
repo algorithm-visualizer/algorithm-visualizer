@@ -38,7 +38,8 @@ class DescriptionViewer extends React.Component {
   loadMarkdown(href) {
     const [, , categoryKey, algorithmKey] = href.split('/');
     DirectoryApi.getFile(categoryKey, algorithmKey, 'desc.md')
-      .then(source => this.setState({ source }));
+      .then(source => this.setState({ source }))
+      .catch(() => this.setState({ source: null }));
   }
 
   render() {

@@ -11,6 +11,14 @@
 
   .icon {
     margin-right: 4px;
+
+    &.image {
+      width: 1.6em;
+      height: 1.6em;
+      background-position: center;
+      background-size: cover;
+      border-radius: 2px;
+    }
   }
 
   &.reverse {

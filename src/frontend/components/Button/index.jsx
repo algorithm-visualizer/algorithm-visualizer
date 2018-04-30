@@ -14,7 +14,12 @@ class Button extends React.Component {
       onClick: disabled ? null : onClick,
       href: disabled ? null : href,
       children: [
-        icon && <FontAwesomeIcon className={styles.icon} fixedWidth icon={icon} key="icon" />,
+        icon && (
+          typeof icon === 'string' ?
+            <div className={classes(styles.icon, styles.image)} key="icon"
+                 style={{ backgroundImage: `url(${icon})` }} /> :
+            <FontAwesomeIcon className={styles.icon} fixedWidth icon={icon} key="icon" />
+        ),
         children,
       ],
       ...rest,
@@ -23,7 +28,7 @@ class Button extends React.Component {
     return to ? (
       <Link to={to} {...props} />
     ) : href ? (
-      <a href={href} rel="noopener" target="_blank" {...props} />
+      <a href={href} {...props} />
     ) : (
       <div {...props} />
     );

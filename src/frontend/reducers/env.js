@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { combineActions, createAction, handleActions } from 'redux-actions';
 
 const prefix = 'ENV';
@@ -13,10 +14,13 @@ export const actions = {
   setDirectory,
 };
 
+const accessToken = Cookies.get('access_token');
 const defaultState = {
   categories: null,
   categoryKey: null,
   algorithmKey: null,
+  accessToken,
+  signedIn: !!accessToken,
 };
 
 export default handleActions({

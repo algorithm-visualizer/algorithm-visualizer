@@ -6,7 +6,7 @@ import { Workspace, WSSectionContainer, WSTabContainer } from '/workspace/compon
 import { Section } from '/workspace/core';
 import { actions as toastActions } from '/reducers/toast';
 import { actions as envActions } from '/reducers/env';
-import { DirectoryApi } from '/apis';
+import { DirectoryApi, GitHubApi } from '/apis';
 import { tracerManager } from '/core';
 import styles from './stylesheet.scss';
 import 'axios-progress-bar/dist/nprogress.css'
@@ -41,6 +41,9 @@ class App extends React.Component {
         const algorithm = category.algorithms.find(algorithm => algorithm.key === algorithmKey) || category.algorithms[0];
         this.props.history.push(`/${category.key}/${algorithm.key}`);
       });
+
+    const { signedIn, accessToken } = this.props.env;
+    if (signedIn) GitHubApi.auth(accessToken);
 
     tracerManager.setOnRender(renderers => this.handleChangeRenderers(renderers));
     tracerManager.setOnError(error => this.props.showErrorToast(error.message));
@@ -95,9 +98,8 @@ class App extends React.Component {
           <Header wsProps={{
             removable: false,
             size: 32,
-            minSize: 32,
-            maxSize: 64,
             fixed: true,
+            resizable: false,
           }}
                   onClickTitleBar={() => this.navigatorReference.core.setVisible(!this.navigatorReference.core.visible)}
                   navigatorOpened={navigatorOpened} />
@@ -110,6 +112,7 @@ class App extends React.Component {
               fixed: true,
             }} />
             <WSTabContainer>
+              <WikiViewer wsProps={{ title: 'Tracer API' }} />
               <WSSectionContainer wsProps={{
                 title: 'Visualization',
                 removable: false,
@@ -119,7 +122,6 @@ class App extends React.Component {
             </WSTabContainer>
             <WSTabContainer>
               <DescriptionViewer wsProps={{ title: 'Description' }} />
-              <WikiViewer wsProps={{ title: 'Tracer API' }} />
               <CodeEditor wsProps={{ title: 'code.js' }} />
             </WSTabContainer>
           </WSSectionContainer>

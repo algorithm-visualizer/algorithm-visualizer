@@ -1,5 +1,8 @@
 import Promise from 'bluebird';
 import axios from 'axios';
+import GitHub from 'github-api';
+
+let gitHub = new GitHub();
 
 axios.interceptors.response.use(response => {
   return response.data;
@@ -56,12 +59,13 @@ const WikiApi = {
   getWiki: GET('/wiki/:wiki'),
 };
 
-const ScratchApi = {
-  getScratch: GET('https://api.github.com/gists/:gist_id'),
+const GitHubApi = {
+  auth: token => gitHub = new GitHub({ token }),
+  getProfile: () => gitHub.getUser().getProfile(),
 };
 
 export {
   DirectoryApi,
   WikiApi,
-  ScratchApi,
+  GitHubApi,
 };

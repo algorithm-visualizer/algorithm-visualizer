@@ -6,14 +6,15 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faAngleRight from '@fortawesome/fontawesome-free-solid/faAngleRight';
 import faCaretDown from '@fortawesome/fontawesome-free-solid/faCaretDown';
 import faCaretRight from '@fortawesome/fontawesome-free-solid/faCaretRight';
-import faShare from '@fortawesome/fontawesome-free-solid/faShare';
 import faPlay from '@fortawesome/fontawesome-free-solid/faPlay';
 import faChevronLeft from '@fortawesome/fontawesome-free-solid/faChevronLeft';
 import faPause from '@fortawesome/fontawesome-free-solid/faPause';
 import faExpandArrowsAlt from '@fortawesome/fontawesome-free-solid/faExpandArrowsAlt';
+import faGithub from '@fortawesome/fontawesome-free-brands/faGithub';
 import { actions as envActions } from '/reducers/env';
+import { GitHubApi } from '/apis';
 import { classes } from '/common/util';
-import { Button, Ellipsis } from '/components';
+import { Button, Ellipsis, ListItem } from '/components';
 import { tracerManager } from '/core';
 import styles from './stylesheet.scss';
 
@@ -29,10 +30,26 @@ class Header extends React.Component {
     super(props);
 
     const { interval, paused, started } = tracerManager;
-    this.state = { interval, paused, started };
+    this.state = {
+      interval, paused, started,
+      profile: {
+        avatar_url: null,
+        login: null,
+      },
+    };
   }
 
   componentDidMount() {
+    const { signedIn } = this.props.env;
+    if (signedIn) {
+      GitHubApi.getProfile()
+        .then(result => {
+          const { avatar_url, login } = result;
+          const profile = { avatar_url, login };
+          this.setState({ profile });
+        });
+    }
+
     tracerManager.setOnUpdateStatus(update => this.setState(update));
   }
 
@@ -51,9 +68,9 @@ class Header extends React.Component {
   }
 
   render() {
-    const { interval, paused, started } = this.state;
+    const { interval, paused, started, profile } = this.state;
     const { className, onClickTitleBar, navigatorOpened } = this.props;
-    const { categories, categoryKey, algorithmKey } = this.props.env;
+    const { categories, categoryKey, algorithmKey, signedIn } = this.props.env;
 
     const category = categories.find(category => category.key === categoryKey);
     const algorithm = category.algorithms.find(algorithm => algorithm.key === algorithmKey);
@@ -68,10 +85,6 @@ class Header extends React.Component {
                            icon={navigatorOpened ? faCaretDown : faCaretRight} />
         </Button>
         <div className={styles.top_menu_buttons}>
-          <Button icon={faShare} primary>
-            Share
-            <input type="text" className={classes(styles.collapse, styles.shared)} />
-          </Button>
           {
             started ? (
               <Button icon={faPlay} primary onClick={() => tracerManager.run()} active>Rerun</Button>
@@ -106,7 +119,24 @@ class Header extends React.Component {
               value={interval}
               onChange={interval => tracerManager.setInterval(interval)} />
           </div>
-          <Button className={styles.btn_fullscreen} icon={faExpandArrowsAlt} primary
+          {
+            signedIn ?
+              <Button className={styles.btn_profile} icon={profile.avatar_url} primary>
+                {profile.login}
+                <div className={styles.dropdown}>
+                  <Button className={styles.fake} icon={profile.avatar_url}>
+                    {profile.login}
+                  </Button>
+                  <div className={styles.list}>
+                    <ListItem href="/api/auth/destroy" label="Sign Out" />
+                  </div>
+                </div>
+              </Button> :
+              <Button icon={faGithub} primary href="/api/auth/request">
+                Sign In
+              </Button>
+          }
+          <Button icon={faExpandArrowsAlt} primary
                   onClick={() => this.handleClickFullScreen()}>Fullscreen</Button>
         </div>
       </header>

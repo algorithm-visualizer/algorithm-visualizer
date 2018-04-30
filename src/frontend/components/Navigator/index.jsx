@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faSearch from '@fortawesome/fontawesome-free-solid/faSearch';
+import faStar from '@fortawesome/fontawesome-free-solid/faStar';
 import faCode from '@fortawesome/fontawesome-free-solid/faCode';
-import faBook from '@fortawesome/fontawesome-free-solid/faBook';
 import faGithub from '@fortawesome/fontawesome-free-brands/faGithub';
 import { ExpandableListItem, ListItem } from '/components';
 import { classes } from '/common/util';
@@ -97,8 +97,8 @@ class Navigator extends React.Component {
           }
         </div>
         <div className={styles.footer}>
-          <ListItem icon={faCode} label="Scratch Paper" />
-          <ListItem icon={faBook} label="Tracer API" />
+          <ExpandableListItem icon={faCode} label="Scratch Paper" />
+          <ExpandableListItem icon={faStar} label="Favorites" />
           <ListItem icon={faGithub} label="Fork me on GitHub" href="https://github.com/parkjs814/AlgorithmVisualizer" />
         </div>
       </nav>
