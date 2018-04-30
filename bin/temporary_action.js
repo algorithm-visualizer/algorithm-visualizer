@@ -14,8 +14,7 @@ for (const category of categories) {
     if (algorithm.startsWith('.')) continue;
     const dir = path.resolve(__dirname, '..', 'algorithm', category, algorithm);
     try {
-      fs.renameSync(path.resolve(dir, 'desc.md'), path.resolve(dir, 'desc.json'));
-//      fs.unlinkSync(path.resolve(dir, 'desc.json'));
+      fs.renameSync(path.resolve(dir, 'desc.json'), path.resolve(dir, 'desc.md'));
     } catch (e) {
     }
   }
