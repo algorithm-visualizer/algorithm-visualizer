@@ -1,6 +1,10 @@
 const path = require('path');
 const fs = require('fs');
-const lebab = require('lebab');
+
+const capitalize = string => string.charAt(0).toUpperCase() + string.slice(1);
+const latex = v => {
+  return v.replace(/\$([^$]+)\$/g, (m, m1) => `<img src="https://latex.codecogs.com/svg.latex?${m1.replace(/ /g, '')}"/>`)
+};
 
 const categories = fs.readdirSync(path.resolve(__dirname, '..', 'algorithm'));
 for (const category of categories) {
@@ -8,14 +12,11 @@ for (const category of categories) {
   const algorithms = fs.readdirSync(path.resolve(__dirname, '..', 'algorithm', category));
   for (const algorithm of algorithms) {
     if (algorithm.startsWith('.')) continue;
-    const filepath = path.resolve(__dirname, '..', 'algorithm', category, algorithm, 'code.js');
-    const oldCode = fs.readFileSync(filepath, 'utf-8');
+    const dir = path.resolve(__dirname, '..', 'algorithm', category, algorithm);
     try {
-      const { code: newCode, warnings } = lebab.transform(oldCode, ['let', 'arrow', 'multi-var', 'template', 'default-param', 'includes']);
-//      fs.writeFileSync(filepath, newCode, 'utf-8');
+      fs.renameSync(path.resolve(dir, 'desc.md'), path.resolve(dir, 'desc.json'));
+//      fs.unlinkSync(path.resolve(dir, 'desc.json'));
     } catch (e) {
-      console.log(filepath);
-      console.error(e);
     }
   }
 }

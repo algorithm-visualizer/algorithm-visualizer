@@ -29,10 +29,7 @@ const getWiki = (req, res, next) => {
   if (!wiki) return next(new NotFoundError());
 
   const wikiPath = getPath(wiki.name);
-  fs.readFile(wikiPath, 'utf8', (err, wiki) => {
-    if (err) return next(err);
-    res.json({ wiki });
-  });
+  res.sendFile(wikiPath);
 };
 
 router.route('/')

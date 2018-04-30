@@ -6,6 +6,7 @@ export { default as Ellipsis } from './Ellipsis';
 export { default as ExpandableListItem } from './ExpandableListItem';
 export { default as Header } from './Header';
 export { default as ListItem } from './ListItem';
+export { default as MarkdownViewer } from './MarkdownViewer';
 export { default as Navigator } from './Navigator';
 export { default as ToastContainer } from './ToastContainer';
 export { default as WikiViewer } from './WikiViewer';

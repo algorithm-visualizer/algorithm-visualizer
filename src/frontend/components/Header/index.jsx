@@ -6,7 +6,6 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faAngleRight from '@fortawesome/fontawesome-free-solid/faAngleRight';
 import faCaretDown from '@fortawesome/fontawesome-free-solid/faCaretDown';
 import faCaretRight from '@fortawesome/fontawesome-free-solid/faCaretRight';
-import faPencilAlt from '@fortawesome/fontawesome-free-solid/faPencilAlt';
 import faShare from '@fortawesome/fontawesome-free-solid/faShare';
 import faPlay from '@fortawesome/fontawesome-free-solid/faPlay';
 import faChevronLeft from '@fortawesome/fontawesome-free-solid/faChevronLeft';
@@ -69,7 +68,6 @@ class Header extends React.Component {
                            icon={navigatorOpened ? faCaretDown : faCaretRight} />
         </Button>
         <div className={styles.top_menu_buttons}>
-          <Button icon={faPencilAlt} primary>Generate</Button>
           <Button icon={faShare} primary>
             Share
             <input type="text" className={classes(styles.collapse, styles.shared)} />
