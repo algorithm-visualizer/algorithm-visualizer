@@ -2,6 +2,8 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 import { NotFoundError } from '/common/error';
+import { exec } from 'child_process';
+import { repo } from '/common/github';
 
 const router = express.Router();
 
@@ -10,46 +12,98 @@ const createKey = name => name.toLowerCase().replace(/ /g, '-');
 const list = dirPath => fs.readdirSync(dirPath).filter(filename => !filename.startsWith('.'));
 
 const cacheHierarchy = () => {
-  const getCategory = categoryName => {
+  const allFiles = [];
+  const cacheCategory = categoryName => {
     const categoryKey = createKey(categoryName);
     const categoryPath = getPath(categoryName);
-    const algorithms = list(categoryPath).map(algorithmName => getAlgorithm(categoryName, algorithmName));
+    const algorithms = list(categoryPath).map(algorithmName => cacheAlgorithm(categoryName, algorithmName));
     return {
       key: categoryKey,
       name: categoryName,
       algorithms,
     };
   };
-  const getAlgorithm = (categoryName, algorithmName) => {
+  const cacheAlgorithm = (categoryName, algorithmName) => {
     const algorithmKey = createKey(algorithmName);
     const algorithmPath = getPath(categoryName, algorithmName);
-    const files = list(algorithmPath);
+    const files = list(algorithmPath).map(fileName => cacheFile(categoryName, algorithmName, fileName));
+    allFiles.push(...files);
     return {
       key: algorithmKey,
       name: algorithmName,
       files,
     };
   };
-  return list(getPath()).map(getCategory);
-};
+  const cacheFile = (categoryName, algorithmName, fileName) => {
+    const filePath = getPath(categoryName, algorithmName, fileName);
+    const content = fs.readFileSync(filePath, 'utf-8');
+    return {
+      name: fileName,
+      path: filePath,
+      content,
+      contributors: [],
+      toJSON: () => fileName,
+    };
+  };
 
-const hierarchy = cacheHierarchy();
+  const hierarchy = list(getPath()).map(cacheCategory);
+
+  const commitAuthors = {};
+  const cacheCommitAuthors = (page, done) => {
+    repo.listCommits({ per_page: 100, page }).then(({ data }) => {
+      if (data.length) {
+        data.forEach(({ sha, commit, author }) => {
+          if (!author) return;
+          const { login, avatar_url } = author;
+          commitAuthors[sha] = { login, avatar_url };
+        });
+        cacheCommitAuthors(page + 1, done);
+      } else done && done();
+    }).catch(console.error);
+  };
+  const cacheContributors = (fileIndex, done) => {
+    const file = allFiles[fileIndex];
+    if (file) {
+      const cwd = getPath();
+      exec(`git --no-pager log --follow --format="%H" "${file.path}"`, { cwd }, (error, stdout, stderr) => {
+        if (!error && !stderr) {
+          const output = stdout.toString().replace(/\n$/, '');
+          const shas = output.split('\n').reverse();
+          const contributors = [];
+          for (const sha of shas) {
+            const author = commitAuthors[sha];
+            if (author && !contributors.find(contributor => contributor.login === author.login)) {
+              contributors.push(author);
+            }
+          }
+          file.contributors = contributors;
+        }
+        cacheContributors(fileIndex + 1, done);
+      });
+    } else done && done();
+  };
+  cacheCommitAuthors(1, () => cacheContributors(0));
+
+  return hierarchy;
+};
+const cachedHierarchy = cacheHierarchy(); // TODO: cache again when webhooked
 
 const getHierarchy = (req, res, next) => {
-  res.json({ hierarchy });
+  res.json({ hierarchy: cachedHierarchy });
 };
 
 const getFile = (req, res, next) => {
   const { categoryKey, algorithmKey, fileName } = req.params;
 
-  const category = hierarchy.find(category => category.key === categoryKey);
+  const category = cachedHierarchy.find(category => category.key === categoryKey);
   if (!category) return next(new NotFoundError());
   const algorithm = category.algorithms.find(algorithm => algorithm.key === algorithmKey);
   if (!algorithm) return next(new NotFoundError());
-  if (!algorithm.files.includes(fileName)) return next(new NotFoundError());
+  const file = algorithm.files.find(file => file.name === fileName);
+  if (!file) return next(new NotFoundError());
 
-  const filePath = getPath(category.name, algorithm.name, fileName);
-  res.sendFile(filePath);
+  const { content, contributors } = file;
+  res.json({ file: { content, contributors } });
 };
 
 router.route('/')

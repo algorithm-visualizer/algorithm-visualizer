@@ -28,7 +28,11 @@ class Button extends React.Component {
     return to ? (
       <Link to={to} {...props} />
     ) : href ? (
-      <a href={href} {...props} />
+      /^https?:\/\//i.test(href) ? (
+        <a href={href} rel="noopener" target="_blank" {...props} />
+      ) : (
+        <a href={href} {...props} />
+      )
     ) : (
       <div {...props} />
     );

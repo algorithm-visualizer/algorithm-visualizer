@@ -1,0 +1,21 @@
+@import "~/common/stylesheet/index";
+
+.contributors_viewer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 4px;
+  background-color: $theme-normal;
+
+  .contributor {
+    height: 28px;
+    padding: 0 6px;
+    font-weight: bold;
+
+    &.label {
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+    }
+  }
+}

@@ -2,7 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { actions as envActions } from '/reducers/env';
 import { HierarchyApi } from '/apis/index';
-import { MarkdownViewer } from '/components';
+import { ContributorsViewer, MarkdownViewer } from '/components';
+import styles from './stylesheet.scss';
+import { classes } from '/common/util';
 
 @connect(
   ({ env }) => ({
@@ -16,14 +18,14 @@ class DescriptionViewer extends React.Component {
     super(props);
 
     this.state = {
-      source: null,
+      file: null,
     };
   }
 
   componentDidMount() {
     const { categoryKey, algorithmKey } = this.props.env;
     const href = `/algorithm/${categoryKey}/${algorithmKey}`;
-    this.loadMarkdown(href);
+    this.loadFile(href);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -31,21 +33,25 @@ class DescriptionViewer extends React.Component {
     if (categoryKey !== this.props.env.categoryKey ||
       algorithmKey !== this.props.env.algorithmKey) {
       const href = `/algorithm/${categoryKey}/${algorithmKey}`;
-      this.loadMarkdown(href);
+      this.loadFile(href);
     }
   }
 
-  loadMarkdown(href) {
+  loadFile(href) {
     const [, , categoryKey, algorithmKey] = href.split('/');
     HierarchyApi.getFile(categoryKey, algorithmKey, 'desc.md')
-      .then(source => this.setState({ source }))
-      .catch(() => this.setState({ source: null }));
+      .then(({ file }) => this.setState({ file }))
+      .catch(() => this.setState({ file: null }));
   }
 
   render() {
-    const { source } = this.state;
-    return (
-      <MarkdownViewer source={source} onClickLink={href => this.loadMarkdown(href)} />
+    const { className } = this.props;
+    const { file } = this.state;
+    return file && (
+      <div className={classes(styles.description_viewer, className)}>
+        <MarkdownViewer className={styles.markdown_viewer} source={file.content} onClickLink={href => this.loadFile(href)} />
+        <ContributorsViewer contributors={file.contributors} />
+      </div>
     );
   }
 }

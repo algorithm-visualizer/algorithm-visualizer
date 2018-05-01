@@ -11,7 +11,7 @@ const {
   GITHUB_BOT_USERNAME,
   GITHUB_BOT_PASSWORD,
   GITHUB_ORG = 'algorithm-visualizer',
-  GITHUB_REPO_ALGORITHMS = 'algorithms',
+  GITHUB_REPO = 'algorithms',
 } = process.env;
 
 const __PROD__ = NODE_ENV === 'production';
@@ -27,9 +27,7 @@ const githubBotAuth = {
   password: GITHUB_BOT_PASSWORD,
 };
 const githubOrg = GITHUB_ORG;
-const githubRepos = {
-  algorithms: GITHUB_REPO_ALGORITHMS
-};
+const githubRepo = GITHUB_REPO;
 
 const builtPath = path.resolve(__dirname, 'built');
 const frontendBuiltPath = path.resolve(builtPath, 'frontend');
@@ -50,7 +48,7 @@ module.exports = {
   githubClientSecret,
   githubBotAuth,
   githubOrg,
-  githubRepos,
+  githubRepo,
   frontendBuiltPath,
   backendBuiltPath,
   frontendSrcPath,

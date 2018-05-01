@@ -46,11 +46,6 @@ class TracerManager {
     this.onError = onError;
   }
 
-  setOnUpdateCode(onUpdateCode) {
-    this.onUpdateCode = onUpdateCode;
-    if (this.onUpdateCode) this.onUpdateCode(this.code);
-  }
-
   render() {
     Object.values(this.datas).forEach(data => data.render());
     if (this.onRender) this.onRender(this.renderers);
@@ -79,7 +74,6 @@ class TracerManager {
   setCode(code) {
     this.code = code;
     this.runInitial();
-    if (this.onUpdateCode) this.onUpdateCode(code);
   }
 
   reset(seed = new Seed()) {

@@ -8,7 +8,7 @@ class MarkdownViewer extends React.Component {
     const { className, source, onClickLink } = this.props;
 
     const link = ({ href, ...rest }) => {
-      return /^https?:\/\//.test(href) ? (
+      return /^https?:\/\//i.test(href) ? (
         <a href={href} rel="noopener" target="_blank" {...rest} />
       ) : (
         <a onClick={() => onClickLink(href)} {...rest} />

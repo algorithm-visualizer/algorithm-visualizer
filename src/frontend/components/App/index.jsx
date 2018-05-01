@@ -6,7 +6,7 @@ import { Workspace, WSSectionContainer, WSTabContainer } from '/workspace/compon
 import { Section } from '/workspace/core';
 import { actions as toastActions } from '/reducers/toast';
 import { actions as envActions } from '/reducers/env';
-import { HierarchyApi, GitHubApi } from '/apis';
+import { GitHubApi, HierarchyApi } from '/apis';
 import { tracerManager } from '/core';
 import styles from './stylesheet.scss';
 import 'axios-progress-bar/dist/nprogress.css'
@@ -63,7 +63,6 @@ class App extends React.Component {
   updateDirectory({ categoryKey = null, algorithmKey = null }) {
     if (categoryKey && algorithmKey) {
       this.props.setDirectory(categoryKey, algorithmKey);
-      HierarchyApi.getFile(categoryKey, algorithmKey, 'code.js').then(code => tracerManager.setCode(code));
     }
   }
 
