@@ -5,11 +5,11 @@ import { NotFoundError } from '/common/error';
 
 const router = express.Router();
 
-const getPath = (...args) => path.resolve(__dirname, '..', '..', '..', 'algorithm', ...args);
+const getPath = (...args) => path.resolve(__dirname, '..', 'public', 'algorithms', ...args);
+const createKey = name => name.toLowerCase().replace(/ /g, '-');
+const list = dirPath => fs.readdirSync(dirPath).filter(filename => !filename.startsWith('.'));
 
-const readCategories = () => {
-  const createKey = name => name.toLowerCase().replace(/ /g, '-');
-  const list = dirPath => fs.readdirSync(dirPath).filter(filename => !filename.startsWith('.'));
+const cacheHierarchy = () => {
   const getCategory = categoryName => {
     const categoryKey = createKey(categoryName);
     const categoryPath = getPath(categoryName);
@@ -33,16 +33,16 @@ const readCategories = () => {
   return list(getPath()).map(getCategory);
 };
 
-const categories = readCategories();
+const hierarchy = cacheHierarchy();
 
-const getCategories = (req, res, next) => {
-  res.json({ categories });
+const getHierarchy = (req, res, next) => {
+  res.json({ hierarchy });
 };
 
 const getFile = (req, res, next) => {
   const { categoryKey, algorithmKey, fileName } = req.params;
 
-  const category = categories.find(category => category.key === categoryKey);
+  const category = hierarchy.find(category => category.key === categoryKey);
   if (!category) return next(new NotFoundError());
   const algorithm = category.algorithms.find(algorithm => algorithm.key === algorithmKey);
   if (!algorithm) return next(new NotFoundError());
@@ -53,7 +53,7 @@ const getFile = (req, res, next) => {
 };
 
 router.route('/')
-  .get(getCategories);
+  .get(getHierarchy);
 
 router.route('/:categoryKey/:algorithmKey/:fileName')
   .get(getFile);

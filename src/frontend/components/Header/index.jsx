@@ -70,9 +70,9 @@ class Header extends React.Component {
   render() {
     const { interval, paused, started, profile } = this.state;
     const { className, onClickTitleBar, navigatorOpened } = this.props;
-    const { categories, categoryKey, algorithmKey, signedIn } = this.props.env;
+    const { hierarchy, categoryKey, algorithmKey, signedIn } = this.props.env;
 
-    const category = categories.find(category => category.key === categoryKey);
+    const category = hierarchy.find(category => category.key === categoryKey);
     const algorithm = category.algorithms.find(algorithm => algorithm.key === algorithmKey);
 
     return (

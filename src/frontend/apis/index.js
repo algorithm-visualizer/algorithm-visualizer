@@ -2,7 +2,7 @@ import Promise from 'bluebird';
 import axios from 'axios';
 import GitHub from 'github-api';
 
-let gitHub = new GitHub();
+let gh = new GitHub();
 
 axios.interceptors.response.use(response => {
   return response.data;
@@ -49,9 +49,9 @@ const PUT = URL => {
   });
 };
 
-const DirectoryApi = {
-  getCategories: GET('/directory'),
-  getFile: GET('/directory/:categoryKey/:algorithmKey/:fileName'),
+const HierarchyApi = {
+  getHierarchy: GET('/hierarchy'),
+  getFile: GET('/hierarchy/:categoryKey/:algorithmKey/:fileName'),
 };
 
 const WikiApi = {
@@ -60,12 +60,12 @@ const WikiApi = {
 };
 
 const GitHubApi = {
-  auth: token => gitHub = new GitHub({ token }),
-  getProfile: () => gitHub.getUser().getProfile(),
+  auth: token => gh = new GitHub({ token }),
+  getProfile: () => gh.getUser().getProfile(),
 };
 
 export {
-  DirectoryApi,
+  HierarchyApi,
   WikiApi,
   GitHubApi,
 };

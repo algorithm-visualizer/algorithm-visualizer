@@ -6,7 +6,7 @@ import { Workspace, WSSectionContainer, WSTabContainer } from '/workspace/compon
 import { Section } from '/workspace/core';
 import { actions as toastActions } from '/reducers/toast';
 import { actions as envActions } from '/reducers/env';
-import { DirectoryApi, GitHubApi } from '/apis';
+import { HierarchyApi, GitHubApi } from '/apis';
 import { tracerManager } from '/core';
 import styles from './stylesheet.scss';
 import 'axios-progress-bar/dist/nprogress.css'
@@ -33,11 +33,11 @@ class App extends React.Component {
   componentDidMount() {
     this.updateDirectory(this.props.match.params);
 
-    DirectoryApi.getCategories()
-      .then(({ categories }) => {
-        this.props.setCategories(categories);
+    HierarchyApi.getHierarchy()
+      .then(({ hierarchy }) => {
+        this.props.setHierarchy(hierarchy);
         const { categoryKey, algorithmKey } = this.props.env;
-        const category = categories.find(category => category.key === categoryKey) || categories[0];
+        const category = hierarchy.find(category => category.key === categoryKey) || hierarchy[0];
         const algorithm = category.algorithms.find(algorithm => algorithm.key === algorithmKey) || category.algorithms[0];
         this.props.history.push(`/${category.key}/${algorithm.key}`);
       });
@@ -63,7 +63,7 @@ class App extends React.Component {
   updateDirectory({ categoryKey = null, algorithmKey = null }) {
     if (categoryKey && algorithmKey) {
       this.props.setDirectory(categoryKey, algorithmKey);
-      DirectoryApi.getFile(categoryKey, algorithmKey, 'code.js').then(code => tracerManager.setCode(code));
+      HierarchyApi.getFile(categoryKey, algorithmKey, 'code.js').then(code => tracerManager.setCode(code));
     }
   }
 
@@ -88,11 +88,11 @@ class App extends React.Component {
   }
 
   render() {
-    const { categories, categoryKey, algorithmKey } = this.props.env;
+    const { hierarchy, categoryKey, algorithmKey } = this.props.env;
 
     const navigatorOpened = true;
 
-    return categories && categoryKey && algorithmKey && (
+    return hierarchy && categoryKey && algorithmKey && (
       <div className={styles.app}>
         <Workspace className={styles.workspace} wsProps={{ horizontal: false }}>
           <Header wsProps={{

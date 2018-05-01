@@ -21,7 +21,7 @@ const response = (req, res, next) => {
     const { access_token } = response.data;
     res.cookie('access_token', access_token);
     res.redirect('/');
-  });
+  }).catch(next);
 };
 
 const destroy = (req, res, next) => {

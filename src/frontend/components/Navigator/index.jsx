@@ -40,10 +40,10 @@ class Navigator extends React.Component {
   }
 
   handleChangeQuery(e) {
-    const { categories } = this.props.env;
+    const { hierarchy } = this.props.env;
     const categoriesOpened = {};
     const query = e.target.value;
-    categories.forEach(category => {
+    hierarchy.forEach(category => {
       if (this.testQuery(name) || category.algorithms.find(algorithm => this.testQuery(algorithm.name))) {
         categoriesOpened[category.key] = true;
       }
@@ -60,7 +60,7 @@ class Navigator extends React.Component {
   render() {
     const { categoriesOpened, query } = this.state;
     const { className, style } = this.props;
-    const { categoryKey: selectedCategoryKey, algorithmKey: selectedAlgorithmKey, categories } = this.props.env;
+    const { hierarchy, categoryKey: selectedCategoryKey, algorithmKey: selectedAlgorithmKey } = this.props.env;
 
     return (
       <nav className={classes(styles.navigator, className)} style={style}>
@@ -71,7 +71,7 @@ class Navigator extends React.Component {
         </div>
         <div className={styles.algorithm_list}>
           {
-            categories.map(category => {
+            hierarchy.map(category => {
               const categoryOpened = categoriesOpened[category.key];
               let algorithms = category.algorithms;
               if (!this.testQuery(category.name)) {

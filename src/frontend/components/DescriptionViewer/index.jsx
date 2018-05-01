@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { actions as envActions } from '/reducers/env';
-import { DirectoryApi } from '/apis/index';
+import { HierarchyApi } from '/apis/index';
 import { MarkdownViewer } from '/components';
 
 @connect(
@@ -37,7 +37,7 @@ class DescriptionViewer extends React.Component {
 
   loadMarkdown(href) {
     const [, , categoryKey, algorithmKey] = href.split('/');
-    DirectoryApi.getFile(categoryKey, algorithmKey, 'desc.md')
+    HierarchyApi.getFile(categoryKey, algorithmKey, 'desc.md')
       .then(source => this.setState({ source }))
       .catch(() => this.setState({ source: null }));
   }
