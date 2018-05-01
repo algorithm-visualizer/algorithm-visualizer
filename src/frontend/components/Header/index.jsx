@@ -121,7 +121,7 @@ class Header extends React.Component {
           </div>
           {
             signedIn ?
-              <Button className={styles.btn_profile} icon={profile.avatar_url} primary>
+              <Button className={styles.btn_profile} icon={profile.avatar_url}>
                 {profile.login}
                 <div className={styles.dropdown}>
                   <Button className={styles.fake} icon={profile.avatar_url}>

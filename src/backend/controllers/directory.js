@@ -28,7 +28,7 @@ const readCategories = () => {
       key: algorithmKey,
       name: algorithmName,
       files,
-    }
+    };
   };
   return list(getPath()).map(getCategory);
 };
