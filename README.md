@@ -4,7 +4,7 @@
 [![OpenCollective](https://opencollective.com/algorithmvisualizer/backers/badge.svg)](#backers) 
 [![OpenCollective](https://opencollective.com/algorithmvisualizer/sponsors/badge.svg)](#sponsors)
 
-http://parkjs814.github.io/AlgorithmVisualizer
+http://algo-visualizer.jasonpark.me
 
 ![Algorithm Visualizer](http://i.giphy.com/3o6EhJFgsyShX6MHeM.gif)
 
