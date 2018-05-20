@@ -10,13 +10,16 @@ http://algo-visualizer.jasonpark.me
 
 ### Contributing
 
-**We do not plan to accept any pull request for next few weeks**, as Algorithm Visualizer is currently undergoing drastic changes, including, but not limited to:
+**We do not plan to accept any pull request for the next few weeks**, as Algorithm Visualizer is currently undergoing drastic changes, including, but not limited to:
 
 * Rewriting in React.js,
 * Separating [parkjs814/AlgorithmVisualizer](https://github.com/parkjs814/AlgorithmVisualizer) repository into [algorithm-visualizer/algorithm-visualizer](https://github.com/algorithm-visualizer/algorithm-visualizer) and [algorithm-visualizer/algorithms](https://github.com/algorithm-visualizer/algorithms),
 * Merging *Data* and *Code* parts in implementing algorithms,
 * Showing contributors of each algorithm,
 * Improving the workspace,
+* Integrating GitHub,
 * Removing subcategories of algorithms,
-* Improving *Tracer* methods, and
-* Rewriting *desc.json* in Markdown.
+* Improving *Tracer* methods,
+* Rewriting *desc.json* of each algorithm in Markdown,
+* Rewriting [Wiki](https://github.com/algorithm-visualizer/algorithm-visualizer/wiki), and
+* Changing URL to https://algorithm-visualizer.org.
