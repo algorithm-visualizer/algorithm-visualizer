@@ -23,3 +23,5 @@ http://algo-visualizer.jasonpark.me
 * Rewriting *desc.json* of each algorithm in Markdown,
 * Rewriting [Wiki](https://github.com/algorithm-visualizer/algorithm-visualizer/wiki), and
 * Changing URL to https://algorithm-visualizer.org.
+
+For any feature request or further information, feel free to [raise issues](https://github.com/algorithm-visualizer/algorithm-visualizer/issues/new) or [email parkjs814@gmail.com](mailto:parkjs814@gmail.com).
