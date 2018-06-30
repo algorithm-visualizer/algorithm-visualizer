@@ -1,9 +1,8 @@
 import React from 'react';
-import { Section, Tab } from '/workspace/core';
+import { Parent, Tab } from '/workspace/core';
 import { WSTabContainer } from '/workspace/components';
-import { parentMixin } from '/workspace/core/mixins';
 
-class TabContainer extends parentMixin(Section) {
+class TabContainer extends Parent {
   getDefaultProps() {
     return {
       ...super.getDefaultProps(),
@@ -22,15 +21,13 @@ class TabContainer extends parentMixin(Section) {
   }
 
   addChild(child, index = this.children.length) {
-    super.addChild(child, index, () => {
-      this.setTabIndex(Math.min(index, this.children.length - 1));
-    });
+    super.addChild(child, index);
+    this.setTabIndex(Math.min(index, this.children.length - 1));
   }
 
   removeChild(index) {
-    super.removeChild(index, () => {
-      this.setTabIndex(Math.min(this.tabIndex, this.children.length - 1));
-    });
+    super.removeChild(index);
+    this.setTabIndex(Math.min(this.tabIndex, this.children.length - 1));
   }
 
   setTabIndex(tabIndex) {

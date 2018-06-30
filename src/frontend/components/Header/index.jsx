@@ -72,15 +72,23 @@ class Header extends React.Component {
     const { className, onClickTitleBar, navigatorOpened } = this.props;
     const { hierarchy, categoryKey, algorithmKey, signedIn } = this.props.env;
 
-    const category = hierarchy.find(category => category.key === categoryKey);
-    const algorithm = category.algorithms.find(algorithm => algorithm.key === algorithmKey);
+    let directory = ['Algorithm Visualizer'];
+    if (hierarchy && categoryKey && algorithmKey) {
+      const category = hierarchy.find(category => category.key === categoryKey);
+      const algorithm = category.algorithms.find(algorithm => algorithm.key === algorithmKey);
+      directory = [category.name, algorithm.name];
+    }
 
     return (
       <header className={classes(styles.header, className)}>
         <Button className={styles.title_bar} onClick={onClickTitleBar}>
-          <Ellipsis>{category.name}</Ellipsis>
-          <FontAwesomeIcon className={styles.nav_arrow} fixedWidth icon={faAngleRight} />
-          <Ellipsis>{algorithm.name}</Ellipsis>
+          {
+            directory.map((path, i) => [
+              <Ellipsis key={`path-${i}`}>{path}</Ellipsis>,
+              i < directory.length - 1 &&
+              <FontAwesomeIcon className={styles.nav_arrow} fixedWidth icon={faAngleRight} key={`arrow-${i}`} />
+            ])
+          }
           <FontAwesomeIcon className={styles.nav_caret} fixedWidth
                            icon={navigatorOpened ? faCaretDown : faCaretRight} />
         </Button>

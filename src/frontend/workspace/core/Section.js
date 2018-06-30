@@ -1,9 +1,10 @@
-import { Child } from '/workspace/core';
+import React from 'react';
 
-class Section extends Child {
+class Section {
   getDefaultProps() {
     return {
-      ...super.getDefaultProps(),
+      id: null,
+      removable: true,
       visible: true,
       resizable: true,
       weight: 1,
@@ -17,13 +18,37 @@ class Section extends Child {
   }
 
   constructor(element) {
-    super(element);
-    this.relative = this.size === -1;
+    if (!React.isValidElement(element)) {
+      element = this.createElement(element);
+    }
+    this.parent = null;
+    Object.assign(this, this.getDefaultProps());
+    this.setElement(element);
   }
 
-  setVisible(visible) {
-    this.visible = visible;
-    this.parent.render();
+  createElement(wsProps) {
+    return (
+      <div wsProps={wsProps} />
+    );
+  }
+
+  setElement(element) {
+    const { wsProps = {} } = element.props;
+    Object.assign(this, wsProps);
+    this.relative = this.size === -1;
+    this.element = element;
+  }
+
+  setParent(parent) {
+    if (this.parent) this.remove(true);
+    this.parent = parent;
+  }
+
+  remove(moving = false) {
+    if (this.removable || moving) {
+      const index = this.parent.findIndex(this);
+      this.parent.removeChild(index);
+    }
   }
 }
 

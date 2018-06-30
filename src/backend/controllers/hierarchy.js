@@ -65,7 +65,7 @@ const cacheHierarchy = () => {
     const file = allFiles[fileIndex];
     if (file) {
       const cwd = getPath();
-      exec(`git --no-pager log --follow --format="%H" "${file.path}"`, { cwd }, (error, stdout, stderr) => {
+      exec(`git --no-pager log --follow --no-merges --format="%H" "${file.path}"`, { cwd }, (error, stdout, stderr) => {
         if (!error && !stderr) {
           const output = stdout.toString().replace(/\n$/, '');
           const shas = output.split('\n').reverse();
@@ -92,24 +92,22 @@ const getHierarchy = (req, res, next) => {
   res.json({ hierarchy: cachedHierarchy });
 };
 
-const getFile = (req, res, next) => {
-  const { categoryKey, algorithmKey, fileName } = req.params;
+const getAlgorithm = (req, res, next) => {
+  const { categoryKey, algorithmKey } = req.params;
 
   const category = cachedHierarchy.find(category => category.key === categoryKey);
   if (!category) return next(new NotFoundError());
   const algorithm = category.algorithms.find(algorithm => algorithm.key === algorithmKey);
   if (!algorithm) return next(new NotFoundError());
-  const file = algorithm.files.find(file => file.name === fileName);
-  if (!file) return next(new NotFoundError());
 
-  const { content, contributors } = file;
-  res.json({ file: { content, contributors } });
+  const files = algorithm.files.map(({ name, content, contributors }) => ({ name, content, contributors }));
+  res.json({ algorithm: { ...algorithm, files } });
 };
 
 router.route('/')
   .get(getHierarchy);
 
-router.route('/:categoryKey/:algorithmKey/:fileName')
-  .get(getFile);
+router.route('/:categoryKey/:algorithmKey')
+  .get(getAlgorithm);
 
 export default router;

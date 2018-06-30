@@ -51,7 +51,7 @@ const PUT = URL => {
 
 const HierarchyApi = {
   getHierarchy: GET('/hierarchy'),
-  getFile: GET('/hierarchy/:categoryKey/:algorithmKey/:fileName'),
+  getAlgorithm: GET('/hierarchy/:categoryKey/:algorithmKey'),
 };
 
 const WikiApi = {
@@ -62,6 +62,7 @@ const WikiApi = {
 const GitHubApi = {
   auth: token => gh = new GitHub({ token }),
   getProfile: () => gh.getUser().getProfile(),
+  listGists: () => gh.getUser().listGists(),
 };
 
 export {

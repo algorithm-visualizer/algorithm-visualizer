@@ -1,9 +1,8 @@
 import React from 'react';
-import { Section, TabContainer } from '/workspace/core';
-import { parentMixin } from '/workspace/core/mixins';
+import { Parent, Section, TabContainer } from '/workspace/core';
 import { WSSectionContainer, WSTabContainer } from '/workspace/components';
 
-class SectionContainer extends parentMixin(Section) {
+class SectionContainer extends Parent {
   getDefaultProps() {
     return {
       ...super.getDefaultProps(),
@@ -32,7 +31,7 @@ class SectionContainer extends parentMixin(Section) {
     super.removeChild(index);
     if (this.removable && this.children.length === 1) {
       const [child] = this.children;
-      const index = this.parent.findIndex(this.key);
+      const index = this.parent.findIndex(this);
       this.parent.addChild(child, index);
     }
   }

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { loadProgressBar } from 'axios-progress-bar'
 import { CodeEditor, DescriptionViewer, Header, Navigator, ToastContainer, WikiViewer, } from '/components';
 import { Workspace, WSSectionContainer, WSTabContainer } from '/workspace/components';
-import { Section } from '/workspace/core';
 import { actions as toastActions } from '/reducers/toast';
 import { actions as envActions } from '/reducers/env';
 import { GitHubApi, HierarchyApi } from '/apis';
@@ -26,11 +25,21 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.spawnReference = Workspace.createReference();
-    this.navigatorReference = Workspace.createReference();
+    this.workspaceRef = React.createRef();
+    this.navigator = null;
+
+    this.state = {
+      files: [],
+      codeFile: null,
+      descFile: null,
+      renderers: [],
+    };
   }
 
   componentDidMount() {
+    const workspace = this.workspaceRef.current;
+    this.navigator = workspace.findSectionById('navigator');
+
     this.updateDirectory(this.props.match.params);
 
     HierarchyApi.getHierarchy()
@@ -45,7 +54,7 @@ class App extends React.Component {
     const { signedIn, accessToken } = this.props.env;
     if (signedIn) GitHubApi.auth(accessToken);
 
-    tracerManager.setOnRender(renderers => this.handleChangeRenderers(renderers));
+    tracerManager.setOnRender(renderers => this.setState({ renderers }));
     tracerManager.setOnError(error => this.props.showErrorToast(error.message));
   }
 
@@ -63,51 +72,37 @@ class App extends React.Component {
   updateDirectory({ categoryKey = null, algorithmKey = null }) {
     if (categoryKey && algorithmKey) {
       this.props.setDirectory(categoryKey, algorithmKey);
+      HierarchyApi.getAlgorithm(categoryKey, algorithmKey)
+        .then(({ algorithm }) => {
+          const { files } = algorithm;
+          const codeFile = files.find(file => file.name === 'code.js') || null;
+          const descFile = files.find(file => file.name === 'desc.md') || null;
+          this.setState({ files, codeFile, descFile });
+        })
+        .catch(() => this.setState({ files: [] }));
     }
-  }
-
-  handleChangeRenderers(renderers) {
-    const oldSections = this.rendererSections || {};
-    const newSections = {};
-    for (const renderer of renderers) {
-      const { tracerKey, element } = renderer;
-      let section = null;
-      if (tracerKey in oldSections) {
-        section = oldSections[tracerKey];
-        section.setElement(element);
-        delete oldSections[tracerKey];
-      } else {
-        section = new Section(element);
-        this.spawnReference.core.addChild(section);
-      }
-      newSections[tracerKey] = section;
-    }
-    Object.values(oldSections).forEach(tab => tab.remove());
-    this.rendererSections = newSections;
   }
 
   render() {
-    const { hierarchy, categoryKey, algorithmKey } = this.props.env;
+    const { codeFile, descFile, renderers } = this.state;
 
-    const navigatorOpened = true;
-
-    return hierarchy && categoryKey && algorithmKey && (
+    return (
       <div className={styles.app}>
-        <Workspace className={styles.workspace} wsProps={{ horizontal: false }}>
+        <Workspace className={styles.workspace} wsProps={{ horizontal: false }} ref={this.workspaceRef}>
           <Header wsProps={{
             removable: false,
             size: 32,
             fixed: true,
             resizable: false,
           }}
-                  onClickTitleBar={() => this.navigatorReference.core.setVisible(!this.navigatorReference.core.visible)}
-                  navigatorOpened={navigatorOpened} />
+                  onClickTitleBar={() => this.navigator.setVisible(!this.navigator.visible)}
+                  navigatorOpened={true /* TODO: fix */} />
           <WSSectionContainer wsProps={{ fixed: true }}>
             <Navigator wsProps={{
+              id: 'navigator',
               removable: false,
               size: 240,
               minSize: 120,
-              reference: this.navigatorReference,
               fixed: true,
             }} />
             <WSTabContainer>
@@ -116,12 +111,13 @@ class App extends React.Component {
                 title: 'Visualization',
                 removable: false,
                 horizontal: false,
-                reference: this.spawnReference
-              }} />
+              }}>
+                {renderers}
+              </WSSectionContainer>
             </WSTabContainer>
             <WSTabContainer>
-              <DescriptionViewer wsProps={{ title: 'Description' }} />
-              <CodeEditor wsProps={{ title: 'code.js' }} />
+              <DescriptionViewer wsProps={{ title: 'Description' }} file={descFile} />
+              <CodeEditor wsProps={{ title: 'code.js' }} file={codeFile} />
             </WSTabContainer>
           </WSSectionContainer>
         </Workspace>

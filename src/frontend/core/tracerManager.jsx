@@ -103,10 +103,9 @@ class TracerManager {
     }[className];
     const data = new DataClass(options);
     this.datas[tracerKey] = data;
-    const renderer = {
-      tracerKey,
-      element: <RendererClass title={title} data={data} wsProps={{ fixed: true }} />
-    };
+    const renderer = (
+      <RendererClass key={tracerKey} title={title} data={data} wsProps={{ fixed: true }} />
+    );
     this.renderers.push(renderer);
   }
 

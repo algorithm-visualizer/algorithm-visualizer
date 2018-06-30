@@ -8,26 +8,41 @@ import faGithub from '@fortawesome/fontawesome-free-brands/faGithub';
 import { ExpandableListItem, ListItem } from '/components';
 import { classes } from '/common/util';
 import { actions as envActions } from '/reducers/env';
+import { actions as toastActions } from '/reducers/toast';
 import styles from './stylesheet.scss';
+import { ALGORITHM_NEW, CATEGORY_SCRATCH_PAPER } from '/common/config';
 
 @connect(
   ({ env }) => ({
     env
   }), {
-    ...envActions
+    ...envActions,
+    ...toastActions,
   }
 )
 class Navigator extends React.Component {
   constructor(props) {
     super(props);
 
-    const { categoryKey } = this.props.env;
-
     this.state = {
-      categoriesOpened: {
-        [categoryKey]: true,
-      },
+      categoriesOpened: {},
+      scratchPaperOpened: false,
+      favoritesOpened: false,
       query: '',
+    }
+  }
+
+  componentDidMount() {
+    const { categoryKey } = this.props.env;
+    if (categoryKey) {
+      this.toggleCategory(categoryKey, true);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { categoryKey } = nextProps.env;
+    if (categoryKey) {
+      this.toggleCategory(categoryKey, true);
     }
   }
 
@@ -39,6 +54,14 @@ class Navigator extends React.Component {
     this.setState({ categoriesOpened });
   }
 
+  toggleScratchPaper(scratchPaperOpened = !this.state.scratchPaperOpened) {
+    this.setState({ scratchPaperOpened });
+  }
+
+  toggleFavorites(favoritesOpened = !this.state.favoritesOpened) {
+    this.setState({ favoritesOpened });
+  }
+
   handleChangeQuery(e) {
     const { hierarchy } = this.props.env;
     const categoriesOpened = {};
@@ -48,7 +71,6 @@ class Navigator extends React.Component {
         categoriesOpened[category.key] = true;
       }
     });
-
     this.setState({ categoriesOpened, query });
   }
 
@@ -58,9 +80,9 @@ class Navigator extends React.Component {
   }
 
   render() {
-    const { categoriesOpened, query } = this.state;
+    const { categoriesOpened, scratchPaperOpened, favoritesOpened, query } = this.state;
     const { className, style } = this.props;
-    const { hierarchy, categoryKey: selectedCategoryKey, algorithmKey: selectedAlgorithmKey } = this.props.env;
+    const { hierarchy, categoryKey, algorithmKey, signedIn } = this.props.env;
 
     return (
       <nav className={classes(styles.navigator, className)} style={style}>
@@ -71,7 +93,7 @@ class Navigator extends React.Component {
         </div>
         <div className={styles.algorithm_list}>
           {
-            hierarchy.map(category => {
+            hierarchy && hierarchy.map(category => {
               const categoryOpened = categoriesOpened[category.key];
               let algorithms = category.algorithms;
               if (!this.testQuery(category.name)) {
@@ -84,7 +106,7 @@ class Navigator extends React.Component {
                                     opened={categoryOpened}>
                   {
                     algorithms.map(algorithm => {
-                      const selected = category.key === selectedCategoryKey && algorithm.key === selectedAlgorithmKey;
+                      const selected = category.key === categoryKey && algorithm.key === algorithmKey;
                       return (
                         <ListItem indent key={algorithm.key} selected={selected}
                                   to={`/${category.key}/${algorithm.key}`} label={algorithm.name} />
@@ -97,9 +119,24 @@ class Navigator extends React.Component {
           }
         </div>
         <div className={styles.footer}>
-          <ExpandableListItem icon={faCode} label="Scratch Paper" />
-          <ExpandableListItem icon={faStar} label="Favorites" />
-          <ListItem icon={faGithub} label="Fork me on GitHub" href="https://github.com/parkjs814/AlgorithmVisualizer" />
+          {
+            signedIn ?
+              <ExpandableListItem icon={faCode} label="Scratch Paper" onClick={() => this.toggleScratchPaper()}
+                                  opened={scratchPaperOpened}>
+                <ListItem indent label="New ..." to={`/${CATEGORY_SCRATCH_PAPER}/${ALGORITHM_NEW}`} />
+              </ExpandableListItem> :
+              <ListItem icon={faCode} label="Scratch Paper"
+                        onClick={() => this.props.showSuccessToast('Sign In Required')} />
+          }
+          {
+            signedIn ?
+              <ExpandableListItem icon={faStar} label="Favorites" onClick={() => this.toggleFavorites()}
+                                  opened={favoritesOpened} /> :
+              <ListItem icon={faStar} label="Favorites"
+                        onClick={() => this.props.showSuccessToast('Sign In Required')} />
+          }
+          <ListItem icon={faGithub} label="Fork me on GitHub"
+                    href="https://github.com/algorithm-visualizer/algorithm-visualizer" />
         </div>
       </nav>
     );

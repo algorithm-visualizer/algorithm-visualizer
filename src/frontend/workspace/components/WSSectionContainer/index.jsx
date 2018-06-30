@@ -9,7 +9,7 @@ class WSSectionContainer extends React.Component {
     super(props);
 
     const { core } = props;
-    core.reference.component = this;
+    core.component = this;
     this.core = core;
   }
 
@@ -57,7 +57,7 @@ class WSSectionContainer extends React.Component {
     visibleChildren.forEach((child, visibleIndex) => {
       const index = children.indexOf(child);
       elements.push(
-        <Divider key={`divider-before-${child.key}`} horizontal={horizontal}
+        <Divider key={`divider-${index}`} horizontal={horizontal}
                  onResize={visibleIndex > 0 && ((target, dx, dy) => this.handleResize(visibleIndex, target, dx, dy))}
                  onDropTab={tab => this.handleDropTabToContainer(tab, index)}
                  onDropSection={section => this.handleDropSectionToContainer(section, index)}
@@ -71,13 +71,13 @@ class WSSectionContainer extends React.Component {
       };
       if (children.length === 1) {
         elements.push(
-          <div key={child.key} className={classes(styles.wrapper)} style={style}>
+          <div key={child.id} className={classes(styles.wrapper)} style={style}>
             {child.element}
           </div>
         );
       } else {
         elements.push(
-          <div key={child.key} className={classes(styles.wrapper, !horizontal && styles.horizontal)} style={style}>
+          <div key={child.id} className={classes(styles.wrapper, !horizontal && styles.horizontal)} style={style}>
             {
               !child.fixed &&
               <Divider horizontal={!horizontal}
@@ -96,7 +96,7 @@ class WSSectionContainer extends React.Component {
       }
       if (visibleIndex === visibleChildren.length - 1) {
         elements.push(
-          <Divider key={`divider-after-${child.key}`} horizontal={horizontal}
+          <Divider key={`divider-last`} horizontal={horizontal}
                    onDropTab={tab => this.handleDropTabToContainer(tab, index + 1)}
                    onDropSection={section => this.handleDropSectionToContainer(section, index + 1)}
                    disableDrop={child.fixed} />

@@ -1,60 +1,38 @@
 import React from 'react';
 import AceEditor from 'react-ace';
-import { connect } from 'react-redux';
 import 'brace/mode/javascript';
 import 'brace/theme/tomorrow_night_eighties';
+import 'brace/ext/searchbox';
 import { tracerManager } from '/core';
 import { classes } from '/common/util';
 import styles from './stylesheet.scss';
-import { HierarchyApi } from '/apis';
 import { ContributorsViewer } from '/components';
-import { actions as envActions } from '/reducers/env';
 
-// TODO: code should not be reloaded when reopening tab
-@connect(
-  ({ env }) => ({
-    env
-  }), {
-    ...envActions
-  }
-)
 class CodeEditor extends React.Component {
   constructor(props) {
     super(props);
 
+    const { file } = props;
     const { lineIndicator } = tracerManager;
     this.state = {
       lineMarker: this.createLineMarker(lineIndicator),
-      file: null,
+      code: file && file.content,
     };
   }
 
   componentDidMount() {
-    const { categoryKey, algorithmKey } = this.props.env;
-    this.loadFile(categoryKey, algorithmKey);
-
     tracerManager.setOnUpdateLineIndicator(lineIndicator => this.setState({ lineMarker: this.createLineMarker(lineIndicator) }));
   }
 
   componentWillReceiveProps(nextProps) {
-    const { categoryKey, algorithmKey } = nextProps.env;
-    if (categoryKey !== this.props.env.categoryKey ||
-      algorithmKey !== this.props.env.algorithmKey) {
-      this.loadFile(categoryKey, algorithmKey);
+    const { file } = nextProps;
+    if (file !== this.props.file) {
+      this.handleChangeCode(file && file.content);
     }
   }
 
   componentWillUnmount() {
     tracerManager.setOnUpdateLineIndicator(null);
-  }
-
-  loadFile(categoryKey, algorithmKey) {
-    HierarchyApi.getFile(categoryKey, algorithmKey, 'code.js')
-      .then(({ file }) => {
-        this.setState({ file });
-        tracerManager.setCode(file.content);
-      })
-      .catch(() => this.setState({ file: null }));
   }
 
   createLineMarker(lineIndicator) {
@@ -73,14 +51,13 @@ class CodeEditor extends React.Component {
   }
 
   handleChangeCode(code) {
-    const file = { ...this.state.file, content: code };
-    this.setState({ file });
+    this.setState({ code });
     tracerManager.setCode(code);
   }
 
   render() {
-    const { lineMarker, file } = this.state;
-    const { className, relativeWeight } = this.props;
+    const { className, file } = this.props;
+    const { lineMarker, code } = this.state;
 
     return file && (
       <div className={classes(styles.code_editor, className)}>
@@ -92,10 +69,9 @@ class CodeEditor extends React.Component {
           editorProps={{ $blockScrolling: true }}
           onChange={code => this.handleChangeCode(code)}
           markers={lineMarker ? [lineMarker] : []}
-          value={file.content}
-          width={`${relativeWeight}`} />
+          value={code} />
         <ContributorsViewer contributors={file.contributors} />
-      </div> // TODO: trick to update on resize
+      </div> // TODO: need resizing when parent resizes
     );
   }
 }

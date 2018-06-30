@@ -22,7 +22,7 @@ class WSTabContainer extends React.Component {
     super(props);
 
     const { core } = props;
-    core.reference.component = this;
+    core.component = this;
     this.core = core;
   }
 
