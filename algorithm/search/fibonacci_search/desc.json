@@ -1,0 +1,17 @@
+{
+  "Binary Search": "Fibonacci Search is a search algorithm that finds the position of a target value within a sorted array.",
+  "Applications": [
+    "Finding values in a sorted collection"
+  ],
+  "Complexity": {
+    "time": "worst $O(log(N))$, best $O(1)$, average $O(log(N))$",
+    "space": "worst $O(log(N))$ - recursive, $O(1)$ - iterative"
+  },
+  "References": [
+    "<a href='https://en.wikipedia.org/wiki/Fibonacci_search_technique'>Wikipedia</a>"
+  ],
+  "files": {
+    "recursive": "Recursively searching a sorted array",
+    "iterative": "Iteratively searching a sorted array"
+  }
+}
