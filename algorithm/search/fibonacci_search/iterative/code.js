@@ -2,7 +2,7 @@ function min(f, s){
     return f < s ? f : s;
 }
 
-function BinarySearch(array, element, minIndex, maxIndex) { // array = sorted array, element = element to be found, minIndex = low index, maxIndex = high index
+function BinarySearch(array, element) {
     var fib2 = 0;
     var fib1 = 1;
     var fib = fib2 + fib1;
@@ -53,4 +53,4 @@ function BinarySearch(array, element, minIndex, maxIndex) { // array = sorted ar
 var element = D[Integer.random(0, D.length - 1)];
 
 logger._print('Using fibonacci search to find ' + element);
-BinarySearch(D, element, 0, D.length - 1);
+BinarySearch(D, element);
