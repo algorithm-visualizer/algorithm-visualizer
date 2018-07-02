@@ -11,7 +11,6 @@
     "<a href='https://en.wikipedia.org/wiki/Fibonacci_search_technique'>Wikipedia</a>"
   ],
   "files": {
-    "recursive": "Recursively searching a sorted array",
     "iterative": "Iteratively searching a sorted array"
   }
 }
