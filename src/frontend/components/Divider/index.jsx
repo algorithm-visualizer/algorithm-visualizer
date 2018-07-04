@@ -1,25 +1,7 @@
 import React from 'react';
-import { DropTarget } from 'react-dnd';
 import { classes } from '/common/util';
 import styles from './stylesheet.scss';
 
-const dividerTarget = {
-  canDrop(props, monitor) {
-    return !props.disableDrop;
-  },
-  drop(props, monitor, component) {
-    const item = monitor.getItem();
-    const { section, tab } = item;
-    if (section) props.onDropSection(section);
-    else if (tab) props.onDropTab(tab);
-  }
-};
-
-@DropTarget(['section', 'tab'], dividerTarget, (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver(),
-  canDrop: monitor.canDrop(),
-}))
 class Divider extends React.Component {
   constructor(props) {
     super(props);
@@ -46,15 +28,13 @@ class Divider extends React.Component {
   }
 
   render() {
-    const { className, horizontal, connectDropTarget, isOver, canDrop } = this.props;
+    const { className, horizontal } = this.props;
 
-    return connectDropTarget(
-      <div
-        className={classes(styles.divider, horizontal ? styles.horizontal : styles.vertical, isOver && canDrop && styles.dropping, className)}
-        onMouseDown={this.handleMouseDown} />
+    return (
+      <div className={classes(styles.divider, horizontal ? styles.horizontal : styles.vertical, className)}
+           onMouseDown={this.handleMouseDown} />
     );
   }
 }
 
 export default Divider;
-

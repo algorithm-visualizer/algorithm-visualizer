@@ -35,6 +35,12 @@ input {
   flex-direction: column;
   align-items: stretch;
   height: 100%;
+  background-color: $theme-normal;
+
+  .header {
+    height: $line-height;
+    border-bottom: 1px solid $theme-light;
+  }
 
   .workspace {
     flex: 1;

@@ -29,4 +29,3 @@ class WikiViewer extends React.Component {
 }
 
 export default WikiViewer;
-

@@ -1,4 +1,0 @@
-export { default as Divider } from './Divider';
-export { default as Workspace } from './Workspace';
-export { default as WSSectionContainer } from './WSSectionContainer';
-export { default as WSTabContainer } from './WSTabContainer';

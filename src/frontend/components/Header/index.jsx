@@ -23,7 +23,7 @@ import styles from './stylesheet.scss';
     env,
   }), {
     ...envActions,
-  }
+  },
 )
 class Header extends React.Component {
   constructor(props) {
@@ -86,7 +86,7 @@ class Header extends React.Component {
             directory.map((path, i) => [
               <Ellipsis key={`path-${i}`}>{path}</Ellipsis>,
               i < directory.length - 1 &&
-              <FontAwesomeIcon className={styles.nav_arrow} fixedWidth icon={faAngleRight} key={`arrow-${i}`} />
+              <FontAwesomeIcon className={styles.nav_arrow} fixedWidth icon={faAngleRight} key={`arrow-${i}`} />,
             ])
           }
           <FontAwesomeIcon className={styles.nav_caret} fixedWidth
@@ -141,7 +141,7 @@ class Header extends React.Component {
                 </div>
               </Button> :
               <Button icon={faGithub} primary href="/api/auth/request">
-                Sign In
+                <Ellipsis>Sign In</Ellipsis>
               </Button>
           }
           <Button icon={faExpandArrowsAlt} primary

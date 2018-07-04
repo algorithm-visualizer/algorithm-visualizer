@@ -1,8 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { loadProgressBar } from 'axios-progress-bar'
-import { CodeEditor, DescriptionViewer, Header, Navigator, ToastContainer, WikiViewer, } from '/components';
-import { Workspace, WSSectionContainer, WSTabContainer } from '/workspace/components';
+import {
+  CodeEditor,
+  DescriptionViewer,
+  Header,
+  Navigator,
+  ResizableContainer,
+  TabContainer,
+  ToastContainer,
+  WikiViewer,
+} from '/components';
 import { actions as toastActions } from '/reducers/toast';
 import { actions as envActions } from '/reducers/env';
 import { GitHubApi, HierarchyApi } from '/apis';
@@ -19,27 +27,26 @@ loadProgressBar();
   }), {
     ...toastActions,
     ...envActions,
-  }
+  },
 )
 class App extends React.Component {
   constructor(props) {
     super(props);
-
-    this.workspaceRef = React.createRef();
-    this.navigator = null;
 
     this.state = {
       files: [],
       codeFile: null,
       descFile: null,
       renderers: [],
+      navigatorOpened: true,
+      workspaceWeights: [1, 2, 2],
+      renderersWeights: [],
+      viewerTabIndex: 0,
+      editorTabIndex: 0,
     };
   }
 
   componentDidMount() {
-    const workspace = this.workspaceRef.current;
-    this.navigator = workspace.findSectionById('navigator');
-
     this.updateDirectory(this.props.match.params);
 
     HierarchyApi.getHierarchy()
@@ -54,7 +61,10 @@ class App extends React.Component {
     const { signedIn, accessToken } = this.props.env;
     if (signedIn) GitHubApi.auth(accessToken);
 
-    tracerManager.setOnRender(renderers => this.setState({ renderers }));
+    tracerManager.setOnChangeRenderers(renderers => {
+      const renderersWeights = renderers.map(() => 1);
+      this.setState({ renderers, renderersWeights });
+    });
     tracerManager.setOnError(error => this.props.showErrorToast(error.message));
   }
 
@@ -83,44 +93,51 @@ class App extends React.Component {
     }
   }
 
+  handleChangeWorkspaceWeights(workspaceWeights) {
+    this.setState({ workspaceWeights });
+  }
+
+  handleChangeRenderersWeights(renderersWeights) {
+    this.setState({ renderersWeights });
+  }
+
+  handleChangeViewerTabIndex(viewerTabIndex) {
+    this.setState({ viewerTabIndex });
+  }
+
+  handleChangeEditorTabIndex(editorTabIndex) {
+    this.setState({ editorTabIndex });
+  }
+
+  toggleNavigatorOpened(navigatorOpened = !this.state.navigatorOpened) {
+    this.setState({ navigatorOpened });
+  }
+
   render() {
-    const { codeFile, descFile, renderers } = this.state;
+    const { codeFile, descFile, renderers, navigatorOpened, workspaceWeights, renderersWeights, viewerTabIndex, editorTabIndex } = this.state;
 
     return (
       <div className={styles.app}>
-        <Workspace className={styles.workspace} wsProps={{ horizontal: false }} ref={this.workspaceRef}>
-          <Header wsProps={{
-            removable: false,
-            size: 32,
-            fixed: true,
-            resizable: false,
-          }}
-                  onClickTitleBar={() => this.navigator.setVisible(!this.navigator.visible)}
-                  navigatorOpened={true /* TODO: fix */} />
-          <WSSectionContainer wsProps={{ fixed: true }}>
-            <Navigator wsProps={{
-              id: 'navigator',
-              removable: false,
-              size: 240,
-              minSize: 120,
-              fixed: true,
-            }} />
-            <WSTabContainer>
-              <WikiViewer wsProps={{ title: 'Tracer API' }} />
-              <WSSectionContainer wsProps={{
-                title: 'Visualization',
-                removable: false,
-                horizontal: false,
-              }}>
-                {renderers}
-              </WSSectionContainer>
-            </WSTabContainer>
-            <WSTabContainer>
-              <DescriptionViewer wsProps={{ title: 'Description' }} file={descFile} />
-              <CodeEditor wsProps={{ title: 'code.js' }} file={codeFile} />
-            </WSTabContainer>
-          </WSSectionContainer>
-        </Workspace>
+        <Header className={styles.header} onClickTitleBar={() => this.toggleNavigatorOpened()}
+                navigatorOpened={navigatorOpened} />
+        <ResizableContainer className={styles.workspace} horizontal weights={workspaceWeights}
+                            visibles={[navigatorOpened, true, true]}
+                            onChangeWeights={weights => this.handleChangeWorkspaceWeights(weights)}>
+          <Navigator />
+          <TabContainer titles={['Visualization', 'Description', 'Tracer API']} tabIndex={viewerTabIndex}
+                        onChangeTabIndex={tabIndex => this.handleChangeViewerTabIndex(tabIndex)}>
+            <ResizableContainer weights={renderersWeights} visibles={renderers.map(() => true)}
+                                onChangeWeights={weights => this.handleChangeRenderersWeights(weights)}>
+              {renderers}
+            </ResizableContainer>
+            <DescriptionViewer file={descFile} />
+            <WikiViewer />
+          </TabContainer>
+          <TabContainer titles={['Javascript']} tabIndex={editorTabIndex}
+                        onChangeTabIndex={tabIndex => this.handleChangeEditorTabIndex(tabIndex)}>
+            <CodeEditor file={codeFile} />
+          </TabContainer>
+        </ResizableContainer>
         <ToastContainer className={styles.toast_container} />
       </div>
     );

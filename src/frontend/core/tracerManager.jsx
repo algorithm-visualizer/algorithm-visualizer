@@ -24,9 +24,9 @@ class TracerManager {
     this.reset();
   }
 
-  setOnRender(onRender) {
-    this.onRender = onRender;
-    this.render();
+  setOnChangeRenderers(onChangeRenderers) {
+    this.onChangeRenderers = onChangeRenderers;
+    if (this.onChangeRenderers) this.onChangeRenderers(this.renderers);
   }
 
   setOnUpdateStatus(onUpdateStatus) {
@@ -48,7 +48,6 @@ class TracerManager {
 
   render() {
     Object.values(this.datas).forEach(data => data.render());
-    if (this.onRender) this.onRender(this.renderers);
   }
 
   setInterval(interval) {
@@ -90,6 +89,7 @@ class TracerManager {
     this.datas = {};
     this.cursor = 0;
     this.chunkCursor = 0;
+    if (this.onChangeRenderers) this.onChangeRenderers(this.renderers);
   }
 
   addTracer(className, tracerKey, title, options) {
@@ -107,6 +107,7 @@ class TracerManager {
       <RendererClass key={tracerKey} title={title} data={data} wsProps={{ fixed: true }} />
     );
     this.renderers.push(renderer);
+    if (this.onChangeRenderers) this.onChangeRenderers(this.renderers);
   }
 
   applyTrace() {
