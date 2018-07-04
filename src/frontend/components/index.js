@@ -13,4 +13,5 @@ export { default as Navigator } from './Navigator';
 export { default as ResizableContainer } from './ResizableContainer';
 export { default as TabContainer } from './TabContainer';
 export { default as ToastContainer } from './ToastContainer';
+export { default as VisualizationViewer } from './VisualizationViewer';
 export { default as WikiViewer } from './WikiViewer';

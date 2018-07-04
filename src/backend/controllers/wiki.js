@@ -5,7 +5,7 @@ import { NotFoundError } from '/common/error';
 
 const router = express.Router();
 
-const getPath = (...args) => path.resolve(__dirname, '..', '..', '..', 'wiki', ...args);
+const getPath = (...args) => path.resolve(__dirname, '..', 'public', 'algorithm-visualizer.wiki', ...args);
 
 const readWikis = () => {
   const createKey = name => name.slice(0, -3);

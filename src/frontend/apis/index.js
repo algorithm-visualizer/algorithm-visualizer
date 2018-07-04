@@ -1,8 +1,5 @@
 import Promise from 'bluebird';
 import axios from 'axios';
-import GitHub from 'github-api';
-
-let gh = new GitHub();
 
 axios.interceptors.response.use(response => {
   return response.data;
@@ -49,9 +46,9 @@ const PUT = URL => {
   });
 };
 
-const HierarchyApi = {
-  getHierarchy: GET('/hierarchy'),
-  getAlgorithm: GET('/hierarchy/:categoryKey/:algorithmKey'),
+const CategoryApi = {
+  getCategories: GET('/category'),
+  getAlgorithm: GET('/category/:categoryKey/:algorithmKey'),
 };
 
 const WikiApi = {
@@ -60,13 +57,14 @@ const WikiApi = {
 };
 
 const GitHubApi = {
-  auth: token => gh = new GitHub({ token }),
-  getProfile: () => gh.getUser().getProfile(),
-  listGists: () => gh.getUser().listGists(),
+  auth: token => axios.defaults.headers.common['Authorization'] = `token ${token}`,
+  getProfile: GET('https://api.github.com/user'),
+  listGists: GET('https://api.github.com/gists'),
+  getGist: GET('https://api.github.com/gists/:id'),
 };
 
 export {
-  HierarchyApi,
+  CategoryApi,
   WikiApi,
   GitHubApi,
 };

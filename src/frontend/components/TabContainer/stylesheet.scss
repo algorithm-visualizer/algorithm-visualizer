@@ -16,7 +16,6 @@
     overflow-x: auto;
     white-space: nowrap;
     flex-shrink: 0;
-    cursor: move;
 
     .title {
       display: flex;
@@ -35,6 +34,8 @@
       }
 
       &.fake {
+        pointer-events: none;
+
         &:first-child {
           flex-shrink: 0;
           width: $line-height / 2;

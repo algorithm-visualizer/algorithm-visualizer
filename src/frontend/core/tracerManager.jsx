@@ -11,7 +11,7 @@ Object.assign(window, {
       ...Tracers,
       Randomize,
     },
-  }
+  },
 });
 
 class TracerManager {
@@ -40,6 +40,10 @@ class TracerManager {
   setOnUpdateLineIndicator(onUpdateLineIndicator) {
     this.onUpdateLineIndicator = onUpdateLineIndicator;
     if (this.onUpdateLineIndicator) this.onUpdateLineIndicator(this.lineIndicator);
+  }
+
+  setOnRun(onRun) {
+    this.onRun = onRun;
   }
 
   setOnError(onError) {
@@ -197,26 +201,29 @@ class TracerManager {
     } else {
       this.setStarted(true);
     }
+    if (this.onRun) this.onRun();
   }
 
   prev() {
     this.pause();
-    const lastChunk = Math.max(this.chunkCursor - 1, 1);
+    const lastChunk = this.chunkCursor - 1;
     this.resetCursor();
-    while (this.chunkCursor < lastChunk) {
+    do {
       this.applyTraceChunk(false);
-    }
+    } while (this.chunkCursor < lastChunk);
     this.render();
   }
 
   resume() {
     this.startTimer();
     this.setPaused(false);
+    if (this.onRun) this.onRun();
   }
 
   pause() {
     this.stopTimer();
     this.setPaused(true);
+    if (this.onRun) this.onRun();
   }
 
   next() {

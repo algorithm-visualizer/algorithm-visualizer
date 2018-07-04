@@ -3,30 +3,26 @@ import { combineActions, createAction, handleActions } from 'redux-actions';
 
 const prefix = 'ENV';
 
-const setHierarchy = createAction(`${prefix}/SET_HIERARCHY`, hierarchy => ({ hierarchy }));
-const setDirectory = createAction(`${prefix}/SET_DIRECTORY`, (categoryKey, algorithmKey) => ({
-  categoryKey,
-  algorithmKey,
-}));
+const setExt = createAction(`${prefix}/SET_EXT`, ext => {
+  Cookies.set('ext', ext);
+  return { ext };
+});
 
 export const actions = {
-  setHierarchy,
-  setDirectory,
+  setExt,
 };
 
 const accessToken = Cookies.get('access_token');
+const ext = Cookies.get('ext');
 const defaultState = {
-  hierarchy: null,
-  categoryKey: null,
-  algorithmKey: null,
   accessToken,
   signedIn: !!accessToken,
+  ext,
 };
 
 export default handleActions({
   [combineActions(
-    setHierarchy,
-    setDirectory,
+    setExt,
   )]: (state, { payload }) => ({
     ...state,
     ...payload,

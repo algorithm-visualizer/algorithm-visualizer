@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Promise from 'bluebird';
 import { loadProgressBar } from 'axios-progress-bar'
 import {
   CodeEditor,
@@ -9,38 +10,38 @@ import {
   ResizableContainer,
   TabContainer,
   ToastContainer,
+  VisualizationViewer,
   WikiViewer,
 } from '/components';
 import { actions as toastActions } from '/reducers/toast';
-import { actions as envActions } from '/reducers/env';
-import { GitHubApi, HierarchyApi } from '/apis';
+import { actions as directoryActions } from '/reducers/directory';
+import { CategoryApi, GitHubApi } from '/apis';
 import { tracerManager } from '/core';
+import { exts } from '/common/config';
+import README from '/static/README.md';
+import 'axios-progress-bar/dist/nprogress.css';
 import styles from './stylesheet.scss';
-import 'axios-progress-bar/dist/nprogress.css'
 
 loadProgressBar();
 
 @connect(
-  ({ toast, env }) => ({
-    toast,
-    env,
+  ({ directory, env, toast }) => ({
+    directory, env, toast,
   }), {
     ...toastActions,
-    ...envActions,
+    ...directoryActions,
   },
 )
 class App extends React.Component {
   constructor(props) {
     super(props);
 
+    const { signedIn, accessToken } = this.props.env;
+    if (signedIn) GitHubApi.auth(accessToken);
+
     this.state = {
-      files: [],
-      codeFile: null,
-      descFile: null,
-      renderers: [],
       navigatorOpened: true,
       workspaceWeights: [1, 2, 2],
-      renderersWeights: [],
       viewerTabIndex: 0,
       editorTabIndex: 0,
     };
@@ -49,27 +50,38 @@ class App extends React.Component {
   componentDidMount() {
     this.updateDirectory(this.props.match.params);
 
-    HierarchyApi.getHierarchy()
-      .then(({ hierarchy }) => {
-        this.props.setHierarchy(hierarchy);
-        const { categoryKey, algorithmKey } = this.props.env;
-        const category = hierarchy.find(category => category.key === categoryKey) || hierarchy[0];
-        const algorithm = category.algorithms.find(algorithm => algorithm.key === algorithmKey) || category.algorithms[0];
-        this.props.history.push(`/${category.key}/${algorithm.key}`);
+    CategoryApi.getCategories()
+      .then(({ categories }) => this.props.setCategories(categories));
+
+    const { signedIn } = this.props.env;
+    if (signedIn) {
+      const per_page = 100;
+      const paginateGists = (page = 1, prevScratchPapers = []) => GitHubApi.listGists({
+        per_page,
+        page,
+      }).then(gists => {
+        const scratchPapers = [...prevScratchPapers, ...gists.filter(gist => 'algorithm-visualizer' in gist.files).map(gist => ({
+          key: gist.id,
+          name: gist.description,
+          files: Object.keys(gist.files),
+        }))];
+        if (gists.length < per_page) {
+          return scratchPapers;
+        } else {
+          return paginateGists(page + 1, scratchPapers);
+        }
       });
+      paginateGists().then(scratchPapers => {
+        this.props.setScratchPapers(scratchPapers);
+      });
+    }
 
-    const { signedIn, accessToken } = this.props.env;
-    if (signedIn) GitHubApi.auth(accessToken);
-
-    tracerManager.setOnChangeRenderers(renderers => {
-      const renderersWeights = renderers.map(() => 1);
-      this.setState({ renderers, renderersWeights });
-    });
+    tracerManager.setOnRun(() => this.handleChangeViewerTabIndex(1));
     tracerManager.setOnError(error => this.props.showErrorToast(error.message));
   }
 
   componentWillUnmount() {
-    tracerManager.setOnRender(null);
+    tracerManager.setOnRun(null);
     tracerManager.setOnError(null);
   }
 
@@ -79,26 +91,56 @@ class App extends React.Component {
     }
   }
 
-  updateDirectory({ categoryKey = null, algorithmKey = null }) {
+  updateDirectory({ categoryKey, algorithmKey, gistId }) {
+    let fetchPromise = new Promise((resolve, reject) => reject());
     if (categoryKey && algorithmKey) {
-      this.props.setDirectory(categoryKey, algorithmKey);
-      HierarchyApi.getAlgorithm(categoryKey, algorithmKey)
-        .then(({ algorithm }) => {
-          const { files } = algorithm;
-          const codeFile = files.find(file => file.name === 'code.js') || null;
-          const descFile = files.find(file => file.name === 'desc.md') || null;
-          this.setState({ files, codeFile, descFile });
-        })
-        .catch(() => this.setState({ files: [] }));
+      fetchPromise = CategoryApi.getAlgorithm(categoryKey, algorithmKey)
+        .then(({ algorithm }) => algorithm);
+    } else if (gistId) {
+      fetchPromise = GitHubApi.getGist(gistId)
+        .then(gist => {
+          const key = gistId;
+          const name = gist.description;
+          const files = Object.values(gist.files).map(file => ({
+            name: file.filename,
+            content: file.content,
+            contributors: [gist.owner],
+          }));
+          const titles = ['Scratch Paper', name];
+          return { key, name, files, titles };
+        });
     }
+    fetchPromise.then(algorithm => {
+      const descFile = algorithm.files.find(file => file.name === 'desc.md') || {
+        name: 'desc.md',
+        content: 'Description file not found',
+        contributors: [{
+          avatar_url: 'https://github.com/algorithm-visualizer.png',
+          login: 'algorithm-visualizer',
+        }],
+      };
+      const codeFiles = exts.map(ext => algorithm.files.find(file => file.name === `code.${ext}`)).filter(v => v);
+      this.props.setCurrent(categoryKey, algorithmKey, gistId, algorithm.titles, descFile, codeFiles);
+      const { ext } = this.props.env;
+      const editorTabIndex = codeFiles.findIndex(file => file.name === `code.${ext}`);
+      this.handleChangeEditorTabIndex(~editorTabIndex ? editorTabIndex : 0);
+    }).catch(() => {
+      const titles = ['Algorithm Visualizer'];
+      const descFile = {
+        name: 'README.md',
+        content: README,
+        contributors: [{
+          avatar_url: 'https://github.com/algorithm-visualizer.png',
+          login: 'algorithm-visualizer',
+        }],
+      };
+      const codeFiles = [];
+      this.props.setCurrent(categoryKey, algorithmKey, gistId, titles, descFile, codeFiles);
+    });
   }
 
   handleChangeWorkspaceWeights(workspaceWeights) {
     this.setState({ workspaceWeights });
-  }
-
-  handleChangeRenderersWeights(renderersWeights) {
-    this.setState({ renderersWeights });
   }
 
   handleChangeViewerTabIndex(viewerTabIndex) {
@@ -114,7 +156,8 @@ class App extends React.Component {
   }
 
   render() {
-    const { codeFile, descFile, renderers, navigatorOpened, workspaceWeights, renderersWeights, viewerTabIndex, editorTabIndex } = this.state;
+    const { navigatorOpened, workspaceWeights, viewerTabIndex, editorTabIndex } = this.state;
+    const { current } = this.props.directory;
 
     return (
       <div className={styles.app}>
@@ -124,18 +167,19 @@ class App extends React.Component {
                             visibles={[navigatorOpened, true, true]}
                             onChangeWeights={weights => this.handleChangeWorkspaceWeights(weights)}>
           <Navigator />
-          <TabContainer titles={['Visualization', 'Description', 'Tracer API']} tabIndex={viewerTabIndex}
+          <TabContainer titles={['Description', 'Visualization', 'Tracer API']} tabIndex={viewerTabIndex}
                         onChangeTabIndex={tabIndex => this.handleChangeViewerTabIndex(tabIndex)}>
-            <ResizableContainer weights={renderersWeights} visibles={renderers.map(() => true)}
-                                onChangeWeights={weights => this.handleChangeRenderersWeights(weights)}>
-              {renderers}
-            </ResizableContainer>
-            <DescriptionViewer file={descFile} />
+            <DescriptionViewer file={current.descFile} />
+            <VisualizationViewer />
             <WikiViewer />
           </TabContainer>
-          <TabContainer titles={['Javascript']} tabIndex={editorTabIndex}
+          <TabContainer titles={current.codeFiles.map(file => file.name)} tabIndex={editorTabIndex}
                         onChangeTabIndex={tabIndex => this.handleChangeEditorTabIndex(tabIndex)}>
-            <CodeEditor file={codeFile} />
+            {
+              current.codeFiles.map(codeFile => (
+                <CodeEditor key={codeFile.name} file={codeFile} />
+              ))
+            }
           </TabContainer>
         </ResizableContainer>
         <ToastContainer className={styles.toast_container} />

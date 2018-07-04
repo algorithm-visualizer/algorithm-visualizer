@@ -7,18 +7,15 @@ import faCode from '@fortawesome/fontawesome-free-solid/faCode';
 import faGithub from '@fortawesome/fontawesome-free-brands/faGithub';
 import { ExpandableListItem, ListItem } from '/components';
 import { classes } from '/common/util';
-import { actions as envActions } from '/reducers/env';
 import { actions as toastActions } from '/reducers/toast';
 import styles from './stylesheet.scss';
-import { ALGORITHM_NEW, CATEGORY_SCRATCH_PAPER } from '/common/config';
 
 @connect(
-  ({ env }) => ({
-    env
+  ({ directory, env }) => ({
+    directory, env,
   }), {
-    ...envActions,
     ...toastActions,
-  }
+  },
 )
 class Navigator extends React.Component {
   constructor(props) {
@@ -33,16 +30,16 @@ class Navigator extends React.Component {
   }
 
   componentDidMount() {
-    const { categoryKey } = this.props.env;
-    if (categoryKey) {
-      this.toggleCategory(categoryKey, true);
+    const { current } = this.props.directory;
+    if (current.categoryKey) {
+      this.toggleCategory(current.categoryKey, true);
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const { categoryKey } = nextProps.env;
-    if (categoryKey) {
-      this.toggleCategory(categoryKey, true);
+    const { current } = nextProps.directory;
+    if (current.categoryKey) {
+      this.toggleCategory(current.categoryKey, true);
     }
   }
 
@@ -63,10 +60,10 @@ class Navigator extends React.Component {
   }
 
   handleChangeQuery(e) {
-    const { hierarchy } = this.props.env;
+    const { categories } = this.props.directory;
     const categoriesOpened = {};
     const query = e.target.value;
-    hierarchy.forEach(category => {
+    categories.forEach(category => {
       if (this.testQuery(name) || category.algorithms.find(algorithm => this.testQuery(algorithm.name))) {
         categoriesOpened[category.key] = true;
       }
@@ -82,7 +79,8 @@ class Navigator extends React.Component {
   render() {
     const { categoriesOpened, scratchPaperOpened, favoritesOpened, query } = this.state;
     const { className, style } = this.props;
-    const { hierarchy, categoryKey, algorithmKey, signedIn } = this.props.env;
+    const { categories, scratchPapers, current } = this.props.directory;
+    const { signedIn } = this.props.env;
 
     return (
       <nav className={classes(styles.navigator, className)} style={style}>
@@ -93,7 +91,7 @@ class Navigator extends React.Component {
         </div>
         <div className={styles.algorithm_list}>
           {
-            hierarchy && hierarchy.map(category => {
+            categories.map(category => {
               const categoryOpened = categoriesOpened[category.key];
               let algorithms = category.algorithms;
               if (!this.testQuery(category.name)) {
@@ -106,7 +104,7 @@ class Navigator extends React.Component {
                                     opened={categoryOpened}>
                   {
                     algorithms.map(algorithm => {
-                      const selected = category.key === categoryKey && algorithm.key === algorithmKey;
+                      const selected = category.key === current.categoryKey && algorithm.key === current.algorithmKey;
                       return (
                         <ListItem indent key={algorithm.key} selected={selected}
                                   to={`/${category.key}/${algorithm.key}`} label={algorithm.name} />
@@ -123,7 +121,16 @@ class Navigator extends React.Component {
             signedIn ?
               <ExpandableListItem icon={faCode} label="Scratch Paper" onClick={() => this.toggleScratchPaper()}
                                   opened={scratchPaperOpened}>
-                <ListItem indent label="New ..." to={`/${CATEGORY_SCRATCH_PAPER}/${ALGORITHM_NEW}`} />
+                <ListItem indent label="New ..." />
+                {
+                  scratchPapers.map(scratchPaper => {
+                    const selected = scratchPaper.key === current.gistId;
+                    return (
+                      <ListItem indent key={scratchPaper.key} selected={selected}
+                                to={`/scratch-paper/${scratchPaper.key}`} label={scratchPaper.name} />
+                    )
+                  })
+                }
               </ExpandableListItem> :
               <ListItem icon={faCode} label="Scratch Paper"
                         onClick={() => this.props.showSuccessToast('Sign In Required')} />

@@ -1,13 +1,13 @@
 import express from 'express';
 import { AuthorizationError, NotFoundError, PermissionError } from '/common/error';
 import auth from './auth';
-import hierarchy from './hierarchy';
+import category from './category';
 import wiki from './wiki';
 
 const router = new express.Router();
 
 router.use('/auth', auth);
-router.use('/hierarchy', hierarchy);
+router.use('/category', category);
 router.use('/wiki', wiki);
 router.use((req, res, next) => next(new NotFoundError()));
 router.use((err, req, res, next) => {

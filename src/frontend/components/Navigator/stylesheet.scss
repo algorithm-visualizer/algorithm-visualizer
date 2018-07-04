@@ -36,6 +36,8 @@
   }
 
   .footer {
+    max-height: 30vh;
     border-top: 1px solid $theme-light;
+    overflow-y: auto;
   }
 }

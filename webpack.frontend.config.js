@@ -53,7 +53,7 @@ module.exports = {
           MiniCssExtractPlugin.loader,
           'css-loader?minimize&importLoaders=2&modules&localIdentName=[local]__[hash:base64:5]',
           'postcss-loader',
-          'sass-loader'
+          'sass-loader',
         ]),
         include: srcPath,
       }, {
@@ -64,6 +64,7 @@ module.exports = {
         ]),
         exclude: srcPath,
       },
+      { test: /\.md$/, use: 'raw-loader' },
     ],
   },
   optimization: {
@@ -82,7 +83,7 @@ module.exports = {
           priority: 5,
           minSize: 0,
         },
-      }
+      },
     },
     minimizer: [
       new UglifyJSPlugin({
@@ -93,7 +94,7 @@ module.exports = {
         uglifyOptions: {
           keep_classnames: true,
           keep_fnames: true,
-        }
+        },
       }),
     ],
   },

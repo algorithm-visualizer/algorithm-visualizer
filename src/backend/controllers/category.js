@@ -11,7 +11,7 @@ const getPath = (...args) => path.resolve(__dirname, '..', 'public', 'algorithms
 const createKey = name => name.toLowerCase().replace(/ /g, '-');
 const list = dirPath => fs.readdirSync(dirPath).filter(filename => !filename.startsWith('.'));
 
-const cacheHierarchy = () => {
+const cacheCategories = () => {
   const allFiles = [];
   const cacheCategory = categoryName => {
     const categoryKey = createKey(categoryName);
@@ -46,7 +46,7 @@ const cacheHierarchy = () => {
     };
   };
 
-  const hierarchy = list(getPath()).map(cacheCategory);
+  const categories = list(getPath()).map(cacheCategory);
 
   const commitAuthors = {};
   const cacheCommitAuthors = (page, done) => {
@@ -84,28 +84,28 @@ const cacheHierarchy = () => {
   };
   cacheCommitAuthors(1, () => cacheContributors(0));
 
-  return hierarchy;
+  return categories;
 };
-const cachedHierarchy = cacheHierarchy(); // TODO: cache again when webhooked
+const cachedCategories = cacheCategories(); // TODO: cache again when webhooked
 
-const getHierarchy = (req, res, next) => {
-  res.json({ hierarchy: cachedHierarchy });
+const getCategories = (req, res, next) => {
+  res.json({ categories: cachedCategories });
 };
 
 const getAlgorithm = (req, res, next) => {
   const { categoryKey, algorithmKey } = req.params;
 
-  const category = cachedHierarchy.find(category => category.key === categoryKey);
+  const category = cachedCategories.find(category => category.key === categoryKey);
   if (!category) return next(new NotFoundError());
   const algorithm = category.algorithms.find(algorithm => algorithm.key === algorithmKey);
   if (!algorithm) return next(new NotFoundError());
 
   const files = algorithm.files.map(({ name, content, contributors }) => ({ name, content, contributors }));
-  res.json({ algorithm: { ...algorithm, files } });
+  res.json({ algorithm: { ...algorithm, files, titles: [category.name, algorithm.name] } });
 };
 
 router.route('/')
-  .get(getHierarchy);
+  .get(getCategories);
 
 router.route('/:categoryKey/:algorithmKey')
   .get(getAlgorithm);

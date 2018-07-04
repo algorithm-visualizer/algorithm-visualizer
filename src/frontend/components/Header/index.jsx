@@ -11,7 +11,6 @@ import faChevronLeft from '@fortawesome/fontawesome-free-solid/faChevronLeft';
 import faPause from '@fortawesome/fontawesome-free-solid/faPause';
 import faExpandArrowsAlt from '@fortawesome/fontawesome-free-solid/faExpandArrowsAlt';
 import faGithub from '@fortawesome/fontawesome-free-brands/faGithub';
-import { actions as envActions } from '/reducers/env';
 import { GitHubApi } from '/apis';
 import { classes } from '/common/util';
 import { Button, Ellipsis, ListItem } from '/components';
@@ -19,11 +18,9 @@ import { tracerManager } from '/core';
 import styles from './stylesheet.scss';
 
 @connect(
-  ({ env }) => ({
-    env,
-  }), {
-    ...envActions,
-  },
+  ({ directory, env }) => ({
+    directory, env,
+  }), {},
 )
 class Header extends React.Component {
   constructor(props) {
@@ -70,22 +67,16 @@ class Header extends React.Component {
   render() {
     const { interval, paused, started, profile } = this.state;
     const { className, onClickTitleBar, navigatorOpened } = this.props;
-    const { hierarchy, categoryKey, algorithmKey, signedIn } = this.props.env;
-
-    let directory = ['Algorithm Visualizer'];
-    if (hierarchy && categoryKey && algorithmKey) {
-      const category = hierarchy.find(category => category.key === categoryKey);
-      const algorithm = category.algorithms.find(algorithm => algorithm.key === algorithmKey);
-      directory = [category.name, algorithm.name];
-    }
+    const { current } = this.props.directory;
+    const { signedIn } = this.props.env;
 
     return (
       <header className={classes(styles.header, className)}>
         <Button className={styles.title_bar} onClick={onClickTitleBar}>
           {
-            directory.map((path, i) => [
+            current.titles.map((path, i) => [
               <Ellipsis key={`path-${i}`}>{path}</Ellipsis>,
-              i < directory.length - 1 &&
+              i < current.titles.length - 1 &&
               <FontAwesomeIcon className={styles.nav_arrow} fixedWidth icon={faAngleRight} key={`arrow-${i}`} />,
             ])
           }

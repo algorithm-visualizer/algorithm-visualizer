@@ -1,10 +1,22 @@
 const stepLimit = 1e6; // TODO: limit number of traces
 
-const CATEGORY_SCRATCH_PAPER = 'scratch-paper';
-const ALGORITHM_NEW = 'new';
+const languages = [{
+  name: 'JavaScript',
+  ext: 'js',
+}, {
+  name: 'C++',
+  ext: 'cpp',
+}, {
+  name: 'Java',
+  ext: 'java',
+}, {
+  name: 'Python',
+  ext: 'py',
+}];
+const exts = languages.map(language => language.ext);
 
 export {
   stepLimit,
-  CATEGORY_SCRATCH_PAPER,
-  ALGORITHM_NEW,
+  languages,
+  exts,
 };

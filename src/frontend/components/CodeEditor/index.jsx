@@ -12,22 +12,23 @@ class CodeEditor extends React.Component {
   constructor(props) {
     super(props);
 
-    const { file } = props;
-    const { lineIndicator } = tracerManager;
     this.state = {
-      lineMarker: this.createLineMarker(lineIndicator),
-      code: file && file.content,
+      lineMarker: null,
+      code: '',
     };
   }
 
   componentDidMount() {
+    const { file } = this.props;
+    this.handleChangeCode(file.content);
+
     tracerManager.setOnUpdateLineIndicator(lineIndicator => this.setState({ lineMarker: this.createLineMarker(lineIndicator) }));
   }
 
   componentWillReceiveProps(nextProps) {
     const { file } = nextProps;
     if (file !== this.props.file) {
-      this.handleChangeCode(file && file.content);
+      this.handleChangeCode(file.content);
     }
   }
 
@@ -59,7 +60,7 @@ class CodeEditor extends React.Component {
     const { className, file } = this.props;
     const { lineMarker, code } = this.state;
 
-    return file && (
+    return (
       <div className={classes(styles.code_editor, className)}>
         <AceEditor
           className={styles.ace_editor}

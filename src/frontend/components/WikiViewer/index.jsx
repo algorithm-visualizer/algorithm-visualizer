@@ -1,6 +1,8 @@
 import React from 'react';
 import { WikiApi } from '/apis';
 import { MarkdownViewer } from '/components';
+import { classes } from '/common/util';
+import styles from './stylesheet.scss';
 
 class WikiViewer extends React.Component {
   constructor(props) {
@@ -21,9 +23,11 @@ class WikiViewer extends React.Component {
   }
 
   render() {
-    const { source } = this.state;
+    const { className, source } = this.state;
+
     return (
-      <MarkdownViewer source={source} onClickLink={href => this.loadMarkdown(href)} />
+      <MarkdownViewer className={classes(styles.wiki_viewer, className)} source={source}
+                      onClickLink={href => this.loadMarkdown(href)} />
     );
   }
 }
