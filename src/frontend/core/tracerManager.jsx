@@ -1,4 +1,5 @@
 import React from 'react';
+import Promise from 'bluebird';
 import { Randomize, Seed } from '/core';
 import * as Tracers from '/core/tracers';
 import { Tracer } from '/core/tracers';
@@ -40,10 +41,6 @@ class TracerManager {
   setOnUpdateLineIndicator(onUpdateLineIndicator) {
     this.onUpdateLineIndicator = onUpdateLineIndicator;
     if (this.onUpdateLineIndicator) this.onUpdateLineIndicator(this.lineIndicator);
-  }
-
-  setOnRun(onRun) {
-    this.onRun = onRun;
   }
 
   setOnError(onError) {
@@ -170,38 +167,38 @@ class TracerManager {
     eval(code);
   }
 
-  execute(callback) {
-    try {
+  execute() { // TODO: consider running on a web worker
+    return new Promise((resolve, reject) => {
       const lines = this.code.split('\n').map((line, i) => line.replace(/(.+\. *wait *)(\( *\))/g, `$1(${i})`));
       const seed = new Seed();
       Tracer.seed = seed;
       const { code } = Babel.transform(lines.join('\n'), { presets: ['es2015'] });
       this.sandboxEval(code);
       this.reset(seed);
-      if (callback) callback();
-    } catch (error) {
-      return error;
-    }
+      resolve();
+    });
   }
 
   runInitial() {
-    const error = this.execute(() => this.applyTraceChunk());
-    if (error) {
-      this.reset();
-      this.render();
-    }
+    this.execute()
+      .then(() => this.applyTraceChunk())
+      .catch(() => {
+        this.reset();
+        this.render();
+      });
   }
 
   run() {
-    const error = this.execute(() => this.resume());
-    if (error) {
-      this.reset();
-      this.render();
-      this.handleError(error);
-    } else {
-      this.setStarted(true);
-    }
-    if (this.onRun) this.onRun();
+    this.execute()
+      .then(() => {
+        this.resume();
+        this.setStarted(true);
+      })
+      .catch(error => {
+        this.reset();
+        this.render();
+        this.handleError(error);
+      });
   }
 
   prev() {
@@ -217,13 +214,11 @@ class TracerManager {
   resume() {
     this.startTimer();
     this.setPaused(false);
-    if (this.onRun) this.onRun();
   }
 
   pause() {
     this.stopTimer();
     this.setPaused(true);
-    if (this.onRun) this.onRun();
   }
 
   next() {

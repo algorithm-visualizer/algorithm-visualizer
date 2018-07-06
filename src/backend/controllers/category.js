@@ -9,7 +9,7 @@ const router = express.Router();
 
 const getPath = (...args) => path.resolve(__dirname, '..', 'public', 'algorithms', ...args);
 const createKey = name => name.toLowerCase().replace(/ /g, '-');
-const list = dirPath => fs.readdirSync(dirPath).filter(filename => !filename.startsWith('.'));
+const list = dirPath => fs.readdirSync(dirPath).filter(fileName => !fileName.startsWith('.'));
 
 const cacheCategories = () => {
   const allFiles = [];
@@ -48,20 +48,23 @@ const cacheCategories = () => {
 
   const categories = list(getPath()).map(cacheCategory);
 
-  const commitAuthors = {};
-  const cacheCommitAuthors = (page, done) => {
-    repo.listCommits({ per_page: 100, page }).then(({ data }) => {
-      if (data.length) {
-        data.forEach(({ sha, commit, author }) => {
-          if (!author) return;
-          const { login, avatar_url } = author;
-          commitAuthors[sha] = { login, avatar_url };
-        });
-        cacheCommitAuthors(page + 1, done);
-      } else done && done();
-    }).catch(console.error);
-  };
-  const cacheContributors = (fileIndex, done) => {
+  const per_page = 100;
+  const cacheCommitAuthors = (page = 1, commitAuthors = {}) => repo.listCommits({
+    per_page,
+    page,
+  }).then(({ data }) => {
+    data.forEach(({ sha, commit, author }) => {
+      if (!author) return;
+      const { login, avatar_url } = author;
+      commitAuthors[sha] = { login, avatar_url };
+    });
+    if (data.length < per_page) {
+      return commitAuthors;
+    } else {
+      return cacheCommitAuthors(page + 1, commitAuthors);
+    }
+  });
+  const cacheContributors = (commitAuthors, fileIndex = 0) => {
     const file = allFiles[fileIndex];
     if (file) {
       const cwd = getPath();
@@ -78,11 +81,11 @@ const cacheCategories = () => {
           }
           file.contributors = contributors;
         }
-        cacheContributors(fileIndex + 1, done);
+        cacheContributors(commitAuthors, fileIndex + 1);
       });
-    } else done && done();
+    }
   };
-  cacheCommitAuthors(1, () => cacheContributors(0));
+  cacheCommitAuthors().then(cacheContributors);
 
   return categories;
 };
@@ -100,8 +103,9 @@ const getAlgorithm = (req, res, next) => {
   const algorithm = category.algorithms.find(algorithm => algorithm.key === algorithmKey);
   if (!algorithm) return next(new NotFoundError());
 
+  const titles = [category.name, algorithm.name];
   const files = algorithm.files.map(({ name, content, contributors }) => ({ name, content, contributors }));
-  res.json({ algorithm: { ...algorithm, files, titles: [category.name, algorithm.name] } });
+  res.json({ algorithm: { titles, files } });
 };
 
 router.route('/')

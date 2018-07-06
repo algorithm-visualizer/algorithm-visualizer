@@ -1,16 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { actions as toastActions } from '/reducers/toast';
+import { actions } from '/reducers';
 import { classes } from '/common/util';
 import styles from './stylesheet.scss';
 
-@connect(
-  ({ toast }) => ({
-    toast,
-  }), {
-    ...toastActions
-  }
-)
+@connect(({ toast }) => ({ toast }), actions)
 class ToastContainer extends React.Component {
   componentWillReceiveProps(nextProps) {
     const newToasts = nextProps.toast.toasts.filter(toast => !this.props.toast.toasts.includes(toast));

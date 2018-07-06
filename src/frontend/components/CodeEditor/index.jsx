@@ -1,35 +1,40 @@
 import React from 'react';
 import AceEditor from 'react-ace';
+import 'brace/mode/markdown';
 import 'brace/mode/javascript';
+import 'brace/mode/c_cpp';
+import 'brace/mode/java';
+import 'brace/mode/python';
 import 'brace/theme/tomorrow_night_eighties';
 import 'brace/ext/searchbox';
 import { tracerManager } from '/core';
-import { classes } from '/common/util';
-import styles from './stylesheet.scss';
+import { classes, extension } from '/common/util';
 import { ContributorsViewer } from '/components';
+import { actions } from '/reducers';
+import { connect } from 'react-redux';
+import styles from './stylesheet.scss';
+import { languages } from '/common/config';
 
+@connect(({ current }) => ({ current }), actions)
 class CodeEditor extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       lineMarker: null,
-      code: '',
     };
   }
 
   componentDidMount() {
     const { file } = this.props;
-    this.handleChangeCode(file.content);
+    tracerManager.setCode(file.content);
 
     tracerManager.setOnUpdateLineIndicator(lineIndicator => this.setState({ lineMarker: this.createLineMarker(lineIndicator) }));
   }
 
   componentWillReceiveProps(nextProps) {
     const { file } = nextProps;
-    if (file !== this.props.file) {
-      this.handleChangeCode(file.content);
-    }
+    tracerManager.setCode(file.content);
   }
 
   componentWillUnmount() {
@@ -52,25 +57,30 @@ class CodeEditor extends React.Component {
   }
 
   handleChangeCode(code) {
-    this.setState({ code });
+    const { file } = this.props;
+    this.props.modifyFile({ ...file, content: code });
     tracerManager.setCode(code);
   }
 
   render() {
     const { className, file } = this.props;
-    const { lineMarker, code } = this.state;
+    const { lineMarker } = this.state;
+
+    const fileExt = extension(file.name);
+    const language = languages.find(language => language.ext === fileExt);
+    const mode = language ? language.mode : fileExt === 'md' ? 'markdown' : 'plain_text';
 
     return (
       <div className={classes(styles.code_editor, className)}>
         <AceEditor
           className={styles.ace_editor}
-          mode="javascript"
+          mode={mode}
           theme="tomorrow_night_eighties"
           name="code_editor"
           editorProps={{ $blockScrolling: true }}
           onChange={code => this.handleChangeCode(code)}
           markers={lineMarker ? [lineMarker] : []}
-          value={code} />
+          value={file.content} />
         <ContributorsViewer contributors={file.contributors} />
       </div> // TODO: need resizing when parent resizes
     );

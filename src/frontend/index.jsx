@@ -17,7 +17,6 @@ const render = (Component) => {
         <Switch>
           <Route exact path="/scratch-paper/:gistId" component={Component} />
           <Route exact path="/:categoryKey/:algorithmKey" component={Component} />
-          <Route exact path="/:categoryKey" component={Component} />
           <Route path="/" component={Component} />
         </Switch>
       </BrowserRouter>

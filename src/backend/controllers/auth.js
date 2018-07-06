@@ -5,7 +5,7 @@ import { githubClientId, githubClientSecret } from '/environment';
 const router = express.Router();
 
 const request = (req, res, next) => {
-  res.redirect(`https://github.com/login/oauth/authorize?client_id=${githubClientId}&scope=user`);
+  res.redirect(`https://github.com/login/oauth/authorize?client_id=${githubClientId}&scope=user,gist`);
 };
 
 const response = (req, res, next) => {

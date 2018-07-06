@@ -26,8 +26,20 @@ a {
   box-sizing: border-box;
 }
 
-input {
+input,
+select,
+textarea,
+button {
   color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  background: none;
+  border: none;
+  outline: none;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  line-height: 1.15;
 }
 
 .app {
@@ -38,8 +50,6 @@ input {
   background-color: $theme-normal;
 
   .header {
-    height: $line-height;
-    border-bottom: 1px solid $theme-light;
   }
 
   .workspace {

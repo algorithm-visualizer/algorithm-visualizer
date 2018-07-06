@@ -6,39 +6,32 @@ import faCode from '@fortawesome/fontawesome-free-solid/faCode';
 import faGithub from '@fortawesome/fontawesome-free-brands/faGithub';
 import { ExpandableListItem, ListItem } from '/components';
 import { classes } from '/common/util';
-import { actions as toastActions } from '/reducers/toast';
+import { actions } from '/reducers';
 import styles from './stylesheet.scss';
 
-@connect(
-  ({ directory, env }) => ({
-    directory, env,
-  }), {
-    ...toastActions,
-  },
-)
+@connect(({ current, directory, env }) => ({ current, directory, env }), actions)
 class Navigator extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       categoriesOpened: {},
-      scratchPaperOpened: false,
-      favoritesOpened: false,
+      scratchPaperOpened: true,
       query: '',
     }
   }
 
   componentDidMount() {
-    const { current } = this.props.directory;
-    if (current.categoryKey) {
-      this.toggleCategory(current.categoryKey, true);
+    const { categoryKey } = this.props.current;
+    if (categoryKey) {
+      this.toggleCategory(categoryKey, true);
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const { current } = nextProps.directory;
-    if (current.categoryKey) {
-      this.toggleCategory(current.categoryKey, true);
+    const { categoryKey } = nextProps.current;
+    if (categoryKey) {
+      this.toggleCategory(categoryKey, true);
     }
   }
 
@@ -52,10 +45,6 @@ class Navigator extends React.Component {
 
   toggleScratchPaper(scratchPaperOpened = !this.state.scratchPaperOpened) {
     this.setState({ scratchPaperOpened });
-  }
-
-  toggleFavorites(favoritesOpened = !this.state.favoritesOpened) {
-    this.setState({ favoritesOpened });
   }
 
   handleChangeQuery(e) {
@@ -76,13 +65,14 @@ class Navigator extends React.Component {
   }
 
   render() {
-    const { categoriesOpened, scratchPaperOpened, favoritesOpened, query } = this.state;
-    const { className, style } = this.props;
-    const { categories, scratchPapers, current } = this.props.directory;
+    const { categoriesOpened, scratchPaperOpened, query } = this.state;
+    const { className, loadAlgorithm } = this.props;
+    const { categories, scratchPapers } = this.props.directory;
+    const { categoryKey, algorithmKey, gistId } = this.props.current;
     const { signedIn, ext } = this.props.env;
 
     return (
-      <nav className={classes(styles.navigator, className)} style={style}>
+      <nav className={classes(styles.navigator, className)}>
         <div className={styles.search_bar_container}>
           <FontAwesomeIcon fixedWidth icon={faSearch} className={styles.search_icon} />
           <input type="text" className={styles.search_bar} autoFocus placeholder="Search ..." value={query}
@@ -104,8 +94,11 @@ class Navigator extends React.Component {
                   {
                     algorithms.map(algorithm => (
                       <ListItem indent key={algorithm.key}
-                                selected={category.key === current.categoryKey && algorithm.key === current.algorithmKey}
-                                to={`/${category.key}/${algorithm.key}`} label={algorithm.name} />
+                                selected={category.key === categoryKey && algorithm.key === algorithmKey}
+                                onClick={() => loadAlgorithm({
+                                  categoryKey: category.key,
+                                  algorithmKey: algorithm.key,
+                                })} label={algorithm.name} />
                     ))
                   }
                 </ExpandableListItem>
@@ -118,11 +111,11 @@ class Navigator extends React.Component {
             signedIn ?
               <ExpandableListItem icon={faCode} label="Scratch Paper" onClick={() => this.toggleScratchPaper()}
                                   opened={scratchPaperOpened}>
-                <ListItem indent label="New ..." />
+                <ListItem indent label="New ..." onClick={() => loadAlgorithm({ gistId: 'new' })} />
                 {
                   scratchPapers.map(scratchPaper => (
-                    <ListItem indent key={scratchPaper.key} selected={scratchPaper.key === current.gistId}
-                              to={`/scratch-paper/${scratchPaper.key}`} label={scratchPaper.name} />
+                    <ListItem indent key={scratchPaper.key} selected={scratchPaper.key === gistId}
+                              onClick={() => loadAlgorithm({ gistId: scratchPaper.key })} label={scratchPaper.name} />
                   ))
                 }
               </ExpandableListItem> :

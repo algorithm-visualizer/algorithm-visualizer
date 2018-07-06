@@ -46,6 +46,13 @@ const PUT = URL => {
   });
 };
 
+const PATCH = URL => {
+  return request(URL, (mappedURL, args) => {
+    const [body, params] = args;
+    return axios.patch(mappedURL, body, { params });
+  });
+};
+
 const CategoryApi = {
   getCategories: GET('/category'),
   getAlgorithm: GET('/category/:categoryKey/:algorithmKey'),
@@ -60,7 +67,10 @@ const GitHubApi = {
   auth: token => axios.defaults.headers.common['Authorization'] = `token ${token}`,
   getProfile: GET('https://api.github.com/user'),
   listGists: GET('https://api.github.com/gists'),
+  createGist: POST('https://api.github.com/gists'),
+  editGist: PATCH('https://api.github.com/gists/:id'),
   getGist: GET('https://api.github.com/gists/:id'),
+  deleteGist: DELETE('https://api.github.com/gists/:id'),
 };
 
 export {
