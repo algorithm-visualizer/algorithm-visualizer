@@ -11,8 +11,11 @@ import faChevronLeft from '@fortawesome/fontawesome-free-solid/faChevronLeft';
 import faPause from '@fortawesome/fontawesome-free-solid/faPause';
 import faExpandArrowsAlt from '@fortawesome/fontawesome-free-solid/faExpandArrowsAlt';
 import faGithub from '@fortawesome/fontawesome-free-brands/faGithub';
+import faStar from '@fortawesome/fontawesome-free-solid/faStar';
 import { GitHubApi } from '/apis';
 import { classes } from '/common/util';
+import { actions as envActions } from '/reducers/env';
+import { languages } from '/common/config';
 import { Button, Ellipsis, ListItem } from '/components';
 import { tracerManager } from '/core';
 import styles from './stylesheet.scss';
@@ -20,7 +23,9 @@ import styles from './stylesheet.scss';
 @connect(
   ({ directory, env }) => ({
     directory, env,
-  }), {},
+  }), {
+    ...envActions,
+  },
 )
 class Header extends React.Component {
   constructor(props) {
@@ -68,7 +73,7 @@ class Header extends React.Component {
     const { interval, paused, started, profile } = this.state;
     const { className, onClickTitleBar, navigatorOpened } = this.props;
     const { current } = this.props.directory;
-    const { signedIn } = this.props.env;
+    const { signedIn, ext } = this.props.env;
 
     return (
       <header className={classes(styles.header, className)}>
@@ -118,9 +123,25 @@ class Header extends React.Component {
               value={interval}
               onChange={interval => tracerManager.setInterval(interval)} />
           </div>
+          <Button className={styles.btn_dropdown} icon={faStar}>
+            {languages.find(language => language.ext === ext).name}
+            <div className={styles.dropdown}>
+              <Button className={styles.fake} icon={faStar}>
+                {languages.find(language => language.ext === ext).name}
+              </Button>
+              <div className={styles.list}>
+                {
+                  languages.map(language => language.ext === ext ? null : (
+                    <ListItem key={language.ext} onClick={() => this.props.setExt(language.ext)}
+                              label={language.name} />
+                  ))
+                }
+              </div>
+            </div>
+          </Button>
           {
             signedIn ?
-              <Button className={styles.btn_profile} icon={profile.avatar_url}>
+              <Button className={styles.btn_dropdown} icon={profile.avatar_url}>
                 {profile.login}
                 <div className={styles.dropdown}>
                   <Button className={styles.fake} icon={profile.avatar_url}>

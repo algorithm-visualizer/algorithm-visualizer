@@ -13,7 +13,7 @@ export const actions = {
 };
 
 const accessToken = Cookies.get('access_token');
-const ext = Cookies.get('ext');
+const ext = Cookies.get('ext') || 'js';
 const defaultState = {
   accessToken,
   signedIn: !!accessToken,

@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faSearch from '@fortawesome/fontawesome-free-solid/faSearch';
-import faStar from '@fortawesome/fontawesome-free-solid/faStar';
 import faCode from '@fortawesome/fontawesome-free-solid/faCode';
 import faGithub from '@fortawesome/fontawesome-free-brands/faGithub';
 import { ExpandableListItem, ListItem } from '/components';
@@ -80,7 +79,7 @@ class Navigator extends React.Component {
     const { categoriesOpened, scratchPaperOpened, favoritesOpened, query } = this.state;
     const { className, style } = this.props;
     const { categories, scratchPapers, current } = this.props.directory;
-    const { signedIn } = this.props.env;
+    const { signedIn, ext } = this.props.env;
 
     return (
       <nav className={classes(styles.navigator, className)} style={style}>
@@ -103,13 +102,11 @@ class Navigator extends React.Component {
                                     label={category.name}
                                     opened={categoryOpened}>
                   {
-                    algorithms.map(algorithm => {
-                      const selected = category.key === current.categoryKey && algorithm.key === current.algorithmKey;
-                      return (
-                        <ListItem indent key={algorithm.key} selected={selected}
-                                  to={`/${category.key}/${algorithm.key}`} label={algorithm.name} />
-                      )
-                    })
+                    algorithms.map(algorithm => (
+                      <ListItem indent key={algorithm.key}
+                                selected={category.key === current.categoryKey && algorithm.key === current.algorithmKey}
+                                to={`/${category.key}/${algorithm.key}`} label={algorithm.name} />
+                    ))
                   }
                 </ExpandableListItem>
               );
@@ -123,23 +120,13 @@ class Navigator extends React.Component {
                                   opened={scratchPaperOpened}>
                 <ListItem indent label="New ..." />
                 {
-                  scratchPapers.map(scratchPaper => {
-                    const selected = scratchPaper.key === current.gistId;
-                    return (
-                      <ListItem indent key={scratchPaper.key} selected={selected}
-                                to={`/scratch-paper/${scratchPaper.key}`} label={scratchPaper.name} />
-                    )
-                  })
+                  scratchPapers.map(scratchPaper => (
+                    <ListItem indent key={scratchPaper.key} selected={scratchPaper.key === current.gistId}
+                              to={`/scratch-paper/${scratchPaper.key}`} label={scratchPaper.name} />
+                  ))
                 }
               </ExpandableListItem> :
               <ListItem icon={faCode} label="Scratch Paper"
-                        onClick={() => this.props.showSuccessToast('Sign In Required')} />
-          }
-          {
-            signedIn ?
-              <ExpandableListItem icon={faStar} label="Favorites" onClick={() => this.toggleFavorites()}
-                                  opened={favoritesOpened} /> :
-              <ListItem icon={faStar} label="Favorites"
                         onClick={() => this.props.showSuccessToast('Sign In Required')} />
           }
           <ListItem icon={faGithub} label="Fork me on GitHub"
