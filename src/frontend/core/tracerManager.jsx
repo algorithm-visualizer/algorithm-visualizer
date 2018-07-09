@@ -1,19 +1,7 @@
 import React from 'react';
 import Promise from 'bluebird';
-import { Randomize, Seed } from '/core';
-import * as Tracers from '/core/tracers';
-import { Tracer } from '/core/tracers';
 import { Array1DData, Array2DData, ChartData, Data, GraphData, LogData } from '/core/datas';
 import { Array1DRenderer, Array2DRenderer, ChartRenderer, GraphRenderer, LogRenderer, Renderer } from '/core/renderers';
-
-Object.assign(window, {
-  modules: {
-    'algorithm-visualizer': {
-      ...Tracers,
-      Randomize,
-    },
-  },
-});
 
 class TracerManager {
   constructor() {
@@ -22,6 +10,7 @@ class TracerManager {
     this.started = false;
     this.lineIndicator = null;
     this.code = '';
+    this.jsWorker = null;
     this.reset();
   }
 
@@ -76,8 +65,8 @@ class TracerManager {
     this.runInitial();
   }
 
-  reset(seed = new Seed()) {
-    this.traces = seed.traces;
+  reset(traces = []) {
+    this.traces = traces;
     this.resetCursor();
     this.stopTimer();
     this.setPaused(false);
@@ -162,20 +151,19 @@ class TracerManager {
     }
   }
 
-  sandboxEval(code) {
-    const require = moduleName => window.modules[moduleName]; // fake require
-    eval(code);
-  }
-
   execute() { // TODO: consider running on a web worker
     return new Promise((resolve, reject) => {
-      const lines = this.code.split('\n').map((line, i) => line.replace(/(.+\. *wait *)(\( *\))/g, `$1(${i})`));
-      const seed = new Seed();
-      Tracer.seed = seed;
-      const { code } = Babel.transform(lines.join('\n'), { presets: ['es2015'] });
-      this.sandboxEval(code);
-      this.reset(seed);
-      resolve();
+      if (this.jsWorker) {
+        this.jsWorker.terminate();
+        this.jsWorker = null;
+      }
+      this.jsWorker = new Worker('/api/compiler/js');
+      this.jsWorker.onmessage = e => {
+        this.reset(e.data);
+        resolve();
+      };
+      this.jsWorker.onerror = reject;
+      this.jsWorker.postMessage(this.code);
     });
   }
 

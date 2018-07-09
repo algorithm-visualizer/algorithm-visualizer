@@ -2,7 +2,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const ImageminPlugin = require('imagemin-webpack-plugin').default;
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const webpack = require('webpack');
@@ -65,37 +64,6 @@ module.exports = {
         exclude: srcPath,
       },
       { test: /\.md$/, use: 'raw-loader' },
-    ],
-  },
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        vendors: {
-          test: /\/node_modules\//,
-          name: 'vendors',
-          chunks: 'all',
-          priority: 10,
-        },
-        core: {
-          test: /\/core\//,
-          name: 'core',
-          chunks: 'all',
-          priority: 5,
-          minSize: 0,
-        },
-      },
-    },
-    minimizer: [
-      new UglifyJSPlugin({
-        exclude: /core/,
-      }),
-      new UglifyJSPlugin({
-        include: /core/,
-        uglifyOptions: {
-          keep_classnames: true,
-          keep_fnames: true,
-        },
-      }),
     ],
   },
   plugins: filter([

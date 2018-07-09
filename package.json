@@ -87,6 +87,8 @@
     "redbox-react": "^1.5.0",
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",
+    "rollup": "^0.62.0",
+    "rollup-plugin-babel": "^3.0.7",
     "sass-loader": "^6.0.6",
     "screenfull": "^3.3.2",
     "style-loader": "^0.20.3",
