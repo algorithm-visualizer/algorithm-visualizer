@@ -1,7 +1,8 @@
 import React from 'react';
-import Promise from 'bluebird';
+import { extension } from '/common/util';
 import { Array1DData, Array2DData, ChartData, Data, GraphData, LogData } from '/core/datas';
 import { Array1DRenderer, Array2DRenderer, ChartRenderer, GraphRenderer, LogRenderer, Renderer } from '/core/renderers';
+import { CompilerApi } from '../apis';
 
 class TracerManager {
   constructor() {
@@ -9,7 +10,7 @@ class TracerManager {
     this.paused = false;
     this.started = false;
     this.lineIndicator = null;
-    this.code = '';
+    this.file = { name: '', content: '', contributors: [] };
     this.jsWorker = null;
     this.reset();
   }
@@ -60,8 +61,8 @@ class TracerManager {
     if (this.onUpdateLineIndicator) this.onUpdateLineIndicator(lineIndicator);
   }
 
-  setCode(code) {
-    this.code = code;
+  setFile(file) {
+    this.file = file;
     this.runInitial();
   }
 
@@ -151,20 +152,10 @@ class TracerManager {
     }
   }
 
-  execute() { // TODO: consider running on a web worker
-    return new Promise((resolve, reject) => {
-      if (this.jsWorker) {
-        this.jsWorker.terminate();
-        this.jsWorker = null;
-      }
-      this.jsWorker = new Worker('/api/compiler/js');
-      this.jsWorker.onmessage = e => {
-        this.reset(e.data);
-        resolve();
-      };
-      this.jsWorker.onerror = reject;
-      this.jsWorker.postMessage(this.code);
-    });
+  execute() {
+    const { name, content } = this.file;
+    const ext = extension(name);
+    return CompilerApi.compileJs(content).then(traces => this.reset(traces));
   }
 
   runInitial() {

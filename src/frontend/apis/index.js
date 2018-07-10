@@ -73,8 +73,20 @@ const GitHubApi = {
   deleteGist: DELETE('https://api.github.com/gists/:id'),
 };
 
+let jsWorker = null;
+const CompilerApi = {
+  compileJs: code => new Promise((resolve, reject) => {
+    if (jsWorker) jsWorker.terminate();
+    jsWorker = new Worker('/api/compiler/js');
+    jsWorker.onmessage = e => resolve(e.data);
+    jsWorker.onerror = reject;
+    jsWorker.postMessage(code);
+  }),
+};
+
 export {
   CategoryApi,
   WikiApi,
   GitHubApi,
+  CompilerApi,
 };

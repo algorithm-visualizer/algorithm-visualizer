@@ -27,14 +27,16 @@ class CodeEditor extends React.Component {
 
   componentDidMount() {
     const { file } = this.props;
-    tracerManager.setCode(file.content);
+    tracerManager.setFile(file);
 
     tracerManager.setOnUpdateLineIndicator(lineIndicator => this.setState({ lineMarker: this.createLineMarker(lineIndicator) }));
   }
 
   componentWillReceiveProps(nextProps) {
     const { file } = nextProps;
-    tracerManager.setCode(file.content);
+    if (file !== this.props.file) {
+      tracerManager.setFile(file);
+    }
   }
 
   componentWillUnmount() {
@@ -59,7 +61,6 @@ class CodeEditor extends React.Component {
   handleChangeCode(code) {
     const { file } = this.props;
     this.props.modifyFile({ ...file, content: code });
-    tracerManager.setCode(code);
   }
 
   render() {
