@@ -15,6 +15,7 @@ class VisualizationViewer extends React.Component {
   }
 
   componentDidMount() {
+    // TODO: rendereres should remain resized
     tracerManager.setOnChangeRenderers(renderers => {
       const renderersWeights = renderers.map(() => 1);
       this.setState({ renderers, renderersWeights });

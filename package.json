@@ -8,25 +8,23 @@
     "build": "npm run build:frontend && npm run build:backend",
     "build:frontend": "NODE_ENV=production node ./node_modules/webpack/bin/webpack --bail --progress --config webpack.frontend.config.js",
     "build:backend": "NODE_ENV=production node ./node_modules/webpack/bin/webpack --bail --progress --config webpack.backend.config.js",
-    "lint": "npm run lint:src && npm run lint:algorithm",
-    "lint:src": "./node_modules/.bin/eslint --fix src",
-    "lint:algorithm": "./node_modules/.bin/eslint --fix algorithm",
+    "lint": "./node_modules/.bin/eslint --fix src",
     "publish": "npm run lint && npm run build && git add . && git commit && git push"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/parkjs814/AlgorithmVisualizer.git"
+    "url": "git+https://github.com/algorithm-visualizer/algorithm-visualizer.git"
   },
   "keywords": [
     "algorithm",
     "visualizer"
   ],
-  "author": "Jason Park & contributors",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/parkjs814/AlgorithmVisualizer/issues"
+  "author": {
+    "name": "Jinseo Jason Park",
+    "email": "parkjs814@gmail.com",
+    "url": "https://jasonpark.me/"
   },
-  "homepage": "https://github.com/parkjs814/AlgorithmVisualizer#readme",
+  "license": "MIT",
   "devDependencies": {
     "@fortawesome/fontawesome": "^1.1.5",
     "@fortawesome/fontawesome-free-brands": "^5.0.9",

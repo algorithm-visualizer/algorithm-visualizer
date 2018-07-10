@@ -75,7 +75,7 @@ const GitHubApi = {
 
 let jsWorker = null;
 const CompilerApi = {
-  compileJs: code => new Promise((resolve, reject) => {
+  js: code => new Promise((resolve, reject) => {
     if (jsWorker) jsWorker.terminate();
     jsWorker = new Worker('/api/compiler/js');
     jsWorker.onmessage = e => resolve(e.data);

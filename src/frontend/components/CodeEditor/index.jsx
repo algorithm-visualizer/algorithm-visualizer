@@ -1,5 +1,6 @@
 import React from 'react';
 import AceEditor from 'react-ace';
+import 'brace/mode/plain_text';
 import 'brace/mode/markdown';
 import 'brace/mode/javascript';
 import 'brace/mode/c_cpp';

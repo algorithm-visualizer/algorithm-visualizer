@@ -1,5 +1,3 @@
-const stepLimit = 1e6; // TODO: limit number of traces
-
 const languages = [{
   name: 'JavaScript',
   ext: 'js',
@@ -20,7 +18,6 @@ const languages = [{
 const exts = languages.map(language => language.ext);
 
 export {
-  stepLimit,
   languages,
   exts,
 };

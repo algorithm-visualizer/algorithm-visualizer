@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Promise from 'bluebird';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import faPlus from '@fortawesome/fontawesome-free-solid/faPlus';
 import { loadProgressBar } from 'axios-progress-bar';
 import 'axios-progress-bar/dist/nprogress.css';
 import {
@@ -154,6 +156,24 @@ class App extends React.Component {
     this.setState({ viewerTabIndex });
   }
 
+  handleChangeEditorTabIndex(editorTabIndex) {
+    const { files } = this.props.current;
+    if (editorTabIndex === files.length) {
+      let newFileName = 'untitled';
+      let count = 0;
+      while (files.some(file => file.name === newFileName)) newFileName = `untitled-${++count}`;
+      this.props.addFile({
+        name: newFileName,
+        content: '',
+        contributors: [],
+      });
+      this.handleChangeEditingFileName(newFileName);
+    } else {
+      const editingFileName = files[editorTabIndex].name;
+      this.handleChangeEditingFileName(editingFileName);
+    }
+  }
+
   handleChangeEditingFileName(editingFileName) {
     this.setState({ editingFileName });
   }
@@ -185,8 +205,9 @@ class App extends React.Component {
             <VisualizationViewer />
             <WikiViewer />
           </TabContainer>
-          <TabContainer titles={files.map(file => file.name)} tabIndex={editorTabIndex}
-                        onChangeTabIndex={tabIndex => this.handleChangeEditingFileName(files[tabIndex].name)}>
+          <TabContainer titles={[...files.map(file => file.name), <FontAwesomeIcon fixedWidth icon={faPlus} />]}
+                        tabIndex={editorTabIndex}
+                        onChangeTabIndex={tabIndex => this.handleChangeEditorTabIndex(tabIndex)}>
             {
               files.map(file => (
                 <CodeEditor key={file.name} file={file} />

@@ -1,8 +1,9 @@
 import React from 'react';
+import Promise from 'bluebird';
 import { extension } from '/common/util';
 import { Array1DData, Array2DData, ChartData, Data, GraphData, LogData } from '/core/datas';
 import { Array1DRenderer, Array2DRenderer, ChartRenderer, GraphRenderer, LogRenderer, Renderer } from '/core/renderers';
-import { CompilerApi } from '../apis';
+import { CompilerApi } from '/apis';
 
 class TracerManager {
   constructor() {
@@ -155,7 +156,11 @@ class TracerManager {
   execute() {
     const { name, content } = this.file;
     const ext = extension(name);
-    return CompilerApi.compileJs(content).then(traces => this.reset(traces));
+    if (ext in CompilerApi) {
+      return CompilerApi[ext](content).then(traces => this.reset(traces));
+    } else {
+      return Promise.reject(new Error('Language Not Supported'));
+    }
   }
 
   runInitial() {

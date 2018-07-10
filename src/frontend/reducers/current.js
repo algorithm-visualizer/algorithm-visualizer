@@ -35,6 +35,12 @@ const defaultState = {
 
 const getNextState = (state, files) => ({
   ...state,
+  ...(state.gistId ? {} : {
+    categoryKey: undefined,
+    algorithmKey: undefined,
+    gistId: 'new',
+    titles: ['Scratch Paper', 'Untitled'],
+  }),
   files,
   saved: false,
 });
