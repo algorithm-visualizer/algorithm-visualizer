@@ -18,12 +18,12 @@ class Array2DData extends Data {
     super.set();
   }
 
-  notify(x, y, v = this.data[x][y].value) {
+  patch(x, y, v = this.data[x][y].value) {
     this.data[x][y].value = v;
     this.data[x][y].notified = true;
   }
 
-  denotify(x, y) {
+  depatch(x, y) {
     this.data[x][y].notified = false;
   }
 

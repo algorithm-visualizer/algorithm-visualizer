@@ -31,7 +31,7 @@ class Data {
   set() {
   }
 
-  wait() {
+  delay() {
   }
 }
 

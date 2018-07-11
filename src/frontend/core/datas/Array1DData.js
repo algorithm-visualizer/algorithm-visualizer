@@ -13,12 +13,12 @@ class Array1DData extends Array2DData {
     this.syncChartData();
   }
 
-  notify(x, v) {
-    super.notify(0, x, v);
+  patch(x, v) {
+    super.patch(0, x, v);
   }
 
-  denotify(x) {
-    super.denotify(0, x);
+  depatch(x) {
+    super.depatch(0, x);
   }
 
   select(s, e = s) {

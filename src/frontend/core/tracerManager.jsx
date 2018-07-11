@@ -113,14 +113,14 @@ class TracerManager {
         return true;
       } else {
         const data = this.datas[tracerKey];
-        const wait = method === 'wait';
+        const delay = method === 'delay';
         const newArgs = [...args];
-        if (wait) {
+        if (delay) {
           const lineNumber = newArgs.shift();
           this.setLineIndicator({ lineNumber, cursor: this.cursor });
         }
         data[method](...newArgs);
-        return !wait;
+        return !delay;
       }
     } catch (error) {
       if (this.started) this.handleError(error);
