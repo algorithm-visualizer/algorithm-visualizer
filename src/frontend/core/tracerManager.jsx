@@ -12,7 +12,6 @@ class TracerManager {
     this.started = false;
     this.lineIndicator = null;
     this.file = { name: '', content: '', contributors: [] };
-    this.jsWorker = null;
     this.reset();
   }
 
@@ -84,7 +83,7 @@ class TracerManager {
     if (this.onChangeRenderers) this.onChangeRenderers(this.renderers);
   }
 
-  addTracer(className, tracerKey, title, options) {
+  addTracer(className, tracerKey, title) {
     const [DataClass, RendererClass] = {
       Tracer: [Data, Renderer],
       LogTracer: [LogData, LogRenderer],
@@ -93,7 +92,7 @@ class TracerManager {
       ChartTracer: [ChartData, ChartRenderer],
       GraphTracer: [GraphData, GraphRenderer],
     }[className];
-    const data = new DataClass(options);
+    const data = new DataClass();
     this.datas[tracerKey] = data;
     const renderer = (
       <RendererClass key={tracerKey} title={title} data={data} wsProps={{ fixed: true }} />
@@ -108,8 +107,8 @@ class TracerManager {
     const { tracerKey, method, args } = trace;
     try {
       if (method === 'construct') {
-        const [className, title, options] = args;
-        this.addTracer(className, tracerKey, title, options);
+        const [className, title] = args;
+        this.addTracer(className, tracerKey, title);
         return true;
       } else {
         const data = this.datas[tracerKey];

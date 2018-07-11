@@ -39,9 +39,8 @@ class GraphRenderer extends Renderer {
   }
 
   renderData() {
-    const { nodes, edges, options, dimensions } = this.props.data;
+    const { nodes, edges, isDirected, isWeighted, dimensions } = this.props.data;
     const { baseWidth, baseHeight, nodeRadius, arrowGap, nodeWeightGap, edgeWeightGap } = dimensions;
-    const { directed, weighted } = options;
     const viewBox = [
       (this.centerX - baseWidth / 2) * this.zoom,
       (this.centerY - baseHeight / 2) * this.zoom,
@@ -71,7 +70,7 @@ class GraphRenderer extends Renderer {
             const dx = ex - sx;
             const dy = ey - sy;
             const degree = Math.atan2(dy, dx) / Math.PI * 180;
-            if (directed) {
+            if (isDirected) {
               const length = Math.sqrt(dx * dx + dy * dy);
               if (length !== 0) {
                 ex = sx + dx / length * (length - nodeRadius - arrowGap);
@@ -81,9 +80,9 @@ class GraphRenderer extends Renderer {
 
             return (
               <g className={classes(styles.edge, selectedCount && styles.selected, visitedCount && styles.visited)} key={`${source}-${target}`}>
-                <path d={`M${sx},${sy} L${ex},${ey}`} className={classes(styles.line, directed && styles.directed)} />
+                <path d={`M${sx},${sy} L${ex},${ey}`} className={classes(styles.line, isDirected && styles.directed)} />
                 {
-                  weighted &&
+                  isWeighted &&
                   <g transform={`translate(${mx},${my})`}>
                     <text className={styles.weight} transform={`rotate(${degree})`}
                           y={-edgeWeightGap}>{this.toString(weight)}</text>
@@ -102,7 +101,7 @@ class GraphRenderer extends Renderer {
                 <circle className={styles.circle} r={nodeRadius} />
                 <text className={styles.id}>{id}</text>
                 {
-                  weighted &&
+                  isWeighted &&
                   <text className={styles.weight} x={nodeRadius + nodeWeightGap}>{this.toString(weight)}</text>
                 }
               </g>

@@ -3,14 +3,6 @@ import { distance } from '/common/util';
 import { tracerManager } from '/core';
 
 class GraphData extends Data {
-  getDefaultOptions() {
-    return {
-      ...super.getDefaultOptions(),
-      directed: true,
-      weighted: false,
-    };
-  }
-
   init() {
     super.init();
     this.dimensions = {
@@ -22,12 +14,21 @@ class GraphData extends Data {
       nodeWeightGap: 4,
       edgeWeightGap: 4,
     };
-    this.logData = null;
+    this.isDirected = true;
+    this.isWeighted = false;
     this.callLayout = { method: this.layoutCircle, args: [] };
+    this.logData = null;
+  }
+
+  directed(isDirected = true) {
+    this.isDirected = isDirected;
+  }
+
+  weighted(isWeighted = true) {
+    this.isWeighted = isWeighted;
   }
 
   set(array2d = []) {
-    const { weighted } = this.options;
     this.nodes = [];
     this.edges = [];
     for (let i = 0; i < array2d.length; i++) {
@@ -35,7 +36,7 @@ class GraphData extends Data {
       for (let j = 0; j < array2d.length; j++) {
         const value = array2d[i][j];
         if (value) {
-          this.addEdge(i, j, weighted ? value : null);
+          this.addEdge(i, j, this.isWeighted ? value : null);
         }
       }
     }
@@ -64,8 +65,8 @@ class GraphData extends Data {
     return this.nodes.find(node => node.id === id);
   }
 
-  findEdge(source, target, directed = this.options.directed) {
-    if (directed) {
+  findEdge(source, target, isDirected = this.isDirected) {
+    if (isDirected) {
       return this.edges.find(edge => edge.source === source && edge.target === target);
     } else {
       return this.edges.find(edge =>
@@ -74,21 +75,21 @@ class GraphData extends Data {
     }
   }
 
-  findLinkedEdges(source, directed = this.options.directed) {
-    if (directed) {
+  findLinkedEdges(source, isDirected = this.isDirected) {
+    if (isDirected) {
       return this.edges.filter(edge => edge.source === source);
     } else {
       return this.edges.filter(edge => edge.source === source || edge.target === source);
     }
   }
 
-  findLinkedNodeIds(source, directed = this.options.directed) {
-    const edges = this.findLinkedEdges(source, directed);
+  findLinkedNodeIds(source, isDirected = this.isDirected) {
+    const edges = this.findLinkedEdges(source, isDirected);
     return edges.map(edge => edge.source === source ? edge.target : edge.source);
   }
 
-  findLinkedNodes(source, directed = this.options.directed) {
-    const ids = this.findLinkedNodeIds(source, directed);
+  findLinkedNodes(source, isDirected = this.isDirected) {
+    const ids = this.findLinkedNodeIds(source, isDirected);
     return ids.map(id => this.findNode(id));
   }
 

@@ -1,15 +1,7 @@
 class Data {
-  constructor(options) {
-    this.options = {
-      ...this.getDefaultOptions(),
-      ...options,
-    };
+  constructor() {
     this.init();
     this.reset();
-  }
-
-  getDefaultOptions() {
-    return {};
   }
 
   init() {
