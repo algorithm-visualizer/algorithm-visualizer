@@ -11,7 +11,7 @@ const fs = require('fs');
 const {
   __PROD__,
   __DEV__,
-  frontendBuiltPath: builtPath,
+  frontendBuildPath: buildPath,
   frontendSrcPath: srcPath,
 } = require('./environment');
 
@@ -39,7 +39,7 @@ module.exports = {
   },
   output: {
     filename: __DEV__ ? '[name].js' : '[name].[chunkhash].js',
-    path: builtPath,
+    path: buildPath,
     publicPath: '/',
   },
   module: {
@@ -67,8 +67,8 @@ module.exports = {
     ],
   },
   plugins: filter([
-    new CleanWebpackPlugin([builtPath]),
-    new CopyWebpackPlugin([{ from: path.resolve(srcPath, 'static'), to: builtPath }]),
+    new CleanWebpackPlugin([buildPath]),
+    new CopyWebpackPlugin([{ from: path.resolve(srcPath, 'static'), to: buildPath }]),
     new HtmlWebpackPlugin({
       template: path.resolve(srcPath, 'template.html'),
       hash: false,

@@ -29,9 +29,9 @@ const githubBotAuth = {
 const githubOrg = GITHUB_ORG;
 const githubRepo = GITHUB_REPO;
 
-const builtPath = path.resolve(__dirname, 'built');
-const frontendBuiltPath = path.resolve(builtPath, 'frontend');
-const backendBuiltPath = path.resolve(builtPath, 'backend');
+const buildPath = path.resolve(__dirname, 'build');
+const frontendBuildPath = path.resolve(buildPath, 'frontend');
+const backendBuildPath = path.resolve(buildPath, 'backend');
 
 const srcPath = path.resolve(__dirname, 'src');
 const frontendSrcPath = path.resolve(srcPath, 'frontend');
@@ -49,8 +49,8 @@ module.exports = {
   githubBotAuth,
   githubOrg,
   githubRepo,
-  frontendBuiltPath,
-  backendBuiltPath,
+  frontendBuildPath,
+  backendBuildPath,
   frontendSrcPath,
   backendSrcPath,
   apiEndpoint,

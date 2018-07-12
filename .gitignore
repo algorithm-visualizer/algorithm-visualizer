@@ -1,6 +1,6 @@
-.idea
-node_modules
-npm-debug.log
+/.idea
+/node_modules
+/build
+/npm-debug.log
+/package-lock.json
 .DS_Store
-built
-package-lock.json

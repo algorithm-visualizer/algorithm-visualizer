@@ -5,7 +5,7 @@ const fs = require('fs');
 
 const {
   __DEV__,
-  backendBuiltPath: builtPath,
+  backendBuildPath: buildPath,
   backendSrcPath: srcPath,
 } = require('./environment');
 
@@ -29,7 +29,7 @@ module.exports = {
     alias,
   },
   output: {
-    path: builtPath,
+    path: buildPath,
     filename: 'index.js',
     libraryTarget: 'umd',
   },
@@ -39,7 +39,7 @@ module.exports = {
     ],
   },
   plugins: [
-    new CleanWebpackPlugin([builtPath]),
+    new CleanWebpackPlugin([buildPath]),
   ],
   mode: __DEV__ ? 'development' : 'production',
 };

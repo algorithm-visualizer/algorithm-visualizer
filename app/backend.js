@@ -3,7 +3,7 @@ const {
   __PROD__,
   __DEV__,
   proxyPort,
-  backendBuiltPath,
+  backendBuildPath,
   apiEndpoint,
 } = require('../environment');
 
@@ -31,8 +31,8 @@ if (__DEV__) {
 
       try {
         if (httpServer) httpServer.close();
-        delete require.cache[require.resolve(backendBuiltPath)];
-        const app = require(backendBuiltPath).default;
+        delete require.cache[require.resolve(backendBuildPath)];
+        const app = require(backendBuildPath).default;
         httpServer = app.listen(proxyPort);
       } catch (e) {
         console.error(e);
@@ -40,7 +40,7 @@ if (__DEV__) {
     }
   });
 } else {
-  const app = require(backendBuiltPath).default;
+  const app = require(backendBuildPath).default;
   app.listen(proxyPort);
 }
 

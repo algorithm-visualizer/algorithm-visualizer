@@ -6,7 +6,7 @@ const {
   frontendSrcPath,
   algorithmApiSrcPath,
   wikiApiSrcPath,
-  frontendBuiltPath,
+  frontendBuildPath,
   apiEndpoint,
 } = require('../environment');
 
@@ -32,5 +32,5 @@ if (__DEV__) {
 
   module.exports = app;
 } else {
-  module.exports = express.static(frontendBuiltPath);
+  module.exports = express.static(frontendBuildPath);
 }
