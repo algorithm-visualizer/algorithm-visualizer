@@ -33,8 +33,8 @@
 
     &.visited {
       .circle {
-        fill: $color-notified;
-        stroke: $color-notified;
+        fill: $color-patched;
+        stroke: $color-patched;
       }
     }
   }
@@ -71,7 +71,7 @@
 
     &.visited {
       .line {
-        stroke: $color-notified;
+        stroke: $color-patched;
 
         &.directed {
           marker-end: url(#markerArrowVisited);
@@ -79,7 +79,7 @@
       }
 
       .weight {
-        fill: $color-notified;
+        fill: $color-patched;
       }
     }
   }
@@ -92,7 +92,7 @@
     }
 
     &.visited {
-      fill: $color-notified;
+      fill: $color-patched;
     }
   }
 }

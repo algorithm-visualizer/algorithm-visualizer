@@ -8,7 +8,7 @@ class Array2DData extends Data {
       for (const value of array1d) {
         const col = {
           value,
-          notified: false,
+          patched: false,
           selected: false,
         };
         row.push(col);
@@ -20,11 +20,11 @@ class Array2DData extends Data {
 
   patch(x, y, v = this.data[x][y].value) {
     this.data[x][y].value = v;
-    this.data[x][y].notified = true;
+    this.data[x][y].patched = true;
   }
 
   depatch(x, y) {
-    this.data[x][y].notified = false;
+    this.data[x][y].patched = false;
   }
 
   select(sx, sy, ex = sx, ey = sy) {

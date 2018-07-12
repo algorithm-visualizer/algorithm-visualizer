@@ -16,11 +16,11 @@ class Data {
     if (this.onRender) this.onRender();
   }
 
-  reset() {
-    this.set();
+  set() {
   }
 
-  set() {
+  reset() {
+    this.set();
   }
 
   delay() {

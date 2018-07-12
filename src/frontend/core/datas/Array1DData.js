@@ -21,12 +21,12 @@ class Array1DData extends Array2DData {
     super.depatch(0, x);
   }
 
-  select(s, e = s) {
-    super.select(0, s, 0, e);
+  select(sx, ex = sx) {
+    super.select(0, sx, 0, ex);
   }
 
-  deselect(s, e = s) {
-    super.deselect(0, s, 0, e);
+  deselect(sx, ex = sx) {
+    super.deselect(0, sx, 0, ex);
   }
 
   chart(tracerKey) {

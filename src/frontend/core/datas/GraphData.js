@@ -20,14 +20,6 @@ class GraphData extends Data {
     this.logData = null;
   }
 
-  directed(isDirected = true) {
-    this.isDirected = isDirected;
-  }
-
-  weighted(isWeighted = true) {
-    this.isWeighted = isWeighted;
-  }
-
   set(array2d = []) {
     this.nodes = [];
     this.edges = [];
@@ -42,6 +34,14 @@ class GraphData extends Data {
     }
     this.layout();
     super.set();
+  }
+
+  directed(isDirected = true) {
+    this.isDirected = isDirected;
+  }
+
+  weighted(isWeighted = true) {
+    this.isWeighted = isWeighted;
   }
 
   addNode(id, weight = null, visitedCount = 0, selectedCount = 0, x = 0, y = 0) {
@@ -184,14 +184,14 @@ class GraphData extends Data {
   }
 
   visit(target, source, weight) {
-    this.visitOrLeave(target, source, weight, true);
+    this.visitOrLeave(true, target, source, weight);
   }
 
   leave(target, source, weight) {
-    this.visitOrLeave(target, source, weight, false);
+    this.visitOrLeave(false, target, source, weight);
   }
 
-  visitOrLeave(target, source, weight, visit) {
+  visitOrLeave(visit, target, source = null, weight = null) {
     const edge = this.findEdge(source, target);
     if (edge) edge.visitedCount += visit ? 1 : -1;
     const node = this.findNode(target);
@@ -203,14 +203,14 @@ class GraphData extends Data {
   }
 
   select(target, source) {
-    this.selectOrDeselect(target, source, true);
+    this.selectOrDeselect(true, target, source);
   }
 
   deselect(target, source) {
-    this.selectOrDeselect(target, source, false);
+    this.selectOrDeselect(false, target, source);
   }
 
-  selectOrDeselect(target, source, select) {
+  selectOrDeselect(select, target, source = null) {
     const edge = this.findEdge(source, target);
     if (edge) edge.selectedCount += select ? 1 : -1;
     const node = this.findNode(target);

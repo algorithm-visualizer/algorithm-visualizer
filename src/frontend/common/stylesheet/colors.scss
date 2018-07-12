@@ -5,7 +5,7 @@ $color-font: #bbbbbb;
 $color-shadow: rgba(#000000, .2);
 $color-overlay: rgba(#ffffff, .1);
 $color-selected: #2962ff;
-$color-notified: #c51162;
+$color-patched: #c51162;
 $color-highlight: #29d;
 
 :export {
@@ -16,6 +16,6 @@ $color-highlight: #29d;
   colorShadow: $color-shadow;
   colorOverlay: $color-overlay;
   colorSelected: $color-selected;
-  colorNotified: $color-notified;
+  colorNotified: $color-patched;
   colorHighlight: $color-highlight;
 }

@@ -4,7 +4,7 @@ import path from 'path';
 const router = express.Router();
 
 const getJsWorker = (req, res, next) => {
-  res.sendFile(path.resolve(__dirname, '..', 'tracers', 'js', 'built', 'index.js'));
+  res.sendFile(path.resolve(__dirname, '..', 'tracers', 'languages', 'js', 'built', 'index.js'));
 };
 
 const compileJava = (req, res, next) => {
