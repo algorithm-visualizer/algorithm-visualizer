@@ -54,13 +54,13 @@ const PATCH = URL => {
 };
 
 const CategoryApi = {
-  getCategories: GET('/category'),
-  getAlgorithm: GET('/category/:categoryKey/:algorithmKey'),
+  getCategories: GET('/categories'),
+  getAlgorithm: GET('/categories/:categoryKey/:algorithmKey'),
 };
 
-const WikiApi = {
-  getWikis: GET('/wiki'),
-  getWiki: GET('/wiki/:wiki'),
+const DocApi = {
+  getDocs: GET('/docs'),
+  getDoc: GET('/docs/:docKey'),
 };
 
 const GitHubApi = {
@@ -77,7 +77,7 @@ let jsWorker = null;
 const CompilerApi = {
   js: code => new Promise((resolve, reject) => {
     if (jsWorker) jsWorker.terminate();
-    jsWorker = new Worker('/api/compiler/js');
+    jsWorker = new Worker('/api/compilers/js');
     jsWorker.onmessage = e => resolve(e.data);
     jsWorker.onerror = reject;
     jsWorker.postMessage(code);
@@ -86,7 +86,7 @@ const CompilerApi = {
 
 export {
   CategoryApi,
-  WikiApi,
+  DocApi,
   GitHubApi,
   CompilerApi,
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { WikiApi } from '/apis';
+import { DocApi } from '/apis';
 import { MarkdownViewer } from '/components';
 import { classes } from '/common/util';
 import styles from './stylesheet.scss';
@@ -18,7 +18,7 @@ class WikiViewer extends React.Component {
   }
 
   loadMarkdown(href) {
-    WikiApi.getWiki(href)
+    DocApi.getDoc(href)
       .then(source => this.setState({ source }));
   }
 
