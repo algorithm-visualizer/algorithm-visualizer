@@ -1,5 +1,12 @@
 import Promise from 'bluebird';
 import axios from 'axios';
+import fs from 'fs';
+import { githubClientId, githubClientSecret } from '/environment';
+
+axios.interceptors.request.use(request => {
+  request.params = { client_id: githubClientId, client_secret: githubClientSecret, ...request.params };
+  return request;
+});
 
 axios.interceptors.response.use(response => {
   return response.data;
@@ -54,9 +61,18 @@ const PATCH = URL => {
 };
 
 const GitHubApi = {
-  auth: (client_id, client_secret) => axios.defaults.params = { client_id, client_secret },
   listCommits: GET('/repos/:owner/:repo/commits'),
   getAccessToken: code => axios.post('https://github.com/login/oauth/access_token', { code }, { headers: { Accept: 'application/json' } }),
+  getLatestRelease: GET('/repos/:owner/:repo/releases/latest'),
+  download: (url, path) => axios({
+    method: 'get',
+    url,
+    responseType: 'stream',
+  }).then(data => new Promise((resolve, reject) => {
+    data.pipe(fs.createWriteStream(path));
+    data.on('end', resolve);
+    data.on('error', reject);
+  })),
 };
 
 export {
