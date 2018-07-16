@@ -1,6 +1,5 @@
 const proxy = require('http-proxy-middleware');
 const {
-  __PROD__,
   __DEV__,
   proxyPort,
   backendBuildPath,

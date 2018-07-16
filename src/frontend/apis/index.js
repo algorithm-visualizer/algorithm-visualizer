@@ -58,11 +58,6 @@ const CategoryApi = {
   getAlgorithm: GET('/categories/:categoryKey/:algorithmKey'),
 };
 
-const DocApi = {
-  getDocs: GET('/docs'),
-  getDoc: GET('/docs/:docKey'),
-};
-
 const GitHubApi = {
   auth: token => axios.defaults.headers.common['Authorization'] = `token ${token}`,
   getProfile: GET('https://api.github.com/user'),
@@ -86,7 +81,6 @@ const CompilerApi = {
 
 export {
   CategoryApi,
-  DocApi,
   GitHubApi,
   CompilerApi,
 };

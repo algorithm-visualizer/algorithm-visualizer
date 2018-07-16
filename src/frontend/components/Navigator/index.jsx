@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faSearch from '@fortawesome/fontawesome-free-solid/faSearch';
 import faCode from '@fortawesome/fontawesome-free-solid/faCode';
+import faBook from '@fortawesome/fontawesome-free-solid/faBook';
 import faGithub from '@fortawesome/fontawesome-free-brands/faGithub';
 import { ExpandableListItem, ListItem } from '/components';
 import { classes } from '/common/util';
@@ -122,6 +123,8 @@ class Navigator extends React.Component {
               <ListItem icon={faCode} label="Scratch Paper"
                         onClick={() => this.props.showSuccessToast('Sign In Required')} />
           }
+          <ListItem icon={faBook} label="Tracers API"
+                    href="https://github.com/algorithm-visualizer/tracers/wiki" />
           <ListItem icon={faGithub} label="Fork me on GitHub"
                     href="https://github.com/algorithm-visualizer/algorithm-visualizer" />
         </div>

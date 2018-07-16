@@ -14,7 +14,6 @@ import {
   TabContainer,
   ToastContainer,
   VisualizationViewer,
-  WikiViewer,
 } from '/components';
 import { CategoryApi, GitHubApi } from '/apis';
 import { tracerManager } from '/core';
@@ -199,11 +198,10 @@ class App extends React.Component {
                             visibles={[navigatorOpened, true, true]}
                             onChangeWeights={weights => this.handleChangeWorkspaceWeights(weights)}>
           <Navigator loadAlgorithm={params => this.loadAlgorithm(params)} />
-          <TabContainer titles={['Description', 'Visualization', 'Tracer API']} tabIndex={viewerTabIndex}
+          <TabContainer titles={['Description', 'Visualization']} tabIndex={viewerTabIndex}
                         onChangeTabIndex={tabIndex => this.handleChangeViewerTabIndex(tabIndex)}>
             <MarkdownViewer source={readmeFile ? readmeFile.content : 'README.md not found'} />
             <VisualizationViewer />
-            <WikiViewer />
           </TabContainer>
           <TabContainer titles={[...files.map(file => file.name), <FontAwesomeIcon fixedWidth icon={faPlus} />]}
                         tabIndex={editorTabIndex}

@@ -1,13 +1,9 @@
 const express = require('express');
 
 const {
-  __PROD__,
   __DEV__,
   frontendSrcPath,
-  algorithmApiSrcPath,
-  wikiApiSrcPath,
   frontendBuildPath,
-  apiEndpoint,
 } = require('../environment');
 
 if (__DEV__) {
