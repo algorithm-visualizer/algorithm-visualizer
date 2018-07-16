@@ -1,6 +1,6 @@
 import express from 'express';
-import axios from 'axios';
-import { githubClientId, githubClientSecret } from '/environment';
+import { githubClientId } from '/environment';
+import { GitHubApi } from '/apis';
 
 const router = express.Router();
 
@@ -11,14 +11,7 @@ const request = (req, res, next) => {
 const response = (req, res, next) => {
   const { code } = req.query;
 
-  axios.post('https://github.com/login/oauth/access_token', {
-    client_id: githubClientId,
-    client_secret: githubClientSecret,
-    code,
-  }, {
-    headers: { Accept: 'application/json' }
-  }).then(response => {
-    const { access_token } = response.data;
+  GitHubApi.getAccessToken(code).then(({ access_token }) => {
     res.cookie('access_token', access_token);
     res.redirect('/');
   }).catch(next);

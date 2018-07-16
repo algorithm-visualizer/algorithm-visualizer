@@ -21,7 +21,7 @@ if (__DEV__) {
   app.use(webpackDev(compiler, {
     stats: {
       cached: false,
-      colors: true
+      colors: true,
     },
   }));
   app.use(webpackHot(compiler));

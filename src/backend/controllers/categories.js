@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { NotFoundError } from '/common/error';
 import { exec } from 'child_process';
-import { repo } from '/common/github';
+import { GitHubApi } from '/apis';
 
 const router = express.Router();
 
@@ -49,16 +49,16 @@ const cacheCategories = () => {
   const categories = list(getPath()).map(cacheCategory);
 
   const per_page = 100;
-  const cacheCommitAuthors = (page = 1, commitAuthors = {}) => repo.listCommits({
+  const cacheCommitAuthors = (page = 1, commitAuthors = {}) => GitHubApi.listCommits('algorithm-visualizer', 'algorithms', {
     per_page,
     page,
-  }).then(({ data }) => {
-    data.forEach(({ sha, commit, author }) => {
+  }).then(commits => {
+    commits.forEach(({ sha, commit, author }) => {
       if (!author) return;
       const { login, avatar_url } = author;
       commitAuthors[sha] = { login, avatar_url };
     });
-    if (data.length < per_page) {
+    if (commits.length < per_page) {
       return commitAuthors;
     } else {
       return cacheCommitAuthors(page + 1, commitAuthors);

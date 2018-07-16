@@ -4,7 +4,10 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import * as controllers from '/controllers';
 import { AuthorizationError, NotFoundError, PermissionError } from '/common/error';
+import { GitHubApi } from '/apis';
+import { githubClientId, githubClientSecret } from '/environment';
 
+GitHubApi.auth(githubClientId, githubClientSecret);
 const app = express();
 app.use(morgan('tiny'));
 app.use(cookieParser());

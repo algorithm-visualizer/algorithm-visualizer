@@ -8,10 +8,6 @@ const {
 
   GITHUB_CLIENT_ID,
   GITHUB_CLIENT_SECRET,
-  GITHUB_BOT_USERNAME,
-  GITHUB_BOT_PASSWORD,
-  GITHUB_ORG = 'algorithm-visualizer',
-  GITHUB_REPO = 'algorithms',
 } = process.env;
 
 const __PROD__ = NODE_ENV === 'production';
@@ -22,12 +18,6 @@ const proxyPort = parseInt(PROXY_PORT);
 
 const githubClientId = GITHUB_CLIENT_ID;
 const githubClientSecret = GITHUB_CLIENT_SECRET;
-const githubBotAuth = {
-  username: GITHUB_BOT_USERNAME,
-  password: GITHUB_BOT_PASSWORD,
-};
-const githubOrg = GITHUB_ORG;
-const githubRepo = GITHUB_REPO;
 
 const buildPath = path.resolve(__dirname, 'build');
 const frontendBuildPath = path.resolve(buildPath, 'frontend');
@@ -46,9 +36,6 @@ module.exports = {
   proxyPort,
   githubClientId,
   githubClientSecret,
-  githubBotAuth,
-  githubOrg,
-  githubRepo,
   frontendBuildPath,
   backendBuildPath,
   frontendSrcPath,
