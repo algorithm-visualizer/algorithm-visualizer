@@ -69,18 +69,19 @@ const GitHubApi = {
 };
 
 let jsWorker = null;
-const CompilerApi = {
-  js: code => new Promise((resolve, reject) => {
+const TracerApi = {
+  js: ({ code }) => new Promise((resolve, reject) => {
     if (jsWorker) jsWorker.terminate();
-    jsWorker = new Worker('/api/compilers/js');
+    jsWorker = new Worker('/api/tracers/js');
     jsWorker.onmessage = e => resolve(e.data);
     jsWorker.onerror = reject;
     jsWorker.postMessage(code);
   }),
+  java: POST('/tracers/java'),
 };
 
 export {
   CategoryApi,
   GitHubApi,
-  CompilerApi,
+  TracerApi,
 };

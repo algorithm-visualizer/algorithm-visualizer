@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "description": "Algorithm Visualizer",
   "scripts": {
+    "postinstall": "docker pull baekjoon/onlinejudge-java:1.8",
     "dev": "NODE_ENV=development node bin/www",
     "start": "NODE_ENV=production node bin/www",
     "build": "npm run build:frontend && npm run build:backend",

@@ -1,5 +1,5 @@
 import express from 'express';
-import fs from 'fs-extra';
+import fs from 'fs';
 import path from 'path';
 import { NotFoundError } from '/common/error';
 import { exec } from 'child_process';

@@ -13,6 +13,7 @@
   padding: 16px;
   margin: 8px;
   font-size: $font-size-large;
+  white-space: pre-line;
 
   &.success {
     border-color: rgb(0, 150, 0);

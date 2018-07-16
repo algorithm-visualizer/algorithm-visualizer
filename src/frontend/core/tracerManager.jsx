@@ -3,7 +3,7 @@ import Promise from 'bluebird';
 import { extension } from '/common/util';
 import { Array1DData, Array2DData, ChartData, Data, GraphData, LogData } from '/core/datas';
 import { Array1DRenderer, Array2DRenderer, ChartRenderer, GraphRenderer, LogRenderer, Renderer } from '/core/renderers';
-import { CompilerApi } from '/apis';
+import { TracerApi } from '/apis';
 
 class TracerManager {
   constructor() {
@@ -63,7 +63,7 @@ class TracerManager {
 
   setFile(file) {
     this.file = file;
-    this.runInitial();
+    if (extension(file.name) === 'js') this.runInitial();
   }
 
   reset(traces = []) {
@@ -155,8 +155,12 @@ class TracerManager {
   execute() {
     const { name, content } = this.file;
     const ext = extension(name);
-    if (ext in CompilerApi) {
-      return CompilerApi[ext](content).then(traces => this.reset(traces));
+    if (ext in TracerApi) {
+      return TracerApi[ext]({ code: content })
+        .then(traces => this.reset(traces))
+        .catch(e => {
+          throw e.err;
+        });
     } else {
       return Promise.reject(new Error('Language Not Supported'));
     }

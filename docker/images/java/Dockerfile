@@ -1,1 +1,0 @@
-FROM baekjoon/onlinejudge-java:1.8
