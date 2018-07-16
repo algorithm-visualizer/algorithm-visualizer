@@ -1,5 +1,5 @@
 import React from 'react';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styles from './stylesheet.scss';
 import { classes } from '/common/util';
 import { Link } from 'react-router-dom';

@@ -1,6 +1,6 @@
 import Promise from 'bluebird';
 import axios from 'axios';
-import fs from 'fs';
+import fs from 'fs-extra';
 import { githubClientId, githubClientSecret } from '/environment';
 
 axios.interceptors.request.use(request => {

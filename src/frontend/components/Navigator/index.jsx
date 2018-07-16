@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import faSearch from '@fortawesome/fontawesome-free-solid/faSearch';
 import faCode from '@fortawesome/fontawesome-free-solid/faCode';
 import faBook from '@fortawesome/fontawesome-free-solid/faBook';

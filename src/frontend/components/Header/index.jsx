@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import InputRange from 'react-input-range';
 import AutosizeInput from 'react-input-autosize';
 import screenfull from 'screenfull';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import faAngleRight from '@fortawesome/fontawesome-free-solid/faAngleRight';
 import faCaretDown from '@fortawesome/fontawesome-free-solid/faCaretDown';
 import faCaretRight from '@fortawesome/fontawesome-free-solid/faCaretRight';

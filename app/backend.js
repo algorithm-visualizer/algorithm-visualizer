@@ -25,12 +25,13 @@ if (__DEV__) {
       lastHash = stats.hash;
       console.info(stats.toString({
         cached: false,
-        colors: true,
+        colors: true
       }));
 
       try {
         if (httpServer) httpServer.close();
-        Object.keys(require.cache).forEach(key => delete require.cache[key]);
+        delete require.cache[require.resolve('axios')];
+        delete require.cache[require.resolve(backendBuildPath)];
         const app = require(backendBuildPath).default;
         httpServer = app.listen(proxyPort);
       } catch (e) {
