@@ -3,25 +3,21 @@ import { combineActions, createAction, handleActions } from 'redux-actions';
 const prefix = 'CURRENT';
 
 const setCurrent = createAction(`${prefix}/SET_CURRENT`, (categoryKey, algorithmKey, gistId, titles, files) => ({
-  categoryKey, algorithmKey, gistId, titles, files, saved: true,
+  categoryKey, algorithmKey, gistId, titles, files, lastTitles: titles, lastFiles: files,
 }));
-const saveScratchPaper = createAction(`${prefix}/SAVE_SCRATCH_PAPER`, gistId => ({ gistId, saved: true }));
-const renameScratchPaper = createAction(`${prefix}/RENAME_SCRATCH_PAPER`, title => ({
-  titles: ['Scratch Paper', title],
-  saved: false,
-}));
+const renameScratchPaper = createAction(`${prefix}/RENAME_SCRATCH_PAPER`, title => ({ titles: ['Scratch Paper', title] }));
 const addFile = createAction(`${prefix}/ADD_FILE`, file => ({ file }));
 const modifyFile = createAction(`${prefix}/MODIFY_FILE`, file => ({ file }));
 const deleteFile = createAction(`${prefix}/DELETE_FILE`, file => ({ file }));
-// TODO: 파일 추가/삭제
+const renameFile = createAction(`${prefix}/RENAME_FILE`, (index, name) => ({ index, name }));
 
 export const actions = {
   setCurrent,
-  saveScratchPaper,
   renameScratchPaper,
   addFile,
   modifyFile,
   deleteFile,
+  renameFile,
 };
 
 const defaultState = {
@@ -30,7 +26,8 @@ const defaultState = {
   gistId: undefined,
   titles: [],
   files: [],
-  saved: true,
+  lastTitles: [],
+  lastFiles: [],
 };
 
 const getNextState = (state, files) => ({
@@ -40,15 +37,15 @@ const getNextState = (state, files) => ({
     algorithmKey: undefined,
     gistId: 'new',
     titles: ['Scratch Paper', 'Untitled'],
+    lastTitles: [],
+    lastFiles: [],
   }),
-  files,
-  saved: false,
+  files: files.map(file => ({ ...file, contributors: [] })),
 });
 
 export default handleActions({
   [combineActions(
     setCurrent,
-    saveScratchPaper,
     renameScratchPaper,
   )]: (state, { payload }) => ({
     ...state,
@@ -67,6 +64,11 @@ export default handleActions({
   [deleteFile]: (state, { payload }) => {
     const { file } = payload;
     const files = state.files.filter(oldFile => oldFile.name !== file.name);
+    return getNextState(state, files);
+  },
+  [renameFile]: (state, { payload }) => {
+    const { index, name } = payload;
+    const files = state.files.map((file, i) => i === index ? { ...file, name } : file);
     return getNextState(state, files);
   },
 }, defaultState);

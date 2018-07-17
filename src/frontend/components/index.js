@@ -1,7 +1,6 @@
 export { default as App } from './App';
 export { default as Button } from './Button';
 export { default as CodeEditor } from './CodeEditor';
-export { default as ContributorsViewer } from './ContributorsViewer';
 export { default as Divider } from './Divider';
 export { default as Ellipsis } from './Ellipsis';
 export { default as ExpandableListItem } from './ExpandableListItem';

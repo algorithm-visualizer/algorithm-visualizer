@@ -3,7 +3,7 @@ import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import * as controllers from '/controllers';
-import { AuthorizationError, NotFoundError, PermissionError } from '/common/error';
+import { AuthorizationError, CompileError, NotFoundError, PermissionError, RuntimeError } from '/common/error';
 
 const app = express();
 app.use(morgan('tiny'));
@@ -17,6 +17,8 @@ app.use((err, req, res, next) => {
     [AuthorizationError, 401],
     [PermissionError, 403],
     [NotFoundError, 404],
+    [CompileError, 422],
+    [RuntimeError, 422],
     [Error, 500],
   ];
   const [, status] = statusMap.find(([Error]) => err instanceof Error);

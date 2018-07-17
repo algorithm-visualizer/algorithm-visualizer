@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import faSearch from '@fortawesome/fontawesome-free-solid/faSearch';
 import faCode from '@fortawesome/fontawesome-free-solid/faCode';
 import faBook from '@fortawesome/fontawesome-free-solid/faBook';
@@ -19,7 +19,7 @@ class Navigator extends React.Component {
       categoriesOpened: {},
       scratchPaperOpened: true,
       query: '',
-    }
+    };
   }
 
   componentDidMount() {
@@ -70,7 +70,7 @@ class Navigator extends React.Component {
     const { className, loadAlgorithm } = this.props;
     const { categories, scratchPapers } = this.props.directory;
     const { categoryKey, algorithmKey, gistId } = this.props.current;
-    const { signedIn, ext } = this.props.env;
+    const { user } = this.props.env;
 
     return (
       <nav className={classes(styles.navigator, className)}>
@@ -109,7 +109,7 @@ class Navigator extends React.Component {
         </div>
         <div className={styles.footer}>
           {
-            signedIn ?
+            user ?
               <ExpandableListItem icon={faCode} label="Scratch Paper" onClick={() => this.toggleScratchPaper()}
                                   opened={scratchPaperOpened}>
                 <ListItem indent label="New ..." onClick={() => loadAlgorithm({ gistId: 'new' })} />

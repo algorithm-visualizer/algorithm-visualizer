@@ -59,8 +59,8 @@ const CategoryApi = {
 };
 
 const GitHubApi = {
-  auth: token => axios.defaults.headers.common['Authorization'] = `token ${token}`,
-  getProfile: GET('https://api.github.com/user'),
+  auth: token => Promise.resolve(axios.defaults.headers.common['Authorization'] = `token ${token}`),
+  getUser: GET('https://api.github.com/user'),
   listGists: GET('https://api.github.com/gists'),
   createGist: POST('https://api.github.com/gists'),
   editGist: PATCH('https://api.github.com/gists/:id'),
@@ -74,7 +74,7 @@ const TracerApi = {
     if (jsWorker) jsWorker.terminate();
     jsWorker = new Worker('/api/tracers/js');
     jsWorker.onmessage = e => resolve(e.data);
-    jsWorker.onerror = err => reject({ status: 500, err });
+    jsWorker.onerror = err => reject({ status: 422, err });
     jsWorker.postMessage(code);
   }),
   java: POST('/tracers/java'),

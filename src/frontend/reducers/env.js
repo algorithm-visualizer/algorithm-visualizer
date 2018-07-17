@@ -7,22 +7,23 @@ const setExt = createAction(`${prefix}/SET_EXT`, ext => {
   Cookies.set('ext', ext);
   return { ext };
 });
+const setUser = createAction(`${prefix}/SET_USER`, user => ({ user }));
 
 export const actions = {
   setExt,
+  setUser,
 };
 
-const accessToken = Cookies.get('access_token');
-const ext = Cookies.get('ext') || 'js';
 const defaultState = {
-  accessToken,
-  signedIn: !!accessToken,
-  ext,
+  accessToken: Cookies.get('access_token'),
+  ext: Cookies.get('ext') || 'js',
+  user: undefined,
 };
 
 export default handleActions({
   [combineActions(
     setExt,
+    setUser,
   )]: (state, { payload }) => ({
     ...state,
     ...payload,

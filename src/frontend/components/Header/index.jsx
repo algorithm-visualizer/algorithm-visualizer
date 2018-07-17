@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import InputRange from 'react-input-range';
 import AutosizeInput from 'react-input-autosize';
 import screenfull from 'screenfull';
+import Promise from 'bluebird';
+import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import faAngleRight from '@fortawesome/fontawesome-free-solid/faAngleRight';
 import faCaretDown from '@fortawesome/fontawesome-free-solid/faCaretDown';
@@ -17,14 +19,12 @@ import faSave from '@fortawesome/fontawesome-free-solid/faSave';
 import faShare from '@fortawesome/fontawesome-free-solid/faShare';
 import faStar from '@fortawesome/fontawesome-free-solid/faStar';
 import { GitHubApi } from '/apis';
-import { classes } from '/common/util';
+import { classes, refineGist } from '/common/util';
 import { actions } from '/reducers';
 import { languages } from '/common/config';
 import { Button, Ellipsis, ListItem } from '/components';
 import { tracerManager } from '/core';
 import styles from './stylesheet.scss';
-import Promise from 'bluebird';
-import { withRouter } from 'react-router-dom';
 
 @withRouter
 @connect(({ current, env }) => ({ current, env }), actions)
@@ -35,24 +35,10 @@ class Header extends React.Component {
     const { interval, paused, started } = tracerManager;
     this.state = {
       interval, paused, started,
-      profile: {
-        avatar_url: null,
-        login: null,
-      },
     };
   }
 
   componentDidMount() {
-    const { signedIn } = this.props.env;
-    if (signedIn) {
-      GitHubApi.getProfile()
-        .then(result => {
-          const { avatar_url, login } = result;
-          const profile = { avatar_url, login };
-          this.setState({ profile });
-        });
-    }
-
     tracerManager.setOnUpdateStatus(update => this.setState(update));
   }
 
@@ -76,22 +62,29 @@ class Header extends React.Component {
   }
 
   saveGist() {
-    const { gistId, titles, files } = this.props.current;
+    const { categoryKey, algorithmKey, gistId, titles, files, lastFiles } = this.props.current;
     const gist = {
       description: titles[1],
-      files: {
-        'algorithm-visualizer': {
-          content: 'https://algorithm-visualizer.org/',
-        },
-      },
+      files: {},
     };
     files.forEach(file => {
       gist.files[file.name] = {
         content: file.content,
       };
     });
+    lastFiles.forEach(lastFile => {
+      if (!(lastFile.name in gist.files)) {
+        gist.files[lastFile.name] = null;
+      }
+    });
+    gist.files['algorithm-visualizer'] = {
+      content: 'https://algorithm-visualizer.org/',
+    };
     const savePromise = gistId === 'new' ? GitHubApi.createGist(gist) : GitHubApi.editGist(gistId, gist);
-    savePromise.then(data => this.props.saveScratchPaper(data.id)).then(this.props.loadScratchPapers);
+    savePromise
+      .then(refineGist)
+      .then(algorithm => this.props.setCurrent(categoryKey, algorithmKey, algorithm.gistId, algorithm.titles, algorithm.files))
+      .then(this.props.loadScratchPapers);
   }
 
   deleteGist() {
@@ -100,11 +93,19 @@ class Header extends React.Component {
     deletePromise.then(() => this.props.loadAlgorithm({})).then(this.props.loadScratchPapers);
   }
 
+  isGistSaved() {
+    const { titles, files, lastTitles, lastFiles } = this.props.current;
+    const serializeTitles = titles => JSON.stringify(titles);
+    const serializeFiles = files => JSON.stringify(files.map(({ name, content }) => ({ name, content })));
+    return serializeTitles(titles) === serializeTitles(lastTitles) &&
+      serializeFiles(files) === serializeFiles(lastFiles);
+  }
+
   render() {
-    const { interval, paused, started, profile } = this.state;
+    const { interval, paused, started } = this.state;
     const { className, onClickTitleBar, navigatorOpened, onAction } = this.props;
-    const { gistId, titles, saved } = this.props.current;
-    const { signedIn, ext } = this.props.env;
+    const { gistId, titles } = this.props.current;
+    const { ext, user } = this.props.env;
 
     return (
       <header className={classes(styles.header, className)}>
@@ -126,7 +127,8 @@ class Header extends React.Component {
             </Button>
           </div>
           <div className={styles.section}>
-            <Button icon={faSave} primary disabled={!gistId || saved} onClick={() => this.saveGist()}>Save</Button>
+            <Button icon={faSave} primary disabled={!gistId || this.isGistSaved()}
+                    onClick={() => this.saveGist()}>Save</Button>
             <Button icon={faTrashAlt} primary disabled={!gistId} onClick={() => this.deleteGist()}>Delete</Button>
             <Button icon={faShare} primary disabled={gistId === 'new'} onClick={() => this.shareLink()}>Share</Button>
             <Button icon={faExpandArrowsAlt} primary
@@ -136,9 +138,9 @@ class Header extends React.Component {
         <div className={styles.row}>
           <div className={styles.section}>
             {
-              signedIn ?
-                <Button className={styles.btn_dropdown} icon={profile.avatar_url}>
-                  {profile.login}
+              user ?
+                <Button className={styles.btn_dropdown} icon={user.avatar_url}>
+                  {user.login}
                   <div className={styles.dropdown}>
                     <ListItem href="/api/auth/destroy" label="Sign Out" />
                   </div>

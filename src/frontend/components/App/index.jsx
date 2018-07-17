@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Promise from 'bluebird';
+import AutosizeInput from 'react-input-autosize';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import faPlus from '@fortawesome/fontawesome-free-solid/faPlus';
 import { loadProgressBar } from 'axios-progress-bar';
@@ -18,7 +19,7 @@ import {
 import { CategoryApi, GitHubApi } from '/apis';
 import { tracerManager } from '/core';
 import { actions } from '/reducers';
-import { extension } from '/common/util';
+import { extension, refineGist } from '/common/util';
 import { exts } from '/common/config';
 import README from '/static/README.md';
 import styles from './stylesheet.scss';
@@ -30,31 +31,35 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    const { signedIn, accessToken } = this.props.env;
-    if (signedIn) GitHubApi.auth(accessToken);
-
     this.state = {
       navigatorOpened: true,
       workspaceWeights: [1, 2, 2],
       viewerTabIndex: 0,
-      editingFileName: undefined,
+      editorTabIndex: -1,
     };
   }
 
   componentDidMount() {
     this.loadAlgorithm(this.props.match.params);
 
+    const { accessToken } = this.props.env;
+    if (accessToken) {
+      GitHubApi.auth(accessToken)
+        .then(() => GitHubApi.getUser())
+        .then(user => {
+          const { login, avatar_url } = user;
+          this.props.setUser({ login, avatar_url });
+        })
+        .then(() => this.loadScratchPapers());
+    }
+
     CategoryApi.getCategories()
       .then(({ categories }) => this.props.setCategories(categories));
-
-    const { signedIn } = this.props.env;
-    if (signedIn) this.loadScratchPapers();
 
     tracerManager.setOnError(error => this.props.showErrorToast(error.message));
   }
 
   componentWillUnmount() {
-    tracerManager.setOnRun(null);
     tracerManager.setOnError(null);
   }
 
@@ -119,16 +124,7 @@ class App extends React.Component {
         }],
       });
     } else if (gistId) {
-      fetchPromise = GitHubApi.getGist(gistId, { timestamp: Date.now() }).then(gist => {
-        const titles = ['Scratch Paper', gist.description];
-        delete gist.files['algorithm-visualizer'];
-        const files = Object.values(gist.files).map(file => ({
-          name: file.filename,
-          content: file.content,
-          contributors: [gist.owner],
-        }));
-        return { titles, files };
-      });
+      fetchPromise = GitHubApi.getGist(gistId, { timestamp: Date.now() }).then(refineGist);
     }
     fetchPromise
       .then(algorithm => this.props.setCurrent(categoryKey, algorithmKey, gistId, algorithm.titles, algorithm.files))
@@ -136,14 +132,16 @@ class App extends React.Component {
         name: 'README.md',
         content: README,
         contributors: [{
-          avatar_url: 'https://github.com/algorithm-visualizer.png',
           login: 'algorithm-visualizer',
+          avatar_url: 'https://github.com/algorithm-visualizer.png',
         }],
       }]))
       .finally(() => {
         const { files } = this.props.current;
-        const editingFile = files.find(file => extension(file.name) === ext) || files.find(file => exts.includes(extension(file.name))) || files[0];
-        this.handleChangeEditingFileName(editingFile.name);
+        let editorTabIndex = files.findIndex(file => extension(file.name) === ext);
+        if (!~editorTabIndex) editorTabIndex = files.findIndex(file => exts.includes(extension(file.name)));
+        if (!~editorTabIndex) editorTabIndex = Math.min(0, files.length - 1);
+        this.handleChangeEditorTabIndex(editorTabIndex);
       });
   }
 
@@ -157,24 +155,34 @@ class App extends React.Component {
 
   handleChangeEditorTabIndex(editorTabIndex) {
     const { files } = this.props.current;
-    if (editorTabIndex === files.length) {
-      let newFileName = 'untitled';
-      let count = 0;
-      while (files.some(file => file.name === newFileName)) newFileName = `untitled-${++count}`;
-      this.props.addFile({
-        name: newFileName,
-        content: '',
-        contributors: [],
-      });
-      this.handleChangeEditingFileName(newFileName);
-    } else {
-      const editingFileName = files[editorTabIndex].name;
-      this.handleChangeEditingFileName(editingFileName);
-    }
+    if (editorTabIndex === files.length) this.handleAddFile();
+    this.setState({ editorTabIndex });
   }
 
-  handleChangeEditingFileName(editingFileName) {
-    this.setState({ editingFileName });
+  handleAddFile() {
+    const { files } = this.props.current;
+    let name = 'untitled';
+    let count = 0;
+    while (files.some(file => file.name === name)) name = `untitled-${++count}`;
+    this.props.addFile({
+      name,
+      content: '',
+      contributors: [],
+    });
+  }
+
+  handleRenameFile(e) {
+    const { value } = e.target;
+    const { editorTabIndex } = this.state;
+    this.props.renameFile(editorTabIndex, value);
+  }
+
+  handleDeleteFile(file) {
+    const { files } = this.props.current;
+    const { editorTabIndex } = this.state;
+    if (files.indexOf(file) < editorTabIndex) this.handleChangeEditorTabIndex(editorTabIndex - 1);
+    else this.handleChangeEditorTabIndex(Math.min(editorTabIndex, files.length - 2));
+    this.props.deleteFile(file);
   }
 
   toggleNavigatorOpened(navigatorOpened = !this.state.navigatorOpened) {
@@ -182,11 +190,21 @@ class App extends React.Component {
   }
 
   render() {
-    const { navigatorOpened, workspaceWeights, viewerTabIndex, editingFileName } = this.state;
+    const { navigatorOpened, workspaceWeights, viewerTabIndex, editorTabIndex } = this.state;
     const { titles, files } = this.props.current;
 
     const readmeFile = files.find(file => file.name === 'README.md');
-    const editorTabIndex = files.findIndex(file => file.name === editingFileName);
+
+    const editorTitles = files.map(file => file.name);
+    if (files[editorTabIndex]) {
+      editorTitles[editorTabIndex] = (
+        <AutosizeInput className={styles.input_title} value={files[editorTabIndex].name}
+                       onClick={e => e.stopPropagation()} onChange={e => this.handleRenameFile(e)} />
+      );
+    }
+    editorTitles.push(
+      <FontAwesomeIcon fixedWidth icon={faPlus} />,
+    );
 
     return (
       <div className={styles.app}>
@@ -203,12 +221,12 @@ class App extends React.Component {
             <MarkdownViewer source={readmeFile ? readmeFile.content : 'README.md not found'} />
             <VisualizationViewer />
           </TabContainer>
-          <TabContainer titles={[...files.map(file => file.name), <FontAwesomeIcon fixedWidth icon={faPlus} />]}
-                        tabIndex={editorTabIndex}
+          <TabContainer className={styles.editor_tab_container} titles={editorTitles} tabIndex={editorTabIndex}
                         onChangeTabIndex={tabIndex => this.handleChangeEditorTabIndex(tabIndex)}>
             {
-              files.map(file => (
-                <CodeEditor key={[...titles, file.name].join('--')} file={file} />
+              files.map((file, i) => (
+                <CodeEditor key={[...titles, i].join('--')} file={file}
+                            onDeleteFile={file => this.handleDeleteFile(file)} />
               ))
             }
           </TabContainer>

@@ -54,6 +54,19 @@ button {
 
   .workspace {
     flex: 1;
+
+    .editor_tab_container {
+      .input_title {
+        input {
+          &:hover,
+          &:focus {
+            margin: -4px;
+            padding: 4px;
+            background-color: $theme-normal;
+          }
+        }
+      }
+    }
   }
 
   .toast_container {
