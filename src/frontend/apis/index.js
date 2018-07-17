@@ -74,7 +74,7 @@ const TracerApi = {
     if (jsWorker) jsWorker.terminate();
     jsWorker = new Worker('/api/tracers/js');
     jsWorker.onmessage = e => resolve(e.data);
-    jsWorker.onerror = reject;
+    jsWorker.onerror = err => reject({ status: 500, err });
     jsWorker.postMessage(code);
   }),
   java: POST('/tracers/java'),

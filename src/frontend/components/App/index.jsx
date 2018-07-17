@@ -183,7 +183,7 @@ class App extends React.Component {
 
   render() {
     const { navigatorOpened, workspaceWeights, viewerTabIndex, editingFileName } = this.state;
-    const { files } = this.props.current;
+    const { titles, files } = this.props.current;
 
     const readmeFile = files.find(file => file.name === 'README.md');
     const editorTabIndex = files.findIndex(file => file.name === editingFileName);
@@ -208,7 +208,7 @@ class App extends React.Component {
                         onChangeTabIndex={tabIndex => this.handleChangeEditorTabIndex(tabIndex)}>
             {
               files.map(file => (
-                <CodeEditor key={file.name} file={file} />
+                <CodeEditor key={[...titles, file.name].join('--')} file={file} />
               ))
             }
           </TabContainer>

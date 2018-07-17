@@ -28,7 +28,7 @@ class CodeEditor extends React.Component {
 
   componentDidMount() {
     const { file } = this.props;
-    tracerManager.setFile(file);
+    tracerManager.setFile(file, true);
 
     tracerManager.setOnUpdateLineIndicator(lineIndicator => this.setState({ lineMarker: this.createLineMarker(lineIndicator) }));
   }
@@ -36,7 +36,7 @@ class CodeEditor extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { file } = nextProps;
     if (file !== this.props.file) {
-      tracerManager.setFile(file);
+      tracerManager.setFile(file, extension(file.name) === 'js');
     }
   }
 

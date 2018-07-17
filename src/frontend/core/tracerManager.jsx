@@ -61,9 +61,9 @@ class TracerManager {
     if (this.onUpdateLineIndicator) this.onUpdateLineIndicator(lineIndicator);
   }
 
-  setFile(file) {
+  setFile(file, initialRun) {
     this.file = file;
-    if (extension(file.name) === 'js') this.runInitial();
+    if (initialRun) this.runInitial();
   }
 
   reset(traces = []) {
@@ -157,7 +157,6 @@ class TracerManager {
     const ext = extension(name);
     if (ext in TracerApi) {
       return TracerApi[ext]({ code: content })
-        .then(traces => this.reset(traces))
         .catch(e => {
           throw e.err;
         });
@@ -167,23 +166,25 @@ class TracerManager {
   }
 
   runInitial() {
+    this.reset();
+    this.render();
     this.execute()
-      .then(() => this.applyTraceChunk())
-      .catch(() => {
-        this.reset();
-        this.render();
+      .then(traces => {
+        this.reset(traces);
+        this.applyTraceChunk();
       });
   }
 
   run() {
+    this.reset();
+    this.render();
     this.execute()
-      .then(() => {
+      .then(traces => {
+        this.reset(traces);
         this.resume();
         this.setStarted(true);
       })
       .catch(error => {
-        this.reset();
-        this.render();
         this.handleError(error);
       });
   }
