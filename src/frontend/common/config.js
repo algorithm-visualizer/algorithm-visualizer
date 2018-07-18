@@ -15,9 +15,16 @@ const languages = [{
   ext: 'py',
   mode: 'python',
 }];
+
 const exts = languages.map(language => language.ext);
+
+const us = {
+  login: 'algorithm-visualizer',
+  avatar_url: 'https://github.com/algorithm-visualizer.png',
+};
 
 export {
   languages,
   exts,
+  us,
 };

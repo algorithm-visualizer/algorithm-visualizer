@@ -2,6 +2,7 @@ import React from 'react';
 import Cookies from 'js-cookie';
 import { connect } from 'react-redux';
 import Promise from 'bluebird';
+import { Helmet } from 'react-helmet';
 import AutosizeInput from 'react-input-autosize';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import faPlus from '@fortawesome/fontawesome-free-solid/faPlus';
@@ -21,7 +22,7 @@ import { CategoryApi, GitHubApi } from '/apis';
 import { tracerManager } from '/core';
 import { actions } from '/reducers';
 import { extension, refineGist } from '/common/util';
-import { exts } from '/common/config';
+import { exts, us } from '/common/config';
 import README from '/static/README.md';
 import styles from './stylesheet.scss';
 
@@ -127,7 +128,7 @@ class App extends React.Component {
 
   loadAlgorithm({ categoryKey, algorithmKey, gistId }) {
     const { ext } = this.props.env;
-    let fetchPromise = Promise.reject();
+    let fetchPromise = null;
     if (categoryKey && algorithmKey) {
       fetchPromise = CategoryApi.getAlgorithm(categoryKey, algorithmKey)
         .then(({ algorithm }) => algorithm);
@@ -136,7 +137,7 @@ class App extends React.Component {
         titles: ['Scratch Paper', 'Untitled'],
         files: [{
           name: 'README.md',
-          content: '# README',
+          content: `# Scratch Paper\nVisualize your own algorithm here!\n\n[Tracer API](https://github.com/algorithm-visualizer/tracers/wiki)`,
           contributors: [],
         }, {
           name: `code.${ext}`,
@@ -146,16 +147,15 @@ class App extends React.Component {
       });
     } else if (gistId) {
       fetchPromise = GitHubApi.getGist(gistId, { timestamp: Date.now() }).then(refineGist);
+    } else {
+      fetchPromise = Promise.reject(new Error());
     }
     fetchPromise
       .then(algorithm => this.props.setCurrent(categoryKey, algorithmKey, gistId, algorithm.titles, algorithm.files))
       .catch(() => this.props.setCurrent(undefined, undefined, undefined, ['Algorithm Visualizer'], [{
         name: 'README.md',
         content: README,
-        contributors: [{
-          login: 'algorithm-visualizer',
-          avatar_url: 'https://github.com/algorithm-visualizer.png',
-        }],
+        contributors: [us],
       }]))
       .finally(() => {
         const { files } = this.props.current;
@@ -214,7 +214,13 @@ class App extends React.Component {
     const { navigatorOpened, workspaceWeights, viewerTabIndex, editorTabIndex } = this.state;
     const { titles, files } = this.props.current;
 
-    const readmeFile = files.find(file => file.name === 'README.md');
+    const readmeFile = files.find(file => file.name === 'README.md') || {
+      name: 'README.md',
+      content: `# ${titles[1]}\nREADME.md not found`,
+      contributors: [us],
+    };
+    const groups = /^\s*# .*\n+([^\n]+)/.exec(readmeFile.content);
+    const description = groups && groups[1] || '';
 
     const editorTitles = files.map(file => file.name);
     if (files[editorTabIndex]) {
@@ -229,6 +235,10 @@ class App extends React.Component {
 
     return (
       <div className={styles.app}>
+        <Helmet>
+          <title>{titles.join(' - ')}</title>
+          <meta name="description" content={description} />
+        </Helmet>
         <Header className={styles.header} onClickTitleBar={() => this.toggleNavigatorOpened()}
                 navigatorOpened={navigatorOpened} loadScratchPapers={() => this.loadScratchPapers()}
                 loadAlgorithm={params => this.loadAlgorithm(params)}
@@ -239,7 +249,7 @@ class App extends React.Component {
           <Navigator loadAlgorithm={params => this.loadAlgorithm(params)} />
           <TabContainer titles={['Description', 'Visualization']} tabIndex={viewerTabIndex}
                         onChangeTabIndex={tabIndex => this.handleChangeViewerTabIndex(tabIndex)}>
-            <MarkdownViewer source={readmeFile ? readmeFile.content : 'README.md not found'} />
+            <MarkdownViewer source={readmeFile.content} />
             <VisualizationViewer />
           </TabContainer>
           <TabContainer className={styles.editor_tab_container} titles={editorTitles} tabIndex={editorTabIndex}

@@ -4,6 +4,7 @@
   display: flex;
   flex-direction: column-reverse;
   padding: 16px;
+  pointer-events: none;
 }
 
 .toast {
@@ -14,6 +15,7 @@
   margin: 8px;
   font-size: $font-size-large;
   white-space: pre-line;
+  pointer-events: auto;
 
   &.success {
     border-color: rgb(0, 150, 0);

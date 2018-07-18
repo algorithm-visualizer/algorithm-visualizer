@@ -13,6 +13,12 @@ class Button extends React.Component {
     this.state = {
       confirming: false,
     };
+
+    this.timeout = null;
+  }
+
+  componentWillUnmount() {
+    if (this.timeout) window.clearTimeout(this.timeout);
   }
 
   render() {
@@ -29,7 +35,8 @@ class Button extends React.Component {
         href = null;
         onClick = () => {
           this.setState({ confirming: true });
-          window.setTimeout(() => {
+          this.timeout = window.setTimeout(() => {
+            this.timeout = null;
             this.setState({ confirming: false });
           }, 2000);
         };

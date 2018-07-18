@@ -169,6 +169,8 @@ class TracerManager {
       .then(traces => {
         this.reset(traces);
         this.applyTraceChunk();
+      })
+      .catch(error => {
       });
   }
 
