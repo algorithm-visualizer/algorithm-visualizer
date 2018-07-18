@@ -1,5 +1,6 @@
 import Promise from 'bluebird';
 import axios from 'axios';
+import { RuntimeError } from '/common/error';
 
 axios.interceptors.response.use(
   response => response.data,
@@ -73,7 +74,7 @@ const TracerApi = {
     if (jsWorker) jsWorker.terminate();
     jsWorker = new Worker('/api/tracers/js');
     jsWorker.onmessage = e => resolve(e.data);
-    jsWorker.onerror = reject;
+    jsWorker.onerror = e => reject(new RuntimeError(e.message));
     jsWorker.postMessage(code);
   }),
   java: POST('/tracers/java'),

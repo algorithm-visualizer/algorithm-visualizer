@@ -4,6 +4,7 @@ import { extension } from '/common/util';
 import { Array1DData, Array2DData, ChartData, Data, GraphData, LogData } from '/core/datas';
 import { Array1DRenderer, Array2DRenderer, ChartRenderer, GraphRenderer, LogRenderer, Renderer } from '/core/renderers';
 import { TracerApi } from '/apis';
+import { CompileError } from '/common/error';
 
 class TracerManager {
   constructor() {
@@ -158,7 +159,7 @@ class TracerManager {
     if (ext in TracerApi) {
       return TracerApi[ext]({ code: content });
     } else {
-      return Promise.reject(new Error('Language Not Supported'));
+      return Promise.reject(new CompileError('Language Not Supported'));
     }
   }
 
