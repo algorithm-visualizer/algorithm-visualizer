@@ -43,7 +43,7 @@
         white-space: nowrap;
 
         &:hover {
-          background: $color-shadow;
+          background-color: $color-shadow;
         }
 
         .range {
@@ -73,7 +73,7 @@
             margin-left: -3px;
             margin-top: -3px;
             appearance: none;
-            background: $color-font;
+            background-color: $color-font;
             cursor: pointer;
             display: block;
             position: absolute;

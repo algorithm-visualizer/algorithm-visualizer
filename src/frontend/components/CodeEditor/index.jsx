@@ -97,7 +97,8 @@ class CodeEditor extends React.Component {
           }
           <div className={styles.empty}>
             <div className={styles.empty} />
-            <Button className={styles.delete} icon={faTrashAlt} primary onClick={() => onDeleteFile(file)}>
+            <Button className={styles.delete} icon={faTrashAlt} primary onClick={() => onDeleteFile(file)}
+                    confirmNeeded>
               <Ellipsis>Delete File</Ellipsis>
             </Button>
           </div>

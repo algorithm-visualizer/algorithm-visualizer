@@ -129,7 +129,7 @@ class Header extends React.Component {
           <div className={styles.section}>
             <Button icon={faSave} primary disabled={!gistId || this.isGistSaved()}
                     onClick={() => this.saveGist()}>Save</Button>
-            <Button icon={faTrashAlt} primary disabled={!gistId} onClick={() => this.deleteGist()}>Delete</Button>
+            <Button icon={faTrashAlt} primary disabled={!gistId} onClick={() => this.deleteGist()} confirmNeeded>Delete</Button>
             <Button icon={faShare} primary disabled={gistId === 'new'} onClick={() => this.shareLink()}>Share</Button>
             <Button icon={faExpandArrowsAlt} primary
                     onClick={() => this.handleClickFullScreen()}>Fullscreen</Button>

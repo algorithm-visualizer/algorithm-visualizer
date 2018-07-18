@@ -4,6 +4,7 @@ $theme-light: #505050;
 $color-font: #bbbbbb;
 $color-shadow: rgba(#000000, .2);
 $color-overlay: rgba(#ffffff, .1);
+$color-alert: #f3bd58;
 $color-selected: #2962ff;
 $color-patched: #c51162;
 $color-highlight: #29d;
@@ -15,7 +16,8 @@ $color-highlight: #29d;
   colorFont: $color-font;
   colorShadow: $color-shadow;
   colorOverlay: $color-overlay;
+  colorAlert: $color-alert;
   colorSelected: $color-selected;
-  colorNotified: $color-patched;
+  colorPatched: $color-patched;
   colorHighlight: $color-highlight;
 }

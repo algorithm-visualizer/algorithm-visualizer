@@ -1,18 +1,47 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import styles from './stylesheet.scss';
-import { classes } from '/common/util';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import faExclamationCircle from '@fortawesome/fontawesome-free-solid/faExclamationCircle';
+import { classes } from '/common/util';
+import { Ellipsis } from '/components';
+import styles from './stylesheet.scss';
 
 class Button extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      confirming: false,
+    };
+  }
+
   render() {
-    const { className, children, onClick, to, href, icon, reverse, selected, disabled, primary, active, ...rest } = this.props;
+    let { className, children, to, href, onClick, icon, reverse, selected, disabled, primary, active, confirmNeeded, ...rest } = this.props;
+    const { confirming } = this.state;
+
+    if (confirmNeeded) {
+      if (confirming) {
+        className = classes(styles.confirming, className);
+        icon = faExclamationCircle;
+        children = <Ellipsis key="text">Click to Confirm</Ellipsis>;
+      } else {
+        to = null;
+        href = null;
+        onClick = () => {
+          this.setState({ confirming: true });
+          window.setTimeout(() => {
+            this.setState({ confirming: false });
+          }, 2000);
+        };
+      }
+    }
 
     const iconOnly = !children;
     const props = {
       className: classes(styles.button, reverse && styles.reverse, selected && styles.selected, disabled && styles.disabled, primary && styles.primary, active && styles.active, iconOnly && styles.icon_only, className),
-      onClick: disabled ? null : onClick,
+      to: disabled ? null : to,
       href: disabled ? null : href,
+      onClick: disabled ? null : onClick,
       children: [
         icon && (
           typeof icon === 'string' ?
@@ -26,13 +55,9 @@ class Button extends React.Component {
     };
 
     return to ? (
-      <Link to={to} {...props} />
+      <Link {...props} />
     ) : href ? (
-      /^https?:\/\//i.test(href) ? (
-        <a href={href} rel="noopener" target="_blank" {...props} />
-      ) : (
-        <a href={href} {...props} />
-      )
+      <a rel="noopener" target="_blank" {...props} />
     ) : (
       <div {...props} />
     );
