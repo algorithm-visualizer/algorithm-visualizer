@@ -210,9 +210,19 @@ class App extends React.Component {
     this.setState({ navigatorOpened });
   }
 
+  isGistSaved() {
+    const { titles, files, lastTitles, lastFiles } = this.props.current;
+    const serializeTitles = titles => JSON.stringify(titles);
+    const serializeFiles = files => JSON.stringify(files.map(({ name, content }) => ({ name, content })));
+    return serializeTitles(titles) === serializeTitles(lastTitles) &&
+      serializeFiles(files) === serializeFiles(lastFiles);
+  }
+
   render() {
     const { navigatorOpened, workspaceWeights, viewerTabIndex, editorTabIndex } = this.state;
     const { titles, files } = this.props.current;
+
+    const gistSaved = this.isGistSaved();
 
     const readmeFile = files.find(file => file.name === 'README.md') || {
       name: 'README.md',
@@ -236,13 +246,13 @@ class App extends React.Component {
     return (
       <div className={styles.app}>
         <Helmet>
-          <title>{titles.join(' - ')}</title>
+          <title>{gistSaved ? '' : '(Unsaved) '}{titles.join(' - ')}</title>
           <meta name="description" content={description} />
         </Helmet>
         <Header className={styles.header} onClickTitleBar={() => this.toggleNavigatorOpened()}
                 navigatorOpened={navigatorOpened} loadScratchPapers={() => this.loadScratchPapers()}
                 loadAlgorithm={params => this.loadAlgorithm(params)}
-                onAction={() => this.handleChangeViewerTabIndex(1)} />
+                onAction={() => this.handleChangeViewerTabIndex(1)} gistSaved={gistSaved} />
         <ResizableContainer className={styles.workspace} horizontal weights={workspaceWeights}
                             visibles={[navigatorOpened, true, true]}
                             onChangeWeights={weights => this.handleChangeWorkspaceWeights(weights)}>

@@ -97,17 +97,9 @@ class Header extends React.Component {
       .catch(this.props.showErrorToast);
   }
 
-  isGistSaved() {
-    const { titles, files, lastTitles, lastFiles } = this.props.current;
-    const serializeTitles = titles => JSON.stringify(titles);
-    const serializeFiles = files => JSON.stringify(files.map(({ name, content }) => ({ name, content })));
-    return serializeTitles(titles) === serializeTitles(lastTitles) &&
-      serializeFiles(files) === serializeFiles(lastFiles);
-  }
-
   render() {
     const { interval, paused, started } = this.state;
-    const { className, onClickTitleBar, navigatorOpened, onAction } = this.props;
+    const { className, onClickTitleBar, navigatorOpened, onAction, gistSaved } = this.props;
     const { gistId, titles } = this.props.current;
     const { ext, user } = this.props.env;
 
@@ -131,7 +123,7 @@ class Header extends React.Component {
             </Button>
           </div>
           <div className={styles.section}>
-            <Button icon={faSave} primary disabled={!gistId || this.isGistSaved()}
+            <Button icon={faSave} primary disabled={!gistId || gistSaved}
                     onClick={() => this.saveGist()}>Save</Button>
             <Button icon={faTrashAlt} primary disabled={!gistId} onClick={() => this.deleteGist()}
                     confirmNeeded>Delete</Button>
