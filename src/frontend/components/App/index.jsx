@@ -24,6 +24,7 @@ import { actions } from '/reducers';
 import { extension, refineGist } from '/common/util';
 import { exts, us } from '/common/config';
 import README from '/static/README.md';
+import SCRATCH_PAPER from '/static/SCRATCH_PAPER.md';
 import styles from './stylesheet.scss';
 
 loadProgressBar();
@@ -137,7 +138,7 @@ class App extends React.Component {
         titles: ['Scratch Paper', 'Untitled'],
         files: [{
           name: 'README.md',
-          content: `# Scratch Paper\nVisualize your own algorithm here!\n\n[Tracer API](https://github.com/algorithm-visualizer/tracers/wiki)`,
+          content: SCRATCH_PAPER,
           contributors: [],
         }, {
           name: `code.${ext}`,
