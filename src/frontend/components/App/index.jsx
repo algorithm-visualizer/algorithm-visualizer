@@ -1,4 +1,5 @@
 import React from 'react';
+import Cookies from 'js-cookie';
 import { connect } from 'react-redux';
 import Promise from 'bluebird';
 import AutosizeInput from 'react-input-autosize';
@@ -40,26 +41,25 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    window.signIn = this.signIn.bind(this);
+    window.signOut = this.signOut.bind(this);
+
     this.loadAlgorithm(this.props.match.params);
 
-    const { accessToken } = this.props.env;
-    if (accessToken) {
-      GitHubApi.auth(accessToken)
-        .then(() => GitHubApi.getUser())
-        .then(user => {
-          const { login, avatar_url } = user;
-          this.props.setUser({ login, avatar_url });
-        })
-        .then(() => this.loadScratchPapers());
-    }
+    const accessToken = Cookies.get('access_token');
+    if (accessToken) this.signIn(accessToken);
 
     CategoryApi.getCategories()
-      .then(({ categories }) => this.props.setCategories(categories));
+      .then(({ categories }) => this.props.setCategories(categories))
+      .catch(this.props.showErrorToast);
 
-    tracerManager.setOnError(error => this.props.showErrorToast(error.message));
+    tracerManager.setOnError(error => this.props.showErrorToast({ name: error.name, message: error.message }));
   }
 
   componentWillUnmount() {
+    delete window.signIn;
+    delete window.signOut;
+
     tracerManager.setOnError(null);
   }
 
@@ -83,6 +83,25 @@ class App extends React.Component {
     }
   }
 
+  signIn(accessToken) {
+    Cookies.set('access_token', accessToken);
+    GitHubApi.auth(accessToken)
+      .then(() => GitHubApi.getUser())
+      .then(user => {
+        const { login, avatar_url } = user;
+        this.props.setUser({ login, avatar_url });
+      })
+      .then(() => this.loadScratchPapers())
+      .catch(() => this.signOut());
+  }
+
+  signOut() {
+    Cookies.remove('access_token');
+    GitHubApi.auth(undefined)
+      .then(() => this.props.setUser(undefined))
+      .then(() => this.props.setScratchPapers([]));
+  }
+
   loadScratchPapers() {
     const per_page = 100;
     const paginateGists = (page = 1, scratchPapers = []) => GitHubApi.listGists({
@@ -101,7 +120,9 @@ class App extends React.Component {
         return paginateGists(page + 1, scratchPapers);
       }
     });
-    return paginateGists().then(scratchPapers => this.props.setScratchPapers(scratchPapers));
+    return paginateGists()
+      .then(scratchPapers => this.props.setScratchPapers(scratchPapers))
+      .catch(this.props.showErrorToast);
   }
 
   loadAlgorithm({ categoryKey, algorithmKey, gistId }) {

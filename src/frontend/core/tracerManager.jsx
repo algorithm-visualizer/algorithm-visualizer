@@ -156,10 +156,7 @@ class TracerManager {
     const { name, content } = this.file;
     const ext = extension(name);
     if (ext in TracerApi) {
-      return TracerApi[ext]({ code: content })
-        .catch(e => {
-          throw e.err;
-        });
+      return TracerApi[ext]({ code: content });
     } else {
       return Promise.reject(new Error('Language Not Supported'));
     }

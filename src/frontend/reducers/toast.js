@@ -4,7 +4,10 @@ import uuid from 'uuid';
 const prefix = 'TOAST';
 
 const showSuccessToast = createAction(`${prefix}/SHOW_SUCCESS_TOAST`, message => ({ type: 'success', message }));
-const showErrorToast = createAction(`${prefix}/SHOW_ERROR_TOAST`, message => ({ type: 'error', message }));
+const showErrorToast = createAction(`${prefix}/SHOW_ERROR_TOAST`, error => ({
+  type: 'error',
+  message: [error.name, error.message].filter(v => v).join(': '),
+}));
 const hideToast = createAction(`${prefix}/HIDE_TOAST`, id => ({ id }));
 
 export const actions = {

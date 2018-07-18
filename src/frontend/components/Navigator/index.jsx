@@ -108,21 +108,16 @@ class Navigator extends React.Component {
           }
         </div>
         <div className={styles.footer}>
-          {
-            user ?
-              <ExpandableListItem icon={faCode} label="Scratch Paper" onClick={() => this.toggleScratchPaper()}
-                                  opened={scratchPaperOpened}>
-                <ListItem indent label="New ..." onClick={() => loadAlgorithm({ gistId: 'new' })} />
-                {
-                  scratchPapers.map(scratchPaper => (
-                    <ListItem indent key={scratchPaper.key} selected={scratchPaper.key === gistId}
-                              onClick={() => loadAlgorithm({ gistId: scratchPaper.key })} label={scratchPaper.name} />
-                  ))
-                }
-              </ExpandableListItem> :
-              <ListItem icon={faCode} label="Scratch Paper"
-                        onClick={() => this.props.showSuccessToast('Sign In Required')} />
-          }
+          <ExpandableListItem icon={faCode} label="Scratch Paper" onClick={() => this.toggleScratchPaper()}
+                              opened={scratchPaperOpened}>
+            <ListItem indent label="New ..." onClick={() => loadAlgorithm({ gistId: 'new' })} />
+            {
+              scratchPapers.map(scratchPaper => (
+                <ListItem indent key={scratchPaper.key} selected={scratchPaper.key === gistId}
+                          onClick={() => loadAlgorithm({ gistId: scratchPaper.key })} label={scratchPaper.name} />
+              ))
+            }
+          </ExpandableListItem>
           <ListItem icon={faBook} label="Tracers API"
                     href="https://github.com/algorithm-visualizer/tracers/wiki" />
           <ListItem icon={faGithub} label="Fork me on GitHub"

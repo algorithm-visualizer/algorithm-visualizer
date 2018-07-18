@@ -1,11 +1,10 @@
 import Promise from 'bluebird';
 import axios from 'axios';
 
-axios.interceptors.response.use(response => {
-  return response.data;
-}, error => {
-  return Promise.reject(error.response.data);
-});
+axios.interceptors.response.use(
+  response => response.data,
+  error => Promise.reject(error.response.data),
+);
 
 const request = (url, process) => {
   const tokens = url.split('/');
@@ -59,7 +58,7 @@ const CategoryApi = {
 };
 
 const GitHubApi = {
-  auth: token => Promise.resolve(axios.defaults.headers.common['Authorization'] = `token ${token}`),
+  auth: token => Promise.resolve(axios.defaults.headers.common['Authorization'] = token && `token ${token}`),
   getUser: GET('https://api.github.com/user'),
   listGists: GET('https://api.github.com/gists'),
   createGist: POST('https://api.github.com/gists'),
@@ -74,7 +73,7 @@ const TracerApi = {
     if (jsWorker) jsWorker.terminate();
     jsWorker = new Worker('/api/tracers/js');
     jsWorker.onmessage = e => resolve(e.data);
-    jsWorker.onerror = err => reject({ status: 422, err });
+    jsWorker.onerror = reject;
     jsWorker.postMessage(code);
   }),
   java: POST('/tracers/java'),

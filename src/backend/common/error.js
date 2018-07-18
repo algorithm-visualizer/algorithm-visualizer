@@ -1,29 +1,29 @@
-class ApplicationError extends Error {
+class ClientError extends Error {
   toJSON() {
-    return { message: this.message };
+    return { name: this.constructor.name, message: this.message };
   }
 }
 
-class NotFoundError extends ApplicationError {
+class NotFoundError extends ClientError {
 }
 
-class PermissionError extends ApplicationError {
+class ForbiddenError extends ClientError {
 }
 
-class AuthorizationError extends ApplicationError {
+class UnauthorizedError extends ClientError {
 }
 
-class CompileError extends ApplicationError {
+class CompileError extends ClientError {
 }
 
-class RuntimeError extends ApplicationError {
+class RuntimeError extends ClientError {
 }
 
 export {
-  ApplicationError,
+  ClientError,
   NotFoundError,
-  PermissionError,
-  AuthorizationError,
+  ForbiddenError,
+  UnauthorizedError,
   CompileError,
   RuntimeError,
 };

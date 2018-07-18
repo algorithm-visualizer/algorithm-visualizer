@@ -15,7 +15,6 @@ export const actions = {
 };
 
 const defaultState = {
-  accessToken: Cookies.get('access_token'),
   ext: Cookies.get('ext') || 'js',
   user: undefined,
 };

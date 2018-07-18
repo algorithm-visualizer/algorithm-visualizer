@@ -84,13 +84,17 @@ class Header extends React.Component {
     savePromise
       .then(refineGist)
       .then(algorithm => this.props.setCurrent(categoryKey, algorithmKey, algorithm.gistId, algorithm.titles, algorithm.files))
-      .then(this.props.loadScratchPapers);
+      .then(this.props.loadScratchPapers)
+      .catch(this.props.showErrorToast);
   }
 
   deleteGist() {
     const { gistId } = this.props.current;
     const deletePromise = gistId === 'new' ? Promise.resolve() : GitHubApi.deleteGist(gistId);
-    deletePromise.then(() => this.props.loadAlgorithm({})).then(this.props.loadScratchPapers);
+    deletePromise
+      .then(() => this.props.loadAlgorithm({}))
+      .then(this.props.loadScratchPapers)
+      .catch(this.props.showErrorToast);
   }
 
   isGistSaved() {
@@ -129,7 +133,8 @@ class Header extends React.Component {
           <div className={styles.section}>
             <Button icon={faSave} primary disabled={!gistId || this.isGistSaved()}
                     onClick={() => this.saveGist()}>Save</Button>
-            <Button icon={faTrashAlt} primary disabled={!gistId} onClick={() => this.deleteGist()} confirmNeeded>Delete</Button>
+            <Button icon={faTrashAlt} primary disabled={!gistId} onClick={() => this.deleteGist()}
+                    confirmNeeded>Delete</Button>
             <Button icon={faShare} primary disabled={gistId === 'new'} onClick={() => this.shareLink()}>Share</Button>
             <Button icon={faExpandArrowsAlt} primary
                     onClick={() => this.handleClickFullScreen()}>Fullscreen</Button>
@@ -142,10 +147,10 @@ class Header extends React.Component {
                 <Button className={styles.btn_dropdown} icon={user.avatar_url}>
                   {user.login}
                   <div className={styles.dropdown}>
-                    <ListItem href="/api/auth/destroy" label="Sign Out" />
+                    <ListItem label="Sign Out" href="/api/auth/destroy" rel="nofollow" />
                   </div>
                 </Button> :
-                <Button icon={faGithub} primary href="/api/auth/request">
+                <Button icon={faGithub} primary href="/api/auth/request" rel="nofollow">
                   <Ellipsis>Sign In</Ellipsis>
                 </Button>
             }
