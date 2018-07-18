@@ -4,7 +4,6 @@ import InputRange from 'react-input-range';
 import AutosizeInput from 'react-input-autosize';
 import screenfull from 'screenfull';
 import Promise from 'bluebird';
-import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import faAngleRight from '@fortawesome/fontawesome-free-solid/faAngleRight';
 import faCaretDown from '@fortawesome/fontawesome-free-solid/faCaretDown';
@@ -16,7 +15,7 @@ import faExpandArrowsAlt from '@fortawesome/fontawesome-free-solid/faExpandArrow
 import faGithub from '@fortawesome/fontawesome-free-brands/faGithub';
 import faTrashAlt from '@fortawesome/fontawesome-free-solid/faTrashAlt';
 import faSave from '@fortawesome/fontawesome-free-solid/faSave';
-import faShare from '@fortawesome/fontawesome-free-solid/faShare';
+import faFacebook from '@fortawesome/fontawesome-free-brands/faFacebook';
 import faStar from '@fortawesome/fontawesome-free-solid/faStar';
 import { GitHubApi } from '/apis';
 import { classes, refineGist } from '/common/util';
@@ -26,7 +25,6 @@ import { Button, Ellipsis, ListItem } from '/components';
 import { tracerManager } from '/core';
 import styles from './stylesheet.scss';
 
-@withRouter
 @connect(({ current, env }) => ({ current, env }), actions)
 class Header extends React.Component {
   constructor(props) {
@@ -86,6 +84,7 @@ class Header extends React.Component {
       .then(algorithm => this.props.setCurrent(categoryKey, algorithmKey, algorithm.gistId, algorithm.titles, algorithm.files))
       .then(this.props.loadScratchPapers)
       .catch(this.props.showErrorToast);
+    // TODO: create a new gist in case of permission error
   }
 
   deleteGist() {
@@ -127,7 +126,8 @@ class Header extends React.Component {
                     onClick={() => this.saveGist()}>Save</Button>
             <Button icon={faTrashAlt} primary disabled={!gistId} onClick={() => this.deleteGist()}
                     confirmNeeded>Delete</Button>
-            <Button icon={faShare} primary disabled={gistId === 'new'} onClick={() => this.shareLink()}>Share</Button>
+            <Button icon={faFacebook} primary disabled={gistId === 'new'}
+                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}>Share</Button>
             <Button icon={faExpandArrowsAlt} primary
                     onClick={() => this.handleClickFullScreen()}>Fullscreen</Button>
           </div>

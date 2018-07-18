@@ -127,6 +127,7 @@ class App extends React.Component {
       .catch(this.props.showErrorToast);
   }
 
+  // TODO: warn before loading or quiting if not saved
   loadAlgorithm({ categoryKey, algorithmKey, gistId }) {
     const { ext } = this.props.env;
     let fetchPromise = null;
@@ -142,7 +143,7 @@ class App extends React.Component {
           contributors: undefined,
         }, {
           name: `code.${ext}`,
-          content: '',
+          content: '', // TODO: put import statements as default
           contributors: undefined,
         }],
       });

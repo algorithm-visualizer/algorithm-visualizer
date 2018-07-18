@@ -25,6 +25,7 @@ const getJsWorker = (req, res, next) => {
 
 const execute = (imageId, srcPath, command, ErrorClass) => new Promise((resolve, reject) => {
   const libPath = getLibPath();
+  // TODO: memory limit + time limit + space limit?
   const dockerCommand = `docker run --rm -w=/usr/judge -t -v=${libPath}:/usr/bin/tracers:ro -v=${srcPath}:/usr/judge:rw -e MAX_TRACES=1000000 -e MAX_TRACERS=100 ${imageId}`;
   child_process.exec(`${dockerCommand} ${command}`, (error, stdout, stderr) => {
     if (error) return reject(new ErrorClass(stdout));
