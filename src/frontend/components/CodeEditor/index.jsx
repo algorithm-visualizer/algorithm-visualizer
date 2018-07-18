@@ -9,6 +9,7 @@ import 'brace/mode/python';
 import 'brace/theme/tomorrow_night_eighties';
 import 'brace/ext/searchbox';
 import faTrashAlt from '@fortawesome/fontawesome-free-solid/faTrashAlt';
+import faUser from '@fortawesome/fontawesome-free-solid/faUser';
 import { tracerManager } from '/core';
 import { classes, extension } from '/common/util';
 import { actions } from '/reducers';
@@ -88,7 +89,7 @@ class CodeEditor extends React.Component {
         <div className={classes(styles.contributors_viewer, className)}>
           <span className={classes(styles.contributor, styles.label)}>Contributed by</span>
           {
-            (file.contributors.length ? file.contributors : user ? [user] : []).map(contributor => (
+            (file.contributors || [user || { login: 'guest', avatar_url: faUser }]).map(contributor => (
               <Button className={styles.contributor} icon={contributor.avatar_url} key={contributor.login}
                       href={`https://github.com/${contributor.login}`}>
                 {contributor.login}

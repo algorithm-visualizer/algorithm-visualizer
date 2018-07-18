@@ -139,11 +139,11 @@ class App extends React.Component {
         files: [{
           name: 'README.md',
           content: SCRATCH_PAPER,
-          contributors: [],
+          contributors: undefined,
         }, {
           name: `code.${ext}`,
           content: '',
-          contributors: [],
+          contributors: undefined,
         }],
       });
     } else if (gistId) {
@@ -189,7 +189,7 @@ class App extends React.Component {
     this.props.addFile({
       name,
       content: '',
-      contributors: [],
+      contributors: undefined,
     });
   }
 
