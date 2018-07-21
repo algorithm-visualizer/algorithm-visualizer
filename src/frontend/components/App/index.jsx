@@ -245,6 +245,7 @@ class App extends React.Component {
       <FontAwesomeIcon fixedWidth icon={faPlus} />,
     );
 
+    // TODO: let google search within algorithm-visualizer.org
     return (
       <div className={styles.app}>
         <Helmet>

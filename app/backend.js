@@ -15,7 +15,11 @@ if (__DEV__) {
 
   let lastHash = null;
   let httpServer = null;
-  compiler.watch({}, (err, stats) => {
+  compiler.watch({
+    watchOptions: {
+      ignored: /public/,
+    },
+  }, (err, stats) => {
     if (err) {
       lastHash = null;
       compiler.purgeInputFileSystem();
@@ -25,7 +29,7 @@ if (__DEV__) {
       lastHash = stats.hash;
       console.info(stats.toString({
         cached: false,
-        colors: true
+        colors: true,
       }));
 
       try {

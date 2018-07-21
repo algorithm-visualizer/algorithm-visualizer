@@ -77,6 +77,7 @@ const TracerApi = {
     jsWorker.onerror = e => reject(new RuntimeError(e.message));
     jsWorker.postMessage(code);
   }),
+  cpp: POST('/tracers/cpp'),
   java: POST('/tracers/java'),
 };
 

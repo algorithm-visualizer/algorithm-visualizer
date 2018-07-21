@@ -1,3 +1,0 @@
-[submodule "src/backend/public/algorithms"]
-	path = src/backend/public/algorithms
-	url = git@github.com:algorithm-visualizer/algorithms.git

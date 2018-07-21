@@ -1,18 +1,22 @@
 import express from 'express';
-import fs from 'fs';
+import Promise from 'bluebird';
+import fs from 'fs-extra';
 import path from 'path';
 import { NotFoundError } from '/common/error';
-import { exec } from 'child_process';
 import { GitHubApi } from '/apis';
+import { execute } from '/common/util';
 
 const router = express.Router();
 
-const getPath = (...args) => path.resolve(__dirname, '..', 'public', 'algorithms', ...args);
-const createKey = name => name.toLowerCase().replace(/ /g, '-');
-const list = dirPath => fs.readdirSync(dirPath).filter(fileName => !fileName.startsWith('.'));
+const repoPath = path.resolve(__dirname, '..', 'public', 'algorithms');
+const getPath = (...args) => path.resolve(repoPath, ...args);
 
 const cacheCategories = () => {
   const allFiles = [];
+
+  const createKey = name => name.toLowerCase().replace(/ /g, '-');
+  const list = dirPath => fs.readdirSync(dirPath).filter(fileName => !fileName.startsWith('.'));
+
   const cacheCategory = categoryName => {
     const categoryKey = createKey(categoryName);
     const categoryPath = getPath(categoryName);
@@ -64,54 +68,53 @@ const cacheCategories = () => {
       return cacheCommitAuthors(page + 1, commitAuthors);
     }
   });
-  const cacheContributors = (commitAuthors, fileIndex = 0) => {
-    const file = allFiles[fileIndex];
-    if (file) {
-      const cwd = getPath();
-      exec(`git --no-pager log --follow --no-merges --format="%H" "${file.path}"`, { cwd }, (error, stdout, stderr) => {
-        if (!error && !stderr) {
-          const output = stdout.toString().replace(/\n$/, '');
-          const shas = output.split('\n').reverse();
-          const contributors = [];
-          for (const sha of shas) {
-            const author = commitAuthors[sha];
-            if (author && !contributors.find(contributor => contributor.login === author.login)) {
-              contributors.push(author);
-            }
+  const cacheContributors = commitAuthors => Promise.each(allFiles, file => {
+    return execute(`git --no-pager log --follow --no-merges --format="%H" "${file.path}"`, getPath(), { stdout: null })
+      .then(stdout => {
+        const output = stdout.toString().replace(/\n$/, '');
+        const shas = output.split('\n').reverse();
+        const contributors = [];
+        for (const sha of shas) {
+          const author = commitAuthors[sha];
+          if (author && !contributors.find(contributor => contributor.login === author.login)) {
+            contributors.push(author);
           }
-          file.contributors = contributors;
         }
-        cacheContributors(commitAuthors, fileIndex + 1);
+        file.contributors = contributors;
       });
-    }
-  };
+  });
   cacheCommitAuthors().then(cacheContributors);
 
   return categories;
 };
-const cachedCategories = cacheCategories(); // TODO: cache again when webhooked
 
-const getCategories = (req, res, next) => {
-  res.json({ categories: cachedCategories });
-};
+const downloadCategories = () => (
+  fs.pathExistsSync(repoPath) ?
+    execute(`git fetch && git reset --hard origin/master`, repoPath) :
+    execute(`git clone git@github.com:algorithm-visualizer/algorithms ${repoPath}`, __dirname)
+);
 
-const getAlgorithm = (req, res, next) => {
-  const { categoryKey, algorithmKey } = req.params;
+let categories = []; // TODO: download again when webhooked
+downloadCategories().then(() => categories = cacheCategories());
 
-  const category = cachedCategories.find(category => category.key === categoryKey);
-  if (!category) return next(new NotFoundError());
-  const algorithm = category.algorithms.find(algorithm => algorithm.key === algorithmKey);
-  if (!algorithm) return next(new NotFoundError());
-
-  const titles = [category.name, algorithm.name];
-  const files = algorithm.files.map(({ name, content, contributors }) => ({ name, content, contributors }));
-  res.json({ algorithm: { titles, files } });
-};
 
 router.route('/')
-  .get(getCategories);
+  .get((req, res, next) => {
+    res.json({ categories });
+  });
 
 router.route('/:categoryKey/:algorithmKey')
-  .get(getAlgorithm);
+  .get((req, res, next) => {
+    const { categoryKey, algorithmKey } = req.params;
+
+    const category = categories.find(category => category.key === categoryKey);
+    if (!category) return next(new NotFoundError());
+    const algorithm = category.algorithms.find(algorithm => algorithm.key === algorithmKey);
+    if (!algorithm) return next(new NotFoundError());
+
+    const titles = [category.name, algorithm.name];
+    const files = algorithm.files.map(({ name, content, contributors }) => ({ name, content, contributors }));
+    res.json({ algorithm: { titles, files } });
+  });
 
 export default router;
