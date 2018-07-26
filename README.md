@@ -3,6 +3,7 @@
 
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square)](https://gitter.im/algorithm-visualizer)
 [![GitHub contributors](https://img.shields.io/github/contributors/algorithm-visualizer/algorithm-visualizer.svg?style=flat-square)](https://github.com/algorithm-visualizer/algorithm-visualizer/graphs/contributors)
+[![GitHub](https://img.shields.io/github/license/algorithm-visualizer/algorithm-visualizer.svg?style=flat-square)](https://github.com/algorithm-visualizer/algorithm-visualizer/blob/master/LICENSE)
 
 Learning algorithms from text and static images is quite boring. For that, there have been many great websites that view animations of various algorithms. However, for us being coders, nothing can be more comprehensible than visualizing the actual working code. So here we introduce Algorithm Visualizer.
 
