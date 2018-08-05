@@ -3,14 +3,12 @@
   "version": "2.0.0",
   "description": "Algorithm Visualizer",
   "scripts": {
-    "postinstall": "docker pull openjdk:8 && docker pull gcc:8.1",
-    "dev": "NODE_ENV=development node bin/www",
-    "start": "NODE_ENV=production node bin/www",
+    "dev": "NODE_ENV=development ./bin/www",
+    "start": "NODE_ENV=production ./bin/www",
     "build": "npm run build:frontend && npm run build:backend",
     "build:frontend": "NODE_ENV=production node ./node_modules/webpack/bin/webpack --bail --progress --config webpack.frontend.config.js",
     "build:backend": "NODE_ENV=production node ./node_modules/webpack/bin/webpack --bail --progress --config webpack.backend.config.js",
-    "lint": "./node_modules/.bin/eslint --fix src",
-    "publish": "npm run lint && npm run build && git add . && git commit && git push"
+    "lint": "./node_modules/.bin/eslint --fix src"
   },
   "repository": {
     "type": "git",

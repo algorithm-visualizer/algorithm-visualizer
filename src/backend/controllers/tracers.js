@@ -9,51 +9,36 @@ import { CompileError, RuntimeError } from '/common/error';
 const router = express.Router();
 
 const repoPath = path.resolve(__dirname, '..', 'public', 'tracers');
-const getLibsPath = (...args) => path.resolve(repoPath, 'libs', ...args);
 const getCodesPath = (...args) => path.resolve(__dirname, '..', 'public', 'codes', ...args);
 
 const buildRelease = release => (
   fs.pathExistsSync(repoPath) ?
     execute(`git fetch && ! git diff-index --quiet ${release.target_commitish}`, repoPath) :
     execute(`git clone git@github.com:algorithm-visualizer/tracers ${repoPath}`, __dirname)
-).then(() => execute(`git reset --hard ${release.target_commitish} && npm install && npm run build`, repoPath));
+).then(() => execute(`git reset --hard ${release.target_commitish} && npm install && npm run build && ./bin/build`, repoPath));
 
 GitHubApi.getLatestRelease('algorithm-visualizer', 'tracers').then(buildRelease);
 // TODO: build release when webhooked
 
 const getJsWorker = (req, res, next) => {
-  res.sendFile(getLibsPath('js', 'tracers.js'));
+  res.sendFile(path.resolve(repoPath, 'src', 'languages', 'js', 'tracers', 'build', 'tracers.js'));
 };
 
-const executeInDocker = (imageId, ext, srcPath, command) => {
-  // TODO: memory limit + time limit + space limit?
-  const libsPath = getLibsPath(ext);
-  const dockerCommand = [
-    `docker run --rm`,
-    '-w=/usr/judge',
-    `-v=${libsPath}:/usr/bin/tracers:ro`,
-    `-v=${srcPath}:/usr/judge:rw`,
-    `-e MAX_TRACES=${1e6} -e MAX_TRACERS=${1e2}`,
-    imageId,
-  ].join(' ');
-  return execute(`${dockerCommand} ${command}`, repoPath, { stdout: null, stderr: null });
-};
-
-const trace = ({ ext, imageId, compileCommand, runCommand }) => (req, res, next) => {
+const trace = lang => (req, res, next) => {
   const { code } = req.body;
-  const srcPath = getCodesPath(uuid.v4());
-  fs.outputFile(path.resolve(srcPath, `Main.${ext}`), code)
-    .then(() => executeInDocker(imageId, ext, srcPath, compileCommand)
+  const tempPath = getCodesPath(uuid.v4());
+  fs.outputFile(path.resolve(tempPath, `Main.${lang}`), code)
+    .then(() => execute(`LANG=${lang} TEMP_PATH=${tempPath} ./bin/compile`, repoPath, { stdout: null, stderr: null })
       .catch(error => {
         throw new CompileError(error);
       }))
-    .then(() => executeInDocker(imageId, ext, srcPath, runCommand)
+    .then(() => execute(`LANG=${lang} TEMP_PATH=${tempPath} ./bin/run`, repoPath, { stdout: null, stderr: null })
       .catch(error => {
         throw new RuntimeError(error);
       }))
-    .then(() => res.sendFile(path.resolve(srcPath, 'traces.json')))
+    .then(() => res.sendFile(path.resolve(tempPath, 'traces.json')))
     .catch(next)
-    .finally(() => fs.remove(srcPath));
+    .finally(() => fs.remove(tempPath));
 };
 
 
@@ -61,19 +46,9 @@ router.route('/js')
   .get(getJsWorker);
 
 router.route('/java')
-  .post(trace({
-    ext: 'java',
-    imageId: 'openjdk:8',
-    compileCommand: 'javac -cp /usr/bin/tracers/tracers.jar Main.java',
-    runCommand: 'java -cp /usr/bin/tracers/tracers.jar:. Main',
-  }));
+  .post(trace('java'));
 
 router.route('/cpp')
-  .post(trace({
-    ext: 'cpp',
-    imageId: 'gcc:8.1',
-    compileCommand: 'g++ Main.cpp -o Main -O2 -std=c++11 -L/usr/bin/tracers/lib -l:tracers.a -I/usr/bin/tracers/include',
-    runCommand: './Main',
-  }));
+  .post(trace('cpp'));
 
 export default router;
