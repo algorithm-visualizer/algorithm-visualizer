@@ -10,7 +10,7 @@ body {
 }
 
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: $font-family-normal;
   -webkit-font-smoothing: subpixel-antialiased;
   user-select: none;
   color: $color-font;

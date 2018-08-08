@@ -7,6 +7,7 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  font-family: $font-family-monospace;
 
   .message {
     margin: 2px 0;

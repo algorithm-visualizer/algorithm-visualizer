@@ -7,7 +7,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Roboto Mono', monospace;
 
   &:first-child {
     border-top: none;
@@ -17,9 +16,9 @@
     position: absolute;
     top: 0;
     left: 0;
-    background-color: $color-shadow;
+    background-color: $theme-light;
     color: $color-font;
-    padding: 4px;
+    padding: 4px 6px;
     font-size: $font-size-large;
   }
 }
