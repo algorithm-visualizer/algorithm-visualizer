@@ -22,9 +22,8 @@ import { CategoryApi, GitHubApi } from '/apis';
 import { tracerManager } from '/core';
 import { actions } from '/reducers';
 import { extension, refineGist } from '/common/util';
-import { exts, us } from '/common/config';
-import README from '/static/README.md';
-import SCRATCH_PAPER from '/static/SCRATCH_PAPER.md';
+import { languages, exts, us } from '/common/config';
+import { README_MD, SCRATCH_PAPER_MD } from '/skeletons';
 import styles from './stylesheet.scss';
 
 loadProgressBar();
@@ -135,15 +134,16 @@ class App extends React.Component {
       fetchPromise = CategoryApi.getAlgorithm(categoryKey, algorithmKey)
         .then(({ algorithm }) => algorithm);
     } else if (gistId === 'new') {
+      const language = languages.find(language => language.ext === ext);
       fetchPromise = Promise.resolve({
         titles: ['Scratch Paper', 'Untitled'],
         files: [{
           name: 'README.md',
-          content: SCRATCH_PAPER,
+          content: SCRATCH_PAPER_MD,
           contributors: undefined,
         }, {
           name: `code.${ext}`,
-          content: '', // TODO: put import statements as default
+          content: language ? language.skeleton : '', // TODO: put import statements as default
           contributors: undefined,
         }],
       });
@@ -156,7 +156,7 @@ class App extends React.Component {
       .then(algorithm => this.props.setCurrent(categoryKey, algorithmKey, gistId, algorithm.titles, algorithm.files))
       .catch(() => this.props.setCurrent(undefined, undefined, undefined, ['Algorithm Visualizer'], [{
         name: 'README.md',
-        content: README,
+        content: README_MD,
         contributors: [us],
       }]))
       .finally(() => {
@@ -245,7 +245,6 @@ class App extends React.Component {
       <FontAwesomeIcon fixedWidth icon={faPlus} />,
     );
 
-    // TODO: let google search within algorithm-visualizer.org
     return (
       <div className={styles.app}>
         <Helmet>
@@ -268,7 +267,7 @@ class App extends React.Component {
           <TabContainer className={styles.editor_tab_container} titles={editorTitles} tabIndex={editorTabIndex}
                         onChangeTabIndex={tabIndex => this.handleChangeEditorTabIndex(tabIndex)}>
             {
-              files.map((file, i) => (
+              files.map((file, i) => ( // TODO: editor cursor should stay when moved to scratch paper
                 <CodeEditor key={[...titles, i].join('--')} file={file}
                             onDeleteFile={file => this.handleDeleteFile(file)} />
               ))

@@ -44,8 +44,12 @@ module.exports = {
   },
   module: {
     rules: [
-      { test: /\.(js|jsx)$/, use: 'babel-loader', include: srcPath },
       {
+        test: /\.(js|jsx)$/,
+        use: 'babel-loader',
+        include: srcPath,
+        exclude: path.resolve(srcPath, 'skeletons'),
+      }, {
         test: /\.scss$/,
         use: filter([
           __DEV__ && 'css-hot-loader',
@@ -63,7 +67,6 @@ module.exports = {
         ]),
         exclude: srcPath,
       },
-      { test: /\.md$/, use: 'raw-loader' },
     ],
   },
   plugins: filter([

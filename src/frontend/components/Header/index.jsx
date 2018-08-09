@@ -102,6 +102,7 @@ class Header extends React.Component {
     const { gistId, titles } = this.props.current;
     const { ext, user } = this.props.env;
 
+    // TODO: remove the 'run' button and add 'build' and 'play' buttons
     return (
       <header className={classes(styles.header, className)}>
         <div className={styles.row}>
