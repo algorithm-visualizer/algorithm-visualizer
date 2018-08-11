@@ -8,7 +8,7 @@ const setCurrent = createAction(`${prefix}/SET_CURRENT`, (categoryKey, algorithm
 const renameScratchPaper = createAction(`${prefix}/RENAME_SCRATCH_PAPER`, title => ({ titles: ['Scratch Paper', title] }));
 const addFile = createAction(`${prefix}/ADD_FILE`, file => ({ file }));
 const modifyFile = createAction(`${prefix}/MODIFY_FILE`, file => ({ file }));
-const deleteFile = createAction(`${prefix}/DELETE_FILE`, file => ({ file }));
+const deleteFile = createAction(`${prefix}/DELETE_FILE`, index => ({ index }));
 const renameFile = createAction(`${prefix}/RENAME_FILE`, (index, name) => ({ index, name }));
 
 export const actions = {
@@ -62,8 +62,8 @@ export default handleActions({
     return getNextState(state, files);
   },
   [deleteFile]: (state, { payload }) => {
-    const { file } = payload;
-    const files = state.files.filter(oldFile => oldFile.name !== file.name);
+    const { index } = payload;
+    const files = state.files.filter((file, i) => i !== index);
     return getNextState(state, files);
   },
   [renameFile]: (state, { payload }) => {

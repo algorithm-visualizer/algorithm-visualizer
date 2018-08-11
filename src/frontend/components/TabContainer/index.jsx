@@ -24,9 +24,7 @@ class TabContainer extends React.Component {
           <div className={classes(styles.title, styles.fake)} />
         </div>
         <div className={styles.content}>
-          {
-            React.Children.toArray(children)[tabIndex]
-          }
+          {children}
         </div>
       </div>
     );

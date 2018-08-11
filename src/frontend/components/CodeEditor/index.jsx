@@ -19,10 +19,6 @@ import styles from './stylesheet.scss';
 
 @connect(({ current, env, player }) => ({ current, env, player }), actions)
 class CodeEditor extends React.Component {
-  componentDidMount() {
-    this.props.shouldBuild();
-  }
-
   handleChangeCode(code) {
     const { file } = this.props;
     this.props.modifyFile({ ...file, content: code });
@@ -30,9 +26,11 @@ class CodeEditor extends React.Component {
   }
 
   render() {
-    const { className, file, onDeleteFile } = this.props;
+    const { className, file, onClickDelete } = this.props;
     const { user } = this.props.env;
     const { lineIndicator } = this.props.player;
+
+    if (!file) return null;
 
     const fileExt = extension(file.name);
     const language = languages.find(language => language.ext === fileExt);
@@ -70,7 +68,7 @@ class CodeEditor extends React.Component {
           }
           <div className={styles.empty}>
             <div className={styles.empty} />
-            <Button className={styles.delete} icon={faTrashAlt} primary onClick={() => onDeleteFile(file)}
+            <Button className={styles.delete} icon={faTrashAlt} primary onClick={onClickDelete}
                     confirmNeeded>
               <Ellipsis>Delete File</Ellipsis>
             </Button>

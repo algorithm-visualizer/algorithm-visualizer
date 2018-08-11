@@ -141,7 +141,7 @@ class App extends React.Component {
           contributors: undefined,
         }, {
           name: `code.${ext}`,
-          content: language ? language.skeleton : '', // TODO: put import statements as default
+          content: language ? language.skeleton : '',
           contributors: undefined,
         }],
       });
@@ -174,6 +174,7 @@ class App extends React.Component {
     const { files } = this.props.current;
     if (editorTabIndex === files.length) this.handleAddFile();
     this.setState({ editorTabIndex });
+    this.props.shouldBuild();
   }
 
   handleAddFile() {
@@ -194,15 +195,11 @@ class App extends React.Component {
     this.props.renameFile(editorTabIndex, value);
   }
 
-  handleDeleteFile(file) {
-    const { files } = this.props.current;
+  handleDeleteFile() {
     const { editorTabIndex } = this.state;
-    if (files.indexOf(file) < editorTabIndex) {
-      this.handleChangeEditorTabIndex(editorTabIndex - 1);
-    } else {
-      this.handleChangeEditorTabIndex(Math.min(editorTabIndex, files.length - 2));
-    }
-    this.props.deleteFile(file);
+    const { files } = this.props.current;
+    this.handleChangeEditorTabIndex(Math.min(editorTabIndex, files.length - 2));
+    this.props.deleteFile(editorTabIndex);
   }
 
   toggleNavigatorOpened(navigatorOpened = !this.state.navigatorOpened) {
@@ -230,13 +227,13 @@ class App extends React.Component {
     const { titles, files } = this.props.current;
 
     const gistSaved = this.isGistSaved();
-
     const description = this.getDescription();
+    const file = files[editorTabIndex];
 
     const editorTitles = files.map(file => file.name);
-    if (files[editorTabIndex]) {
+    if (file) {
       editorTitles[editorTabIndex] = (
-        <AutosizeInput className={styles.input_title} value={files[editorTabIndex].name}
+        <AutosizeInput className={styles.input_title} value={file.name}
                        onClick={e => e.stopPropagation()} onChange={e => this.handleRenameFile(e)} />
       );
     }
@@ -253,7 +250,7 @@ class App extends React.Component {
         <Header className={styles.header} onClickTitleBar={() => this.toggleNavigatorOpened()}
                 navigatorOpened={navigatorOpened} loadScratchPapers={() => this.loadScratchPapers()}
                 loadAlgorithm={params => this.loadAlgorithm(params)} gistSaved={gistSaved}
-                file={files[editorTabIndex]} />
+                file={file} />
         <ResizableContainer className={styles.workspace} horizontal weights={workspaceWeights}
                             visibles={[navigatorOpened, true, true]}
                             onChangeWeights={weights => this.handleChangeWorkspaceWeights(weights)}>
@@ -261,12 +258,7 @@ class App extends React.Component {
           <VisualizationViewer className={styles.visualization_viewer} />
           <TabContainer className={styles.editor_tab_container} titles={editorTitles} tabIndex={editorTabIndex}
                         onChangeTabIndex={tabIndex => this.handleChangeEditorTabIndex(tabIndex)}>
-            {
-              files.map((file, i) => ( // TODO: editor cursor should stay when moved to scratch paper
-                <CodeEditor key={[...titles, i].join('--')} file={file}
-                            onDeleteFile={file => this.handleDeleteFile(file)} />
-              ))
-            }
+            <CodeEditor file={file} onClickDelete={() => this.handleDeleteFile()} />
           </TabContainer>
         </ResizableContainer>
         <ToastContainer className={styles.toast_container} />
