@@ -14,7 +14,7 @@ import faSave from '@fortawesome/fontawesome-free-solid/faSave';
 import faFacebook from '@fortawesome/fontawesome-free-brands/faFacebook';
 import faStar from '@fortawesome/fontawesome-free-solid/faStar';
 import { GitHubApi } from '/apis';
-import { classes, refineGist } from '/common/util';
+import { classes, handleError, refineGist } from '/common/util';
 import { actions } from '/reducers';
 import { languages } from '/common/config';
 import { Button, Ellipsis, ListItem, Player } from '/components';
@@ -38,7 +38,8 @@ class Header extends React.Component {
   }
 
   saveGist() {
-    const { categoryKey, algorithmKey, gistId, titles, files, lastFiles } = this.props.current;
+    const { user } = this.props.env;
+    const { categoryKey, algorithmKey, gistId, titles, files, lastFiles, lastGist } = this.props.current;
     const gist = {
       description: titles[1],
       files: {},
@@ -56,21 +57,28 @@ class Header extends React.Component {
     gist.files['algorithm-visualizer'] = {
       content: 'https://algorithm-visualizer.org/',
     };
-    const savePromise = gistId === 'new' ? GitHubApi.createGist(gist) : GitHubApi.editGist(gistId, gist);
-    savePromise
+    const save = gist => {
+      if (!user) return Promise.reject(new Error('Sign In Required'));
+      if (gistId === 'new') return GitHubApi.createGist(gist);
+      if (gistId === 'forked') {
+        return GitHubApi.forkGist(lastGist.id).then(forkedGist => GitHubApi.editGist(forkedGist.id, gist));
+      }
+      return GitHubApi.editGist(gistId, gist);
+    };
+    save(gist)
       .then(refineGist)
-      .then(algorithm => this.props.setCurrent(categoryKey, algorithmKey, algorithm.gistId, algorithm.titles, algorithm.files))
+      .then(algorithm => this.props.setCurrent(categoryKey, algorithmKey, algorithm.gistId, algorithm.titles, algorithm.files, algorithm.gist))
       .then(this.props.loadScratchPapers)
-      .catch(this.props.showErrorToast);
+      .catch(handleError.bind(this));
   }
 
   deleteGist() {
     const { gistId } = this.props.current;
-    const deletePromise = gistId === 'new' ? Promise.resolve() : GitHubApi.deleteGist(gistId);
+    const deletePromise = ['new', 'forked'].includes(gistId) ? Promise.resolve() : GitHubApi.deleteGist(gistId);
     deletePromise
       .then(() => this.props.loadAlgorithm({}, true))
       .then(this.props.loadScratchPapers)
-      .catch(this.props.showErrorToast);
+      .catch(handleError.bind(this));
   }
 
   render() {
@@ -102,7 +110,7 @@ class Header extends React.Component {
                     onClick={() => this.saveGist()}>Save</Button>
             <Button icon={faTrashAlt} primary disabled={!gistId} onClick={() => this.deleteGist()}
                     confirmNeeded>Delete</Button>
-            <Button icon={faFacebook} primary disabled={gistId === 'new'}
+            <Button icon={faFacebook} primary disabled={['new', 'forked'].includes(gistId)}
                     href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}>Share</Button>
             <Button icon={faExpandArrowsAlt} primary
                     onClick={() => this.handleClickFullScreen()}>Fullscreen</Button>

@@ -13,7 +13,6 @@ class ProgressBar extends React.Component {
 
   handleMouseDown(e) {
     this.target = e.target;
-    console.log(this.target)
     this.handleMouseMove(e);
     document.addEventListener('mousemove', this.handleMouseMove);
     document.addEventListener('mouseup', this.handleMouseUp);

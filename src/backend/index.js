@@ -31,7 +31,7 @@ app.use((err, req, res, next) => {
   ];
   const [, status] = statusMap.find(([Error]) => err instanceof Error);
   res.status(status);
-  res.json(err);
+  res.send(err.message);
   console.error(err);
 });
 

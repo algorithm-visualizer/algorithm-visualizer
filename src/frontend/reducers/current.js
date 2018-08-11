@@ -1,9 +1,10 @@
 import { combineActions, createAction, handleActions } from 'redux-actions';
+import Cookies from 'js-cookie';
 
 const prefix = 'CURRENT';
 
-const setCurrent = createAction(`${prefix}/SET_CURRENT`, (categoryKey, algorithmKey, gistId, titles, files) => ({
-  categoryKey, algorithmKey, gistId, titles, files, lastTitles: titles, lastFiles: files,
+const setCurrent = createAction(`${prefix}/SET_CURRENT`, (categoryKey, algorithmKey, gistId, titles, files, gist) => ({
+  categoryKey, algorithmKey, gistId, titles, files, lastTitles: titles, lastFiles: files, lastGist: gist,
 }));
 const renameScratchPaper = createAction(`${prefix}/RENAME_SCRATCH_PAPER`, title => ({ titles: ['Scratch Paper', title] }));
 const addFile = createAction(`${prefix}/ADD_FILE`, file => ({ file }));
@@ -28,20 +29,33 @@ const defaultState = {
   files: [],
   lastTitles: [],
   lastFiles: [],
+  lastGist: undefined,
 };
 
-const getNextState = (state, files) => ({
-  ...state,
-  ...(state.gistId ? {} : {
-    categoryKey: undefined,
-    algorithmKey: undefined,
-    gistId: 'new',
-    titles: ['Scratch Paper', 'Untitled'],
-    lastTitles: [],
-    lastFiles: [],
-  }),
-  files: files.map(file => ({ ...file, contributors: undefined })),
-});
+const getNextState = (state, files) => {
+  let update = {};
+  if (!state.gistId) {
+    update = {
+      categoryKey: undefined,
+      algorithmKey: undefined,
+      gistId: 'new',
+      titles: ['Scratch Paper', 'Untitled'],
+      lastTitles: [],
+      lastFiles: [],
+    };
+  } else if (!['new', 'forked'].includes(state.gistId) && Cookies.get('login') !== state.lastGist.owner.login) {
+    update = {
+      gistId: 'forked',
+      lastTitles: [],
+      lastFiles: [],
+    };
+  }
+  return {
+    ...state,
+    ...update,
+    files: files.map(file => ({ ...file, contributors: undefined })),
+  };
+};
 
 export default handleActions({
   [combineActions(

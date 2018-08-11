@@ -18,7 +18,12 @@ const refineGist = gist => {
     content: file.content,
     contributors: [{ login, avatar_url }],
   }));
-  return { gistId, titles, files };
+  return { gistId, titles, files, gist };
+};
+
+const handleError = function (error) {
+  console.error(error);
+  this.props.showErrorToast(error.message);
 };
 
 export {
@@ -26,4 +31,5 @@ export {
   distance,
   extension,
   refineGist,
+  handleError,
 };

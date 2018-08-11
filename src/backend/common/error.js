@@ -1,7 +1,4 @@
 class ClientError extends Error {
-  toJSON() {
-    return { name: this.constructor.name, message: this.message };
-  }
 }
 
 class NotFoundError extends ClientError {

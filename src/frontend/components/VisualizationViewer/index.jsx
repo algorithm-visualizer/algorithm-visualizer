@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { classes } from '/common/util';
+import { classes, handleError } from '/common/util';
 import { ResizableContainer } from '/components';
 import { actions } from '/reducers';
 import styles from './stylesheet.scss';
@@ -82,13 +82,8 @@ class VisualizationViewer extends React.Component {
         data[method](...args);
       }
     } catch (error) {
-      this.handleError(error);
+      handleError.bind(this)(error);
     }
-  }
-
-  handleError(error) {
-    console.error(error);
-    this.props.showErrorToast({ name: error.name, message: error.message });
   }
 
   applyChunk(chunk) {

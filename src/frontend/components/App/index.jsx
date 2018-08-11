@@ -19,7 +19,7 @@ import {
 } from '/components';
 import { CategoryApi, GitHubApi } from '/apis';
 import { actions } from '/reducers';
-import { extension, refineGist } from '/common/util';
+import { extension, handleError, refineGist } from '/common/util';
 import { exts, languages, us } from '/common/config';
 import { README_MD, SCRATCH_PAPER_MD } from '/skeletons';
 import styles from './stylesheet.scss';
@@ -51,7 +51,7 @@ class App extends React.Component {
 
     CategoryApi.getCategories()
       .then(({ categories }) => this.props.setCategories(categories))
-      .catch(this.props.showErrorToast);
+      .catch(handleError.bind(this));
 
     window.onbeforeunload = () => this.isGistSaved() ? undefined : 'Changes you made will not be saved.';
   }
@@ -90,6 +90,7 @@ class App extends React.Component {
       .then(user => {
         const { login, avatar_url } = user;
         this.props.setUser({ login, avatar_url });
+        Cookies.set('login', login);
       })
       .then(() => this.loadScratchPapers())
       .catch(() => this.signOut());
@@ -98,7 +99,10 @@ class App extends React.Component {
   signOut() {
     Cookies.remove('access_token');
     GitHubApi.auth(undefined)
-      .then(() => this.props.setUser(undefined))
+      .then(() => {
+        this.props.setUser(undefined);
+        Cookies.remove('login');
+      })
       .then(() => this.props.setScratchPapers([]));
   }
 
@@ -122,7 +126,7 @@ class App extends React.Component {
     });
     return paginateGists()
       .then(scratchPapers => this.props.setScratchPapers(scratchPapers))
-      .catch(this.props.showErrorToast);
+      .catch(handleError.bind(this));
   }
 
   loadAlgorithm({ categoryKey, algorithmKey, gistId }, forceLoad = false) {
@@ -133,7 +137,8 @@ class App extends React.Component {
     if (categoryKey && algorithmKey) {
       fetchPromise = CategoryApi.getAlgorithm(categoryKey, algorithmKey)
         .then(({ algorithm }) => algorithm);
-    } else if (gistId === 'new') {
+    } else if (['new', 'forked'].includes(gistId)) {
+      gistId = 'new';
       const language = languages.find(language => language.ext === ext);
       fetchPromise = Promise.resolve({
         titles: ['Scratch Paper', 'Untitled'],
@@ -153,12 +158,15 @@ class App extends React.Component {
       fetchPromise = Promise.reject(new Error());
     }
     fetchPromise
-      .then(algorithm => this.props.setCurrent(categoryKey, algorithmKey, gistId, algorithm.titles, algorithm.files))
-      .catch(() => this.props.setCurrent(undefined, undefined, undefined, ['Algorithm Visualizer'], [{
-        name: 'README.md',
-        content: README_MD,
-        contributors: [us],
-      }]))
+      .then(algorithm => this.props.setCurrent(categoryKey, algorithmKey, gistId, algorithm.titles, algorithm.files, algorithm.gist))
+      .catch(error => {
+        if (error.message) handleError.bind(this)(error);
+        this.props.setCurrent(undefined, undefined, undefined, ['Algorithm Visualizer'], [{
+          name: 'README.md',
+          content: README_MD,
+          contributors: [us],
+        }], undefined);
+      })
       .finally(() => {
         const { files } = this.props.current;
         let editorTabIndex = files.findIndex(file => extension(file.name) === ext);

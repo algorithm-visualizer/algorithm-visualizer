@@ -1,10 +1,13 @@
 import Promise from 'bluebird';
 import axios from 'axios';
-import { RuntimeError } from '/common/error';
 
 axios.interceptors.response.use(
   response => response.data,
-  error => Promise.reject(error.response.data),
+  error => {
+    const { data } = error.response;
+    const message = typeof data === 'string' ? data : JSON.stringify(data);
+    return Promise.reject(new Error(message));
+  },
 );
 
 const request = (url, process) => {
@@ -66,6 +69,7 @@ const GitHubApi = {
   editGist: PATCH('https://api.github.com/gists/:id'),
   getGist: GET('https://api.github.com/gists/:id'),
   deleteGist: DELETE('https://api.github.com/gists/:id'),
+  forkGist: POST('https://api.github.com/gists/:id/forks'),
 };
 
 let jsWorker = null;
@@ -83,7 +87,7 @@ const TracerApi = {
     if (jsWorker) jsWorker.terminate();
     jsWorker = new Worker('/api/tracers/js');
     jsWorker.onmessage = e => resolve(e.data);
-    jsWorker.onerror = e => reject(new RuntimeError(e.message));
+    jsWorker.onerror = reject;
     jsWorker.postMessage(code);
   }),
   cpp: POST('/tracers/cpp'),

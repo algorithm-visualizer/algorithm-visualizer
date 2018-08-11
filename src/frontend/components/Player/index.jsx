@@ -7,13 +7,11 @@ import faChevronLeft from '@fortawesome/fontawesome-free-solid/faChevronLeft';
 import faChevronRight from '@fortawesome/fontawesome-free-solid/faChevronRight';
 import faPause from '@fortawesome/fontawesome-free-solid/faPause';
 import faWrench from '@fortawesome/fontawesome-free-solid/faWrench';
-import { classes, extension } from '/common/util';
+import { classes, extension, handleError } from '/common/util';
 import { TracerApi } from '/apis';
-import { CompileError } from '/common/error';
 import { actions } from '/reducers';
-import { Button } from '/components';
+import { Button, ProgressBar } from '/components';
 import styles from './stylesheet.scss';
-import ProgressBar from '../ProgressBar';
 
 @connect(({ player }) => ({ player }), actions)
 class Player extends React.Component {
@@ -73,10 +71,10 @@ class Player extends React.Component {
     const ext = extension(file.name);
     (ext in TracerApi ?
       TracerApi[ext]({ code: file.content }) :
-      Promise.reject(new CompileError('Language Not Supported')))
+      Promise.reject(new Error('Language Not Supported')))
       .then(traces => this.reset(traces))
       .then(() => this.next())
-      .catch(error => this.handleError(error))
+      .catch(handleError.bind(this))
       .finally(() => this.setState({ building: false }));
   }
 
@@ -115,11 +113,6 @@ class Player extends React.Component {
     if (!this.isValidCursor(cursor)) return false;
     this.props.setCursor(cursor);
     return true;
-  }
-
-  handleError(error) {
-    console.error(error);
-    this.props.showErrorToast({ name: error.name, message: error.message });
   }
 
   handleChangeInterval(interval) {
