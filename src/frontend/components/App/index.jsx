@@ -123,8 +123,8 @@ class App extends React.Component {
       .catch(this.props.showErrorToast);
   }
 
-  loadAlgorithm({ categoryKey, algorithmKey, gistId }) {
-    if (!this.isGistSaved() && !window.confirm('Are you sure want to discard changes?')) return;
+  loadAlgorithm({ categoryKey, algorithmKey, gistId }, forceLoad = false) {
+    if (!forceLoad && !this.isGistSaved() && !window.confirm('Are you sure want to discard changes?')) return;
 
     const { ext } = this.props.env;
     let fetchPromise = null;
@@ -249,12 +249,12 @@ class App extends React.Component {
         </Helmet>
         <Header className={styles.header} onClickTitleBar={() => this.toggleNavigatorOpened()}
                 navigatorOpened={navigatorOpened} loadScratchPapers={() => this.loadScratchPapers()}
-                loadAlgorithm={params => this.loadAlgorithm(params)} gistSaved={gistSaved}
+                loadAlgorithm={this.loadAlgorithm.bind(this)} gistSaved={gistSaved}
                 file={file} />
         <ResizableContainer className={styles.workspace} horizontal weights={workspaceWeights}
                             visibles={[navigatorOpened, true, true]}
                             onChangeWeights={weights => this.handleChangeWorkspaceWeights(weights)}>
-          <Navigator loadAlgorithm={params => this.loadAlgorithm(params)} />
+          <Navigator loadAlgorithm={this.loadAlgorithm.bind(this)} />
           <VisualizationViewer className={styles.visualization_viewer} />
           <TabContainer className={styles.editor_tab_container} titles={editorTitles} tabIndex={editorTabIndex}
                         onChangeTabIndex={tabIndex => this.handleChangeEditorTabIndex(tabIndex)}>

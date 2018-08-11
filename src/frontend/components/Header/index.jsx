@@ -69,7 +69,7 @@ class Header extends React.Component {
     const { gistId } = this.props.current;
     const deletePromise = gistId === 'new' ? Promise.resolve() : GitHubApi.deleteGist(gistId);
     deletePromise
-      .then(() => this.props.loadAlgorithm({}))
+      .then(() => this.props.loadAlgorithm({}, true))
       .then(this.props.loadScratchPapers)
       .catch(this.props.showErrorToast);
   }
