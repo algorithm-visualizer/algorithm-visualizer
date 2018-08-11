@@ -36,6 +36,8 @@ class App extends React.Component {
       workspaceWeights: [1, 2, 2],
       editorTabIndex: -1,
     };
+
+    this.codeEditorRef = React.createRef();
   }
 
   componentDidMount() {
@@ -141,7 +143,7 @@ class App extends React.Component {
           contributors: undefined,
         }, {
           name: `code.${ext}`,
-          content: language ? language.skeleton : '',
+          content: language.skeleton,
           contributors: undefined,
         }],
       });
@@ -168,6 +170,7 @@ class App extends React.Component {
 
   handleChangeWorkspaceWeights(workspaceWeights) {
     this.setState({ workspaceWeights });
+    this.codeEditorRef.current.getWrappedInstance().handleResize();
   }
 
   handleChangeEditorTabIndex(editorTabIndex) {
@@ -178,13 +181,15 @@ class App extends React.Component {
   }
 
   handleAddFile() {
+    const { ext } = this.props.env;
     const { files } = this.props.current;
-    let name = 'untitled';
+    let name = `code.${ext}`;
     let count = 0;
-    while (files.some(file => file.name === name)) name = `untitled-${++count}`;
+    while (files.some(file => file.name === name)) name = `code-${++count}.${ext}`;
+    const language = languages.find(language => language.ext === ext);
     this.props.addFile({
       name,
-      content: '',
+      content: language.skeleton,
       contributors: undefined,
     });
   }
@@ -258,7 +263,7 @@ class App extends React.Component {
           <VisualizationViewer className={styles.visualization_viewer} />
           <TabContainer className={styles.editor_tab_container} titles={editorTitles} tabIndex={editorTabIndex}
                         onChangeTabIndex={tabIndex => this.handleChangeEditorTabIndex(tabIndex)}>
-            <CodeEditor file={file} onClickDelete={() => this.handleDeleteFile()} />
+            <CodeEditor ref={this.codeEditorRef} file={file} onClickDelete={() => this.handleDeleteFile()} />
           </TabContainer>
         </ResizableContainer>
         <ToastContainer className={styles.toast_container} />

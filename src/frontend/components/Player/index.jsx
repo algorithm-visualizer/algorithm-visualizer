@@ -103,8 +103,8 @@ class Player extends React.Component {
 
   pause() {
     if (this.timer) {
-      window.clearInterval(this.timer);
-      this.timer = null;
+      window.clearTimeout(this.timer);
+      this.timer = undefined;
       this.setState({ playing: false });
     }
   }

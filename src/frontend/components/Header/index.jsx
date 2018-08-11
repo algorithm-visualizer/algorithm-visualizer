@@ -62,7 +62,6 @@ class Header extends React.Component {
       .then(algorithm => this.props.setCurrent(categoryKey, algorithmKey, algorithm.gistId, algorithm.titles, algorithm.files))
       .then(this.props.loadScratchPapers)
       .catch(this.props.showErrorToast);
-    // TODO: create a new gist in case of permission error
   }
 
   deleteGist() {

@@ -17,12 +17,22 @@ import { languages } from '/common/config';
 import { Button, Ellipsis } from '/components';
 import styles from './stylesheet.scss';
 
-@connect(({ current, env, player }) => ({ current, env, player }), actions)
+@connect(({ current, env, player }) => ({ current, env, player }), actions, null, { withRef: true })
 class CodeEditor extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.aceEditorRef = React.createRef();
+  }
+
   handleChangeCode(code) {
     const { file } = this.props;
     this.props.modifyFile({ ...file, content: code });
     if (extension(file.name) === 'md') this.props.shouldBuild();
+  }
+
+  handleResize() {
+    this.aceEditorRef.current.editor.resize();
   }
 
   render() {
@@ -40,6 +50,7 @@ class CodeEditor extends React.Component {
       <div className={classes(styles.code_editor, className)}>
         <AceEditor
           className={styles.ace_editor}
+          ref={this.aceEditorRef}
           mode={mode}
           theme="tomorrow_night_eighties"
           name="code_editor"
@@ -74,7 +85,7 @@ class CodeEditor extends React.Component {
             </Button>
           </div>
         </div>
-      </div> // TODO: need resizing when parent resizes
+      </div>
     );
   }
 }

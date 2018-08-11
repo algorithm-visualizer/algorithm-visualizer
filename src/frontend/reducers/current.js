@@ -40,7 +40,7 @@ const getNextState = (state, files) => ({
     lastTitles: [],
     lastFiles: [],
   }),
-  files: files.map(file => ({ ...file, contributors: [] })),
+  files: files.map(file => ({ ...file, contributors: undefined })),
 });
 
 export default handleActions({

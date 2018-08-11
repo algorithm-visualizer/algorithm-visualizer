@@ -22,7 +22,7 @@ class MarkdownRenderer extends Renderer {
       } else {
         newSrc = src;
       }
-      return <img src={newSrc} {...rest} />;
+      return <img src={newSrc} style={{ maxWidth: '100%' }} {...rest} />;
     };
 
     return (

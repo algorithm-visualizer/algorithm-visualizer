@@ -19,7 +19,10 @@ class Button extends React.Component {
   }
 
   componentWillUnmount() {
-    if (this.timeout) window.clearTimeout(this.timeout);
+    if (this.timeout) {
+      window.clearTimeout(this.timeout);
+      this.timeout = undefined;
+    }
   }
 
   render() {
@@ -31,13 +34,22 @@ class Button extends React.Component {
         className = classes(styles.confirming, className);
         icon = faExclamationCircle;
         children = <Ellipsis key="text">Click to Confirm</Ellipsis>;
+        const onClickOriginal = onClick;
+        onClick = () => {
+          if (onClickOriginal) onClickOriginal();
+          if (this.timeout) {
+            window.clearTimeout(this.timeout);
+            this.timeout = undefined;
+            this.setState({ confirming: false });
+          }
+        };
       } else {
         to = null;
         href = null;
         onClick = () => {
           this.setState({ confirming: true });
           this.timeout = window.setTimeout(() => {
-            this.timeout = null;
+            this.timeout = undefined;
             this.setState({ confirming: false });
           }, 2000);
         };
