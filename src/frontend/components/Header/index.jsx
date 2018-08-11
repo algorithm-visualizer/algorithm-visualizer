@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import InputRange from 'react-input-range';
 import AutosizeInput from 'react-input-autosize';
 import screenfull from 'screenfull';
 import Promise from 'bluebird';
@@ -8,9 +7,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import faAngleRight from '@fortawesome/fontawesome-free-solid/faAngleRight';
 import faCaretDown from '@fortawesome/fontawesome-free-solid/faCaretDown';
 import faCaretRight from '@fortawesome/fontawesome-free-solid/faCaretRight';
-import faPlay from '@fortawesome/fontawesome-free-solid/faPlay';
-import faChevronLeft from '@fortawesome/fontawesome-free-solid/faChevronLeft';
-import faPause from '@fortawesome/fontawesome-free-solid/faPause';
 import faExpandArrowsAlt from '@fortawesome/fontawesome-free-solid/faExpandArrowsAlt';
 import faGithub from '@fortawesome/fontawesome-free-brands/faGithub';
 import faTrashAlt from '@fortawesome/fontawesome-free-solid/faTrashAlt';
@@ -21,29 +17,11 @@ import { GitHubApi } from '/apis';
 import { classes, refineGist } from '/common/util';
 import { actions } from '/reducers';
 import { languages } from '/common/config';
-import { Button, Ellipsis, ListItem } from '/components';
-import { tracerManager } from '/core';
+import { Button, Ellipsis, ListItem, Player } from '/components';
 import styles from './stylesheet.scss';
 
 @connect(({ current, env }) => ({ current, env }), actions)
 class Header extends React.Component {
-  constructor(props) {
-    super(props);
-
-    const { interval, paused, started } = tracerManager;
-    this.state = {
-      interval, paused, started,
-    };
-  }
-
-  componentDidMount() {
-    tracerManager.setOnUpdateStatus(update => this.setState(update));
-  }
-
-  componentWillUnmount() {
-    tracerManager.setOnUpdateStatus(null);
-  }
-
   handleClickFullScreen() {
     if (screenfull.enabled) {
       if (screenfull.isFullscreen) {
@@ -97,12 +75,10 @@ class Header extends React.Component {
   }
 
   render() {
-    const { interval, paused, started } = this.state;
-    const { className, onClickTitleBar, navigatorOpened, onAction, gistSaved } = this.props;
+    const { className, onClickTitleBar, navigatorOpened, gistSaved, file } = this.props;
     const { gistId, titles } = this.props.current;
     const { ext, user } = this.props.env;
 
-    // TODO: remove the 'run' button and add 'build' and 'play' buttons
     return (
       <header className={classes(styles.header, className)}>
         <div className={styles.row}>
@@ -159,42 +135,7 @@ class Header extends React.Component {
               </div>
             </Button>
           </div>
-          <div className={styles.section} onClick={onAction}>
-            {
-              started ? (
-                <Button icon={faPlay} primary onClick={() => tracerManager.run()} active>Rerun</Button>
-              ) : (
-                <Button icon={faPlay} primary onClick={() => tracerManager.run()}>Run</Button>
-              )
-            }
-            <Button icon={faChevronLeft} primary disabled={!started}
-                    onClick={() => tracerManager.prev()}>Prev</Button>
-            {
-              paused ? (
-                <Button icon={faPause} primary onClick={() => tracerManager.resume()} active>Resume</Button>
-              ) : (
-                <Button icon={faPause} primary disabled={!started}
-                        onClick={() => tracerManager.pause()}>Pause</Button>
-              )
-            }
-            <Button icon={faCaretRight} reverse primary disabled={!started}
-                    onClick={() => tracerManager.next()}>Next</Button>
-            <div className={styles.interval}>
-              Speed
-              <InputRange
-                classNames={{
-                  inputRange: styles.range,
-                  labelContainer: styles.range_label_container,
-                  slider: styles.range_slider,
-                  track: styles.range_track,
-                }}
-                maxValue={2000}
-                minValue={100}
-                step={100}
-                value={interval}
-                onChange={interval => tracerManager.setInterval(interval)} />
-            </div>
-          </div>
+          <Player className={styles.section} file={file} />
         </div>
       </header>
     );

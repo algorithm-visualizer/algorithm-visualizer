@@ -11,7 +11,6 @@ import 'axios-progress-bar/dist/nprogress.css';
 import {
   CodeEditor,
   Header,
-  MarkdownViewer,
   Navigator,
   ResizableContainer,
   TabContainer,
@@ -19,10 +18,9 @@ import {
   VisualizationViewer,
 } from '/components';
 import { CategoryApi, GitHubApi } from '/apis';
-import { tracerManager } from '/core';
 import { actions } from '/reducers';
 import { extension, refineGist } from '/common/util';
-import { languages, exts, us } from '/common/config';
+import { exts, languages, us } from '/common/config';
 import { README_MD, SCRATCH_PAPER_MD } from '/skeletons';
 import styles from './stylesheet.scss';
 
@@ -36,7 +34,6 @@ class App extends React.Component {
     this.state = {
       navigatorOpened: true,
       workspaceWeights: [1, 2, 2],
-      viewerTabIndex: 0,
       editorTabIndex: -1,
     };
   }
@@ -53,15 +50,11 @@ class App extends React.Component {
     CategoryApi.getCategories()
       .then(({ categories }) => this.props.setCategories(categories))
       .catch(this.props.showErrorToast);
-
-    tracerManager.setOnError(error => this.props.showErrorToast({ name: error.name, message: error.message }));
   }
 
   componentWillUnmount() {
     delete window.signIn;
     delete window.signOut;
-
-    tracerManager.setOnError(null);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -172,10 +165,6 @@ class App extends React.Component {
     this.setState({ workspaceWeights });
   }
 
-  handleChangeViewerTabIndex(viewerTabIndex) {
-    this.setState({ viewerTabIndex });
-  }
-
   handleChangeEditorTabIndex(editorTabIndex) {
     const { files } = this.props.current;
     if (editorTabIndex === files.length) this.handleAddFile();
@@ -203,8 +192,11 @@ class App extends React.Component {
   handleDeleteFile(file) {
     const { files } = this.props.current;
     const { editorTabIndex } = this.state;
-    if (files.indexOf(file) < editorTabIndex) this.handleChangeEditorTabIndex(editorTabIndex - 1);
-    else this.handleChangeEditorTabIndex(Math.min(editorTabIndex, files.length - 2));
+    if (files.indexOf(file) < editorTabIndex) {
+      this.handleChangeEditorTabIndex(editorTabIndex - 1);
+    } else {
+      this.handleChangeEditorTabIndex(Math.min(editorTabIndex, files.length - 2));
+    }
     this.props.deleteFile(file);
   }
 
@@ -220,19 +212,21 @@ class App extends React.Component {
       serializeFiles(files) === serializeFiles(lastFiles);
   }
 
+  getDescription() {
+    const { files } = this.props.current;
+    const readmeFile = files.find(file => file.name === 'README.md');
+    if (!readmeFile) return '';
+    const groups = /^\s*# .*\n+([^\n]+)/.exec(readmeFile.content);
+    return groups && groups[1] || '';
+  }
+
   render() {
-    const { navigatorOpened, workspaceWeights, viewerTabIndex, editorTabIndex } = this.state;
+    const { navigatorOpened, workspaceWeights, editorTabIndex } = this.state;
     const { titles, files } = this.props.current;
 
     const gistSaved = this.isGistSaved();
 
-    const readmeFile = files.find(file => file.name === 'README.md') || {
-      name: 'README.md',
-      content: `# ${titles[1]}\nREADME.md not found`,
-      contributors: [us],
-    };
-    const groups = /^\s*# .*\n+([^\n]+)/.exec(readmeFile.content);
-    const description = groups && groups[1] || '';
+    const description = this.getDescription();
 
     const editorTitles = files.map(file => file.name);
     if (files[editorTabIndex]) {
@@ -253,17 +247,13 @@ class App extends React.Component {
         </Helmet>
         <Header className={styles.header} onClickTitleBar={() => this.toggleNavigatorOpened()}
                 navigatorOpened={navigatorOpened} loadScratchPapers={() => this.loadScratchPapers()}
-                loadAlgorithm={params => this.loadAlgorithm(params)}
-                onAction={() => this.handleChangeViewerTabIndex(1)} gistSaved={gistSaved} />
+                loadAlgorithm={params => this.loadAlgorithm(params)} gistSaved={gistSaved}
+                file={files[editorTabIndex]} />
         <ResizableContainer className={styles.workspace} horizontal weights={workspaceWeights}
                             visibles={[navigatorOpened, true, true]}
                             onChangeWeights={weights => this.handleChangeWorkspaceWeights(weights)}>
           <Navigator loadAlgorithm={params => this.loadAlgorithm(params)} />
-          <TabContainer titles={['Description', 'Visualization']} tabIndex={viewerTabIndex}
-                        onChangeTabIndex={tabIndex => this.handleChangeViewerTabIndex(tabIndex)}>
-            <MarkdownViewer source={readmeFile.content} />
-            <VisualizationViewer />
-          </TabContainer>
+          <VisualizationViewer className={styles.visualization_viewer} />
           <TabContainer className={styles.editor_tab_container} titles={editorTitles} tabIndex={editorTabIndex}
                         onChangeTabIndex={tabIndex => this.handleChangeEditorTabIndex(tabIndex)}>
             {

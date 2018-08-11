@@ -1,7 +1,11 @@
 import { Array2DData } from '/core/datas';
-import { tracerManager } from '/core';
+import { Array1DRenderer } from '/core/renderers';
 
 class Array1DData extends Array2DData {
+  getRendererClass() {
+    return Array1DRenderer;
+  }
+
   init() {
     super.init();
     this.chartData = null;
@@ -30,7 +34,7 @@ class Array1DData extends Array2DData {
   }
 
   chart(tracerKey) {
-    this.chartData = tracerKey ? tracerManager.datas[tracerKey] : null;
+    this.chartData = tracerKey ? this.findData(tracerKey) : null;
     this.syncChartData();
   }
 

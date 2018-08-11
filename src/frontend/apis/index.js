@@ -70,6 +70,15 @@ const GitHubApi = {
 
 let jsWorker = null;
 const TracerApi = {
+  md: ({ code }) => Promise.resolve([{
+    tracerKey: '0-MarkdownTracer-Markdown',
+    method: 'construct',
+    args: ['MarkdownTracer', 'Markdown'],
+  }, {
+    tracerKey: '0-MarkdownTracer-Markdown',
+    method: 'set',
+    args: [code],
+  }]),
   js: ({ code }) => new Promise((resolve, reject) => {
     if (jsWorker) jsWorker.terminate();
     jsWorker = new Worker('/api/tracers/js');

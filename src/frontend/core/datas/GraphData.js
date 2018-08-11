@@ -1,8 +1,12 @@
 import { Data } from '/core/datas';
 import { distance } from '/common/util';
-import { tracerManager } from '/core';
+import { GraphRenderer } from '/core/renderers';
 
 class GraphData extends Data {
+  getRendererClass() {
+    return GraphRenderer;
+  }
+
   init() {
     super.init();
     this.dimensions = {
@@ -221,7 +225,7 @@ class GraphData extends Data {
   }
 
   log(tracerKey) {
-    this.logData = tracerKey ? tracerManager.datas[tracerKey] : null;
+    this.logData = tracerKey ? this.findData(tracerKey) : null;
   }
 }
 

@@ -1,15 +1,15 @@
 @import "~/common/stylesheet/index";
 
-.markdown_viewer {
+.markdown {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  padding: 16px;
+  flex: 1;
+  align-self: stretch;
+  padding: 24px;
   font-size: $font-size-large;
   overflow-y: auto;
 
   a {
     text-decoration: underline;
-    cursor: pointer;
   }
 }

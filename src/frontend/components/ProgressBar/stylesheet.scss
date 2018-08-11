@@ -1,0 +1,31 @@
+@import "~/common/stylesheet/index";
+
+.progress_bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-color: $theme-light;
+  cursor: pointer;
+  pointer-events: auto;
+
+  > * {
+    pointer-events: none;
+  }
+
+  .active {
+    position: absolute;
+    height: 100%;
+    left: 0;
+    background-color: $color-active;
+  }
+
+  .label {
+    position: absolute;
+    color: $theme-dark;
+
+    .current {
+      font-weight: bold;
+    }
+  }
+}

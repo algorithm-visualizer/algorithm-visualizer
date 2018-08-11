@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import faExclamationCircle from '@fortawesome/fontawesome-free-solid/faExclamationCircle';
+import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
 import { classes } from '/common/util';
 import { Ellipsis } from '/components';
 import styles from './stylesheet.scss';
@@ -22,7 +23,7 @@ class Button extends React.Component {
   }
 
   render() {
-    let { className, children, to, href, onClick, icon, reverse, selected, disabled, primary, active, confirmNeeded, ...rest } = this.props;
+    let { className, children, to, href, onClick, icon, reverse, selected, disabled, primary, active, confirmNeeded, inProgress, ...rest } = this.props;
     const { confirming } = this.state;
 
     if (confirmNeeded) {
@@ -54,7 +55,8 @@ class Button extends React.Component {
           typeof icon === 'string' ?
             <div className={classes(styles.icon, styles.image)} key="icon"
                  style={{ backgroundImage: `url(${icon})` }} /> :
-            <FontAwesomeIcon className={styles.icon} fixedWidth icon={icon} key="icon" />
+            <FontAwesomeIcon className={styles.icon} fixedWidth icon={inProgress ? faSpinner : icon} spin={inProgress}
+                             key="icon" />
         ),
         children,
       ],

@@ -10,7 +10,6 @@ import 'brace/theme/tomorrow_night_eighties';
 import 'brace/ext/searchbox';
 import faTrashAlt from '@fortawesome/fontawesome-free-solid/faTrashAlt';
 import faUser from '@fortawesome/fontawesome-free-solid/faUser';
-import { tracerManager } from '/core';
 import { classes, extension } from '/common/util';
 import { actions } from '/reducers';
 import { connect } from 'react-redux';
@@ -18,58 +17,22 @@ import { languages } from '/common/config';
 import { Button, Ellipsis } from '/components';
 import styles from './stylesheet.scss';
 
-@connect(({ current, env }) => ({ current, env }), actions)
+@connect(({ current, env, player }) => ({ current, env, player }), actions)
 class CodeEditor extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      lineMarker: null,
-    };
-  }
-
   componentDidMount() {
-    const { file } = this.props;
-    tracerManager.setFile(file, true);
-
-    tracerManager.setOnUpdateLineIndicator(lineIndicator => this.setState({ lineMarker: this.createLineMarker(lineIndicator) }));
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { file } = nextProps;
-    if (file !== this.props.file) {
-      tracerManager.setFile(file, extension(file.name) === 'js');
-    }
-  }
-
-  componentWillUnmount() {
-    tracerManager.setOnUpdateLineIndicator(null);
-  }
-
-  createLineMarker(lineIndicator) {
-    if (lineIndicator === null) return null;
-    const { lineNumber, cursor } = lineIndicator;
-    return {
-      startRow: lineNumber,
-      startCol: 0,
-      endRow: lineNumber,
-      endCol: Infinity,
-      className: styles.current_line_marker,
-      type: 'line',
-      inFront: true,
-      _key: cursor,
-    };
+    this.props.shouldBuild();
   }
 
   handleChangeCode(code) {
     const { file } = this.props;
     this.props.modifyFile({ ...file, content: code });
+    if (extension(file.name) === 'md') this.props.shouldBuild();
   }
 
   render() {
     const { className, file, onDeleteFile } = this.props;
     const { user } = this.props.env;
-    const { lineMarker } = this.state;
+    const { lineIndicator } = this.props.player;
 
     const fileExt = extension(file.name);
     const language = languages.find(language => language.ext === fileExt);
@@ -84,7 +47,16 @@ class CodeEditor extends React.Component {
           name="code_editor"
           editorProps={{ $blockScrolling: true }}
           onChange={code => this.handleChangeCode(code)}
-          markers={lineMarker ? [lineMarker] : []}
+          markers={lineIndicator ? [{
+            startRow: lineIndicator.lineNumber,
+            startCol: 0,
+            endRow: lineIndicator.lineNumber,
+            endCol: Infinity,
+            className: styles.current_line_marker,
+            type: 'line',
+            inFront: true,
+            _key: lineIndicator.cursor,
+          }] : []}
           value={file.content} />
         <div className={classes(styles.contributors_viewer, className)}>
           <span className={classes(styles.contributor, styles.label)}>Contributed by</span>

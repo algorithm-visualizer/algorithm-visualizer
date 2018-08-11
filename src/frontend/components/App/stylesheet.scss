@@ -55,6 +55,10 @@ button {
   .workspace {
     flex: 1;
 
+    .visualization_viewer {
+      background-color: $theme-dark;
+    }
+
     .editor_tab_container {
       .input_title {
         input {

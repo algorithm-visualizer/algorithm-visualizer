@@ -21,37 +21,7 @@ class Renderer extends React.Component {
     this.zoomMin = 1 / 20;
   }
 
-  componentDidMount() {
-    const { data } = this.props;
-    this.mountData(data);
-  }
-
-  componentWillUnmount() {
-    const { data } = this.props;
-    this.unmountData(data);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { data } = nextProps;
-    if (data !== this.props.data) {
-      this.unmountData(this.props.data);
-      this.mountData(data);
-    }
-  }
-
-  shouldComponentUpdate() {
-    return false;
-  }
-
   componentDidUpdate(prevProps, prevState, snapshot) {
-  }
-
-  mountData(data) {
-    data.setOnRender(() => this.refresh());
-  }
-
-  unmountData(data) {
-    data.setOnRender(null);
   }
 
   handleMouseDown(e) {

@@ -1,6 +1,11 @@
 import { Data } from '/core/datas';
+import { Array2DRenderer } from '/core/renderers';
 
 class Array2DData extends Data {
+  getRendererClass() {
+    return Array2DRenderer;
+  }
+
   set(array2d = []) {
     this.data = [];
     for (const array1d of array2d) {

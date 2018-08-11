@@ -8,6 +8,7 @@ $color-alert: #f3bd58;
 $color-selected: #2962ff;
 $color-patched: #c51162;
 $color-highlight: #29d;
+$color-active: #00e676;
 
 :export {
   themeDark: $theme-dark;
@@ -20,4 +21,5 @@ $color-highlight: #29d;
   colorSelected: $color-selected;
   colorPatched: $color-patched;
   colorHighlight: $color-highlight;
+  colorActive: $color-active;
 }

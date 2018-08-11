@@ -36,51 +36,6 @@
         }
       }
 
-      .interval {
-        display: flex;
-        align-items: center;
-        padding: 0 12px;
-        white-space: nowrap;
-
-        &:hover {
-          background-color: $color-shadow;
-        }
-
-        .range {
-          position: relative;
-          height: 16px;
-          width: 60px;
-          margin-left: 8px;
-
-          .range_label_container {
-            display: none;
-          }
-
-          .range_track {
-            top: 50%;
-            height: 6px;
-            margin-top: -3px;
-            background-color: $theme-light;
-            cursor: pointer;
-            display: block;
-            position: relative;
-          }
-
-          .range_slider {
-            top: 0;
-            width: 6px;
-            height: 12px;
-            margin-left: -3px;
-            margin-top: -3px;
-            appearance: none;
-            background-color: $color-font;
-            cursor: pointer;
-            display: block;
-            position: absolute;
-          }
-        }
-      }
-
       .btn_dropdown {
         position: relative;
         font-weight: bold;
