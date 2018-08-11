@@ -50,11 +50,15 @@ class App extends React.Component {
     CategoryApi.getCategories()
       .then(({ categories }) => this.props.setCategories(categories))
       .catch(this.props.showErrorToast);
+
+    window.onbeforeunload = () => this.isGistSaved() ? undefined : 'Changes you made will not be saved.';
   }
 
   componentWillUnmount() {
     delete window.signIn;
     delete window.signOut;
+
+    window.onbeforeunload = undefined;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -119,8 +123,9 @@ class App extends React.Component {
       .catch(this.props.showErrorToast);
   }
 
-  // TODO: warn before loading or quiting if not saved
   loadAlgorithm({ categoryKey, algorithmKey, gistId }) {
+    if (!this.isGistSaved() && !window.confirm('Are you sure want to discard changes?')) return;
+
     const { ext } = this.props.env;
     let fetchPromise = null;
     if (categoryKey && algorithmKey) {
