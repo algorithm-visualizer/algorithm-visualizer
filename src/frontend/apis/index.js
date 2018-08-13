@@ -56,9 +56,9 @@ const PATCH = URL => {
   });
 };
 
-const CategoryApi = {
-  getCategories: GET('/categories'),
-  getAlgorithm: GET('/categories/:categoryKey/:algorithmKey'),
+const AlgorithmApi = {
+  getCategories: GET('/algorithms'),
+  getAlgorithm: GET('/algorithms/:categoryKey/:algorithmKey'),
 };
 
 const GitHubApi = {
@@ -95,7 +95,7 @@ const TracerApi = {
 };
 
 export {
-  CategoryApi,
+  AlgorithmApi,
   GitHubApi,
   TracerApi,
 };

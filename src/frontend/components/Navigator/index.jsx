@@ -23,16 +23,16 @@ class Navigator extends React.Component {
   }
 
   componentDidMount() {
-    const { categoryKey } = this.props.current;
-    if (categoryKey) {
-      this.toggleCategory(categoryKey, true);
+    const { algorithm } = this.props.current;
+    if (algorithm) {
+      this.toggleCategory(algorithm.categoryKey, true);
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const { categoryKey } = nextProps.current;
-    if (categoryKey) {
-      this.toggleCategory(categoryKey, true);
+    const { algorithm } = nextProps.current;
+    if (algorithm) {
+      this.toggleCategory(algorithm.categoryKey, true);
     }
   }
 
@@ -69,8 +69,11 @@ class Navigator extends React.Component {
     const { categoriesOpened, scratchPaperOpened, query } = this.state;
     const { className, loadAlgorithm } = this.props;
     const { categories, scratchPapers } = this.props.directory;
-    const { categoryKey, algorithmKey, gistId } = this.props.current;
-    const { user } = this.props.env;
+    const { algorithm, scratchPaper } = this.props.current;
+
+    const categoryKey = algorithm && algorithm.categoryKey;
+    const algorithmKey = algorithm && algorithm.algorithmKey;
+    const gistId = scratchPaper && scratchPaper.gistId;
 
     return (
       <nav className={classes(styles.navigator, className)}>

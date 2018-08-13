@@ -19,6 +19,7 @@ import { actions } from '/reducers';
 import { languages } from '/common/config';
 import { Button, Ellipsis, ListItem, Player } from '/components';
 import styles from './stylesheet.scss';
+import { getTitleArray } from '../../common/util';
 
 @connect(({ current, env }) => ({ current, env }), actions)
 class Header extends React.Component {
@@ -34,14 +35,15 @@ class Header extends React.Component {
 
   handleChangeTitle(e) {
     const { value } = e.target;
-    this.props.renameScratchPaper(value);
+    this.props.modifyTitle(value);
   }
 
   saveGist() {
     const { user } = this.props.env;
-    const { categoryKey, algorithmKey, gistId, titles, files, lastFiles, lastGist } = this.props.current;
+    const { scratchPaper } = this.props.current;
+    const { gistId, title, files, lastFiles, lastGist } = scratchPaper;
     const gist = {
-      description: titles[1],
+      description: title,
       files: {},
     };
     files.forEach(file => {
@@ -67,13 +69,14 @@ class Header extends React.Component {
     };
     save(gist)
       .then(refineGist)
-      .then(algorithm => this.props.setCurrent(categoryKey, algorithmKey, algorithm.gistId, algorithm.titles, algorithm.files, algorithm.gist))
+      .then(this.props.setScratchPaper)
       .then(this.props.loadScratchPapers)
       .catch(handleError.bind(this));
   }
 
   deleteGist() {
-    const { gistId } = this.props.current;
+    const { scratchPaper } = this.props.current;
+    const { gistId } = scratchPaper;
     const deletePromise = ['new', 'forked'].includes(gistId) ? Promise.resolve() : GitHubApi.deleteGist(gistId);
     deletePromise
       .then(() => this.props.loadAlgorithm({}, true))
@@ -83,7 +86,8 @@ class Header extends React.Component {
 
   render() {
     const { className, onClickTitleBar, navigatorOpened, gistSaved, file } = this.props;
-    const { gistId, titles } = this.props.current;
+    const { scratchPaper } = this.props.current;
+    const titleArray = getTitleArray(this.props.current);
     const { ext, user } = this.props.env;
 
     return (
@@ -92,12 +96,12 @@ class Header extends React.Component {
           <div className={styles.section}>
             <Button className={styles.title_bar} onClick={onClickTitleBar}>
               {
-                titles.map((title, i) => [
-                  gistId && i === 1 ?
+                titleArray.map((title, i) => [
+                  scratchPaper && i === 1 ?
                     <AutosizeInput className={styles.input_title} key={`title-${i}`} value={title}
                                    onClick={e => e.stopPropagation()} onChange={e => this.handleChangeTitle(e)} /> :
                     <Ellipsis key={`title-${i}`}>{title}</Ellipsis>,
-                  i < titles.length - 1 &&
+                  i < titleArray.length - 1 &&
                   <FontAwesomeIcon className={styles.nav_arrow} fixedWidth icon={faAngleRight} key={`arrow-${i}`} />,
                 ])
               }
@@ -106,11 +110,11 @@ class Header extends React.Component {
             </Button>
           </div>
           <div className={styles.section}>
-            <Button icon={faSave} primary disabled={!gistId || gistSaved}
+            <Button icon={faSave} primary disabled={!scratchPaper || gistSaved}
                     onClick={() => this.saveGist()}>Save</Button>
-            <Button icon={faTrashAlt} primary disabled={!gistId} onClick={() => this.deleteGist()}
+            <Button icon={faTrashAlt} primary disabled={!scratchPaper} onClick={() => this.deleteGist()}
                     confirmNeeded>Delete</Button>
-            <Button icon={faFacebook} primary disabled={['new', 'forked'].includes(gistId)}
+            <Button icon={faFacebook} primary disabled={scratchPaper && ['new', 'forked'].includes(scratchPaper.gistId)}
                     href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}>Share</Button>
             <Button icon={faExpandArrowsAlt} primary
                     onClick={() => this.handleClickFullScreen()}>Fullscreen</Button>

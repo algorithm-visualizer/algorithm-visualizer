@@ -17,9 +17,9 @@ import {
   ToastContainer,
   VisualizationViewer,
 } from '/components';
-import { CategoryApi, GitHubApi } from '/apis';
+import { AlgorithmApi, GitHubApi } from '/apis';
 import { actions } from '/reducers';
-import { extension, handleError, refineGist } from '/common/util';
+import { extension, getFiles, getTitleArray, handleError, refineGist } from '/common/util';
 import { exts, languages, us } from '/common/config';
 import { README_MD, SCRATCH_PAPER_MD } from '/skeletons';
 import styles from './stylesheet.scss';
@@ -49,7 +49,7 @@ class App extends React.Component {
     const accessToken = Cookies.get('access_token');
     if (accessToken) this.signIn(accessToken);
 
-    CategoryApi.getCategories()
+    AlgorithmApi.getCategories()
       .then(({ categories }) => this.props.setCategories(categories))
       .catch(handleError.bind(this));
 
@@ -65,7 +65,12 @@ class App extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { params } = nextProps.match;
-    const { categoryKey, algorithmKey, gistId } = nextProps.current;
+    const { algorithm, scratchPaper } = nextProps.current;
+
+    const categoryKey = algorithm && algorithm.categoryKey;
+    const algorithmKey = algorithm && algorithm.algorithmKey;
+    const gistId = scratchPaper && scratchPaper.gistId;
+
     if (params.categoryKey !== categoryKey ||
       params.algorithmKey !== algorithmKey ||
       params.gistId !== gistId) {
@@ -135,13 +140,14 @@ class App extends React.Component {
     const { ext } = this.props.env;
     let fetchPromise = null;
     if (categoryKey && algorithmKey) {
-      fetchPromise = CategoryApi.getAlgorithm(categoryKey, algorithmKey)
-        .then(({ algorithm }) => algorithm);
+      fetchPromise = AlgorithmApi.getAlgorithm(categoryKey, algorithmKey)
+        .then(({ algorithm }) => this.props.setAlgorithm(algorithm));
     } else if (['new', 'forked'].includes(gistId)) {
       gistId = 'new';
       const language = languages.find(language => language.ext === ext);
-      fetchPromise = Promise.resolve({
-        titles: ['Scratch Paper', 'Untitled'],
+      fetchPromise = Promise.resolve(this.props.setScratchPaper({
+        gistId,
+        title: 'Untitled',
         files: [{
           name: 'README.md',
           content: SCRATCH_PAPER_MD,
@@ -151,24 +157,29 @@ class App extends React.Component {
           content: language.skeleton,
           contributors: undefined,
         }],
-      });
+      }));
     } else if (gistId) {
-      fetchPromise = GitHubApi.getGist(gistId, { timestamp: Date.now() }).then(refineGist);
+      fetchPromise = GitHubApi.getGist(gistId, { timestamp: Date.now() })
+        .then(refineGist)
+        .then(this.props.setScratchPaper);
     } else {
       fetchPromise = Promise.reject(new Error());
     }
     fetchPromise
-      .then(algorithm => this.props.setCurrent(categoryKey, algorithmKey, gistId, algorithm.titles, algorithm.files, algorithm.gist))
       .catch(error => {
         if (error.message) handleError.bind(this)(error);
-        this.props.setCurrent(undefined, undefined, undefined, ['Algorithm Visualizer'], [{
-          name: 'README.md',
-          content: README_MD,
-          contributors: [us],
-        }], undefined);
+        this.props.setAlgorithm({
+          categoryName: 'Algorithm Visualizer',
+          algorithmName: 'Home',
+          files: [{
+            name: 'README.md',
+            content: README_MD,
+            contributors: [us],
+          }],
+        });
       })
       .finally(() => {
-        const { files } = this.props.current;
+        const files = getFiles(this.props.current);
         let editorTabIndex = files.findIndex(file => extension(file.name) === ext);
         if (!~editorTabIndex) editorTabIndex = files.findIndex(file => exts.includes(extension(file.name)));
         if (!~editorTabIndex) editorTabIndex = Math.min(0, files.length - 1);
@@ -182,7 +193,7 @@ class App extends React.Component {
   }
 
   handleChangeEditorTabIndex(editorTabIndex) {
-    const { files } = this.props.current;
+    const files = getFiles(this.props.current);
     if (editorTabIndex === files.length) this.handleAddFile();
     this.setState({ editorTabIndex });
     this.props.shouldBuild();
@@ -190,7 +201,7 @@ class App extends React.Component {
 
   handleAddFile() {
     const { ext } = this.props.env;
-    const { files } = this.props.current;
+    const files = getFiles(this.props.current);
     let name = `code.${ext}`;
     let count = 0;
     while (files.some(file => file.name === name)) name = `code-${++count}.${ext}`;
@@ -210,7 +221,7 @@ class App extends React.Component {
 
   handleDeleteFile() {
     const { editorTabIndex } = this.state;
-    const { files } = this.props.current;
+    const files = getFiles(this.props.current);
     this.handleChangeEditorTabIndex(Math.min(editorTabIndex, files.length - 2));
     this.props.deleteFile(editorTabIndex);
   }
@@ -220,15 +231,15 @@ class App extends React.Component {
   }
 
   isGistSaved() {
-    const { titles, files, lastTitles, lastFiles } = this.props.current;
-    const serializeTitles = titles => JSON.stringify(titles);
+    const { scratchPaper } = this.props.current;
+    if (!scratchPaper) return true;
+    const { title, files, lastTitle, lastFiles } = scratchPaper;
     const serializeFiles = files => JSON.stringify(files.map(({ name, content }) => ({ name, content })));
-    return serializeTitles(titles) === serializeTitles(lastTitles) &&
-      serializeFiles(files) === serializeFiles(lastFiles);
+    return title === lastTitle && serializeFiles(files) === serializeFiles(lastFiles);
   }
 
   getDescription() {
-    const { files } = this.props.current;
+    const files = getFiles(this.props.current);
     const readmeFile = files.find(file => file.name === 'README.md');
     if (!readmeFile) return '';
     const groups = /^\s*# .*\n+([^\n]+)/.exec(readmeFile.content);
@@ -237,7 +248,8 @@ class App extends React.Component {
 
   render() {
     const { navigatorOpened, workspaceWeights, editorTabIndex } = this.state;
-    const { titles, files } = this.props.current;
+    const files = getFiles(this.props.current);
+    const titleArray = getTitleArray(this.props.current);
 
     const gistSaved = this.isGistSaved();
     const description = this.getDescription();
@@ -257,7 +269,7 @@ class App extends React.Component {
     return (
       <div className={styles.app}>
         <Helmet>
-          <title>{gistSaved ? '' : '(Unsaved) '}{titles.join(' - ')}</title>
+          <title>{gistSaved ? '' : '(Unsaved) '}{titleArray.join(' - ')}</title>
           <meta name="description" content={description} />
         </Helmet>
         <Header className={styles.header} onClickTitleBar={() => this.toggleNavigatorOpened()}

@@ -10,7 +10,7 @@ const extension = fileName => /(?:\.([^.]+))?$/.exec(fileName)[1];
 
 const refineGist = gist => {
   const gistId = gist.id;
-  const titles = ['Scratch Paper', gist.description];
+  const title = gist.description;
   delete gist.files['algorithm-visualizer'];
   const { login, avatar_url } = gist.owner;
   const files = Object.values(gist.files).map(file => ({
@@ -18,7 +18,21 @@ const refineGist = gist => {
     content: file.content,
     contributors: [{ login, avatar_url }],
   }));
-  return { gistId, titles, files, gist };
+  return { gistId, title, files, gist };
+};
+
+const getFiles = current => {
+  const { algorithm, scratchPaper } = current;
+  if (algorithm) return algorithm.files;
+  if (scratchPaper) return scratchPaper.files;
+  return [];
+};
+
+const getTitleArray = current => {
+  const { algorithm, scratchPaper } = current;
+  if (algorithm) return [algorithm.categoryName, algorithm.algorithmName];
+  if (scratchPaper) return ['Scratch Paper', scratchPaper.title];
+  return ['Algorithm Visualizer'];
 };
 
 const handleError = function (error) {
@@ -31,5 +45,7 @@ export {
   distance,
   extension,
   refineGist,
+  getFiles,
+  getTitleArray,
   handleError,
 };

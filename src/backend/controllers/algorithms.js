@@ -112,9 +112,10 @@ router.route('/:categoryKey/:algorithmKey')
     const algorithm = category.algorithms.find(algorithm => algorithm.key === algorithmKey);
     if (!algorithm) return next(new NotFoundError());
 
-    const titles = [category.name, algorithm.name];
+    const categoryName = category.name;
+    const algorithmName = algorithm.name;
     const files = algorithm.files.map(({ name, content, contributors }) => ({ name, content, contributors }));
-    res.json({ algorithm: { titles, files } });
+    res.json({ algorithm: { categoryKey, categoryName, algorithmKey, algorithmName, files } });
   });
 
 export default router;
