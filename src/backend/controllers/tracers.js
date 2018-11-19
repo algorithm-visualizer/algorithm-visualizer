@@ -4,7 +4,6 @@ import uuid from 'uuid';
 import path from 'path';
 import { GitHubApi } from '/apis';
 import { execute } from '/common/util';
-import { CompileError, RuntimeError } from '/common/error';
 
 const router = express.Router();
 

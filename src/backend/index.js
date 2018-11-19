@@ -5,10 +5,8 @@ import bodyParser from 'body-parser';
 import * as controllers from '/controllers';
 import {
   ClientError,
-  CompileError,
   ForbiddenError,
   NotFoundError,
-  RuntimeError,
   UnauthorizedError,
 } from '/common/error';
 
@@ -24,8 +22,6 @@ app.use((err, req, res, next) => {
     [UnauthorizedError, 401],
     [ForbiddenError, 403],
     [NotFoundError, 404],
-    [CompileError, 422],
-    [RuntimeError, 422],
     [ClientError, 400],
     [Error, 500],
   ];
