@@ -58,7 +58,10 @@ class Renderer extends React.Component {
   toString(value) {
     switch (typeof(value)) {
       case 'number':
-        return value === Infinity ? '∞' : Number.isInteger(value) ? value.toString() : value.toFixed(3);
+        return [Number.POSITIVE_INFINITY, Number.MAX_SAFE_INTEGER, 0x7fffffff].includes(value) ? '∞' :
+          [Number.NEGATIVE_INFINITY, Number.MIN_SAFE_INTEGER, -0x80000000].includes(value) ? '-∞' :
+            Number.isInteger(value) ? value.toString() :
+              value.toFixed(3);
       case 'boolean':
         return value ? 'T' : 'F';
       default:

@@ -21,8 +21,10 @@ class GraphRenderer extends Renderer {
 
   handleMouseMove(e) {
     if (this.selectedNode) {
-      const coords = this.computeCoords(e);
-      this.props.data.updateNode(this.selectedNode.id, coords);
+      const { x, y } = this.computeCoords(e);
+      const node = this.props.data.findNode(this.selectedNode.id);
+      node.x = x;
+      node.y = y;
       this.refresh();
     } else {
       super.handleMouseMove(e);
@@ -63,8 +65,11 @@ class GraphRenderer extends Renderer {
         {
           edges.sort((a, b) => a.visitedCount - b.visitedCount).map(edge => {
             const { source, target, weight, visitedCount, selectedCount } = edge;
-            const { x: sx, y: sy } = this.props.data.findNode(source);
-            let { x: ex, y: ey } = this.props.data.findNode(target);
+            const sourceNode = this.props.data.findNode(source);
+            const targetNode = this.props.data.findNode(target);
+            if (!sourceNode || !targetNode) return undefined;
+            const { x: sx, y: sy } = sourceNode;
+            let { x: ex, y: ey } = targetNode;
             const mx = (sx + ex) / 2;
             const my = (sy + ey) / 2;
             const dx = ex - sx;
@@ -79,7 +84,8 @@ class GraphRenderer extends Renderer {
             }
 
             return (
-              <g className={classes(styles.edge, selectedCount && styles.selected, visitedCount && styles.visited)} key={`${source}-${target}`}>
+              <g className={classes(styles.edge, selectedCount && styles.selected, visitedCount && styles.visited)}
+                 key={`${source}-${target}`}>
                 <path d={`M${sx},${sy} L${ex},${ey}`} className={classes(styles.line, isDirected && styles.directed)} />
                 {
                   isWeighted &&
@@ -96,8 +102,8 @@ class GraphRenderer extends Renderer {
           nodes.map(node => {
             const { id, x, y, weight, visitedCount, selectedCount } = node;
             return (
-              <g className={classes(styles.node, selectedCount && styles.selected, visitedCount && styles.visited)} key={id}
-                 transform={`translate(${x},${y})`}>
+              <g className={classes(styles.node, selectedCount && styles.selected, visitedCount && styles.visited)}
+                 key={id} transform={`translate(${x},${y})`}>
                 <circle className={styles.circle} r={nodeRadius} />
                 <text className={styles.id}>{id}</text>
                 {

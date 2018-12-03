@@ -48,9 +48,26 @@ class GraphData extends Data {
     this.isWeighted = isWeighted;
   }
 
-  addNode(id, weight = null, visitedCount = 0, selectedCount = 0, x = 0, y = 0) {
+  addNode(id, weight = null, x = 0, y = 0, visitedCount = 0, selectedCount = 0) {
     if (this.findNode(id)) return;
-    this.nodes.push({ id, weight, visitedCount, selectedCount, x, y });
+    this.nodes.push({ id, weight, x, y, visitedCount, selectedCount });
+    this.layout();
+  }
+
+  updateNode(id, weight, x, y, visitedCount, selectedCount) {
+    const node = this.findNode(id);
+    const update = { weight, x, y, visitedCount, selectedCount };
+    Object.keys(update).forEach(key => {
+      if (update[key] === undefined) delete update[key];
+    });
+    Object.assign(node, update);
+  }
+
+  removeNode(id) {
+    const node = this.findNode(id);
+    if (!node) return;
+    const index = this.nodes.indexOf(node);
+    this.nodes.splice(index, 1);
     this.layout();
   }
 
@@ -60,9 +77,21 @@ class GraphData extends Data {
     this.layout();
   }
 
-  updateNode(id, update) {
-    const node = this.findNode(id);
-    Object.assign(node, update);
+  updateEdge(source, target, weight, visitedCount, selectedCount) {
+    const edge = this.findEdge(source, target);
+    const update = { weight, visitedCount, selectedCount };
+    Object.keys(update).forEach(key => {
+      if (update[key] === undefined) delete update[key];
+    });
+    Object.assign(edge, update);
+  }
+
+  removeEdge(source, target) {
+    const edge = this.findEdge(source, target);
+    if (!edge) return;
+    const index = this.edges.indexOf(edge);
+    this.edges.splice(index, 1);
+    this.layout();
   }
 
   findNode(id) {
@@ -195,11 +224,11 @@ class GraphData extends Data {
     this.visitOrLeave(false, target, source, weight);
   }
 
-  visitOrLeave(visit, target, source = null, weight = null) {
+  visitOrLeave(visit, target, source = null, weight) {
     const edge = this.findEdge(source, target);
     if (edge) edge.visitedCount += visit ? 1 : -1;
     const node = this.findNode(target);
-    node.weight = weight;
+    if (weight !== undefined) node.weight = weight;
     node.visitedCount += visit ? 1 : -1;
     if (this.logData) {
       this.logData.print(visit ? (source || '') + ' -> ' + target : (source || '') + ' <- ' + target);
