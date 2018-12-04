@@ -19,8 +19,8 @@ const trace = lang => (req, res, next) => {
   const { code } = req.body;
   const tempPath = getCodesPath(uuid.v4());
   fs.outputFile(path.resolve(tempPath, `Main.${lang}`), code)
-    .then(() => execute(`LANG=${lang} TEMP_PATH=${tempPath} ./bin/compile`, repoPath, { stdout: null, stderr: null }))
-    .then(() => execute(`LANG=${lang} TEMP_PATH=${tempPath} ./bin/run`, repoPath, { stdout: null, stderr: null }))
+    .then(() => execute(`./bin/compile ${lang} ${tempPath}`, repoPath, { stdout: null, stderr: null }))
+    .then(() => execute(`./bin/run ${lang} ${tempPath}`, repoPath, { stdout: null, stderr: null }))
     .then(() => res.sendFile(path.resolve(tempPath, 'traces.json')))
     .catch(next)
     .finally(() => fs.remove(tempPath));
