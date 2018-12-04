@@ -1,5 +1,6 @@
 import Promise from 'bluebird';
 import child_process from 'child_process';
+import fs from 'fs-extra';
 
 const execute = (command, cwd, { stdout = process.stdout, stderr = process.stderr } = {}) => new Promise((resolve, reject) => {
   if (!cwd) return reject(new Error('CWD Not Specified'));
@@ -11,6 +12,12 @@ const execute = (command, cwd, { stdout = process.stdout, stderr = process.stder
   if (stderr) child.stderr.pipe(stderr);
 });
 
+const createKey = name => name.toLowerCase().replace(/ /g, '-');
+
+const listFiles = dirPath => fs.readdirSync(dirPath).filter(fileName => !fileName.startsWith('.'));
+
 export {
   execute,
+  createKey,
+  listFiles,
 };

@@ -8,6 +8,7 @@ const {
 
   GITHUB_CLIENT_ID,
   GITHUB_CLIENT_SECRET,
+  GITHUB_WEBHOOK_SECRET,
 } = process.env;
 
 const __PROD__ = NODE_ENV === 'production';
@@ -18,6 +19,7 @@ const proxyPort = parseInt(PROXY_PORT);
 
 const githubClientId = GITHUB_CLIENT_ID;
 const githubClientSecret = GITHUB_CLIENT_SECRET;
+const githubWebhookSecret = GITHUB_WEBHOOK_SECRET;
 
 const buildPath = path.resolve(__dirname, 'build');
 const frontendBuildPath = path.resolve(buildPath, 'frontend');
@@ -36,6 +38,7 @@ module.exports = {
   proxyPort,
   githubClientId,
   githubClientSecret,
+  githubWebhookSecret,
   frontendBuildPath,
   backendBuildPath,
   frontendSrcPath,

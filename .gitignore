@@ -2,6 +2,5 @@
 /node_modules
 /build
 /npm-debug.log
-/package-lock.json
 /src/backend/public
 .DS_Store
