@@ -8,8 +8,7 @@
     "build": "npm run build:frontend && npm run build:backend",
     "build:frontend": "NODE_ENV=production node ./node_modules/webpack/bin/webpack --bail --progress --config webpack.frontend.config.js",
     "build:backend": "NODE_ENV=production node ./node_modules/webpack/bin/webpack --bail --progress --config webpack.backend.config.js",
-    "lint": "./node_modules/.bin/eslint --fix src",
-    "heroku-postbuild": "npm run build"
+    "lint": "./node_modules/.bin/eslint --fix src"
   },
   "repository": {
     "type": "git",
