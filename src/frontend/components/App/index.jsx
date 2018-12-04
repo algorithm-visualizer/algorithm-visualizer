@@ -248,10 +248,11 @@ class App extends React.Component {
 
   render() {
     const { navigatorOpened, workspaceWeights, editorTabIndex } = this.state;
+
     const files = getFiles(this.props.current);
     const titleArray = getTitleArray(this.props.current);
-
     const gistSaved = this.isGistSaved();
+    const title = `${gistSaved ? '' : '(Unsaved) '}${titleArray.join(' - ')}`;
     const description = this.getDescription();
     const file = files[editorTabIndex];
 
@@ -269,8 +270,10 @@ class App extends React.Component {
     return (
       <div className={styles.app}>
         <Helmet>
-          <title>{gistSaved ? '' : '(Unsaved) '}{titleArray.join(' - ')}</title>
+          <title>{title}</title>
           <meta name="description" content={description} />
+          <meta property="og:title" content={title} />
+          <meta property="og:description" content={description} />
         </Helmet>
         <Header className={styles.header} onClickTitleBar={() => this.toggleNavigatorOpened()}
                 navigatorOpened={navigatorOpened} loadScratchPapers={() => this.loadScratchPapers()}
