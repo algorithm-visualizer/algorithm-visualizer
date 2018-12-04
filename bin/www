@@ -4,9 +4,9 @@ const http = require('http');
 
 const app = require('../app');
 const {
-  httpPort,
+  port,
 } = require('../environment');
 
 const httpServer = http.createServer(app);
-httpServer.listen(httpPort);
-console.info(`http: listening on port ${httpPort}`);
+httpServer.listen(port);
+console.info(`http: listening on port ${port}`);

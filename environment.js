@@ -3,7 +3,7 @@ const path = require('path');
 const {
   NODE_ENV = 'production',
 
-  HTTP_PORT = '8080',
+  PORT = '8080',
   PROXY_PORT = '3000',
 
   GITHUB_CLIENT_ID,
@@ -14,7 +14,7 @@ const {
 const __PROD__ = NODE_ENV === 'production';
 const __DEV__ = !__PROD__;
 
-const httpPort = parseInt(HTTP_PORT);
+const port = parseInt(PORT);
 const proxyPort = parseInt(PROXY_PORT);
 
 const githubClientId = GITHUB_CLIENT_ID;
@@ -34,7 +34,7 @@ const apiEndpoint = '/api';
 module.exports = {
   __PROD__,
   __DEV__,
-  httpPort,
+  port,
   proxyPort,
   githubClientId,
   githubClientSecret,
