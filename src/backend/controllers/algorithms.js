@@ -94,7 +94,7 @@ const cacheCategories = () => {
 const downloadCategories = () => (
   fs.pathExistsSync(repoPath) ?
     execute(`git fetch && git reset --hard origin/master`, repoPath) :
-    execute(`git clone git@github.com:algorithm-visualizer/algorithms ${repoPath}`, __dirname)
+    execute(`git clone https://github.com/algorithm-visualizer/algorithms.git ${repoPath}`, __dirname)
 );
 
 let categories = [];
