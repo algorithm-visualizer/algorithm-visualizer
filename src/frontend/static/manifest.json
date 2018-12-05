@@ -1,19 +1,20 @@
 {
   "name": "Algorithm Visualizer",
   "short_name": "Algorithm Visualizer",
-  "start_url": ".",
-  "display": "standalone",
+  "start_url": "/?utm_source=homescreen",
+  "display": "fullscreen",
+  "orientation": "landscape",
   "theme_color": "#393939",
   "background_color": "#393939",
-  "description": "Write down your algorithm to be visualized.",
+  "description": "Algorithm Visualizer is an interactive online platform that visualizes algorithms from code.",
   "icons": [
     {
-      "src": "/img/favicon.png",
+      "src": "favicon.png",
       "sizes": "256x256",
       "type": "image/png"
     },
     {
-      "src": "/img/icon.png",
+      "src": "icon.png",
       "sizes": "1024x1024",
       "type": "image/png"
     }

@@ -1,7 +1,7 @@
 {
   "name": "algorithm-visualizer",
   "version": "2.0.0",
-  "description": "Algorithm Visualizer",
+  "description": "Algorithm Visualizer is an interactive online platform that visualizes algorithms from code.",
   "scripts": {
     "dev": "NODE_ENV=development ./bin/www",
     "start": "NODE_ENV=production ./bin/www",
