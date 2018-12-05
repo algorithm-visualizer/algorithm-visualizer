@@ -1,3 +1,5 @@
+import { README_MD } from '/skeletons';
+
 const classes = (...arr) => arr.filter(v => v).join(' ');
 
 const distance = (a, b) => {
@@ -25,7 +27,14 @@ const getFiles = current => {
   const { algorithm, scratchPaper } = current;
   if (algorithm) return algorithm.files;
   if (scratchPaper) return scratchPaper.files;
-  return [];
+  return [{
+    name: 'README.md',
+    content: README_MD,
+    contributors: [{
+      login: 'algorithm-visualizer',
+      avatar_url: 'https://github.com/algorithm-visualizer.png',
+    }],
+  }];
 };
 
 const getTitleArray = current => {

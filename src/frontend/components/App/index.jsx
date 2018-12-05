@@ -20,8 +20,8 @@ import {
 import { AlgorithmApi, GitHubApi } from '/apis';
 import { actions } from '/reducers';
 import { extension, getFiles, getTitleArray, handleError, refineGist } from '/common/util';
-import { exts, languages, us } from '/common/config';
-import { README_MD, SCRATCH_PAPER_MD } from '/skeletons';
+import { exts, languages } from '/common/config';
+import { SCRATCH_PAPER_MD } from '/skeletons';
 import styles from './stylesheet.scss';
 
 loadProgressBar();
@@ -168,15 +168,7 @@ class App extends React.Component {
     fetchPromise
       .catch(error => {
         if (error.message) handleError.bind(this)(error);
-        this.props.setAlgorithm({
-          categoryName: 'Algorithm Visualizer',
-          algorithmName: 'Home',
-          files: [{
-            name: 'README.md',
-            content: README_MD,
-            contributors: [us],
-          }],
-        });
+        this.props.setHome();
       })
       .finally(() => {
         const files = getFiles(this.props.current);
@@ -272,8 +264,6 @@ class App extends React.Component {
         <Helmet>
           <title>{title}</title>
           <meta name="description" content={description} />
-          <meta property="og:title" content={title} />
-          <meta property="og:description" content={description} />
         </Helmet>
         <Header className={styles.header} onClickTitleBar={() => this.toggleNavigatorOpened()}
                 navigatorOpened={navigatorOpened} loadScratchPapers={() => this.loadScratchPapers()}

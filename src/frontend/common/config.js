@@ -1,4 +1,4 @@
-import { CODE_JS, CODE_JAVA, CODE_CPP } from '/skeletons';
+import { CODE_CPP, CODE_JAVA, CODE_JS } from '/skeletons';
 
 const languages = [{
   name: 'JavaScript',
@@ -19,13 +19,7 @@ const languages = [{
 
 const exts = languages.map(language => language.ext);
 
-const us = {
-  login: 'algorithm-visualizer',
-  avatar_url: 'https://github.com/algorithm-visualizer.png',
-};
-
 export {
   languages,
   exts,
-  us,
 };
