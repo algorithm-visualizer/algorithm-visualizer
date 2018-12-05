@@ -1,12 +1,21 @@
 #!/usr/bin/env node
 
 const http = require('http');
+const https = require('https');
 
 const app = require('../app');
 const {
-  port,
+  httpPort,
+  httpsPort,
+  credentials,
 } = require('../environment');
 
 const httpServer = http.createServer(app);
-httpServer.listen(port);
-console.info(`http: listening on port ${port}`);
+httpServer.listen(httpPort);
+console.info(`http: listening on port ${httpPort}`);
+
+if (credentials) {
+  const httpsServer = https.createServer(credentials, app);
+  httpsServer.listen(httpsPort);
+  console.info(`https: listening on port ${httpsPort}`);
+}

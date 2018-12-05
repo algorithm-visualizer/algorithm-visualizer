@@ -132,7 +132,7 @@ router.route('/sitemap.txt')
   .get((req, res, next) => {
     const urls = [];
     categories.forEach(category => category.algorithms.forEach(algorithm => {
-      urls.push(`http://algorithm-visualizer.org/${category.key}/${algorithm.key}`);
+      urls.push(`https://algorithm-visualizer.org/${category.key}/${algorithm.key}`);
     }));
     res.set('Content-Type', 'text/plain');
     res.send(urls.join('\n'));

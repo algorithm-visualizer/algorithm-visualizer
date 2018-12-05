@@ -7,7 +7,7 @@
 
 Learning algorithms from text and static images is quite boring. For that, there have been many great websites that view animations of various algorithms. However, for us being coders, nothing can be more comprehensible than visualizing the actual working code. So here we introduce Algorithm Visualizer.
 
-[![Screenshot](https://raw.githubusercontent.com/algorithm-visualizer/algorithm-visualizer/master/branding/screenshot.png)](http://algorithm-visualizer.org/)
+[![Screenshot](https://raw.githubusercontent.com/algorithm-visualizer/algorithm-visualizer/master/branding/screenshot.png)](https://algorithm-visualizer.org/)
 
 ## Contributing
 
