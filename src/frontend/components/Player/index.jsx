@@ -19,7 +19,7 @@ class Player extends React.Component {
     super(props);
 
     this.state = {
-      interval: 500,
+      speed: 2,
       playing: false,
       building: false,
     };
@@ -94,7 +94,8 @@ class Player extends React.Component {
   resume(wrap = false) {
     this.pause();
     if (this.next() || wrap && this.props.setCursor(1)) {
-      this.timer = window.setTimeout(() => this.resume(), this.state.interval);
+      const interval = 4000 / Math.pow(Math.E, this.state.speed);
+      this.timer = window.setTimeout(() => this.resume(), interval);
       this.setState({ playing: true });
     }
   }
@@ -115,8 +116,8 @@ class Player extends React.Component {
     return true;
   }
 
-  handleChangeInterval(interval) {
-    this.setState({ interval });
+  handleChangeSpeed(speed) {
+    this.setState({ speed });
   }
 
   handleChangeProgress(progress) {
@@ -129,7 +130,7 @@ class Player extends React.Component {
   render() {
     const { className, file } = this.props;
     const { chunks, cursor } = this.props.player;
-    const { interval, playing, building } = this.state;
+    const { speed, playing, building } = this.state;
 
     return (
       <div className={classes(styles.player, className)}>
@@ -148,7 +149,7 @@ class Player extends React.Component {
                      onChangeProgress={progress => this.handleChangeProgress(progress)} />
         <Button icon={faChevronRight} reverse primary disabled={!this.isValidCursor(cursor + 1)}
                 onClick={() => this.next()} />
-        <div className={styles.interval}>
+        <div className={styles.speed}>
           Speed
           <InputRange
             classNames={{
@@ -156,8 +157,8 @@ class Player extends React.Component {
               labelContainer: styles.range_label_container,
               slider: styles.range_slider,
               track: styles.range_track,
-            }} maxValue={2000} minValue={100} step={100} value={interval}
-            onChange={interval => this.handleChangeInterval(interval)} />
+            }} minValue={0} maxValue={4} step={.5} value={speed}
+            onChange={speed => this.handleChangeSpeed(speed)} />
         </div>
       </div>
     );
