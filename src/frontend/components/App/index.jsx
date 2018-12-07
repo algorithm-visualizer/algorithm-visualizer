@@ -19,9 +19,9 @@ import {
 } from '/components';
 import { AlgorithmApi, GitHubApi } from '/apis';
 import { actions } from '/reducers';
-import { extension, getFiles, getTitleArray, handleError, refineGist } from '/common/util';
+import { extension, handleError, refineGist } from '/common/util';
 import { exts, languages } from '/common/config';
-import { SCRATCH_PAPER_MD } from '/skeletons';
+import { SCRATCH_PAPER_MD } from '/files';
 import styles from './stylesheet.scss';
 
 loadProgressBar();
@@ -53,7 +53,9 @@ class App extends React.Component {
       .then(({ categories }) => this.props.setCategories(categories))
       .catch(handleError.bind(this));
 
-    window.onbeforeunload = () => this.isGistSaved() ? undefined : 'Changes you made will not be saved.';
+    this.props.history.block(() => {
+      if (!this.isSaved()) return 'Are you sure want to discard changes?';
+    });
   }
 
   componentWillUnmount() {
@@ -65,26 +67,12 @@ class App extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { params } = nextProps.match;
-    const { algorithm, scratchPaper } = nextProps.current;
-
-    const categoryKey = algorithm && algorithm.categoryKey;
-    const algorithmKey = algorithm && algorithm.algorithmKey;
-    const gistId = scratchPaper && scratchPaper.gistId;
-
-    if (params.categoryKey !== categoryKey ||
-      params.algorithmKey !== algorithmKey ||
-      params.gistId !== gistId) {
-      if (nextProps.location.pathname !== this.props.location.pathname) {
-        this.loadAlgorithm(params);
-      } else {
-        if (categoryKey && algorithmKey) {
-          this.props.history.push(`/${categoryKey}/${algorithmKey}`);
-        } else if (gistId) {
-          this.props.history.push(`/scratch-paper/${gistId}`);
-        } else {
-          this.props.history.push('/');
-        }
-      }
+    if (params !== this.props.match.params) {
+      const { categoryKey, algorithmKey, gistId } = params;
+      const { algorithm, scratchPaper } = nextProps.current;
+      if (algorithm && algorithm.categoryKey === categoryKey && algorithm.algorithmKey === algorithmKey) return;
+      if (scratchPaper && scratchPaper.gistId === gistId) return;
+      this.loadAlgorithm(params);
     }
   }
 
@@ -95,7 +83,6 @@ class App extends React.Component {
       .then(user => {
         const { login, avatar_url } = user;
         this.props.setUser({ login, avatar_url });
-        Cookies.set('login', login);
       })
       .then(() => this.loadScratchPapers())
       .catch(() => this.signOut());
@@ -106,7 +93,6 @@ class App extends React.Component {
     GitHubApi.auth(undefined)
       .then(() => {
         this.props.setUser(undefined);
-        Cookies.remove('login');
       })
       .then(() => this.props.setScratchPapers([]));
   }
@@ -134,44 +120,37 @@ class App extends React.Component {
       .catch(handleError.bind(this));
   }
 
-  loadAlgorithm({ categoryKey, algorithmKey, gistId }, forceLoad = false) {
-    if (!forceLoad && !this.isGistSaved() && !window.confirm('Are you sure want to discard changes?')) return;
-
+  loadAlgorithm({ categoryKey, algorithmKey, gistId }) {
     const { ext } = this.props.env;
-    let fetchPromise = null;
-    if (categoryKey && algorithmKey) {
-      fetchPromise = AlgorithmApi.getAlgorithm(categoryKey, algorithmKey)
-        .then(({ algorithm }) => this.props.setAlgorithm(algorithm));
-    } else if (['new', 'forked'].includes(gistId)) {
-      gistId = 'new';
-      const language = languages.find(language => language.ext === ext);
-      fetchPromise = Promise.resolve(this.props.setScratchPaper({
-        gistId,
-        title: 'Untitled',
-        files: [{
-          name: 'README.md',
-          content: SCRATCH_PAPER_MD,
-          contributors: undefined,
-        }, {
-          name: `code.${ext}`,
-          content: language.skeleton,
-          contributors: undefined,
-        }],
-      }));
-    } else if (gistId) {
-      fetchPromise = GitHubApi.getGist(gistId, { timestamp: Date.now() })
-        .then(refineGist)
-        .then(this.props.setScratchPaper);
-    } else {
-      fetchPromise = Promise.reject(new Error());
-    }
-    fetchPromise
+    const fetch = () => {
+      if (categoryKey && algorithmKey) {
+        return AlgorithmApi.getAlgorithm(categoryKey, algorithmKey)
+          .then(({ algorithm }) => this.props.setAlgorithm(algorithm));
+      } else if (gistId === 'new') {
+        const language = languages.find(language => language.ext === ext);
+        this.props.setScratchPaper({
+          login: undefined,
+          gistId,
+          title: 'Untitled',
+          files: [SCRATCH_PAPER_MD, language.skeleton],
+        });
+        return Promise.resolve();
+      } else if (gistId) {
+        return GitHubApi.getGist(gistId, { timestamp: Date.now() })
+          .then(refineGist)
+          .then(this.props.setScratchPaper);
+      } else {
+        this.props.setHome();
+        return Promise.resolve();
+      }
+    };
+    fetch()
       .catch(error => {
-        if (error.message) handleError.bind(this)(error);
+        handleError.bind(this)(error);
         this.props.setHome();
       })
       .finally(() => {
-        const files = getFiles(this.props.current);
+        const { files } = this.props.current;
         let editorTabIndex = files.findIndex(file => extension(file.name) === ext);
         if (!~editorTabIndex) editorTabIndex = files.findIndex(file => exts.includes(extension(file.name)));
         if (!~editorTabIndex) editorTabIndex = Math.min(0, files.length - 1);
@@ -185,7 +164,7 @@ class App extends React.Component {
   }
 
   handleChangeEditorTabIndex(editorTabIndex) {
-    const files = getFiles(this.props.current);
+    const { files } = this.props.current;
     if (editorTabIndex === files.length) this.handleAddFile();
     this.setState({ editorTabIndex });
     this.props.shouldBuild();
@@ -193,7 +172,7 @@ class App extends React.Component {
 
   handleAddFile() {
     const { ext } = this.props.env;
-    const files = getFiles(this.props.current);
+    const { files } = this.props.current;
     let name = `code.${ext}`;
     let count = 0;
     while (files.some(file => file.name === name)) name = `code-${++count}.${ext}`;
@@ -213,7 +192,7 @@ class App extends React.Component {
 
   handleDeleteFile() {
     const { editorTabIndex } = this.state;
-    const files = getFiles(this.props.current);
+    const { files } = this.props.current;
     this.handleChangeEditorTabIndex(Math.min(editorTabIndex, files.length - 2));
     this.props.deleteFile(editorTabIndex);
   }
@@ -222,16 +201,17 @@ class App extends React.Component {
     this.setState({ navigatorOpened });
   }
 
-  isGistSaved() {
-    const { scratchPaper } = this.props.current;
-    if (!scratchPaper) return true;
-    const { title, files, lastTitle, lastFiles } = scratchPaper;
-    const serializeFiles = files => JSON.stringify(files.map(({ name, content }) => ({ name, content })));
-    return title === lastTitle && serializeFiles(files) === serializeFiles(lastFiles);
+  isSaved() {
+    const { titles, files, lastTitles, lastFiles } = this.props.current;
+    const serialize = (titles, files) => JSON.stringify({
+      titles,
+      files: files.map(({ name, content }) => ({ name, content })),
+    });
+    return serialize(titles, files) === serialize(lastTitles, lastFiles);
   }
 
   getDescription() {
-    const files = getFiles(this.props.current);
+    const { files } = this.props.current;
     const readmeFile = files.find(file => file.name === 'README.md');
     if (!readmeFile) return '';
     const groups = /^\s*# .*\n+([^\n]+)/.exec(readmeFile.content);
@@ -241,10 +221,9 @@ class App extends React.Component {
   render() {
     const { navigatorOpened, workspaceWeights, editorTabIndex } = this.state;
 
-    const files = getFiles(this.props.current);
-    const titleArray = getTitleArray(this.props.current);
-    const gistSaved = this.isGistSaved();
-    const title = `${gistSaved ? '' : '(Unsaved) '}${titleArray.join(' - ')}`;
+    const { files, titles } = this.props.current;
+    const saved = this.isSaved();
+    const title = `${saved ? '' : '(Unsaved) '}${titles.join(' - ')}`;
     const description = this.getDescription();
     const file = files[editorTabIndex];
 
@@ -265,14 +244,12 @@ class App extends React.Component {
           <title>{title}</title>
           <meta name="description" content={description} />
         </Helmet>
-        <Header className={styles.header} onClickTitleBar={() => this.toggleNavigatorOpened()}
-                navigatorOpened={navigatorOpened} loadScratchPapers={() => this.loadScratchPapers()}
-                loadAlgorithm={this.loadAlgorithm.bind(this)} gistSaved={gistSaved}
-                file={file} />
+        <Header className={styles.header} onClickTitleBar={() => this.toggleNavigatorOpened()} saved={saved}
+                navigatorOpened={navigatorOpened} loadScratchPapers={() => this.loadScratchPapers()} file={file} />
         <ResizableContainer className={styles.workspace} horizontal weights={workspaceWeights}
                             visibles={[navigatorOpened, true, true]}
                             onChangeWeights={weights => this.handleChangeWorkspaceWeights(weights)}>
-          <Navigator loadAlgorithm={this.loadAlgorithm.bind(this)} />
+          <Navigator />
           <VisualizationViewer className={styles.visualization_viewer} />
           <TabContainer className={styles.editor_tab_container} titles={editorTitles} tabIndex={editorTabIndex}
                         onChangeTabIndex={tabIndex => this.handleChangeEditorTabIndex(tabIndex)}>

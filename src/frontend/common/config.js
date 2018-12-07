@@ -1,4 +1,4 @@
-import { CODE_CPP, CODE_JAVA, CODE_JS } from '/skeletons';
+import { CODE_CPP, CODE_JAVA, CODE_JS } from '/files';
 
 const languages = [{
   name: 'JavaScript',

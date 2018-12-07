@@ -5,7 +5,6 @@ import 'brace/mode/markdown';
 import 'brace/mode/javascript';
 import 'brace/mode/c_cpp';
 import 'brace/mode/java';
-import 'brace/mode/python';
 import 'brace/theme/tomorrow_night_eighties';
 import 'brace/ext/searchbox';
 import faTrashAlt from '@fortawesome/fontawesome-free-solid/faTrashAlt';
@@ -17,7 +16,7 @@ import { languages } from '/common/config';
 import { Button, Ellipsis } from '/components';
 import styles from './stylesheet.scss';
 
-@connect(({ current, env, player }) => ({ current, env, player }), actions, null, { withRef: true })
+@connect(({ env, player }) => ({ env, player }), actions, null, { withRef: true })
 class CodeEditor extends React.Component {
   constructor(props) {
     super(props);

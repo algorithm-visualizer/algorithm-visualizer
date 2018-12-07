@@ -1,5 +1,3 @@
-import { README_MD } from '/skeletons';
-
 const classes = (...arr) => arr.filter(v => v).join(' ');
 
 const distance = (a, b) => {
@@ -20,28 +18,7 @@ const refineGist = gist => {
     content: file.content,
     contributors: [{ login, avatar_url }],
   }));
-  return { gistId, title, files, gist };
-};
-
-const getFiles = current => {
-  const { algorithm, scratchPaper } = current;
-  if (algorithm) return algorithm.files;
-  if (scratchPaper) return scratchPaper.files;
-  return [{
-    name: 'README.md',
-    content: README_MD,
-    contributors: [{
-      login: 'algorithm-visualizer',
-      avatar_url: 'https://github.com/algorithm-visualizer.png',
-    }],
-  }];
-};
-
-const getTitleArray = current => {
-  const { algorithm, scratchPaper } = current;
-  if (algorithm) return [algorithm.categoryName, algorithm.algorithmName];
-  if (scratchPaper) return ['Scratch Paper', scratchPaper.title];
-  return ['Algorithm Visualizer'];
+  return { login, gistId, title, files };
 };
 
 const handleError = function (error) {
@@ -54,7 +31,5 @@ export {
   distance,
   extension,
   refineGist,
-  getFiles,
-  getTitleArray,
   handleError,
 };

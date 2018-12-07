@@ -48,7 +48,7 @@ module.exports = {
         test: /\.(js|jsx)$/,
         use: 'babel-loader',
         include: srcPath,
-        exclude: path.resolve(srcPath, 'skeletons'),
+        exclude: path.resolve(srcPath, 'files'),
       }, {
         test: /\.scss$/,
         use: filter([

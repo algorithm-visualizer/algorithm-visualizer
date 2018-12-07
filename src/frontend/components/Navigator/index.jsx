@@ -67,7 +67,7 @@ class Navigator extends React.Component {
 
   render() {
     const { categoriesOpened, scratchPaperOpened, query } = this.state;
-    const { className, loadAlgorithm } = this.props;
+    const { className } = this.props;
     const { categories, scratchPapers } = this.props.directory;
     const { algorithm, scratchPaper } = this.props.current;
 
@@ -99,10 +99,7 @@ class Navigator extends React.Component {
                     algorithms.map(algorithm => (
                       <ListItem indent key={algorithm.key}
                                 selected={category.key === categoryKey && algorithm.key === algorithmKey}
-                                onClick={() => loadAlgorithm({
-                                  categoryKey: category.key,
-                                  algorithmKey: algorithm.key,
-                                })} label={algorithm.name} />
+                                to={`/${category.key}/${algorithm.key}`} label={algorithm.name} />
                     ))
                   }
                 </ExpandableListItem>
@@ -113,11 +110,11 @@ class Navigator extends React.Component {
         <div className={styles.footer}>
           <ExpandableListItem icon={faCode} label="Scratch Paper" onClick={() => this.toggleScratchPaper()}
                               opened={scratchPaperOpened}>
-            <ListItem indent label="New ..." onClick={() => loadAlgorithm({ gistId: 'new' })} />
+            <ListItem indent label="New ..." to="/scratch-paper/new" />
             {
               scratchPapers.map(scratchPaper => (
                 <ListItem indent key={scratchPaper.key} selected={scratchPaper.key === gistId}
-                          onClick={() => loadAlgorithm({ gistId: scratchPaper.key })} label={scratchPaper.name} />
+                          to={`/scratch-paper/${scratchPaper.key}`} label={scratchPaper.name} />
               ))
             }
           </ExpandableListItem>

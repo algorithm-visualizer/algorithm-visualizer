@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import AutosizeInput from 'react-input-autosize';
 import screenfull from 'screenfull';
 import Promise from 'bluebird';
@@ -7,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import faAngleRight from '@fortawesome/fontawesome-free-solid/faAngleRight';
 import faCaretDown from '@fortawesome/fontawesome-free-solid/faCaretDown';
 import faCaretRight from '@fortawesome/fontawesome-free-solid/faCaretRight';
+import faCodeBranch from '@fortawesome/fontawesome-free-solid/faCodeBranch';
 import faExpandArrowsAlt from '@fortawesome/fontawesome-free-solid/faExpandArrowsAlt';
 import faGithub from '@fortawesome/fontawesome-free-brands/faGithub';
 import faTrashAlt from '@fortawesome/fontawesome-free-solid/faTrashAlt';
@@ -19,8 +21,8 @@ import { actions } from '/reducers';
 import { languages } from '/common/config';
 import { Button, Ellipsis, ListItem, Player } from '/components';
 import styles from './stylesheet.scss';
-import { getTitleArray } from '../../common/util';
 
+@withRouter
 @connect(({ current, env }) => ({ current, env }), actions)
 class Header extends React.Component {
   handleClickFullScreen() {
@@ -40,10 +42,9 @@ class Header extends React.Component {
 
   saveGist() {
     const { user } = this.props.env;
-    const { scratchPaper } = this.props.current;
-    const { gistId, title, files, lastFiles, lastGist } = scratchPaper;
+    const { scratchPaper, titles, files, lastFiles } = this.props.current;
     const gist = {
-      description: title,
+      description: titles[titles.length - 1],
       files: {},
     };
     files.forEach(file => {
@@ -61,34 +62,61 @@ class Header extends React.Component {
     };
     const save = gist => {
       if (!user) return Promise.reject(new Error('Sign In Required'));
-      if (gistId === 'new') return GitHubApi.createGist(gist);
-      if (gistId === 'forked') {
-        return GitHubApi.forkGist(lastGist.id).then(forkedGist => GitHubApi.editGist(forkedGist.id, gist));
+      if (scratchPaper && scratchPaper.login) {
+        if (scratchPaper.login === user.login) {
+          return GitHubApi.editGist(scratchPaper.gistId, gist);
+        } else {
+          return GitHubApi.forkGist(scratchPaper.gistId).then(forkedGist => GitHubApi.editGist(forkedGist.id, gist));
+        }
       }
-      return GitHubApi.editGist(gistId, gist);
+      return GitHubApi.createGist(gist);
     };
     save(gist)
       .then(refineGist)
-      .then(this.props.setScratchPaper)
+      .then(newScratchPaper => {
+        this.props.setScratchPaper(newScratchPaper);
+        if (!(scratchPaper && scratchPaper.gistId === newScratchPaper.gistId)) {
+          this.props.history.push(`/scratch-paper/${newScratchPaper.gistId}`);
+        }
+      })
       .then(this.props.loadScratchPapers)
       .catch(handleError.bind(this));
+  }
+
+  hasPermission() {
+    const { scratchPaper } = this.props.current;
+    const { user } = this.props.env;
+    if (!scratchPaper) return false;
+    if (scratchPaper.gistId !== 'new') {
+      if (!user) return false;
+      if (scratchPaper.login !== user.login) return false;
+    }
+    return true;
   }
 
   deleteGist() {
     const { scratchPaper } = this.props.current;
     const { gistId } = scratchPaper;
-    const deletePromise = ['new', 'forked'].includes(gistId) ? Promise.resolve() : GitHubApi.deleteGist(gistId);
-    deletePromise
-      .then(() => this.props.loadAlgorithm({}, true))
-      .then(this.props.loadScratchPapers)
-      .catch(handleError.bind(this));
+    if (gistId === 'new') {
+      this.props.markSaved();
+      this.props.history.push('/');
+    } else {
+      GitHubApi.deleteGist(gistId)
+        .then(() => {
+          this.props.markSaved();
+          this.props.history.push('/');
+        })
+        .then(this.props.loadScratchPapers)
+        .catch(handleError.bind(this));
+    }
   }
 
   render() {
-    const { className, onClickTitleBar, navigatorOpened, gistSaved, file } = this.props;
-    const { scratchPaper } = this.props.current;
-    const titleArray = getTitleArray(this.props.current);
+    const { className, onClickTitleBar, navigatorOpened, saved, file } = this.props;
+    const { scratchPaper, titles } = this.props.current;
     const { ext, user } = this.props.env;
+
+    const permitted = this.hasPermission();
 
     return (
       <header className={classes(styles.header, className)}>
@@ -96,12 +124,12 @@ class Header extends React.Component {
           <div className={styles.section}>
             <Button className={styles.title_bar} onClick={onClickTitleBar}>
               {
-                titleArray.map((title, i) => [
+                titles.map((title, i) => [
                   scratchPaper && i === 1 ?
                     <AutosizeInput className={styles.input_title} key={`title-${i}`} value={title}
                                    onClick={e => e.stopPropagation()} onChange={e => this.handleChangeTitle(e)} /> :
                     <Ellipsis key={`title-${i}`}>{title}</Ellipsis>,
-                  i < titleArray.length - 1 &&
+                  i < titles.length - 1 &&
                   <FontAwesomeIcon className={styles.nav_arrow} fixedWidth icon={faAngleRight} key={`arrow-${i}`} />,
                 ])
               }
@@ -110,11 +138,13 @@ class Header extends React.Component {
             </Button>
           </div>
           <div className={styles.section}>
-            <Button icon={faSave} primary disabled={!scratchPaper || gistSaved}
-                    onClick={() => this.saveGist()}>Save</Button>
-            <Button icon={faTrashAlt} primary disabled={!scratchPaper} onClick={() => this.deleteGist()}
-                    confirmNeeded>Delete</Button>
-            <Button icon={faFacebook} primary disabled={scratchPaper && ['new', 'forked'].includes(scratchPaper.gistId)}
+            <Button icon={permitted ? faSave : faCodeBranch} primary disabled={permitted && saved}
+                    onClick={() => this.saveGist()}>{permitted ? 'Save' : 'Fork'}</Button>
+            {
+              permitted &&
+              <Button icon={faTrashAlt} primary onClick={() => this.deleteGist()} confirmNeeded>Delete</Button>
+            }
+            <Button icon={faFacebook} primary
                     href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}>Share</Button>
             <Button icon={faExpandArrowsAlt} primary
                     onClick={() => this.handleClickFullScreen()}>Fullscreen</Button>
