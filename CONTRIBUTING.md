@@ -6,7 +6,7 @@
 
 ## Running Locally
 
-1. Fork the main repo.
+1. Fork this repository.
 
 2. Clone your forked repo to your machine.
 

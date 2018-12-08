@@ -9,13 +9,13 @@
 
 ## Project Structure
 
-The project [algorithm-visualizer](https://github.com/algorithm-visualizer) consists of the following 3 repos.
+The project [algorithm-visualizer](https://github.com/algorithm-visualizer) consists of the following three repositories.
 
-- [algorithms](https://github.com/algorithm-visualizer/algorithms) contains public algorithms shown on the sidebar.
+- [`algorithms`](https://github.com/algorithm-visualizer/algorithms) contains public algorithms shown on the sidebar.
 
-- [tracers](https://github.com/algorithm-visualizer/tracers) builds visualization libraries for each supported language based on the specifications, and executes users' codes to extract visualization data.
+- [`tracers`](https://github.com/algorithm-visualizer/tracers) builds visualization libraries for each supported language based on the specifications, and executes users' codes to extract visualization data.
 
-- [algorithm-visualizer](https://github.com/algorithm-visualizer/algorithm-visualizer) contains the frontend server written in React and the backend server written in Node.
+- [`algorithm-visualizer`](https://github.com/algorithm-visualizer/algorithm-visualizer) contains the frontend server written in React and the backend server written in Node.
 
 ## Directory Structures
 
