@@ -32,12 +32,12 @@ const buildRelease = release => (
     execute(`git clone https://github.com/algorithm-visualizer/tracers.git ${repoPath}`, __dirname)
 ).then(() => execute(`git reset --hard ${release.target_commitish} && npm install && npm run build && ./bin/build`, repoPath));
 
-GitHubApi.getLatestRelease('algorithm-visualizer', 'tracers').then(buildRelease);
+GitHubApi.getLatestRelease('algorithm-visualizer', 'tracers').then(buildRelease).catch(console.error);
 
 webhook.on('tracers', (event, data) => {
   switch (event) {
     case 'release':
-      buildRelease(data.release);
+      buildRelease(data.release).catch(console.error);
       break;
   }
 });

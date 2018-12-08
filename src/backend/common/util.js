@@ -1,5 +1,6 @@
 import Promise from 'bluebird';
 import child_process from 'child_process';
+import path from 'path';
 import fs from 'fs-extra';
 
 const execute = (command, cwd, { stdout = process.stdout, stderr = process.stderr } = {}) => new Promise((resolve, reject) => {
@@ -22,11 +23,17 @@ const spawn = (command, args, cwd, { stdout = process.stdout, stderr = process.s
 
 const createKey = name => name.toLowerCase().replace(/ /g, '-');
 
+const isDirectory = dirPath => fs.lstatSync(dirPath).isDirectory();
+
 const listFiles = dirPath => fs.readdirSync(dirPath).filter(fileName => !fileName.startsWith('.'));
+
+const listDirectories = dirPath => listFiles(dirPath).filter(fileName => isDirectory(path.resolve(dirPath, fileName)));
 
 export {
   execute,
   spawn,
   createKey,
+  isDirectory,
   listFiles,
+  listDirectories,
 };

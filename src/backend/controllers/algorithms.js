@@ -4,7 +4,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import { NotFoundError } from '/common/error';
 import { GitHubApi } from '/apis';
-import { createKey, execute, listFiles } from '/common/util';
+import { createKey, execute, listDirectories, listFiles } from '/common/util';
 import webhook from '/common/webhook';
 
 const router = express.Router();
@@ -38,7 +38,7 @@ const cacheAlgorithm = (categoryName, algorithmName) => {
 const cacheCategory = categoryName => {
   const categoryKey = createKey(categoryName);
   const categoryPath = getPath(categoryName);
-  const algorithms = listFiles(categoryPath).map(algorithmName => cacheAlgorithm(categoryName, algorithmName));
+  const algorithms = listDirectories(categoryPath).map(algorithmName => cacheAlgorithm(categoryName, algorithmName));
   return {
     key: categoryKey,
     name: categoryName,
@@ -82,7 +82,7 @@ const cacheContributors = (files, commitAuthors) => Promise.each(files, file => 
 });
 
 const cacheCategories = () => {
-  const categories = listFiles(getPath()).map(cacheCategory);
+  const categories = listDirectories(getPath()).map(cacheCategory);
 
   const files = [];
   categories.forEach(category => category.algorithms.forEach(algorithm => files.push(...algorithm.files)));
@@ -91,19 +91,19 @@ const cacheCategories = () => {
   return categories;
 };
 
+let categories = [];
 const downloadCategories = () => (
   fs.pathExistsSync(repoPath) ?
     execute(`git fetch && git reset --hard origin/master`, repoPath) :
     execute(`git clone https://github.com/algorithm-visualizer/algorithms.git ${repoPath}`, __dirname)
-);
+).then(() => categories = cacheCategories());
 
-let categories = [];
-downloadCategories().then(() => categories = cacheCategories());
+downloadCategories().catch(console.error);
 
 webhook.on('algorithms', event => {
   switch (event) {
     case 'push':
-      downloadCategories().then(() => categories = cacheCategories());
+      downloadCategories().catch(console.error);
       break;
   }
 });
