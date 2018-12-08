@@ -1,4 +1,5 @@
 export { default as App } from './App';
+export { default as BaseComponent } from './BaseComponent';
 export { default as Button } from './Button';
 export { default as CodeEditor } from './CodeEditor';
 export { default as Divider } from './Divider';

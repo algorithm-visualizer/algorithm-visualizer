@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { classes, handleError } from '/common/util';
-import { ResizableContainer } from '/components';
+import { classes } from '/common/util';
+import { BaseComponent, ResizableContainer } from '/components';
 import { actions } from '/reducers';
 import styles from './stylesheet.scss';
 import { Array1DData, Array2DData, ChartData, Data, GraphData, LogData, MarkdownData } from '/core/datas';
 
 @connect(({ player }) => ({ player }), actions)
-class VisualizationViewer extends React.Component {
+class VisualizationViewer extends BaseComponent {
   constructor(props) {
     super(props);
 
@@ -82,7 +82,7 @@ class VisualizationViewer extends React.Component {
         data[method](...args);
       }
     } catch (error) {
-      handleError.bind(this)(error);
+      this.handleError(error);
     }
   }
 

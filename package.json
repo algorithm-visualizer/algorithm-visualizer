@@ -45,7 +45,6 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.0",
     "@fortawesome/react-fontawesome": "0.1.0",
     "autoprefixer": "latest",
-    "axios-progress-bar": "^1.1.8",
     "babel-core": "^6.18.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-builtin-extend": "^1.1.2",

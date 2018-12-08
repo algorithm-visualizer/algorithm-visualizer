@@ -1,58 +1,49 @@
 import Promise from 'bluebird';
 import axios from 'axios';
 
-axios.interceptors.response.use(
-  response => response.data,
-  error => {
-    const { data } = error.response;
-    const message = typeof data === 'string' ? data : JSON.stringify(data);
-    return Promise.reject(new Error(message));
-  },
-);
+axios.interceptors.response.use(response => response.data);
 
 const request = (url, process) => {
   const tokens = url.split('/');
   const baseURL = /^https?:\/\//i.test(url) ? '' : '/api';
   return (...args) => {
-    return new Promise((resolve, reject) => {
-      const mappedURL = baseURL + tokens.map((token, i) => token.startsWith(':') ? args.shift() : token).join('/');
-      return resolve(process(mappedURL, args));
-    });
+    const mappedURL = baseURL + tokens.map((token, i) => token.startsWith(':') ? args.shift() : token).join('/');
+    return Promise.resolve(process(mappedURL, args));
   };
 };
 
 const GET = URL => {
   return request(URL, (mappedURL, args) => {
-    const [params] = args;
-    return axios.get(mappedURL, { params });
+    const [params, cancelToken] = args;
+    return axios.get(mappedURL, { params, cancelToken });
   });
 };
 
 const DELETE = URL => {
   return request(URL, (mappedURL, args) => {
-    const [params] = args;
-    return axios.delete(mappedURL, { params });
+    const [params, cancelToken] = args;
+    return axios.delete(mappedURL, { params, cancelToken });
   });
 };
 
 const POST = URL => {
   return request(URL, (mappedURL, args) => {
-    const [body, params] = args;
-    return axios.post(mappedURL, body, { params });
+    const [body, params, cancelToken] = args;
+    return axios.post(mappedURL, body, { params, cancelToken });
   });
 };
 
 const PUT = URL => {
   return request(URL, (mappedURL, args) => {
-    const [body, params] = args;
-    return axios.put(mappedURL, body, { params });
+    const [body, params, cancelToken] = args;
+    return axios.put(mappedURL, body, { params, cancelToken });
   });
 };
 
 const PATCH = URL => {
   return request(URL, (mappedURL, args) => {
-    const [body, params] = args;
-    return axios.patch(mappedURL, body, { params });
+    const [body, params, cancelToken] = args;
+    return axios.patch(mappedURL, body, { params, cancelToken });
   });
 };
 
@@ -72,7 +63,6 @@ const GitHubApi = {
   forkGist: POST('https://api.github.com/gists/:id/forks'),
 };
 
-let jsWorker = null;
 const TracerApi = {
   md: ({ code }) => Promise.resolve([{
     tracerKey: '0-MarkdownTracer-Markdown',
@@ -83,12 +73,23 @@ const TracerApi = {
     method: 'set',
     args: [code],
   }]),
-  js: ({ code }) => new Promise((resolve, reject) => {
-    if (jsWorker) jsWorker.terminate();
-    jsWorker = new Worker('/api/tracers/js');
-    jsWorker.onmessage = e => resolve(e.data);
-    jsWorker.onerror = reject;
-    jsWorker.postMessage(code);
+  js: ({ code }, params, cancelToken) => new Promise((resolve, reject) => {
+    const worker = new Worker('/api/tracers/js');
+    if (cancelToken) {
+      cancelToken.promise.then(cancel => {
+        worker.terminate();
+        reject(cancel);
+      });
+    }
+    worker.onmessage = e => {
+      worker.terminate();
+      resolve(e.data);
+    };
+    worker.onerror = error => {
+      worker.terminate();
+      reject(error);
+    };
+    worker.postMessage(code);
   }),
   cpp: POST('/tracers/cpp'),
   java: POST('/tracers/java'),

@@ -1,20 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Promise from 'bluebird';
 import InputRange from 'react-input-range';
+import axios from 'axios';
 import faPlay from '@fortawesome/fontawesome-free-solid/faPlay';
 import faChevronLeft from '@fortawesome/fontawesome-free-solid/faChevronLeft';
 import faChevronRight from '@fortawesome/fontawesome-free-solid/faChevronRight';
 import faPause from '@fortawesome/fontawesome-free-solid/faPause';
 import faWrench from '@fortawesome/fontawesome-free-solid/faWrench';
-import { classes, extension, handleError } from '/common/util';
+import { classes, extension } from '/common/util';
 import { TracerApi } from '/apis';
 import { actions } from '/reducers';
-import { Button, ProgressBar } from '/components';
+import { BaseComponent, Button, ProgressBar } from '/components';
 import styles from './stylesheet.scss';
 
 @connect(({ player }) => ({ player }), actions)
-class Player extends React.Component {
+class Player extends BaseComponent {
   constructor(props) {
     super(props);
 
@@ -23,6 +23,8 @@ class Player extends React.Component {
       playing: false,
       building: false,
     };
+
+    this.tracerApiSource = null;
 
     this.reset();
   }
@@ -65,17 +67,31 @@ class Player extends React.Component {
   }
 
   build(file) {
-    if (!file) return;
-    this.setState({ building: true });
     this.reset();
+    if (!file) return;
+
+    if (this.tracerApiSource) this.tracerApiSource.cancel();
+    this.tracerApiSource = axios.CancelToken.source();
+    this.setState({ building: true });
+
     const ext = extension(file.name);
-    (ext in TracerApi ?
-      TracerApi[ext]({ code: file.content }) :
-      Promise.reject(new Error('Language Not Supported')))
-      .then(traces => this.reset(traces))
-      .then(() => this.next())
-      .catch(handleError.bind(this))
-      .finally(() => this.setState({ building: false }));
+    if (ext in TracerApi) {
+      TracerApi[ext]({ code: file.content }, undefined, this.tracerApiSource.token)
+        .then(traces => {
+          this.tracerApiSource = null;
+          this.setState({ building: false });
+          this.reset(traces);
+          this.next();
+        })
+        .catch(error => {
+          if (axios.isCancel(error)) return;
+          this.tracerApiSource = null;
+          this.setState({ building: false });
+          this.handleError(error);
+        });
+    } else {
+      this.handleError(new Error('Language Not Supported'));
+    }
   }
 
   isValidCursor(cursor) {

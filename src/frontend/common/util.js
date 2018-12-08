@@ -21,15 +21,9 @@ const refineGist = gist => {
   return { login, gistId, title, files };
 };
 
-const handleError = function (error) {
-  console.error(error);
-  this.props.showErrorToast(error.message);
-};
-
 export {
   classes,
   distance,
   extension,
   refineGist,
-  handleError,
 };

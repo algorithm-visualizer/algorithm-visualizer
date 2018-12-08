@@ -16,15 +16,15 @@ import faSave from '@fortawesome/fontawesome-free-solid/faSave';
 import faFacebook from '@fortawesome/fontawesome-free-brands/faFacebook';
 import faStar from '@fortawesome/fontawesome-free-solid/faStar';
 import { GitHubApi } from '/apis';
-import { classes, handleError, refineGist } from '/common/util';
+import { classes, refineGist } from '/common/util';
 import { actions } from '/reducers';
 import { languages } from '/common/config';
-import { Button, Ellipsis, ListItem, Player } from '/components';
+import { BaseComponent, Button, Ellipsis, ListItem, Player } from '/components';
 import styles from './stylesheet.scss';
 
 @withRouter
 @connect(({ current, env }) => ({ current, env }), actions)
-class Header extends React.Component {
+class Header extends BaseComponent {
   handleClickFullScreen() {
     if (screenfull.enabled) {
       if (screenfull.isFullscreen) {
@@ -80,7 +80,7 @@ class Header extends React.Component {
         }
       })
       .then(this.props.loadScratchPapers)
-      .catch(handleError.bind(this));
+      .catch(this.handleError);
   }
 
   hasPermission() {
@@ -107,7 +107,7 @@ class Header extends React.Component {
           this.props.history.push('/');
         })
         .then(this.props.loadScratchPapers)
-        .catch(handleError.bind(this));
+        .catch(this.handleError);
     }
   }
 

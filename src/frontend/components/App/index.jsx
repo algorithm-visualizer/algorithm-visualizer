@@ -6,9 +6,8 @@ import { Helmet } from 'react-helmet';
 import AutosizeInput from 'react-input-autosize';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import faPlus from '@fortawesome/fontawesome-free-solid/faPlus';
-import { loadProgressBar } from 'axios-progress-bar';
-import 'axios-progress-bar/dist/nprogress.css';
 import {
+  BaseComponent,
   CodeEditor,
   Header,
   Navigator,
@@ -19,15 +18,13 @@ import {
 } from '/components';
 import { AlgorithmApi, GitHubApi } from '/apis';
 import { actions } from '/reducers';
-import { extension, handleError, refineGist } from '/common/util';
+import { extension, refineGist } from '/common/util';
 import { exts, languages } from '/common/config';
 import { SCRATCH_PAPER_MD } from '/files';
 import styles from './stylesheet.scss';
 
-loadProgressBar();
-
 @connect(({ current, env }) => ({ current, env }), actions)
-class App extends React.Component {
+class App extends BaseComponent {
   constructor(props) {
     super(props);
 
@@ -51,9 +48,10 @@ class App extends React.Component {
 
     AlgorithmApi.getCategories()
       .then(({ categories }) => this.props.setCategories(categories))
-      .catch(handleError.bind(this));
+      .catch(this.handleError);
 
-    this.props.history.block(() => {
+    this.props.history.block((location) => {
+      if (location.pathname === this.props.location.pathname) return;
       if (!this.isSaved()) return 'Are you sure want to discard changes?';
     });
   }
@@ -117,7 +115,7 @@ class App extends React.Component {
     });
     return paginateGists()
       .then(scratchPapers => this.props.setScratchPapers(scratchPapers))
-      .catch(handleError.bind(this));
+      .catch(this.handleError);
   }
 
   loadAlgorithm({ categoryKey, algorithmKey, gistId }) {
@@ -146,7 +144,7 @@ class App extends React.Component {
     };
     fetch()
       .catch(error => {
-        handleError.bind(this)(error);
+        this.handleError(error);
         this.props.setHome();
       })
       .finally(() => {
