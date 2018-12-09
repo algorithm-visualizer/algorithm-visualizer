@@ -171,15 +171,11 @@ class App extends BaseComponent {
   handleAddFile() {
     const { ext } = this.props.env;
     const { files } = this.props.current;
-    let name = `code.${ext}`;
-    let count = 0;
-    while (files.some(file => file.name === name)) name = `code-${++count}.${ext}`;
     const language = languages.find(language => language.ext === ext);
-    this.props.addFile({
-      name,
-      content: language.skeleton,
-      contributors: undefined,
-    });
+    const file = {...language.skeleton};
+    let count = 0;
+    while (files.some(existingFile => existingFile.name === file.name)) file.name = `code-${++count}.${ext}`;
+    this.props.addFile(file);
   }
 
   handleRenameFile(e) {
