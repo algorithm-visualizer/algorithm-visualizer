@@ -98,13 +98,11 @@ class Header extends BaseComponent {
     const { scratchPaper } = this.props.current;
     const { gistId } = scratchPaper;
     if (gistId === 'new') {
-      this.props.markSaved();
-      this.props.history.push('/');
+      this.props.ignoreHistoryBlock(() => this.props.history.push('/'));
     } else {
       GitHubApi.deleteGist(gistId)
         .then(() => {
-          this.props.markSaved();
-          this.props.history.push('/');
+          this.props.ignoreHistoryBlock(() => this.props.history.push('/'));
         })
         .then(this.props.loadScratchPapers)
         .catch(this.handleError);

@@ -35,6 +35,8 @@ class App extends BaseComponent {
     };
 
     this.codeEditorRef = React.createRef();
+
+    this.ignoreHistoryBlock = this.ignoreHistoryBlock.bind(this);
   }
 
   componentDidMount() {
@@ -50,17 +52,14 @@ class App extends BaseComponent {
       .then(({ categories }) => this.props.setCategories(categories))
       .catch(this.handleError);
 
-    this.props.history.block((location) => {
-      if (location.pathname === this.props.location.pathname) return;
-      if (!this.isSaved()) return 'Are you sure want to discard changes?';
-    });
+    this.toggleHistoryBlock(true);
   }
 
   componentWillUnmount() {
     delete window.signIn;
     delete window.signOut;
 
-    window.onbeforeunload = undefined;
+    this.toggleHistoryBlock(false);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -72,6 +71,24 @@ class App extends BaseComponent {
       if (scratchPaper && scratchPaper.gistId === gistId) return;
       this.loadAlgorithm(params);
     }
+  }
+
+  toggleHistoryBlock(enable = !this.unblock) {
+    if (enable) {
+      this.unblock = this.props.history.block((location) => {
+        if (location.pathname === this.props.location.pathname) return;
+        if (!this.isSaved()) return 'Are you sure want to discard changes?';
+      });
+    } else {
+      this.unblock();
+      this.unblock = undefined;
+    }
+  }
+
+  ignoreHistoryBlock(process) {
+    this.toggleHistoryBlock(false);
+    process();
+    this.toggleHistoryBlock(true);
   }
 
   signIn(accessToken) {
@@ -172,7 +189,7 @@ class App extends BaseComponent {
     const { ext } = this.props.env;
     const { files } = this.props.current;
     const language = languages.find(language => language.ext === ext);
-    const file = {...language.skeleton};
+    const file = { ...language.skeleton };
     let count = 0;
     while (files.some(existingFile => existingFile.name === file.name)) file.name = `code-${++count}.${ext}`;
     this.props.addFile(file);
@@ -239,7 +256,8 @@ class App extends BaseComponent {
           <meta name="description" content={description} />
         </Helmet>
         <Header className={styles.header} onClickTitleBar={() => this.toggleNavigatorOpened()} saved={saved}
-                navigatorOpened={navigatorOpened} loadScratchPapers={() => this.loadScratchPapers()} file={file} />
+                navigatorOpened={navigatorOpened} loadScratchPapers={() => this.loadScratchPapers()} file={file}
+                ignoreHistoryBlock={this.ignoreHistoryBlock} />
         <ResizableContainer className={styles.workspace} horizontal weights={workspaceWeights}
                             visibles={[navigatorOpened, true, true]}
                             onChangeWeights={weights => this.handleChangeWorkspaceWeights(weights)}>

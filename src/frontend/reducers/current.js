@@ -26,7 +26,6 @@ const setScratchPaper = createAction(`${prefix}/SET_SCRATCH_PAPER`, ({ login, gi
     lastFiles: files,
   };
 });
-const markSaved = createAction(`${prefix}/MARK_SAVED`);
 const modifyTitle = createAction(`${prefix}/MODIFY_TITLE`, title => ({ title }));
 const addFile = createAction(`${prefix}/ADD_FILE`, file => ({ file }));
 const modifyFile = createAction(`${prefix}/MODIFY_FILE`, file => ({ file }));
@@ -37,7 +36,6 @@ export const actions = {
   setHome,
   setAlgorithm,
   setScratchPaper,
-  markSaved,
   modifyTitle,
   addFile,
   modifyFile,
@@ -68,13 +66,6 @@ export default handleActions({
     ...state,
     ...payload,
   }),
-  [markSaved]: state => {
-    return {
-      ...state,
-      lastTitles: state.titles,
-      lastFiles: state.files,
-    };
-  },
   [modifyTitle]: (state, { payload }) => {
     const { title } = payload;
     return {
