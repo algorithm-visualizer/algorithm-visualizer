@@ -20,7 +20,7 @@ import { AlgorithmApi, GitHubApi } from '/apis';
 import { actions } from '/reducers';
 import { extension, refineGist } from '/common/util';
 import { exts, languages } from '/common/config';
-import { SCRATCH_PAPER_MD } from '/files';
+import { CONTRIBUTING_MD } from '/files';
 import styles from './stylesheet.scss';
 
 @connect(({ current, env }) => ({ current, env }), actions)
@@ -130,7 +130,7 @@ class App extends BaseComponent {
           login: undefined,
           gistId,
           title: 'Untitled',
-          files: [SCRATCH_PAPER_MD, language.skeleton],
+          files: [CONTRIBUTING_MD, language.skeleton],
         });
         return Promise.resolve();
       } else if (gistId) {

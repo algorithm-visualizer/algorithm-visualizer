@@ -7,8 +7,39 @@ class MarkdownRenderer extends Renderer {
   renderData() {
     const { markdown } = this.props.data;
 
-    const link = ({ href, ...rest }) => {
+    const heading = ({ level, children, ...rest }) => {
+      const HeadingComponent = [
+        props => <h1 {...props} />,
+        props => <h2 {...props} />,
+        props => <h3 {...props} />,
+        props => <h4 {...props} />,
+        props => <h5 {...props} />,
+        props => <h6 {...props} />,
+      ][level - 1];
+
+      const idfy = text => text.toLowerCase().trim().replace(/[^\w \-]/g, '').replace(/ /g, '-');
+
+      const getText = children => {
+        return children ? children.filter(child => child).map(child => {
+          if (typeof child === 'string') return child;
+          if ('props' in child) return getText(child.props.children);
+          return '';
+        }).join('') : '';
+      };
+
+      const id = idfy(getText(children));
+
       return (
+        <HeadingComponent id={id} {...rest}>
+          {children}
+        </HeadingComponent>
+      );
+    };
+
+    const link = ({ href, ...rest }) => {
+      return /^#/.test(href) ? (
+        <a href={href} {...rest} />
+      ) : (
         <a href={href} rel="noopener" target="_blank" {...rest} />
       );
     };
@@ -26,7 +57,8 @@ class MarkdownRenderer extends Renderer {
     };
 
     return (
-      <ReactMarkdown className={styles.markdown} source={markdown} renderers={{ link, image }} escapeHtml={false} />
+      <ReactMarkdown className={styles.markdown} source={markdown} renderers={{ heading, link, image }}
+                     escapeHtml={false} />
     );
   }
 }

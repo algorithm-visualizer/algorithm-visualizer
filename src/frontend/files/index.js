@@ -17,4 +17,4 @@ export const CODE_CPP = createUserFile('skeletons/code.cpp');
 export const CODE_JAVA = createUserFile('skeletons/code.java');
 export const CODE_JS = createUserFile('skeletons/code.js');
 export const README_MD = createProjectFile('algorithm-visualizer/README.md');
-export const SCRATCH_PAPER_MD = createProjectFile('scratch-paper/README.md');
+export const CONTRIBUTING_MD = createProjectFile('scratch-paper/CONTRIBUTING.md');
