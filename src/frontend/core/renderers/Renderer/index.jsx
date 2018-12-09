@@ -11,6 +11,12 @@ class Renderer extends React.Component {
     this.handleMouseMove = this.handleMouseMove.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
     this.handleWheel = this.handleWheel.bind(this);
+
+    this._handleMouseDown = this.handleMouseDown;
+    this._handleWheel = this.handleWheel;
+    this.togglePan(false);
+    this.toggleZoom(false);
+
     this.lastX = null;
     this.lastY = null;
     this.centerX = 0;
@@ -22,6 +28,14 @@ class Renderer extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
+  }
+
+  togglePan(enable = !this.handleMouseDown) {
+    this.handleMouseDown = enable ? this._handleMouseDown : undefined;
+  }
+
+  toggleZoom(enable = !this.handleWheel) {
+    this.handleWheel = enable ? this._handleWheel : undefined;
   }
 
   handleMouseDown(e) {

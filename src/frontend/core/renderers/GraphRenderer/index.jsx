@@ -9,6 +9,9 @@ class GraphRenderer extends Renderer {
 
     this.element = React.createRef();
     this.selectedNode = null;
+
+    this.togglePan(true);
+    this.toggleZoom(true);
   }
 
   handleMouseDown(e) {

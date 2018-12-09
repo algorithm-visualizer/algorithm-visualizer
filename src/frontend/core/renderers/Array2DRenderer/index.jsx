@@ -4,6 +4,13 @@ import styles from './stylesheet.scss';
 import { classes } from '/common/util';
 
 class Array2DRenderer extends Renderer {
+  constructor(props) {
+    super(props);
+
+    this.togglePan(true);
+    this.toggleZoom(true);
+  }
+
   renderData() {
     const { data } = this.props.data;
 
