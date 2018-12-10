@@ -62,7 +62,11 @@ class Navigator extends React.Component {
 
   testQuery(value) {
     const { query } = this.state;
-    return new RegExp(query, 'i').test(value);
+    const refine = string => string.replace(/-/g, ' ').replace(/[^\w ]/g, '');
+    const refinedQuery = refine(query);
+    const refinedValue = refine(value);
+    return new RegExp(`(^| )${refinedQuery}`, 'i').test(refinedValue) ||
+      new RegExp(refinedQuery, 'i').test(refinedValue.split(' ').map(v => v && v[0]).join(''));
   }
 
   render() {
