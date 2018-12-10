@@ -162,7 +162,7 @@ class App extends BaseComponent {
     fetch()
       .catch(error => {
         this.handleError(error);
-        this.props.setHome();
+        this.props.history.push('/');
       })
       .finally(() => {
         const { files } = this.props.current;
