@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Promise from 'bluebird';
 import { Helmet } from 'react-helmet';
 import AutosizeInput from 'react-input-autosize';
+import removeMarkdown from 'remove-markdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import faPlus from '@fortawesome/fontawesome-free-solid/faPlus';
 import {
@@ -228,8 +229,12 @@ class App extends BaseComponent {
     const { files } = this.props.current;
     const readmeFile = files.find(file => file.name === 'README.md');
     if (!readmeFile) return '';
-    const groups = /^\s*# .*\n+([^\n]+)/.exec(readmeFile.content);
-    return groups && groups[1] || '';
+    const lines = readmeFile.content.split('\n');
+    lines.shift();
+    while (lines.length && !lines[0].trim()) lines.shift();
+    let descriptionLines = [];
+    while (lines.length && lines[0].trim()) descriptionLines.push(lines.shift());
+    return removeMarkdown(descriptionLines.join(' '));
   }
 
   render() {

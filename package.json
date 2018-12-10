@@ -89,6 +89,7 @@
     "redbox-react": "^1.5.0",
     "redux": "^4.0.0",
     "redux-actions": "^2.2.1",
+    "remove-markdown": "^0.3.0",
     "sass-loader": "^7.0.3",
     "screenfull": "^3.3.2",
     "style-loader": "^0.21.0",
