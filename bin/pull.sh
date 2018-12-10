@@ -2,5 +2,5 @@
 
 git fetch &&
 git reset --hard origin/master &&
-npm install &&
+npm --production=false install &&
 npm run build
