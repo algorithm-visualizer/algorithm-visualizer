@@ -225,25 +225,12 @@ class App extends BaseComponent {
     return serialize(titles, files) === serialize(lastTitles, lastFiles);
   }
 
-  getDescription() {
-    const { files } = this.props.current;
-    const readmeFile = files.find(file => file.name === 'README.md');
-    if (!readmeFile) return '';
-    const lines = readmeFile.content.split('\n');
-    lines.shift();
-    while (lines.length && !lines[0].trim()) lines.shift();
-    let descriptionLines = [];
-    while (lines.length && lines[0].trim()) descriptionLines.push(lines.shift());
-    return removeMarkdown(descriptionLines.join(' '));
-  }
-
   render() {
     const { navigatorOpened, workspaceWeights, editorTabIndex } = this.state;
 
-    const { files, titles } = this.props.current;
+    const { files, titles, description } = this.props.current;
     const saved = this.isSaved();
     const title = `${saved ? '' : '(Unsaved) '}${titles.join(' - ')}`;
-    const description = this.getDescription();
     const file = files[editorTabIndex];
 
     const editorTitles = files.map(file => file.name);

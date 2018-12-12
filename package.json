@@ -1,6 +1,7 @@
 {
   "name": "algorithm-visualizer",
   "version": "2.0.0",
+  "title": "Algorithm Visualizer",
   "description": "Algorithm Visualizer is an interactive online platform that visualizes algorithms from code.",
   "scripts": {
     "dev": "NODE_ENV=development ./bin/www",
@@ -25,18 +26,17 @@
   },
   "license": "MIT",
   "dependencies": {
-    "express": "^4.15.4",
-    "morgan": "^1.9.1",
-    "cookie-parser": "^1.4.3",
-    "body-parser": "^1.18.2",
-    "bluebird": "latest",
     "axios": "latest",
-    "fs-extra": "^6.0.1",
+    "bluebird": "latest",
+    "body-parser": "^1.18.2",
+    "connect-history-api-fallback": "^1.5.0",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.4",
     "express-github-webhook": "^1.0.6",
-    "uuid": "^3.2.1",
-    "compression": "latest",
-    "connect-history-api-fallback": "^1.3.0",
-    "http-proxy-middleware": "^0.18.0"
+    "fs-extra": "^6.0.1",
+    "http-proxy-middleware": "^0.18.0",
+    "morgan": "^1.9.1",
+    "uuid": "^3.2.1"
   },
   "devDependencies": {
     "@fortawesome/fontawesome": "^1.1.5",

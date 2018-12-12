@@ -1,5 +1,3 @@
-const compression = require('compression');
-const history = require('connect-history-api-fallback');
 const express = require('express');
 const app = express();
 
@@ -21,8 +19,6 @@ app.use((req, res, next) => {
   }
 });
 app.use(apiEndpoint, backend);
-app.use(history());
-app.use(compression());
 app.use(frontend);
 
 module.exports = app;

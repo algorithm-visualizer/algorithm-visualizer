@@ -4,7 +4,7 @@ import { README_MD } from '/files';
 const prefix = 'CURRENT';
 
 const setHome = createAction(`${prefix}/SET_HOME`, () => defaultState);
-const setAlgorithm = createAction(`${prefix}/SET_ALGORITHM`, ({ categoryKey, categoryName, algorithmKey, algorithmName, files }) => {
+const setAlgorithm = createAction(`${prefix}/SET_ALGORITHM`, ({ categoryKey, categoryName, algorithmKey, algorithmName, files, description }) => {
   const titles = [categoryName, algorithmName];
   return {
     algorithm: { categoryKey, algorithmKey },
@@ -13,6 +13,7 @@ const setAlgorithm = createAction(`${prefix}/SET_ALGORITHM`, ({ categoryKey, cat
     files,
     lastTitles: titles,
     lastFiles: files,
+    description,
   };
 });
 const setScratchPaper = createAction(`${prefix}/SET_SCRATCH_PAPER`, ({ login, gistId, title, files }) => {
@@ -24,6 +25,7 @@ const setScratchPaper = createAction(`${prefix}/SET_SCRATCH_PAPER`, ({ login, gi
     files,
     lastTitles: titles,
     lastFiles: files,
+    description: homeDescription,
   };
 });
 const modifyTitle = createAction(`${prefix}/MODIFY_TITLE`, title => ({ title }));
@@ -45,6 +47,7 @@ export const actions = {
 
 const homeTitles = ['Algorithm Visualizer'];
 const homeFiles = [README_MD];
+const homeDescription = 'Algorithm Visualizer is an interactive online platform that visualizes algorithms from code.';
 const defaultState = {
   algorithm: {
     categoryKey: 'algorithm-visualizer',
@@ -55,6 +58,7 @@ const defaultState = {
   files: homeFiles,
   lastTitles: homeTitles,
   lastFiles: homeFiles,
+  description: homeDescription,
 };
 
 export default handleActions({

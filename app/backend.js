@@ -34,7 +34,6 @@ if (__DEV__) {
 
       try {
         if (httpServer) httpServer.close();
-        delete require.cache[require.resolve('axios')];
         delete require.cache[require.resolve(backendBuildPath)];
         const app = require(backendBuildPath).default;
         httpServer = app.listen(proxyPort);
@@ -43,13 +42,12 @@ if (__DEV__) {
       }
     }
   });
-} else {
-  const app = require(backendBuildPath).default;
-  app.listen(proxyPort);
-}
 
-module.exports = proxy({
-  target: `http://localhost:${proxyPort}/`,
-  pathRewrite: { ['^' + apiEndpoint]: '' },
-  ws: true,
-});
+  module.exports = proxy({
+    target: `http://localhost:${proxyPort}/`,
+    pathRewrite: { ['^' + apiEndpoint]: '' },
+    ws: true,
+  });
+} else {
+  module.exports = require(backendBuildPath).default;
+}

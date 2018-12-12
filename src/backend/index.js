@@ -7,6 +7,7 @@ import * as controllers from '/controllers';
 import { ClientError, ForbiddenError, NotFoundError, UnauthorizedError } from '/common/error';
 import webhook from '/common/webhook';
 import { spawn } from '/common/util';
+import hierarchy from '/common/hierarchy';
 
 const app = express();
 app.use(morgan('tiny'));
@@ -29,6 +30,7 @@ app.use((err, req, res, next) => {
   res.send(err.message);
   console.error(err);
 });
+app.hierarchy = hierarchy;
 
 const rootPath = path.resolve(__dirname, '..', '..');
 webhook.on('algorithm-visualizer', event => {
