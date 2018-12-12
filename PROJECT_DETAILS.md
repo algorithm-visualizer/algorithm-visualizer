@@ -9,7 +9,7 @@
 
 ## Project Structure
 
-The project [algorithm-visualizer](https://github.com/algorithm-visualizer) consists of the following three repositories.
+The project [Algorithm Visualizer](https://github.com/algorithm-visualizer) consists of the following three repositories.
 
 - [`algorithms`](https://github.com/algorithm-visualizer/algorithms) contains public algorithms shown on the sidebar.
 
