@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import Promise from 'bluebird';
 import { Helmet } from 'react-helmet';
 import AutosizeInput from 'react-input-autosize';
-import removeMarkdown from 'remove-markdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import faPlus from '@fortawesome/fontawesome-free-solid/faPlus';
 import {
@@ -142,7 +141,10 @@ class App extends BaseComponent {
   loadAlgorithm({ categoryKey, algorithmKey, gistId }) {
     const { ext } = this.props.env;
     const fetch = () => {
-      if (categoryKey && algorithmKey) {
+      if (window.__PRELOADED_ALGORITHM__) {
+        this.props.setAlgorithm(window.__PRELOADED_ALGORITHM__);
+        delete window.__PRELOADED_ALGORITHM__;
+      } else if (categoryKey && algorithmKey) {
         return AlgorithmApi.getAlgorithm(categoryKey, algorithmKey)
           .then(({ algorithm }) => this.props.setAlgorithm(algorithm));
       } else if (gistId === 'new') {
@@ -153,28 +155,30 @@ class App extends BaseComponent {
           title: 'Untitled',
           files: [CONTRIBUTING_MD, language.skeleton],
         });
-        return Promise.resolve();
       } else if (gistId) {
         return GitHubApi.getGist(gistId, { timestamp: Date.now() })
           .then(refineGist)
           .then(this.props.setScratchPaper);
       } else {
         this.props.setHome();
-        return Promise.resolve();
       }
+      return Promise.resolve();
     };
     fetch()
+      .then(() => this.selectDefaultTab())
       .catch(error => {
         this.handleError(error);
         this.props.history.push('/');
-      })
-      .finally(() => {
-        const { files } = this.props.current;
-        let editorTabIndex = files.findIndex(file => extension(file.name) === ext);
-        if (!~editorTabIndex) editorTabIndex = files.findIndex(file => exts.includes(extension(file.name)));
-        if (!~editorTabIndex) editorTabIndex = Math.min(0, files.length - 1);
-        this.handleChangeEditorTabIndex(editorTabIndex);
       });
+  }
+
+  selectDefaultTab() {
+    const { ext } = this.props.env;
+    const { files } = this.props.current;
+    let editorTabIndex = files.findIndex(file => extension(file.name) === ext);
+    if (!~editorTabIndex) editorTabIndex = files.findIndex(file => exts.includes(extension(file.name)));
+    if (!~editorTabIndex) editorTabIndex = Math.min(0, files.length - 1);
+    this.handleChangeEditorTabIndex(editorTabIndex);
   }
 
   handleChangeWorkspaceWeights(workspaceWeights) {

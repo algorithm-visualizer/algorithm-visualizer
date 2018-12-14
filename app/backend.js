@@ -1,20 +1,15 @@
-const proxy = require('http-proxy-middleware');
 const {
   __DEV__,
-  proxyPort,
   backendBuildPath,
-  apiEndpoint,
 } = require('../environment');
 
 if (__DEV__) {
   const webpack = require('webpack');
-
   const webpackConfig = require('../webpack.backend.config.js');
-
   const compiler = webpack(webpackConfig);
 
+  let backend = null;
   let lastHash = null;
-  let httpServer = null;
   compiler.watch({
     watchOptions: {
       ignored: /public/,
@@ -24,30 +19,24 @@ if (__DEV__) {
       lastHash = null;
       compiler.purgeInputFileSystem();
       console.error(err);
-    }
-    if (stats.hash !== lastHash) {
+    } else if (stats.hash !== lastHash) {
       lastHash = stats.hash;
       console.info(stats.toString({
         cached: false,
         colors: true,
       }));
 
-      try {
-        if (httpServer) httpServer.close();
-        delete require.cache[require.resolve(backendBuildPath)];
-        const app = require(backendBuildPath).default;
-        httpServer = app.listen(proxyPort);
-      } catch (e) {
-        console.error(e);
-      }
+      delete require.cache[require.resolve(backendBuildPath)];
+      backend = require(backendBuildPath).default;
     }
   });
 
-  module.exports = proxy({
-    target: `http://localhost:${proxyPort}/`,
-    pathRewrite: { ['^' + apiEndpoint]: '' },
-    ws: true,
-  });
+  const backendWrapper = (req, res, next) => backend(req, res, next);
+  backendWrapper.getHierarchy = () => backend.hierarchy;
+  module.exports = backendWrapper;
 } else {
-  module.exports = require(backendBuildPath).default;
+  const backend = require(backendBuildPath).default;
+  const backendWrapper = (req, res, next) => backend(req, res, next);
+  backendWrapper.getHierarchy = () => backend.hierarchy;
+  module.exports = backendWrapper;
 }

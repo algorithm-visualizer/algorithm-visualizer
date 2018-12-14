@@ -29,12 +29,10 @@
     "axios": "latest",
     "bluebird": "latest",
     "body-parser": "^1.18.2",
-    "connect-history-api-fallback": "^1.5.0",
     "cookie-parser": "^1.4.3",
     "express": "^4.15.4",
     "express-github-webhook": "^1.0.6",
     "fs-extra": "^6.0.1",
-    "http-proxy-middleware": "^0.18.0",
     "morgan": "^1.9.1",
     "uuid": "^3.2.1"
   },
@@ -97,7 +95,7 @@
     "webpack": "^4.5.0",
     "webpack-bundle-analyzer": "^2.11.1",
     "webpack-cli": "^3.0.8",
-    "webpack-dev-middleware": "^3.1.0",
+    "webpack-dev-middleware": "^3.4.0",
     "webpack-hot-middleware": "^2.19.1",
     "webpack-node-externals": "^1.6.0"
   }

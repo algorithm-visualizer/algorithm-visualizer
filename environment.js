@@ -6,7 +6,6 @@ const {
 
   HTTP_PORT = '8080',
   HTTPS_PORT = '8443',
-  PROXY_PORT = '3000',
 
   GITHUB_CLIENT_ID,
   GITHUB_CLIENT_SECRET,
@@ -26,7 +25,6 @@ const __DEV__ = !__PROD__;
 
 const httpPort = parseInt(HTTP_PORT);
 const httpsPort = parseInt(HTTPS_PORT);
-const proxyPort = parseInt(PROXY_PORT);
 
 const githubClientId = GITHUB_CLIENT_ID;
 const githubClientSecret = GITHUB_CLIENT_SECRET;
@@ -54,7 +52,6 @@ module.exports = {
   __DEV__,
   httpPort,
   httpsPort,
-  proxyPort,
   githubClientId,
   githubClientSecret,
   githubWebhookSecret,
