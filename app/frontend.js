@@ -39,7 +39,7 @@ if (__DEV__) {
     });
   });
 } else {
-  app.use(express.static(frontendBuildPath));
+  app.use(express.static(frontendBuildPath, { index: false }));
   app.use((req, res, next) => {
     const filePath = path.resolve(frontendBuildPath, 'index.html');
     fs.readFile(filePath, 'utf8', (err, data) => {
