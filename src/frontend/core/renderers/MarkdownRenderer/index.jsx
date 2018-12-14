@@ -45,15 +45,20 @@ class MarkdownRenderer extends Renderer {
     };
 
     const image = ({ src, ...rest }) => {
-      let newSrc;
-      const codecogs = 'https://latex.codecogs.com/svg.latex?';
-      if (src.startsWith(codecogs)) {
-        const latex = src.substring(codecogs.length);
-        newSrc = `${codecogs}\\color{White}${latex}`;
-      } else {
-        newSrc = src;
+      let newSrc = src;
+      let style = { maxWidth: '100%' };
+      const CODECOGS = 'https://latex.codecogs.com/svg.latex?';
+      const WIKIMEDIA_IMAGE = 'https://upload.wikimedia.org/wikipedia/';
+      const WIKIMEDIA_MATH = 'https://wikimedia.org/api/rest_v1/media/math/render/svg/';
+      if (src.startsWith(CODECOGS)) {
+        const latex = src.substring(CODECOGS.length);
+        newSrc = `${CODECOGS}\\color{White}${latex}`;
+      } else if (src.startsWith(WIKIMEDIA_IMAGE)) {
+        style.backgroundColor = 'white';
+      } else if (src.startsWith(WIKIMEDIA_MATH)) {
+        style.filter = 'invert(100%)';
       }
-      return <img src={newSrc} style={{ maxWidth: '100%' }} {...rest} />;
+      return <img src={newSrc} style={style} {...rest} />;
     };
 
     return (
