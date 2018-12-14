@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 git fetch &&
+! git diff-index --quiet origin/master &&
 git reset --hard origin/master &&
-npm --production=false install &&
+npm install &&
 npm run build

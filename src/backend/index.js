@@ -1,4 +1,3 @@
-import path from 'path';
 import express from 'express';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
@@ -6,7 +5,6 @@ import bodyParser from 'body-parser';
 import * as controllers from '/controllers';
 import { ClientError, ForbiddenError, NotFoundError, UnauthorizedError } from '/common/error';
 import webhook from '/common/webhook';
-import { spawn } from '/common/util';
 import hierarchy from '/common/hierarchy';
 
 const app = express();
@@ -32,11 +30,10 @@ app.use((err, req, res, next) => {
 });
 app.hierarchy = hierarchy;
 
-const rootPath = path.resolve(__dirname, '..', '..');
 webhook.on('algorithm-visualizer', event => {
   switch (event) {
     case 'push':
-      spawn('sh', ['./bin/pull.sh'], rootPath).then(() => process.exit(0));
+      process.exit(0);
       break;
   }
 });

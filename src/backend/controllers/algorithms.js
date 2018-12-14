@@ -3,7 +3,7 @@ import fs from 'fs-extra';
 import { execute } from '/common/util';
 import webhook from '/common/webhook';
 import hierarchy from '/common/hierarchy';
-import { NotFoundError } from '../common/error';
+import { NotFoundError } from '/common/error';
 
 const router = express.Router();
 

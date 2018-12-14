@@ -9,6 +9,8 @@
     "build": "npm run build:frontend && npm run build:backend",
     "build:frontend": "NODE_ENV=production node ./node_modules/webpack/bin/webpack --bail --progress --config webpack.frontend.config.js",
     "build:backend": "NODE_ENV=production node ./node_modules/webpack/bin/webpack --bail --progress --config webpack.backend.config.js",
+    "pull": "NODE_ENV=development ./bin/pull",
+    "pm2": "npm run pull ; npm start",
     "lint": "./node_modules/.bin/eslint --fix src"
   },
   "repository": {

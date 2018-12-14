@@ -14,14 +14,6 @@ const execute = (command, cwd, { stdout = process.stdout, stderr = process.stder
   if (stderr) child.stderr.pipe(stderr);
 });
 
-const spawn = (command, args, cwd, { stdout = process.stdout, stderr = process.stderr } = {}) => new Promise((resolve, reject) => {
-  if (!cwd) return reject(new Error('CWD Not Specified'));
-  const child = child_process.spawn(command, args, { cwd });
-  child.on('close', code => code ? reject(new Error(`Process exited with code: ${code}`)) : resolve());
-  if (stdout) child.stdout.pipe(stdout);
-  if (stderr) child.stderr.pipe(stderr);
-});
-
 const createKey = name => name.toLowerCase().trim().replace(/[^\w \-]/g, '').replace(/ /g, '-');
 
 const isDirectory = dirPath => fs.lstatSync(dirPath).isDirectory();
@@ -43,7 +35,6 @@ const getDescription = files => {
 
 export {
   execute,
-  spawn,
   createKey,
   isDirectory,
   listFiles,
