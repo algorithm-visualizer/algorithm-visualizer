@@ -28,7 +28,7 @@ const trace = lang => (req, res, next) => {
 
 const buildRelease = release => (
   fs.pathExistsSync(repoPath) ?
-    execute(`git fetch && ! git diff-index --quiet ${release.target_commitish}`, repoPath) :
+    execute(`git fetch && ! git diff-index --quiet ${release.target_commitish} -- ':!package-lock.json'`, repoPath) :
     execute(`git clone https://github.com/algorithm-visualizer/tracers.git ${repoPath}`, __dirname)
 ).then(() => execute(`git reset --hard ${release.target_commitish} && npm install && npm run build && ./bin/build`, repoPath));
 
