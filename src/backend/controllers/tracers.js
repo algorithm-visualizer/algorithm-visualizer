@@ -1,54 +1,78 @@
 import express from 'express';
 import fs from 'fs-extra';
+import Promise from 'bluebird';
 import uuid from 'uuid';
 import path from 'path';
 import { GitHubApi } from '/apis';
 import { execute } from '/common/util';
 import webhook from '/common/webhook';
+import { ImageBuilder, WorkerBuilder } from '/tracers';
+import { memoryLimit, timeLimit } from '/common/config';
 
 const router = express.Router();
 
-const repoPath = path.resolve(__dirname, '..', 'public', 'tracers');
-const getCodesPath = (...args) => path.resolve(__dirname, '..', 'public', 'codes', ...args);
-
-const getJsWorker = (req, res, next) => {
-  res.sendFile(path.resolve(repoPath, 'src', 'languages', 'js', 'tracers', 'build', 'tracers.js'));
-};
-
 const trace = lang => (req, res, next) => {
   const { code } = req.body;
-  const tempPath = getCodesPath(uuid.v4());
+  const tempPath = path.resolve(__dirname, '..', 'public', 'codes', uuid.v4());
+  const tracesPath = path.resolve(tempPath, 'traces.json');
   fs.outputFile(path.resolve(tempPath, `Main.${lang}`), code)
-    .then(() => execute(`./bin/compile ${lang} ${tempPath}`, repoPath, { stdout: null, stderr: null }))
-    .then(() => execute(`./bin/run ${lang} ${tempPath}`, repoPath, { stdout: null, stderr: null }))
-    .then(() => res.sendFile(path.resolve(tempPath, 'traces.json')))
+    .then(() => {
+      const builder = builderMap[lang];
+      const containerName = uuid.v4();
+      let killed = false;
+      const timer = setTimeout(() => {
+        execute(`docker kill ${containerName}`).then(() => {
+          killed = true;
+        });
+      }, timeLimit);
+      return execute([
+        'docker run --rm',
+        `--name=${containerName}`,
+        '-w=/usr/tracer',
+        `-v=${tempPath}:/usr/tracer:rw`,
+        `-m=${memoryLimit}m`,
+        builder.imageName,
+      ].join(' ')).catch(error => {
+        if (killed) throw new Error('Time Limit Exceeded');
+        throw error;
+      }).finally(() => clearTimeout(timer));
+    })
+    .then(() => fs.pathExists(tracesPath))
+    .then(exists => {
+      if (!exists) throw new Error('Traces Not Found');
+      res.sendFile(tracesPath);
+    })
     .catch(next)
     .finally(() => fs.remove(tempPath));
 };
 
-const buildRelease = release => (
-  fs.pathExistsSync(repoPath) ?
-    execute(`git fetch && ! git diff-index --quiet ${release.target_commitish} -- ':!package-lock.json'`, repoPath) :
-    execute(`git clone https://github.com/algorithm-visualizer/tracers.git ${repoPath}`, __dirname)
-).then(() => execute(`git reset --hard ${release.target_commitish} && npm install && npm run build && ./bin/build`, repoPath));
+const builderMap = {
+  js: new WorkerBuilder(),
+  cpp: new ImageBuilder('cpp'),
+  java: new ImageBuilder('java'),
+};
 
-GitHubApi.getLatestRelease('algorithm-visualizer', 'tracers').then(buildRelease).catch(console.error);
+Promise.map(Object.keys(builderMap), lang => {
+  const builder = builderMap[lang];
+  return GitHubApi.getLatestRelease('algorithm-visualizer', `tracers.${lang}`).then(builder.build);
+}).catch(console.error);
 
-webhook.on('tracers', (event, data) => {
-  switch (event) {
-    case 'release':
-      buildRelease(data.release).catch(console.error);
-      break;
+webhook.on('release', (repo, data) => {
+  const result = /^tracers\.(\w+)$/.exec(repo);
+  if (result) {
+    const [, lang] = result;
+    const builder = builderMap[lang];
+    builder.build(data.release).catch(console.error);
   }
 });
 
-router.route('/js')
-  .get(getJsWorker);
-
-router.route('/java')
-  .post(trace('java'));
-
-router.route('/cpp')
-  .post(trace('cpp'));
+Object.keys(builderMap).forEach(lang => {
+  const builder = builderMap[lang];
+  if (builder instanceof ImageBuilder) {
+    router.post(`/${lang}`, trace(lang));
+  } else if (builder instanceof WorkerBuilder) {
+    router.get(`/${lang}`, (req, res) => res.sendFile(builder.workerPath));
+  }
+});
 
 export default router;

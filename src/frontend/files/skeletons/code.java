@@ -1,4 +1,4 @@
-import org.algorithm_visualizer.tracers.*;
+import org.algorithm_visualizer.*;
 
 class Main {
     public static void main(String[] args) {

@@ -90,6 +90,7 @@ class Player extends BaseComponent {
           this.handleError(error);
         });
     } else {
+      this.setState({ building: false });
       this.handleError(new Error('Language Not Supported'));
     }
   }

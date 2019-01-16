@@ -1,4 +1,4 @@
-#include "LogTracer.h"
+#include "algorithm-visualizer/LogTracer.h"
 
 int main() {
     LogTracer logTracer = LogTracer("Scratch Paper");
