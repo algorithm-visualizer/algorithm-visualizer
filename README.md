@@ -12,18 +12,20 @@ Learning algorithms from text and static images is quite boring. There have been
 
 ## Contributing
 
-**I want to add or improve an algorithm.**
+If you want to ...
 
-- We have a separate repository for public algorithms. Check out the [contributing guidelines](https://github.com/algorithm-visualizer/algorithms/blob/master/CONTRIBUTING.md) in [`algorithms`](https://github.com/algorithm-visualizer/algorithms) repo.
+- **Add or improve an algorithm.**
 
-**I want to improve the UI.**
+  We have a separate repository for public algorithms. Check out the [contributing guidelines](https://github.com/algorithm-visualizer/algorithms/blob/master/CONTRIBUTING.md) in [`algorithms`](https://github.com/algorithm-visualizer/algorithms) repo.
 
-- Check out the [contributing guidelines](https://github.com/algorithm-visualizer/algorithm-visualizer/blob/master/CONTRIBUTING.md) in this repo. The [directory structure](https://github.com/algorithm-visualizer/algorithm-visualizer/blob/master/PROJECT_DETAILS.md#algorithm-visualizer) might be helpful as well.
+- **Improve the UI.**
 
-**I want to enhance visualization libraries.**
+  Check out the [contributing guidelines](https://github.com/algorithm-visualizer/algorithm-visualizer/blob/master/CONTRIBUTING.md) in this repo. The [directory structure](https://github.com/algorithm-visualizer/algorithm-visualizer/blob/master/PROJECT_DETAILS.md#algorithm-visualizer) might be helpful as well.
 
-- It is highly recommended to read the entire [project details](https://github.com/algorithm-visualizer/algorithm-visualizer/blob/master/PROJECT_DETAILS.md) before working on it. Making changes to visualization libraries often requires a lot of work since you may need to work on all of the following repositories: [`algorithms`](https://github.com/algorithm-visualizer/algorithms), [`tracers`](https://github.com/algorithm-visualizer/tracers), and [`algorithm-visualizer`](https://github.com/algorithm-visualizer/algorithm-visualizer). We encourage you to raise an issue about your idea of enhancement before working on it.
+- **Revise the specifications of visualization libraries.**
+  
+  Making changes to the specifications is often followed by updating visualization libraries for every supported language and the affected public algorithms accordingly. It is highly recommended to read the entire [project details](https://github.com/algorithm-visualizer/algorithm-visualizer/blob/master/PROJECT_DETAILS.md) and to raise an issue about your proposal before working on it.
 
-**I have a question in regards to contributing.**
+- **Fix issues in a visualization library for a specific langauge.**
 
-- Raising an issue is another way of contributing!
+  Check out the contributing guidelines ([JavaScript](https://github.com/algorithm-visualizer/tracers.js/blob/master/CONTRIBUTING.md), [C++](https://github.com/algorithm-visualizer/tracers.cpp/blob/master/CONTRIBUTING.md), and [Java](https://github.com/algorithm-visualizer/tracers.java/blob/master/CONTRIBUTING.md)) in the repo of the visualization library.
