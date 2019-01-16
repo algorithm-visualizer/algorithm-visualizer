@@ -122,8 +122,8 @@ class Navigator extends React.Component {
               ))
             }
           </ExpandableListItem>
-          <ListItem icon={faBook} label="Tracers API"
-                    href="https://github.com/algorithm-visualizer/tracers/wiki" />
+          <ListItem icon={faBook} label="API Reference"
+                    href="https://github.com/algorithm-visualizer/algorithm-visualizer/wiki" />
           <ListItem icon={faGithub} label="Fork me on GitHub"
                     href="https://github.com/algorithm-visualizer/algorithm-visualizer" />
         </div>
