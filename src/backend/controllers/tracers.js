@@ -27,9 +27,10 @@ const trace = lang => (req, res, next) => {
       return execute([
         'docker run --rm',
         `--name=${containerName}`,
-        '-w=/usr/tracer',
-        `-v=${tempPath}:/usr/tracer:rw`,
+        '-w=/usr/visualization',
+        `-v=${tempPath}:/usr/visualization:rw`,
         `-m=${memoryLimit}m`,
+        '-e ALGORITHM_VISUALIZER=1',
         builder.imageName,
       ].join(' ')).catch(error => {
         if (killed) throw new Error('Time Limit Exceeded');
