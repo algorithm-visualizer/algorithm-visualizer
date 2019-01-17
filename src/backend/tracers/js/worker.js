@@ -1,3 +1,4 @@
+const process = { env: { ALGORITHM_VISUALIZER: '1' } };
 importScripts('https://unpkg.com/algorithm-visualizer/dist/algorithm-visualizer.js');
 importScripts('https://unpkg.com/babel-standalone@6/babel.min.js');
 
