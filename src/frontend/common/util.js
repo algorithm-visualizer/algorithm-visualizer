@@ -21,9 +21,21 @@ const refineGist = gist => {
   return { login, gistId, title, files };
 };
 
+const createFile = (name, content, contributors) => ({ name, content, contributors });
+
+const createProjectFile = (name, content) => createFile(name, content, [{
+  login: 'algorithm-visualizer',
+  avatar_url: 'https://github.com/algorithm-visualizer.png',
+}]);
+
+const createUserFile = (name, content) => createFile(name, content, undefined);
+
 export {
   classes,
   distance,
   extension,
   refineGist,
+  createFile,
+  createProjectFile,
+  createUserFile,
 };

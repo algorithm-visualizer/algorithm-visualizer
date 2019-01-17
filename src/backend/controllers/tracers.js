@@ -14,7 +14,6 @@ const router = express.Router();
 const trace = lang => (req, res, next) => {
   const { code } = req.body;
   const tempPath = path.resolve(__dirname, '..', 'public', 'codes', uuid.v4());
-  const tracesPath = path.resolve(tempPath, 'traces.json');
   fs.outputFile(path.resolve(tempPath, `Main.${lang}`), code)
     .then(() => {
       const builder = builderMap[lang];
@@ -37,11 +36,13 @@ const trace = lang => (req, res, next) => {
         throw error;
       }).finally(() => clearTimeout(timer));
     })
-    .then(() => fs.pathExists(tracesPath))
-    .then(exists => {
-      if (!exists) throw new Error('Traces Not Found');
-      res.sendFile(tracesPath);
-    })
+    .then(() => new Promise((resolve, reject) => {
+      const visualizationPath = path.resolve(tempPath, 'traces.json');
+      res.sendFile(visualizationPath, err => {
+        if (err) return reject(new Error('Visualization Not Found'));
+        resolve();
+      });
+    }))
     .catch(next)
     .finally(() => fs.remove(tempPath));
 };

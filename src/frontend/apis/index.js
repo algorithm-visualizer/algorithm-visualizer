@@ -52,6 +52,10 @@ const AlgorithmApi = {
   getAlgorithm: GET('/algorithms/:categoryKey/:algorithmKey'),
 };
 
+const VisualizationApi = {
+  getVisualization: GET('/visualizations/:visualizationId'),
+};
+
 const GitHubApi = {
   auth: token => Promise.resolve(axios.defaults.headers.common['Authorization'] = token && `token ${token}`),
   getUser: GET('https://api.github.com/user'),
@@ -73,6 +77,7 @@ const TracerApi = {
     method: 'set',
     args: [code],
   }]),
+  json: ({ code }) => new Promise(resolve => resolve(JSON.parse(code))),
   js: ({ code }, params, cancelToken) => new Promise((resolve, reject) => {
     const worker = new Worker('/api/tracers/js');
     if (cancelToken) {
@@ -97,6 +102,7 @@ const TracerApi = {
 
 export {
   AlgorithmApi,
+  VisualizationApi,
   GitHubApi,
   TracerApi,
 };

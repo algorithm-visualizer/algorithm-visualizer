@@ -2,6 +2,7 @@ import React from 'react';
 import AceEditor from 'react-ace';
 import 'brace/mode/plain_text';
 import 'brace/mode/markdown';
+import 'brace/mode/json';
 import 'brace/mode/javascript';
 import 'brace/mode/c_cpp';
 import 'brace/mode/java';
@@ -43,7 +44,10 @@ class CodeEditor extends React.Component {
 
     const fileExt = extension(file.name);
     const language = languages.find(language => language.ext === fileExt);
-    const mode = language ? language.mode : fileExt === 'md' ? 'markdown' : 'plain_text';
+    const mode = language ? language.mode :
+      fileExt === 'md' ? 'markdown' :
+        fileExt === 'json' ? 'json' :
+          'plain_text';
 
     return (
       <div className={classes(styles.code_editor, className)}>

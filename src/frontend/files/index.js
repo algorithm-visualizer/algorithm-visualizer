@@ -1,20 +1,12 @@
-const createProjectFile = filePath => ({
-  name: filePath.split('/').pop(),
-  content: require('raw-loader!./' + filePath),
-  contributors: [{
-    login: 'algorithm-visualizer',
-    avatar_url: 'https://github.com/algorithm-visualizer.png',
-  }],
-});
+import { createProjectFile, createUserFile } from '/common/util';
 
-const createUserFile = filePath => ({
-  name: filePath.split('/').pop(),
-  content: require('raw-loader!./' + filePath),
-  contributors: undefined,
-});
+const getName = filePath => filePath.split('/').pop();
+const getContent = filePath => require('raw-loader!./' + filePath);
+const readProjectFile = filePath => createProjectFile(getName(filePath), getContent(filePath));
+const readUserFile = filePath => createUserFile(getName(filePath), getContent(filePath));
 
-export const CODE_CPP = createUserFile('skeletons/code.cpp');
-export const CODE_JAVA = createUserFile('skeletons/code.java');
-export const CODE_JS = createUserFile('skeletons/code.js');
-export const README_MD = createProjectFile('algorithm-visualizer/README.md');
-export const CONTRIBUTING_MD = createProjectFile('scratch-paper/CONTRIBUTING.md');
+export const CODE_CPP = readUserFile('skeletons/code.cpp');
+export const CODE_JAVA = readUserFile('skeletons/code.java');
+export const CODE_JS = readUserFile('skeletons/code.js');
+export const README_MD = readProjectFile('algorithm-visualizer/README.md');
+export const CONTRIBUTING_MD = readProjectFile('scratch-paper/CONTRIBUTING.md');

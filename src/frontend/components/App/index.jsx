@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Promise from 'bluebird';
 import { Helmet } from 'react-helmet';
 import AutosizeInput from 'react-input-autosize';
+import queryString from 'query-string';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import faPlus from '@fortawesome/fontawesome-free-solid/faPlus';
 import {
@@ -16,9 +17,9 @@ import {
   ToastContainer,
   VisualizationViewer,
 } from '/components';
-import { AlgorithmApi, GitHubApi } from '/apis';
+import { AlgorithmApi, GitHubApi, VisualizationApi } from '/apis';
 import { actions } from '/reducers';
-import { extension, refineGist } from '/common/util';
+import { createUserFile, extension, refineGist } from '/common/util';
 import { exts, languages } from '/common/config';
 import { CONTRIBUTING_MD } from '/files';
 import styles from './stylesheet.scss';
@@ -43,7 +44,9 @@ class App extends BaseComponent {
     window.signIn = this.signIn.bind(this);
     window.signOut = this.signOut.bind(this);
 
-    this.loadAlgorithm(this.props.match.params);
+    const { params } = this.props.match;
+    const { search } = this.props.location;
+    this.loadAlgorithm(params, queryString.parse(search));
 
     const accessToken = Cookies.get('access_token');
     if (accessToken) this.signIn(accessToken);
@@ -64,12 +67,13 @@ class App extends BaseComponent {
 
   componentWillReceiveProps(nextProps) {
     const { params } = nextProps.match;
-    if (params !== this.props.match.params) {
+    const { search } = nextProps.location;
+    if (params !== this.props.match.params || search !== this.props.location.search) {
       const { categoryKey, algorithmKey, gistId } = params;
       const { algorithm, scratchPaper } = nextProps.current;
       if (algorithm && algorithm.categoryKey === categoryKey && algorithm.algorithmKey === algorithmKey) return;
       if (scratchPaper && scratchPaper.gistId === gistId) return;
-      this.loadAlgorithm(params);
+      this.loadAlgorithm(params, queryString.parse(search));
     }
   }
 
@@ -138,7 +142,7 @@ class App extends BaseComponent {
       .catch(this.handleError);
   }
 
-  loadAlgorithm({ categoryKey, algorithmKey, gistId }) {
+  loadAlgorithm({ categoryKey, algorithmKey, gistId }, { visualizationId }) {
     const { ext } = this.props.env;
     const fetch = () => {
       if (window.__PRELOADED_ALGORITHM__) {
@@ -147,6 +151,16 @@ class App extends BaseComponent {
       } else if (categoryKey && algorithmKey) {
         return AlgorithmApi.getAlgorithm(categoryKey, algorithmKey)
           .then(({ algorithm }) => this.props.setAlgorithm(algorithm));
+      } else if (gistId === 'new' && visualizationId) {
+        return VisualizationApi.getVisualization(visualizationId)
+          .then(content => {
+            this.props.setScratchPaper({
+              login: undefined,
+              gistId,
+              title: 'Untitled',
+              files: [CONTRIBUTING_MD, createUserFile('traces.json', JSON.stringify(content))],
+            });
+          });
       } else if (gistId === 'new') {
         const language = languages.find(language => language.ext === ext);
         this.props.setScratchPaper({
@@ -175,7 +189,8 @@ class App extends BaseComponent {
   selectDefaultTab() {
     const { ext } = this.props.env;
     const { files } = this.props.current;
-    let editorTabIndex = files.findIndex(file => extension(file.name) === ext);
+    let editorTabIndex = files.findIndex(file => extension(file.name) === 'json');
+    if (!~editorTabIndex) files.findIndex(file => extension(file.name) === ext);
     if (!~editorTabIndex) editorTabIndex = files.findIndex(file => exts.includes(extension(file.name)));
     if (!~editorTabIndex) editorTabIndex = Math.min(0, files.length - 1);
     this.handleChangeEditorTabIndex(editorTabIndex);
