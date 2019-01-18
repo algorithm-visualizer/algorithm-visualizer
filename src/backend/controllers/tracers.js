@@ -32,7 +32,7 @@ const trace = lang => (req, res, next) => {
         `-m=${memoryLimit}m`,
         '-e ALGORITHM_VISUALIZER=1',
         builder.imageName,
-      ].join(' ')).catch(error => {
+      ].join(' '), { stdout: null, stderr: null }).catch(error => {
         if (killed) throw new Error('Time Limit Exceeded');
         throw error;
       }).finally(() => clearTimeout(timer));

@@ -12,7 +12,7 @@ class ImageBuilder {
 
   build(release) {
     const { tag_name } = release;
-    return execute(`docker build -t ${this.imageName} . --build-arg tag_name=${tag_name}`, this.directory);
+    return execute(`docker build -t ${this.imageName} . --build-arg tag_name=${tag_name}`, { cwd: this.directory });
   }
 }
 

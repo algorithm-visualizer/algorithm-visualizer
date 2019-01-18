@@ -4,8 +4,8 @@ import path from 'path';
 import fs from 'fs-extra';
 import removeMarkdown from 'remove-markdown';
 
-const execute = (command, cwd, { stdout = process.stdout, stderr = process.stderr } = {}) => new Promise((resolve, reject) => {
-  const child = child_process.exec(command, { cwd }, (error, stdout, stderr) => {
+const execute = (command, { stdout = process.stdout, stderr = process.stderr, ...options } = {}) => new Promise((resolve, reject) => {
+  const child = child_process.exec(command, options, (error, stdout, stderr) => {
     if (error) return reject(error.code ? new Error(stderr) : error);
     resolve(stdout);
   });

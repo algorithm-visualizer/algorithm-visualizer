@@ -40,19 +40,20 @@ class Hierarchy {
 
   cacheContributors(files, commitAuthors) {
     return Promise.each(files, file => {
-      return execute(`git --no-pager log --follow --no-merges --format="%H" "${file.path}"`, this.path, { stdout: null })
-        .then(stdout => {
-          const output = stdout.toString().replace(/\n$/, '');
-          const shas = output.split('\n').reverse();
-          const contributors = [];
-          for (const sha of shas) {
-            const author = commitAuthors[sha];
-            if (author && !contributors.find(contributor => contributor.login === author.login)) {
-              contributors.push(author);
-            }
+      return execute(`git --no-pager log --follow --no-merges --format="%H" "${file.path}"`, {
+        cwd: this.path, stdout: null,
+      }).then(stdout => {
+        const output = stdout.toString().replace(/\n$/, '');
+        const shas = output.split('\n').reverse();
+        const contributors = [];
+        for (const sha of shas) {
+          const author = commitAuthors[sha];
+          if (author && !contributors.find(contributor => contributor.login === author.login)) {
+            contributors.push(author);
           }
-          file.contributors = contributors;
-        });
+        }
+        file.contributors = contributors;
+      });
     });
   }
 
