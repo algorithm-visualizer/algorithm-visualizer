@@ -13,5 +13,5 @@ RUN curl --create-dirs -o /usr/local/include/nlohmann/json.hpp -L "https://githu
  && cmake .. \
  && make install
 
-CMD g++ Main.cpp -o Main -O2 -std=c++11 \
+CMD g++ Main.cpp -o Main -O2 -std=c++11 -lcurl \
  && ./Main
