@@ -63,6 +63,7 @@ class Renderer extends React.Component {
   }
 
   handleWheel(e) {
+    e.preventDefault();
     const { deltaY } = e;
     this.zoom *= Math.pow(this.zoomFactor, deltaY);
     this.zoom = Math.min(this.zoomMax, Math.max(this.zoomMin, this.zoom));
