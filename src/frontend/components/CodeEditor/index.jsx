@@ -1,20 +1,11 @@
 import React from 'react';
-import AceEditor from 'react-ace';
-import 'brace/mode/plain_text';
-import 'brace/mode/markdown';
-import 'brace/mode/json';
-import 'brace/mode/javascript';
-import 'brace/mode/c_cpp';
-import 'brace/mode/java';
-import 'brace/theme/tomorrow_night_eighties';
-import 'brace/ext/searchbox';
 import faTrashAlt from '@fortawesome/fontawesome-free-solid/faTrashAlt';
 import faUser from '@fortawesome/fontawesome-free-solid/faUser';
 import { classes, extension } from '/common/util';
 import { actions } from '/reducers';
 import { connect } from 'react-redux';
 import { languages } from '/common/config';
-import { Button, Ellipsis } from '/components';
+import { Button, Ellipsis, FoldableAceEditor } from '/components';
 import styles from './stylesheet.scss';
 
 @connect(({ env, player }) => ({ env, player }), actions, null, { withRef: true })
@@ -38,7 +29,7 @@ class CodeEditor extends React.Component {
   render() {
     const { className, file, onClickDelete } = this.props;
     const { user } = this.props.env;
-    const { lineIndicator } = this.props.player;
+    const { lineIndicator, buildAt } = this.props.player;
 
     if (!file) return null;
 
@@ -51,7 +42,7 @@ class CodeEditor extends React.Component {
 
     return (
       <div className={classes(styles.code_editor, className)}>
-        <AceEditor
+        <FoldableAceEditor
           className={styles.ace_editor}
           ref={this.aceEditorRef}
           mode={mode}
@@ -69,6 +60,7 @@ class CodeEditor extends React.Component {
             inFront: true,
             _key: lineIndicator.cursor,
           }] : []}
+          foldAt={buildAt}
           value={file.content} />
         <div className={classes(styles.contributors_viewer, className)}>
           <span className={classes(styles.contributor, styles.label)}>Contributed by</span>

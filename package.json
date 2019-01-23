@@ -75,7 +75,7 @@
     "query-string": "^6.2.0",
     "raw-loader": "^0.5.1",
     "react": "^16.3.1",
-    "react-ace": "^6.1.4",
+    "react-ace": "^6.3.2",
     "react-chartjs-2": "^2.7.0",
     "react-dom": "^16.3.1",
     "react-helmet": "^5.2.0",
