@@ -84,7 +84,25 @@ module.exports = {
     new MiniCssExtractPlugin({ filename: __DEV__ ? '[name].css' : '[name].[contenthash].css' }),
     __PROD__ && new ImageminPlugin({ test: /\.(jpe?g|png|gif|svg)$/i }),
     __DEV__ && new webpack.HotModuleReplacementPlugin(),
+    new webpack.HashedModuleIdsPlugin(),
     // new BundleAnalyzerPlugin(),
   ]),
+  optimization: {
+    runtimeChunk: 'single',
+    splitChunks: {
+      chunks: 'all',
+      maxInitialRequests: Infinity,
+      minSize: 128 * 1024,
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name(module) {
+            const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+            return `npm.${packageName.replace('@', '')}`;
+          },
+        },
+      },
+    },
+  },
   mode: __DEV__ ? 'development' : 'production',
 };
