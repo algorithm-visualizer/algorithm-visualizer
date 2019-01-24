@@ -231,7 +231,7 @@ class GraphData extends Data {
     if (weight !== undefined) node.weight = weight;
     node.visitedCount += visit ? 1 : -1;
     if (this.logData) {
-      this.logData.print(visit ? (source || '') + ' -> ' + target : (source || '') + ' <- ' + target);
+      this.logData.println(visit ? (source || '') + ' -> ' + target : (source || '') + ' <- ' + target);
     }
   }
 
@@ -249,7 +249,7 @@ class GraphData extends Data {
     const node = this.findNode(target);
     node.selectedCount += select ? 1 : -1;
     if (this.logData) {
-      this.logData.print(select ? (source || '') + ' => ' + target : (source || '') + ' <= ' + target);
+      this.logData.println(select ? (source || '') + ' => ' + target : (source || '') + ' <= ' + target);
     }
   }
 

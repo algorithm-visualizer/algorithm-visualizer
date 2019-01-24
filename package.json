@@ -19,7 +19,9 @@
   },
   "keywords": [
     "algorithm",
-    "visualizer"
+    "data-structure",
+    "visualization",
+    "animation"
   ],
   "author": {
     "name": "Jinseo Jason Park",
@@ -94,6 +96,7 @@
     "remove-markdown": "^0.3.0",
     "sass-loader": "^7.0.3",
     "screenfull": "^3.3.2",
+    "sprintf-js": "^1.1.2",
     "style-loader": "^0.21.0",
     "uglifyjs-webpack-plugin": "^1.2.4",
     "webpack": "^4.5.0",

@@ -11,21 +11,15 @@ class LogRenderer extends Renderer {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     super.componentDidUpdate(prevProps, prevState, snapshot);
-    const { lastChild } = this.element.current;
-    if (lastChild) lastChild.scrollIntoView();
+    const div = this.element.current;
+    div.scrollTop = div.scrollHeight;
   }
 
   renderData() {
-    const { messages } = this.props.data;
+    const { log } = this.props.data;
 
     return (
-      <div className={styles.log} ref={this.element}>
-        {
-          messages.map((message, i) => (
-            <span className={styles.message} key={i} dangerouslySetInnerHTML={{ __html: message }} />
-          ))
-        }
-      </div>
+      <div className={styles.log} ref={this.element} dangerouslySetInnerHTML={{ __html: log }} />
     );
   }
 }

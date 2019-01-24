@@ -8,8 +8,6 @@
   flex-direction: column;
   overflow-y: auto;
   font-family: $font-family-monospace;
-
-  .message {
-    margin: 2px 0;
-  }
+  white-space: pre-wrap;
+  line-height: 1.6;
 }
