@@ -31,6 +31,7 @@
     "axios": "latest",
     "bluebird": "latest",
     "body-parser": "^1.18.2",
+    "compression": "^1.7.3",
     "cookie-parser": "^1.4.3",
     "express": "^4.15.4",
     "express-github-webhook": "^1.0.6",

@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const compression = require('compression');
 const app = express();
 
 const frontend = require('./frontend');
@@ -10,6 +11,7 @@ const {
   credentials,
 } = require('../environment');
 
+app.use(compression());
 app.use((req, res, next) => {
   if (req.hostname === 'algo-visualizer.jasonpark.me') {
     res.redirect(301, 'https://algorithm-visualizer.org/');
