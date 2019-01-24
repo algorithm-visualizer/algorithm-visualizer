@@ -56,16 +56,22 @@ app.use((req, res) => {
 
   const [, categoryKey, algorithmKey] = url.parse(req.originalUrl).pathname.split('/');
   let { title, description } = packageJson;
-  const algorithm = hierarchy.find(categoryKey, algorithmKey);
-  if (algorithm) {
-    title = [algorithm.categoryName, algorithm.algorithmName].join(' - ');
-    description = algorithm.description;
+  let algorithm = undefined;
+  if (categoryKey && categoryKey !== 'scratch-paper') {
+    algorithm = hierarchy.find(categoryKey, algorithmKey) || null;
+    if (algorithm) {
+      title = [algorithm.categoryName, algorithm.algorithmName].join(' - ');
+      description = algorithm.description;
+    } else {
+      res.status(404);
+    }
   }
 
   const indexFile = res.indexFile
     .replace(/\$TITLE/g, title)
     .replace(/\$DESCRIPTION/g, description)
-    .replace(/\$ALGORITHM/g, algorithm ? JSON.stringify(algorithm).replace(/</g, '\\u003c') : 'undefined');
+    .replace(/\$ALGORITHM/g, algorithm === undefined ? 'undefined' :
+      JSON.stringify(algorithm).replace(/</g, '\\u003c'));
   res.send(indexFile);
 });
 
