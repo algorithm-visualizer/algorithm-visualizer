@@ -83,8 +83,8 @@ class Navigator extends React.Component {
       <nav className={classes(styles.navigator, className)}>
         <div className={styles.search_bar_container}>
           <FontAwesomeIcon fixedWidth icon={faSearch} className={styles.search_icon} />
-          <input type="text" className={styles.search_bar} autoFocus placeholder="Search ..." value={query}
-                 onChange={e => this.handleChangeQuery(e)} />
+          <input type="text" className={styles.search_bar} aria-label="Search" placeholder="Search ..." autoFocus
+                 value={query} onChange={e => this.handleChangeQuery(e)} />
         </div>
         <div className={styles.algorithm_list}>
           {
