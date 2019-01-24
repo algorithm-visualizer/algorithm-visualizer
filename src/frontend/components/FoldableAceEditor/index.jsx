@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import AceEditor from 'react-ace';
 import 'brace/mode/plain_text';
 import 'brace/mode/markdown';
@@ -8,19 +9,23 @@ import 'brace/mode/c_cpp';
 import 'brace/mode/java';
 import 'brace/theme/tomorrow_night_eighties';
 import 'brace/ext/searchbox';
+import { actions } from '/reducers';
 
+@connect(({ current }) => ({ current }), actions)
 class FoldableAceEditor extends AceEditor {
   componentDidMount() {
     super.componentDidMount();
 
-    this.foldTracers();
+    const { shouldBuild } = this.props.current;
+    if (shouldBuild) this.foldTracers();
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     super.componentDidUpdate(prevProps, prevState, snapshot);
 
-    if (prevProps.foldAt !== this.props.foldAt) {
-      this.foldTracers();
+    const { editingFile, shouldBuild } = this.props.current;
+    if (editingFile !== prevProps.current.editingFile) {
+      if (shouldBuild) this.foldTracers();
     }
   }
 

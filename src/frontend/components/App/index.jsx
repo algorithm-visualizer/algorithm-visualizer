@@ -3,10 +3,7 @@ import Cookies from 'js-cookie';
 import { connect } from 'react-redux';
 import Promise from 'bluebird';
 import { Helmet } from 'react-helmet';
-import AutosizeInput from 'react-input-autosize';
 import queryString from 'query-string';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import faPlus from '@fortawesome/fontawesome-free-solid/faPlus';
 import {
   BaseComponent,
   CodeEditor,
@@ -32,7 +29,6 @@ class App extends BaseComponent {
     this.state = {
       navigatorOpened: true,
       workspaceWeights: [1, 2, 2],
-      editorTabIndex: -1,
     };
 
     this.codeEditorRef = React.createRef();
@@ -79,11 +75,12 @@ class App extends BaseComponent {
 
   toggleHistoryBlock(enable = !this.unblock) {
     if (enable) {
+      const { saved } = this.props.current;
       const warningMessage = 'Are you sure you want to discard changes?';
-      window.onbeforeunload = () => this.isSaved() ? undefined : warningMessage;
+      window.onbeforeunload = () => saved ? undefined : warningMessage;
       this.unblock = this.props.history.block((location) => {
         if (location.pathname === this.props.location.pathname) return;
-        if (!this.isSaved()) return warningMessage;
+        if (!saved) return warningMessage;
       });
     } else {
       window.onbeforeunload = undefined;
@@ -189,11 +186,11 @@ class App extends BaseComponent {
   selectDefaultTab() {
     const { ext } = this.props.env;
     const { files } = this.props.current;
-    let editorTabIndex = files.findIndex(file => extension(file.name) === 'json');
-    if (!~editorTabIndex) files.findIndex(file => extension(file.name) === ext);
-    if (!~editorTabIndex) editorTabIndex = files.findIndex(file => exts.includes(extension(file.name)));
-    if (!~editorTabIndex) editorTabIndex = Math.min(0, files.length - 1);
-    this.handleChangeEditorTabIndex(editorTabIndex);
+    const editingFile = files.find(file => extension(file.name) === 'json') ||
+      files.find(file => extension(file.name) === ext) ||
+      files.find(file => exts.includes(extension(file.name))) ||
+      files[files.length - 1];
+    this.props.setEditingFile(editingFile);
   }
 
   handleChangeWorkspaceWeights(workspaceWeights) {
@@ -201,67 +198,15 @@ class App extends BaseComponent {
     this.codeEditorRef.current.getWrappedInstance().handleResize();
   }
 
-  handleChangeEditorTabIndex(editorTabIndex) {
-    const { files } = this.props.current;
-    if (editorTabIndex === files.length) this.handleAddFile();
-    this.setState({ editorTabIndex });
-    this.props.shouldBuild();
-  }
-
-  handleAddFile() {
-    const { ext } = this.props.env;
-    const { files } = this.props.current;
-    const language = languages.find(language => language.ext === ext);
-    const file = { ...language.skeleton };
-    let count = 0;
-    while (files.some(existingFile => existingFile.name === file.name)) file.name = `code-${++count}.${ext}`;
-    this.props.addFile(file);
-  }
-
-  handleRenameFile(e) {
-    const { value } = e.target;
-    const { editorTabIndex } = this.state;
-    this.props.renameFile(editorTabIndex, value);
-  }
-
-  handleDeleteFile() {
-    const { editorTabIndex } = this.state;
-    const { files } = this.props.current;
-    this.handleChangeEditorTabIndex(Math.min(editorTabIndex, files.length - 2));
-    this.props.deleteFile(editorTabIndex);
-  }
-
   toggleNavigatorOpened(navigatorOpened = !this.state.navigatorOpened) {
     this.setState({ navigatorOpened });
   }
 
-  isSaved() {
-    const { titles, files, lastTitles, lastFiles } = this.props.current;
-    const serialize = (titles, files) => JSON.stringify({
-      titles,
-      files: files.map(({ name, content }) => ({ name, content })),
-    });
-    return serialize(titles, files) === serialize(lastTitles, lastFiles);
-  }
-
   render() {
-    const { navigatorOpened, workspaceWeights, editorTabIndex } = this.state;
+    const { navigatorOpened, workspaceWeights } = this.state;
 
-    const { files, titles, description } = this.props.current;
-    const saved = this.isSaved();
+    const { titles, description, saved } = this.props.current;
     const title = `${saved ? '' : '(Unsaved) '}${titles.join(' - ')}`;
-    const file = files[editorTabIndex];
-
-    const editorTitles = files.map(file => file.name);
-    if (file) {
-      editorTitles[editorTabIndex] = (
-        <AutosizeInput className={styles.input_title} value={file.name}
-                       onClick={e => e.stopPropagation()} onChange={e => this.handleRenameFile(e)} />
-      );
-    }
-    editorTitles.push(
-      <FontAwesomeIcon fixedWidth icon={faPlus} />,
-    );
 
     return (
       <div className={styles.app}>
@@ -269,17 +214,16 @@ class App extends BaseComponent {
           <title>{title}</title>
           <meta name="description" content={description} />
         </Helmet>
-        <Header className={styles.header} onClickTitleBar={() => this.toggleNavigatorOpened()} saved={saved}
-                navigatorOpened={navigatorOpened} loadScratchPapers={() => this.loadScratchPapers()} file={file}
+        <Header className={styles.header} onClickTitleBar={() => this.toggleNavigatorOpened()}
+                navigatorOpened={navigatorOpened} loadScratchPapers={() => this.loadScratchPapers()}
                 ignoreHistoryBlock={this.ignoreHistoryBlock} />
         <ResizableContainer className={styles.workspace} horizontal weights={workspaceWeights}
                             visibles={[navigatorOpened, true, true]}
                             onChangeWeights={weights => this.handleChangeWorkspaceWeights(weights)}>
           <Navigator />
           <VisualizationViewer className={styles.visualization_viewer} />
-          <TabContainer className={styles.editor_tab_container} titles={editorTitles} tabIndex={editorTabIndex}
-                        onChangeTabIndex={tabIndex => this.handleChangeEditorTabIndex(tabIndex)}>
-            <CodeEditor ref={this.codeEditorRef} file={file} onClickDelete={() => this.handleDeleteFile()} />
+          <TabContainer className={styles.editor_tab_container}>
+            <CodeEditor ref={this.codeEditorRef} />
           </TabContainer>
         </ResizableContainer>
         <ToastContainer className={styles.toast_container} />

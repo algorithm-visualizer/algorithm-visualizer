@@ -25,6 +25,17 @@
       margin: 0;
       border-bottom: 1px solid $theme-light;
 
+      .input_title {
+        input {
+          &:hover,
+          &:focus {
+            margin: -4px;
+            padding: 4px;
+            background-color: $theme-normal;
+          }
+        }
+      }
+
       &.selected {
         border-left: 1px solid $theme-light;
         border-right: 1px solid $theme-light;

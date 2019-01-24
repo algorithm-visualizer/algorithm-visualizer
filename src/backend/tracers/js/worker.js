@@ -7,7 +7,7 @@ const sandbox = code => {
   eval(code);
 };
 
-onmessage = e => { // TODO: stop after the first delay() on the initial run
+onmessage = e => {
   const lines = e.data.split('\n').map((line, i) => line.replace(/(.+\. *delay *)(\( *\))/g, `$1(${i})`));
   const { code } = Babel.transform(lines.join('\n'), { presets: ['es2015'] });
   sandbox(code);

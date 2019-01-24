@@ -30,6 +30,14 @@ const createProjectFile = (name, content) => createFile(name, content, [{
 
 const createUserFile = (name, content) => createFile(name, content, undefined);
 
+const isSaved = ({ titles, files, lastTitles, lastFiles }) => {
+  const serialize = (titles, files) => JSON.stringify({
+    titles,
+    files: files.map(({ name, content }) => ({ name, content })),
+  });
+  return serialize(titles, files) === serialize(lastTitles, lastFiles);
+};
+
 export {
   classes,
   distance,
@@ -38,4 +46,5 @@ export {
   createFile,
   createProjectFile,
   createUserFile,
+  isSaved,
 };

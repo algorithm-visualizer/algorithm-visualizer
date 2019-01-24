@@ -110,8 +110,8 @@ class Header extends BaseComponent {
   }
 
   render() {
-    const { className, onClickTitleBar, navigatorOpened, saved, file } = this.props;
-    const { scratchPaper, titles } = this.props.current;
+    const { className, onClickTitleBar, navigatorOpened } = this.props;
+    const { scratchPaper, titles, saved } = this.props.current;
     const { ext, user } = this.props.env;
 
     const permitted = this.hasPermission();
@@ -174,7 +174,7 @@ class Header extends BaseComponent {
               </div>
             </Button>
           </div>
-          <Player className={styles.section} file={file} />
+          <Player className={styles.section} />
         </div>
       </header>
     );

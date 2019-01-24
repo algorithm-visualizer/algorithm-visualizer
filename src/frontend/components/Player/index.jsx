@@ -13,7 +13,7 @@ import { actions } from '/reducers';
 import { BaseComponent, Button, ProgressBar } from '/components';
 import styles from './stylesheet.scss';
 
-@connect(({ player }) => ({ player }), actions)
+@connect(({ current, player }) => ({ current, player }), actions)
 class Player extends BaseComponent {
   constructor(props) {
     super(props);
@@ -30,15 +30,14 @@ class Player extends BaseComponent {
   }
 
   componentDidMount() {
-    const { file } = this.props;
-    this.build(file);
+    const { editingFile, shouldBuild } = this.props.current;
+    if (shouldBuild) this.build(editingFile);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { file } = nextProps;
-    const { buildAt } = nextProps.player;
-    if (buildAt !== this.props.player.buildAt) {
-      this.build(file);
+    const { editingFile, shouldBuild } = nextProps.current;
+    if (editingFile !== this.props.current.editingFile) {
+      if (shouldBuild) this.build(editingFile);
     }
   }
 
@@ -145,13 +144,15 @@ class Player extends BaseComponent {
   }
 
   render() {
-    const { className, file } = this.props;
+    const { className } = this.props;
+    const { editingFile } = this.props.current;
     const { chunks, cursor } = this.props.player;
     const { speed, playing, building } = this.state;
 
     return (
       <div className={classes(styles.player, className)}>
-        <Button icon={faWrench} primary disabled={building} inProgress={building} onClick={() => this.build(file)}>
+        <Button icon={faWrench} primary disabled={building} inProgress={building}
+                onClick={() => this.build(editingFile)}>
           {building ? 'Building' : 'Build'}
         </Button>
         {
