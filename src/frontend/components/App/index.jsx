@@ -75,11 +75,14 @@ class App extends BaseComponent {
 
   toggleHistoryBlock(enable = !this.unblock) {
     if (enable) {
-      const { saved } = this.props.current;
       const warningMessage = 'Are you sure you want to discard changes?';
-      window.onbeforeunload = () => saved ? undefined : warningMessage;
+      window.onbeforeunload = () => {
+        const { saved } = this.props.current;
+        if (!saved) return warningMessage;
+      };
       this.unblock = this.props.history.block((location) => {
         if (location.pathname === this.props.location.pathname) return;
+        const { saved } = this.props.current;
         if (!saved) return warningMessage;
       });
     } else {
