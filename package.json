@@ -95,7 +95,7 @@
     "redux-actions": "^2.2.1",
     "remove-markdown": "^0.3.0",
     "sass-loader": "^7.0.3",
-    "screenfull": "^3.3.2",
+    "screenfull": "^4.0.0",
     "sprintf-js": "^1.1.2",
     "style-loader": "^0.21.0",
     "uglifyjs-webpack-plugin": "^1.2.4",
