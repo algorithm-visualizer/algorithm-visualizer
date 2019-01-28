@@ -42,7 +42,7 @@ class Header extends BaseComponent {
 
   saveGist() {
     const { user } = this.props.env;
-    const { scratchPaper, titles, files, lastFiles } = this.props.current;
+    const { scratchPaper, titles, files, lastFiles, editingFile } = this.props.current;
     const gist = {
       description: titles[titles.length - 1],
       files: {},
@@ -75,6 +75,7 @@ class Header extends BaseComponent {
       .then(refineGist)
       .then(newScratchPaper => {
         this.props.setScratchPaper(newScratchPaper);
+        this.props.setEditingFile(newScratchPaper.files.find(file => file.name === editingFile.name));
         if (!(scratchPaper && scratchPaper.gistId === newScratchPaper.gistId)) {
           this.props.history.push(`/scratch-paper/${newScratchPaper.gistId}`);
         }
