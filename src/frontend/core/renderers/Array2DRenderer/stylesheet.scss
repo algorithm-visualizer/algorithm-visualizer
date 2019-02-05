@@ -9,12 +9,6 @@
     display: table-row;
     height: 28em;
 
-    &:empty:after {
-      content: '';
-      display: table-cell;
-      border-left: 1em solid $theme-light;
-    }
-
     .col {
       display: table-cell;
       text-align: center;
@@ -33,6 +27,12 @@
 
       &.patched {
         background-color: $color-patched;
+      }
+
+      &.index {
+        background: none;
+        border: none;
+        color: $theme-light;
       }
     }
   }
