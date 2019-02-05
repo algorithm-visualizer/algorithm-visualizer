@@ -2,27 +2,25 @@
 
 .array_2d {
   flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
+  display: table;
+  border-collapse: collapse;
 
   .row {
-    display: flex;
-    min-height: 28em;
-    align-items: stretch;
+    display: table-row;
+    height: 28em;
 
-    &:empty {
+    &:empty:after {
+      content: '';
+      display: table-cell;
       border-left: 1em solid $theme-light;
     }
 
     .col {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: table-cell;
+      text-align: center;
       min-width: 28em;
       background-color: $theme-normal;
       border: 1em solid $theme-light;
-      margin-right: -1em;
-      margin-bottom: -1em;
       padding: 0 4em;
 
       .value {
