@@ -1,4 +1,5 @@
 import Promise from 'bluebird';
+import axios from 'axios';
 import child_process from 'child_process';
 import path from 'path';
 import fs from 'fs-extra';
@@ -32,6 +33,14 @@ const getDescription = files => {
   return removeMarkdown(descriptionLines.join(' '));
 };
 
+const download = (url, localPath) => axios({ url, method: 'GET', responseType: 'stream' })
+  .then(response => new Promise((resolve, reject) => {
+    const writer = fs.createWriteStream(localPath);
+    writer.on('finish', resolve);
+    writer.on('error', reject);
+    response.data.pipe(writer);
+  }));
+
 export {
   execute,
   createKey,
@@ -39,4 +48,5 @@ export {
   listFiles,
   listDirectories,
   getDescription,
+  download,
 };

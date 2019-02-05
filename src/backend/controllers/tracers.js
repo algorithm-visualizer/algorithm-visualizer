@@ -73,7 +73,8 @@ Object.keys(builderMap).forEach(lang => {
   if (builder instanceof ImageBuilder) {
     router.post(`/${lang}`, trace(lang));
   } else if (builder instanceof WorkerBuilder) {
-    router.get(`/${lang}`, (req, res) => res.sendFile(builder.workerPath));
+    router.get(`/${lang}`, (req, res) => res.sendFile(builder.tracerPath));
+    router.get(`/${lang}/worker`, (req, res) => res.sendFile(builder.workerPath));
   }
 });
 

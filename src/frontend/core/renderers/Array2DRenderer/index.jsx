@@ -28,7 +28,7 @@ class Array2DRenderer extends Renderer {
           }
           {
             longestRow.map((_, i) => (
-              <td className={classes(styles.col, styles.index)}>
+              <td className={classes(styles.col, styles.index)} key={i}>
                 <span className={styles.value}>{i}</span>
               </td>
             ))
