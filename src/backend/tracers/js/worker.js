@@ -1,6 +1,5 @@
 const process = { env: { ALGORITHM_VISUALIZER: '1' } };
 importScripts('https://unpkg.com/algorithm-visualizer@latest/dist/algorithm-visualizer.js');
-importScripts('https://unpkg.com/babel-standalone@6/babel.min.js');
 
 const sandbox = code => {
   const require = name => ({ 'algorithm-visualizer': AlgorithmVisualizer }[name]); // fake require
@@ -9,7 +8,7 @@ const sandbox = code => {
 
 onmessage = e => {
   const lines = e.data.split('\n').map((line, i) => line.replace(/(.+\. *delay *)(\( *\))/g, `$1(${i})`));
-  const { code } = Babel.transform(lines.join('\n'), { presets: ['es2015'] });
+  const code = lines.join('\n');
   sandbox(code);
   postMessage(AlgorithmVisualizer.Tracer.traces);
 };
