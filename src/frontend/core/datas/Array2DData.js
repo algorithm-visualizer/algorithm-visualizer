@@ -1,29 +1,26 @@
 import { Data } from '/core/datas';
 import { Array2DRenderer } from '/core/renderers';
 
+class Element {
+  constructor(value) {
+    this.value = value;
+    this.patched = false;
+    this.selected = false;
+  }
+}
+
 class Array2DData extends Data {
   getRendererClass() {
     return Array2DRenderer;
   }
 
   set(array2d = []) {
-    this.data = [];
-    for (const array1d of array2d) {
-      const row = [];
-      for (const value of array1d) {
-        const col = {
-          value,
-          patched: false,
-          selected: false,
-        };
-        row.push(col);
-      }
-      this.data.push(row);
-    }
+    this.data = array2d.map(array1d => [...array1d].map(value => new Element(value)));
     super.set();
   }
 
   patch(x, y, v = this.data[x][y].value) {
+    if (!this.data[x][y]) this.data[x][y] = new Element();
     this.data[x][y].value = v;
     this.data[x][y].patched = true;
   }

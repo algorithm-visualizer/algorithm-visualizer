@@ -7,13 +7,18 @@
 
   .row {
     display: flex;
+    min-height: 28em;
+    align-items: stretch;
+
+    &:empty {
+      border-left: 1em solid $theme-light;
+    }
 
     .col {
       display: flex;
       align-items: center;
       justify-content: center;
       min-width: 28em;
-      height: 28em;
       background-color: $theme-normal;
       border: 1em solid $theme-light;
       margin-right: -1em;
