@@ -1,5 +1,5 @@
 // import visualization libraries {
-import { Array2DTracer, LogTracer } from 'algorithm-visualizer';
+const { Array2DTracer, LogTracer } = require('algorithm-visualizer');
 // }
 
 // define tracer variables {
