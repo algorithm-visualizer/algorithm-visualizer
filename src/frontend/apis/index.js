@@ -76,6 +76,10 @@ const TracerApi = {
     key: 'markdown',
     method: 'set',
     args: [code],
+  }, {
+    key: null,
+    method: 'setRoot',
+    args: ['markdown'],
   }]),
   json: ({ code }) => new Promise(resolve => resolve(JSON.parse(code))),
   js: ({ code }, params, cancelToken) => new Promise((resolve, reject) => {
