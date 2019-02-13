@@ -2,7 +2,7 @@ import React from 'react';
 import { Renderer } from '/core/renderers';
 
 class Tracer {
-  constructor(key, getObject, title = this.constructor.name) {
+  constructor(key, getObject, title) {
     this.key = key;
     this.getObject = getObject;
     this.title = title;

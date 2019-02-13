@@ -64,8 +64,9 @@ class VisualizationViewer extends BaseComponent {
         const LayoutClass = LayoutClasses[method];
         this.objects[key] = new LayoutClass(key, key => this.objects[key], children);
       } else if (method in TracerClasses) {
-        const [title] = args;
-        const TracerClass = TracerClasses[method];
+        const className = method;
+        const [title = className] = args;
+        const TracerClass = TracerClasses[className];
         this.objects[key] = new TracerClass(key, key => this.objects[key], title);
       } else {
         this.objects[key][method](...args);
