@@ -1,4 +1,4 @@
-import { Data } from '/core/datas';
+import { Tracer } from '/core/tracers';
 import { Array2DRenderer } from '/core/renderers';
 
 class Element {
@@ -9,7 +9,7 @@ class Element {
   }
 }
 
-class Array2DData extends Data {
+class Array2DTracer extends Tracer {
   getRendererClass() {
     return Array2DRenderer;
   }
@@ -62,4 +62,4 @@ class Array2DData extends Data {
   }
 }
 
-export default Array2DData;
+export default Array2DTracer;

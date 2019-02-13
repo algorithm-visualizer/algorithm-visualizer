@@ -1,7 +1,7 @@
-import { Data } from '/core/datas';
+import { Tracer } from '/core/tracers';
 import { MarkdownRenderer } from '/core/renderers';
 
-class MarkdownData extends Data {
+class MarkdownTracer extends Tracer {
   getRendererClass() {
     return MarkdownRenderer;
   }
@@ -12,4 +12,4 @@ class MarkdownData extends Data {
   }
 }
 
-export default MarkdownData;
+export default MarkdownTracer;

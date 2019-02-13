@@ -17,7 +17,7 @@ class CodeEditor extends React.Component {
   }
 
   handleResize() {
-    this.aceEditorRef.current.editor.resize();
+    this.aceEditorRef.current.getWrappedInstance().resize();
   }
 
   render() {

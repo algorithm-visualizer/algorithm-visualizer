@@ -41,22 +41,23 @@ class Player extends BaseComponent {
     }
   }
 
-  reset(traces = []) {
+  reset(commands = []) {
     const chunks = [{
-      traces: [],
+      commands: [],
       lineNumber: undefined,
     }];
-    while (traces.length) {
-      const trace = traces.shift();
-      if (trace.method === 'delay') {
-        const [lineNumber] = trace.args;
+    while (commands.length) {
+      const command = commands.shift();
+      const { key, method, args } = command;
+      if (key === null && method === 'delay') {
+        const [lineNumber] = args;
         chunks[chunks.length - 1].lineNumber = lineNumber;
         chunks.push({
-          traces: [],
+          commands: [],
           lineNumber: undefined,
         });
       } else {
-        chunks[chunks.length - 1].traces.push(trace);
+        chunks[chunks.length - 1].commands.push(command);
       }
     }
     this.props.setChunks(chunks);
@@ -76,10 +77,10 @@ class Player extends BaseComponent {
     const ext = extension(file.name);
     if (ext in TracerApi) {
       TracerApi[ext]({ code: file.content }, undefined, this.tracerApiSource.token)
-        .then(traces => {
+        .then(commands => {
           this.tracerApiSource = null;
           this.setState({ building: false });
-          this.reset(traces);
+          this.reset(commands);
           this.next();
         })
         .catch(error => {

@@ -1,21 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { classes } from '/common/util';
-import { BaseComponent, ResizableContainer } from '/components';
+import { BaseComponent } from '/components';
 import { actions } from '/reducers';
 import styles from './stylesheet.scss';
-import { Array1DData, Array2DData, ChartData, Data, GraphData, LogData, MarkdownData } from '/core/datas';
+import * as TracerClasses from '/core/tracers';
+import * as LayoutClasses from '/core/layouts';
+import { classes } from '/common/util';
 
 @connect(({ player }) => ({ player }), actions)
 class VisualizationViewer extends BaseComponent {
   constructor(props) {
     super(props);
 
-    this.state = {
-      dataWeights: {},
-    };
+    this.reset();
+  }
 
-    this.datas = [];
+  reset() {
+    this.root = null;
+    this.objects = {};
   }
 
   componentDidMount() {
@@ -36,18 +38,10 @@ class VisualizationViewer extends BaseComponent {
     if (cursor > oldCursor) {
       applyingChunks = chunks.slice(oldCursor, cursor);
     } else {
-      this.datas = [];
+      this.reset();
       applyingChunks = chunks.slice(0, cursor);
     }
     applyingChunks.forEach(chunk => this.applyChunk(chunk));
-
-    const dataWeights = chunks === oldChunks ? { ...this.state.dataWeights } : {};
-    this.datas.forEach(data => {
-      if (!(data.tracerKey in dataWeights)) {
-        dataWeights[data.tracerKey] = 1;
-      }
-    });
-    this.setState({ dataWeights });
 
     const lastChunk = applyingChunks[applyingChunks.length - 1];
     if (lastChunk && lastChunk.lineNumber !== undefined) {
@@ -57,29 +51,24 @@ class VisualizationViewer extends BaseComponent {
     }
   }
 
-  addTracer(className, tracerKey, title) {
-    const DataClass = {
-      Tracer: Data,
-      MarkdownTracer: MarkdownData,
-      LogTracer: LogData,
-      Array2DTracer: Array2DData,
-      Array1DTracer: Array1DData,
-      ChartTracer: ChartData,
-      GraphTracer: GraphData,
-    }[className];
-    const data = new DataClass(tracerKey, title, this.datas);
-    this.datas.push(data);
-  }
-
-  applyTrace(trace) {
-    const { tracerKey, method, args } = trace;
+  applyCommand(command) {
+    const { key, method, args } = command;
     try {
-      if (method === 'construct') {
-        const [className, title] = args;
-        this.addTracer(className, tracerKey, title);
+      if (key === null && method === 'setRoot') {
+        const [root] = args;
+        this.root = this.objects[root];
+      } else if (method === 'destroy') {
+        delete this.objects[key];
+      } else if (method in LayoutClasses) {
+        const [children] = args;
+        const LayoutClass = LayoutClasses[method];
+        this.objects[key] = new LayoutClass(key, key => this.objects[key], children);
+      } else if (method in TracerClasses) {
+        const [title] = args;
+        const TracerClass = TracerClasses[method];
+        this.objects[key] = new TracerClass(key, key => this.objects[key], title);
       } else {
-        const data = this.datas.find(data => data.tracerKey === tracerKey);
-        data[method](...args);
+        this.objects[key][method](...args);
       }
     } catch (error) {
       this.handleError(error);
@@ -87,30 +76,18 @@ class VisualizationViewer extends BaseComponent {
   }
 
   applyChunk(chunk) {
-    chunk.traces.forEach(trace => this.applyTrace(trace));
-  }
-
-  handleChangeWeights(weights) {
-    const dataWeights = {};
-    weights.forEach((weight, i) => {
-      dataWeights[this.datas[i].tracerKey] = weight;
-    });
-    this.setState({ dataWeights });
+    chunk.commands.forEach(command => this.applyCommand(command));
   }
 
   render() {
     const { className } = this.props;
-    const { dataWeights } = this.state;
 
     return (
-      <ResizableContainer className={classes(styles.visualization_viewer, className)}
-                          weights={this.datas.map(data => dataWeights[data.tracerKey])}
-                          visibles={this.datas.map(() => true)}
-                          onChangeWeights={weights => this.handleChangeWeights(weights)}>
+      <div className={classes(styles.visualization_viewer, className)}>
         {
-          this.datas.map(data => data.render())
+          this.root && this.root.render()
         }
-      </ResizableContainer>
+      </div>
     );
   }
 }

@@ -1,20 +1,20 @@
-import { Array2DData } from '/core/datas';
+import { Array2DTracer } from '/core/tracers';
 import { Array1DRenderer } from '/core/renderers';
 
-class Array1DData extends Array2DData {
+class Array1DTracer extends Array2DTracer {
   getRendererClass() {
     return Array1DRenderer;
   }
 
   init() {
     super.init();
-    this.chartData = null;
+    this.chartTracer = null;
   }
 
   set(array1d = []) {
     const array2d = [array1d];
     super.set(array2d);
-    this.syncChartData();
+    this.syncChartTracer();
   }
 
   patch(x, v) {
@@ -33,14 +33,14 @@ class Array1DData extends Array2DData {
     super.deselect(0, sx, 0, ex);
   }
 
-  chart(tracerKey) {
-    this.chartData = tracerKey ? this.findData(tracerKey) : null;
-    this.syncChartData();
+  chart(key) {
+    this.chartTracer = key ? this.getObject(key) : null;
+    this.syncChartTracer();
   }
 
-  syncChartData() {
-    if (this.chartData) this.chartData.data = this.data;
+  syncChartTracer() {
+    if (this.chartTracer) this.chartTracer.data = this.data;
   }
 }
 
-export default Array1DData;
+export default Array1DTracer;

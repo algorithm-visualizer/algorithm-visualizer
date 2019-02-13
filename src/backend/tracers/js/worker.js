@@ -10,5 +10,5 @@ onmessage = e => {
   const lines = e.data.split('\n').map((line, i) => line.replace(/(\.\s*delay\s*)\(\s*\)/g, `$1(${i})`));
   const code = lines.join('\n');
   sandbox(code);
-  postMessage(AlgorithmVisualizer.Tracer.traces);
+  postMessage(AlgorithmVisualizer.Commander.commands);
 };

@@ -1,8 +1,8 @@
-import { Data } from '/core/datas';
+import { Tracer } from '/core/tracers';
 import { distance } from '/common/util';
 import { GraphRenderer } from '/core/renderers';
 
-class GraphData extends Data {
+class GraphTracer extends Tracer {
   getRendererClass() {
     return GraphRenderer;
   }
@@ -21,7 +21,7 @@ class GraphData extends Data {
     this.isDirected = true;
     this.isWeighted = false;
     this.callLayout = { method: this.layoutCircle, args: [] };
-    this.logData = null;
+    this.logTracer = null;
   }
 
   set(array2d = []) {
@@ -230,8 +230,8 @@ class GraphData extends Data {
     const node = this.findNode(target);
     if (weight !== undefined) node.weight = weight;
     node.visitedCount += visit ? 1 : -1;
-    if (this.logData) {
-      this.logData.println(visit ? (source || '') + ' -> ' + target : (source || '') + ' <- ' + target);
+    if (this.logTracer) {
+      this.logTracer.println(visit ? (source || '') + ' -> ' + target : (source || '') + ' <- ' + target);
     }
   }
 
@@ -248,14 +248,14 @@ class GraphData extends Data {
     if (edge) edge.selectedCount += select ? 1 : -1;
     const node = this.findNode(target);
     node.selectedCount += select ? 1 : -1;
-    if (this.logData) {
-      this.logData.println(select ? (source || '') + ' => ' + target : (source || '') + ' <= ' + target);
+    if (this.logTracer) {
+      this.logTracer.println(select ? (source || '') + ' => ' + target : (source || '') + ' <= ' + target);
     }
   }
 
-  log(tracerKey) {
-    this.logData = tracerKey ? this.findData(tracerKey) : null;
+  log(key) {
+    this.logTracer = key ? this.getObject(key) : null;
   }
 }
 
-export default GraphData;
+export default GraphTracer;

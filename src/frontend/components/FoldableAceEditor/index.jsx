@@ -11,7 +11,7 @@ import 'brace/theme/tomorrow_night_eighties';
 import 'brace/ext/searchbox';
 import { actions } from '/reducers';
 
-@connect(({ current }) => ({ current }), actions)
+@connect(({ current }) => ({ current }), actions, null, { withRef: true })
 class FoldableAceEditor extends AceEditor {
   componentDidMount() {
     super.componentDidMount();
@@ -39,6 +39,10 @@ class FoldableAceEditor extends AceEditor {
         row = range.end.row;
       }
     }
+  }
+
+  resize() {
+    this.editor.resize();
   }
 }
 

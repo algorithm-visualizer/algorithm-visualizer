@@ -16,7 +16,7 @@ class ResizableContainer extends React.Component {
     let totalWeight = 0;
     let subtotalWeight = 0;
     weights.forEach((weight, i) => {
-      if (!visibles[i]) return;
+      if (visibles && !visibles[i]) return;
       totalWeight += weight;
       if (i < index) subtotalWeight += weight;
     });
@@ -34,9 +34,10 @@ class ResizableContainer extends React.Component {
 
     const elements = [];
     let lastIndex = -1;
-    const totalWeight = weights.filter((weight, i) => visibles[i]).reduce((sumWeight, weight) => sumWeight + weight, 0);
+    const totalWeight = weights.filter((weight, i) => !visibles || visibles[i])
+      .reduce((sumWeight, weight) => sumWeight + weight, 0);
     children.forEach((child, i) => {
-      if (visibles[i]) {
+      if (!visibles || visibles[i]) {
         if (~lastIndex) {
           const prevIndex = lastIndex;
           elements.push(

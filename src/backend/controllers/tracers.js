@@ -38,7 +38,7 @@ const trace = lang => (req, res, next) => {
       }).finally(() => clearTimeout(timer));
     })
     .then(() => new Promise((resolve, reject) => {
-      const visualizationPath = path.resolve(tempPath, 'traces.json');
+      const visualizationPath = path.resolve(tempPath, 'visualization.json');
       res.sendFile(visualizationPath, err => {
         if (err) return reject(new Error('Visualization Not Found'));
         resolve();

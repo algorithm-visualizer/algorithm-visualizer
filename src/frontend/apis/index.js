@@ -69,11 +69,11 @@ const GitHubApi = {
 
 const TracerApi = {
   md: ({ code }) => Promise.resolve([{
-    tracerKey: '0-MarkdownTracer-Markdown',
-    method: 'construct',
-    args: ['MarkdownTracer', 'Markdown'],
+    key: 'markdown',
+    method: 'MarkdownTracer',
+    args: ['Markdown'],
   }, {
-    tracerKey: '0-MarkdownTracer-Markdown',
+    key: 'markdown',
     method: 'set',
     args: [code],
   }]),

@@ -6,12 +6,12 @@ class LogRenderer extends Renderer {
   constructor(props) {
     super(props);
 
-    this.element = React.createRef();
+    this.elementRef = React.createRef();
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     super.componentDidUpdate(prevProps, prevState, snapshot);
-    const div = this.element.current;
+    const div = this.elementRef.current;
     div.scrollTop = div.scrollHeight;
   }
 
@@ -19,7 +19,7 @@ class LogRenderer extends Renderer {
     const { log } = this.props.data;
 
     return (
-      <div className={styles.log} ref={this.element} dangerouslySetInnerHTML={{ __html: log }} />
+      <div className={styles.log} ref={this.elementRef} dangerouslySetInnerHTML={{ __html: log }} />
     );
   }
 }

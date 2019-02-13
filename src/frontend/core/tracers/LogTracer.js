@@ -1,8 +1,8 @@
 import { sprintf } from 'sprintf-js';
-import { Data } from '/core/datas';
+import { Tracer } from '/core/tracers';
 import { LogRenderer } from '/core/renderers';
 
-class LogData extends Data {
+class LogTracer extends Tracer {
   getRendererClass() {
     return LogRenderer;
   }
@@ -25,4 +25,4 @@ class LogData extends Data {
   }
 }
 
-export default LogData;
+export default LogTracer;

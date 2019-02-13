@@ -27,13 +27,16 @@ class App extends BaseComponent {
     super(props);
 
     this.state = {
-      navigatorOpened: true,
+      workspaceVisibles: [true, true, true],
       workspaceWeights: [1, 2, 2],
     };
 
     this.codeEditorRef = React.createRef();
 
     this.ignoreHistoryBlock = this.ignoreHistoryBlock.bind(this);
+    this.handleClickTitleBar = this.handleClickTitleBar.bind(this);
+    this.loadScratchPapers = this.loadScratchPapers.bind(this);
+    this.handleChangeWorkspaceWeights = this.handleChangeWorkspaceWeights.bind(this);
   }
 
   componentDidMount() {
@@ -161,7 +164,7 @@ class App extends BaseComponent {
               login: undefined,
               gistId,
               title: 'Untitled',
-              files: [CONTRIBUTING_MD, createUserFile('traces.json', JSON.stringify(content))],
+              files: [CONTRIBUTING_MD, createUserFile('visualization.json', JSON.stringify(content))],
             });
           });
       } else if (gistId === 'new') {
@@ -182,7 +185,10 @@ class App extends BaseComponent {
       return Promise.resolve();
     };
     fetch()
-      .then(() => this.selectDefaultTab())
+      .then(() => {
+        this.selectDefaultTab();
+        return null; // to suppress unnecessary bluebird warning
+      })
       .catch(error => {
         this.handleError(error);
         this.props.history.push('/');
@@ -204,15 +210,22 @@ class App extends BaseComponent {
     this.codeEditorRef.current.getWrappedInstance().handleResize();
   }
 
-  toggleNavigatorOpened(navigatorOpened = !this.state.navigatorOpened) {
-    this.setState({ navigatorOpened });
+  toggleNavigatorOpened(navigatorOpened = !this.state.workspaceVisibles[0]) {
+    const workspaceVisibles = [...this.state.workspaceVisibles];
+    workspaceVisibles[0] = navigatorOpened;
+    this.setState({ workspaceVisibles });
+  }
+
+  handleClickTitleBar() {
+    this.toggleNavigatorOpened();
   }
 
   render() {
-    const { navigatorOpened, workspaceWeights } = this.state;
-
+    const { workspaceVisibles, workspaceWeights } = this.state;
     const { titles, description, saved } = this.props.current;
+
     const title = `${saved ? '' : '(Unsaved) '}${titles.join(' - ')}`;
+    const [navigatorOpened] = workspaceVisibles;
 
     return (
       <div className={styles.app}>
@@ -220,12 +233,11 @@ class App extends BaseComponent {
           <title>{title}</title>
           <meta name="description" content={description} />
         </Helmet>
-        <Header className={styles.header} onClickTitleBar={() => this.toggleNavigatorOpened()}
-                navigatorOpened={navigatorOpened} loadScratchPapers={() => this.loadScratchPapers()}
+        <Header className={styles.header} onClickTitleBar={this.handleClickTitleBar}
+                navigatorOpened={navigatorOpened} loadScratchPapers={this.loadScratchPapers}
                 ignoreHistoryBlock={this.ignoreHistoryBlock} />
         <ResizableContainer className={styles.workspace} horizontal weights={workspaceWeights}
-                            visibles={[navigatorOpened, true, true]}
-                            onChangeWeights={weights => this.handleChangeWorkspaceWeights(weights)}>
+                            visibles={workspaceVisibles} onChangeWeights={this.handleChangeWorkspaceWeights}>
           <Navigator />
           <VisualizationViewer className={styles.visualization_viewer} />
           <TabContainer className={styles.editor_tab_container}>

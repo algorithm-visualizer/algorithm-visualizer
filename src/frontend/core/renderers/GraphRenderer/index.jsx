@@ -7,7 +7,7 @@ class GraphRenderer extends Renderer {
   constructor(props) {
     super(props);
 
-    this.element = React.createRef();
+    this.elementRef = React.createRef();
     this.selectedNode = null;
 
     this.togglePan(true);
@@ -35,7 +35,7 @@ class GraphRenderer extends Renderer {
   }
 
   computeCoords(e) {
-    const svg = this.element.current;
+    const svg = this.elementRef.current;
     const s = svg.createSVGPoint();
     s.x = e.clientX;
     s.y = e.clientY;
@@ -53,7 +53,7 @@ class GraphRenderer extends Renderer {
       baseHeight * this.zoom,
     ];
     return (
-      <svg className={styles.graph} viewBox={viewBox} ref={this.element}>
+      <svg className={styles.graph} viewBox={viewBox} ref={this.elementRef}>
         <defs>
           <marker id="markerArrow" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto">
             <path d="M0,0 L0,4 L4,2 L0,0" className={styles.arrow} />
