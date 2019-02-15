@@ -1,6 +1,9 @@
 // import visualization libraries {
 #include "algorithm-visualizer/Array2DTracer.h"
+#include "algorithm-visualizer/Layout.h"
 #include "algorithm-visualizer/LogTracer.h"
+#include "algorithm-visualizer/Tracer.h"
+#include "algorithm-visualizer/VerticalLayout.h"
 // }
 
 #include <vector>
@@ -25,8 +28,9 @@ void highlight(int line) {
     if (line >= messages.size()) return;
     std::string message = messages[line];
     // visualize {
-    logTracer.print(message);
-    array2dTracer.selectRow(line, 0, message.size() - 1).delay();
+    logTracer.println(message);
+    array2dTracer.selectRow(line, 0, message.size() - 1);
+    Tracer::delay();
     array2dTracer.deselectRow(line, 0, message.size() - 1);
     // }
     highlight(line + 1);
@@ -34,7 +38,9 @@ void highlight(int line) {
 
 int main() {
     // visualize {
-    array2dTracer.set(messages).delay();
+    Layout::setRoot(VerticalLayout({array2dTracer, logTracer}));
+    array2dTracer.set(messages);
+    Tracer::delay();
     // }
     highlight(0);
     return 0;

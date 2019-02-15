@@ -22,8 +22,9 @@ class Main {
         if (line >= messages.length) return;
         String message = messages[line];
         // visualize {
-        logTracer.print(message);
-        array2dTracer.selectRow(line, 0, message.length() - 1).delay();
+        logTracer.println(message);
+        array2dTracer.selectRow(line, 0, message.length() - 1);
+        Tracer.delay();
         array2dTracer.deselectRow(line, 0, message.length() - 1);
         // }
         highlight(line + 1);
@@ -31,7 +32,9 @@ class Main {
 
     Main() {
         // visualize {
-        array2dTracer.set(messages).delay();
+        Layout.setRoot(new VerticalLayout(new Commander[]{array2dTracer, logTracer}));
+        array2dTracer.set(messages);
+        Tracer.delay();
         // }
         highlight(0);
     }
