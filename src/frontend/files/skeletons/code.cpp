@@ -1,9 +1,5 @@
 // import visualization libraries {
-#include "algorithm-visualizer/Array2DTracer.h"
-#include "algorithm-visualizer/Layout.h"
-#include "algorithm-visualizer/LogTracer.h"
-#include "algorithm-visualizer/Tracer.h"
-#include "algorithm-visualizer/VerticalLayout.h"
+#include "algorithm-visualizer.h"
 // }
 
 #include <vector>
