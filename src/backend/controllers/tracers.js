@@ -29,7 +29,7 @@ const trace = lang => (req, res, next) => {
         `--name=${containerName}`,
         '-w=/usr/visualization',
         `-v=${tempPath}:/usr/visualization:rw`,
-        `-m=${memoryLimit}m`,
+        //`-m=${memoryLimit}m`,
         '-e ALGORITHM_VISUALIZER=1',
         builder.imageName,
       ].join(' '), { stdout: null, stderr: null }).catch(error => {
