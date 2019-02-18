@@ -20,16 +20,16 @@ const trace = lang => (req, res, next) => {
       const containerName = uuid.v4();
       let killed = false;
       const timer = setTimeout(() => {
-/*        execute(`docker kill ${containerName}`).then(() => {
+        execute(`docker kill ${containerName}`).then(() => {
           killed = true;
-        });*/
+        });
       }, timeLimit);
       return execute([
         'docker run --rm',
         `--name=${containerName}`,
         '-w=/usr/visualization',
         `-v=${tempPath}:/usr/visualization:rw`,
-        //`-m=${memoryLimit}m`,
+        `-m=${memoryLimit}m`,
         '-e ALGORITHM_VISUALIZER=1',
         builder.imageName,
       ].join(' '), { stdout: null, stderr: null }).catch(error => {
