@@ -23,9 +23,9 @@ If you want to ...
   Check out the [contributing guidelines](https://github.com/algorithm-visualizer/algorithm-visualizer/blob/master/CONTRIBUTING.md) in this repo. The [directory structure](https://github.com/algorithm-visualizer/algorithm-visualizer/blob/master/PROJECT_DETAILS.md#algorithm-visualizer) might be helpful as well.
 
 - **Revise the specifications of visualization libraries.**
-  
+
   Making changes to the specifications is often followed by updating visualization libraries for every supported language and the affected public algorithms accordingly. It is highly recommended to read the entire [project details](https://github.com/algorithm-visualizer/algorithm-visualizer/blob/master/PROJECT_DETAILS.md) and to raise an issue about your proposal before working on it.
 
 - **Fix issues in a visualization library for a specific langauge.**
 
-  Check out the contributing guidelines ([JavaScript](https://github.com/algorithm-visualizer/tracers.js/blob/master/CONTRIBUTING.md), [C++](https://github.com/algorithm-visualizer/tracers.cpp/blob/master/CONTRIBUTING.md), and [Java](https://github.com/algorithm-visualizer/tracers.java/blob/master/CONTRIBUTING.md)) in the repo of the visualization library.
+  Check out the contributing guidelines ([JavaScript](https://github.com/algorithm-visualizer/tracers.js/blob/master/README.md), [C++](https://github.com/algorithm-visualizer/tracers.cpp/blob/master/README.md), and [Java](https://github.com/algorithm-visualizer/tracers.java/blob/master/README.md)) in the repo of the visualization library.
