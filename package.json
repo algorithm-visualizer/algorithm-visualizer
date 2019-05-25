@@ -100,7 +100,7 @@
     "style-loader": "^0.21.0",
     "uglifyjs-webpack-plugin": "^1.2.4",
     "webpack": "^4.5.0",
-    "webpack-bundle-analyzer": "^2.11.1",
+    "webpack-bundle-analyzer": "^3.3.2",
     "webpack-cli": "^3.0.8",
     "webpack-dev-middleware": "^3.4.0",
     "webpack-hot-middleware": "^2.19.1",
