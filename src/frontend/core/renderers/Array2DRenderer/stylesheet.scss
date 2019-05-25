@@ -7,18 +7,18 @@
 
   .row {
     display: table-row;
-    height: 28em;
+    height: 28px;
 
     .col {
       display: table-cell;
       text-align: center;
-      min-width: 28em;
+      min-width: 28px;
       background-color: $theme-normal;
-      border: 1em solid $theme-light;
-      padding: 0 4em;
+      border: 1px solid $theme-light;
+      padding: 0 4px;
 
       .value {
-        font-size: 12em;
+        font-size: 12px;
       }
 
       &.selected {
