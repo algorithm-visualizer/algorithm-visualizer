@@ -4,6 +4,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  overflow-y : auto;
 
   .search_bar_container {
     height: $line-height;
