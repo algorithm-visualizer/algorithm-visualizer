@@ -48,6 +48,7 @@ class ResizableContainer extends React.Component {
         elements.push(
           <div key={i} className={classes(styles.wrapper)} style={{
             flexGrow: weights[i] / totalWeight,
+            overflowY: 'auto',
           }}>
             {child}
           </div>,
