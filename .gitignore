@@ -2,6 +2,4 @@
 /node_modules
 /build
 /npm-debug.log
-/src/backend/public
 .DS_Store
-/pm2.config.js

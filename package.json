@@ -23,11 +23,6 @@
     "visualization",
     "animation"
   ],
-  "author": {
-    "name": "Jinseo Jason Park",
-    "email": "parkjs814@gmail.com",
-    "url": "https://jasonpark.me/"
-  },
   "license": "MIT",
   "dependencies": {
     "axios": "latest",

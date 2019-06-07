@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-git fetch &&
-! git diff-index --quiet origin/master -- ':!package-lock.json' &&
-git reset --hard origin/master &&
-npm install &&
-npm run build
