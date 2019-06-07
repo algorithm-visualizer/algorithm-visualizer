@@ -3,11 +3,15 @@
 .log {
   flex: 1;
   align-self: stretch;
-  padding: 24px;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
   overflow-y: auto;
-  font-family: $font-family-monospace;
-  white-space: pre-wrap;
-  line-height: 1.6;
+
+  .content {
+    padding: 24px;
+    font-family: $font-family-monospace;
+    white-space: pre-wrap;
+    line-height: 1.6;
+  }
 }

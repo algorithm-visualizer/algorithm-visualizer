@@ -19,7 +19,9 @@ class LogRenderer extends Renderer {
     const { log } = this.props.data;
 
     return (
-      <div className={styles.log} ref={this.elementRef} dangerouslySetInnerHTML={{ __html: log }} />
+      <div className={styles.log} ref={this.elementRef}>
+        <div className={styles.content} dangerouslySetInnerHTML={{ __html: log }} />
+      </div>
     );
   }
 }

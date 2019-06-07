@@ -62,8 +62,10 @@ class MarkdownRenderer extends Renderer {
     };
 
     return (
-      <ReactMarkdown className={styles.markdown} source={markdown} renderers={{ heading, link, image }}
-                     escapeHtml={false} />
+      <div className={styles.markdown}>
+        <ReactMarkdown className={styles.content} source={markdown} renderers={{ heading, link, image }}
+                       escapeHtml={false} />
+      </div>
     );
   }
 }
