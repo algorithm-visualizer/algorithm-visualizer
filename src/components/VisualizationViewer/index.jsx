@@ -1,13 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { BaseComponent } from '/components';
-import { actions } from '/reducers';
-import styles from './stylesheet.scss';
-import * as TracerClasses from '/core/tracers';
-import * as LayoutClasses from '/core/layouts';
-import { classes } from '/common/util';
+import { BaseComponent } from 'components';
+import { actions } from 'reducers';
+import styles from './stylesheet.module.scss';
+import * as TracerClasses from 'core/tracers';
+import * as LayoutClasses from 'core/layouts';
+import { classes } from 'common/util';
 
-@connect(({ player }) => ({ player }), actions)
 class VisualizationViewer extends BaseComponent {
   constructor(props) {
     super(props);
@@ -93,4 +92,6 @@ class VisualizationViewer extends BaseComponent {
   }
 }
 
-export default VisualizationViewer;
+export default connect(({ player }) => ({ player }), actions)(
+  VisualizationViewer,
+);

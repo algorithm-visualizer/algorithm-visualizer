@@ -1,6 +1,6 @@
 import React from 'react';
-import { classes } from '/common/util';
-import styles from './stylesheet.scss';
+import { classes } from 'common/util';
+import styles from './stylesheet.module.scss';
 
 class Divider extends React.Component {
   constructor(props) {

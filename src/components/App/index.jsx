@@ -13,15 +13,14 @@ import {
   TabContainer,
   ToastContainer,
   VisualizationViewer,
-} from '/components';
-import { AlgorithmApi, GitHubApi, VisualizationApi } from '/apis';
-import { actions } from '/reducers';
-import { createUserFile, extension, refineGist } from '/common/util';
-import { exts, languages } from '/common/config';
-import { CONTRIBUTING_MD } from '/files';
-import styles from './stylesheet.scss';
+} from 'components';
+import { AlgorithmApi, GitHubApi, VisualizationApi } from 'apis';
+import { actions } from 'reducers';
+import { createUserFile, extension, refineGist } from 'common/util';
+import { exts, languages } from 'common/config';
+import { CONTRIBUTING_MD } from 'files';
+import styles from './stylesheet.module.scss';
 
-@connect(({ current, env }) => ({ current, env }), actions)
 class App extends BaseComponent {
   constructor(props) {
     super(props);
@@ -231,23 +230,25 @@ class App extends BaseComponent {
       <div className={styles.app}>
         <Helmet>
           <title>{title}</title>
-          <meta name="description" content={description} />
+          <meta name="description" content={description}/>
         </Helmet>
         <Header className={styles.header} onClickTitleBar={this.handleClickTitleBar}
                 navigatorOpened={navigatorOpened} loadScratchPapers={this.loadScratchPapers}
-                ignoreHistoryBlock={this.ignoreHistoryBlock} />
+                ignoreHistoryBlock={this.ignoreHistoryBlock}/>
         <ResizableContainer className={styles.workspace} horizontal weights={workspaceWeights}
                             visibles={workspaceVisibles} onChangeWeights={this.handleChangeWorkspaceWeights}>
-          <Navigator />
-          <VisualizationViewer className={styles.visualization_viewer} />
+          <Navigator/>
+          <VisualizationViewer className={styles.visualization_viewer}/>
           <TabContainer className={styles.editor_tab_container}>
-            <CodeEditor ref={this.codeEditorRef} />
+            <CodeEditor ref={this.codeEditorRef}/>
           </TabContainer>
         </ResizableContainer>
-        <ToastContainer className={styles.toast_container} />
+        <ToastContainer className={styles.toast_container}/>
       </div>
     );
   }
 }
 
-export default App;
+export default connect(({ current, env }) => ({ current, env }), actions)(
+  App,
+);

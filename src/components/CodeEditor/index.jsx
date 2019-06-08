@@ -1,14 +1,13 @@
 import React from 'react';
 import faTrashAlt from '@fortawesome/fontawesome-free-solid/faTrashAlt';
 import faUser from '@fortawesome/fontawesome-free-solid/faUser';
-import { classes, extension } from '/common/util';
-import { actions } from '/reducers';
+import { classes, extension } from 'common/util';
+import { actions } from 'reducers';
 import { connect } from 'react-redux';
-import { languages } from '/common/config';
-import { Button, Ellipsis, FoldableAceEditor } from '/components';
-import styles from './stylesheet.scss';
+import { languages } from 'common/config';
+import { Button, Ellipsis, FoldableAceEditor } from 'components';
+import styles from './stylesheet.module.scss';
 
-@connect(({ current, env, player }) => ({ current, env, player }), actions, null, { withRef: true })
 class CodeEditor extends React.Component {
   constructor(props) {
     super(props);
@@ -55,7 +54,7 @@ class CodeEditor extends React.Component {
             inFront: true,
             _key: lineIndicator.cursor,
           }] : []}
-          value={editingFile.content} />
+          value={editingFile.content}/>
         <div className={classes(styles.contributors_viewer, className)}>
           <span className={classes(styles.contributor, styles.label)}>Contributed by</span>
           {
@@ -67,7 +66,7 @@ class CodeEditor extends React.Component {
             ))
           }
           <div className={styles.empty}>
-            <div className={styles.empty} />
+            <div className={styles.empty}/>
             <Button className={styles.delete} icon={faTrashAlt} primary confirmNeeded
                     onClick={() => this.props.deleteFile(editingFile)}>
               <Ellipsis>Delete File</Ellipsis>
@@ -79,4 +78,6 @@ class CodeEditor extends React.Component {
   }
 }
 
-export default CodeEditor;
+export default connect(({ current, env, player }) => ({ current, env, player }), actions, null, { forwardRef: true })(
+  CodeEditor,
+);

@@ -15,15 +15,13 @@ import faTrashAlt from '@fortawesome/fontawesome-free-solid/faTrashAlt';
 import faSave from '@fortawesome/fontawesome-free-solid/faSave';
 import faFacebook from '@fortawesome/fontawesome-free-brands/faFacebook';
 import faStar from '@fortawesome/fontawesome-free-solid/faStar';
-import { GitHubApi } from '/apis';
-import { classes, refineGist } from '/common/util';
-import { actions } from '/reducers';
-import { languages } from '/common/config';
-import { BaseComponent, Button, Ellipsis, ListItem, Player } from '/components';
-import styles from './stylesheet.scss';
+import { GitHubApi } from 'apis';
+import { classes, refineGist } from 'common/util';
+import { actions } from 'reducers';
+import { languages } from 'common/config';
+import { BaseComponent, Button, Ellipsis, ListItem, Player } from 'components';
+import styles from './stylesheet.module.scss';
 
-@withRouter
-@connect(({ current, env }) => ({ current, env }), actions)
 class Header extends BaseComponent {
   handleClickFullScreen() {
     if (screenfull.enabled) {
@@ -126,14 +124,14 @@ class Header extends BaseComponent {
                 titles.map((title, i) => [
                   scratchPaper && i === 1 ?
                     <AutosizeInput className={styles.input_title} key={`title-${i}`} value={title}
-                                   onClick={e => e.stopPropagation()} onChange={e => this.handleChangeTitle(e)} /> :
+                                   onClick={e => e.stopPropagation()} onChange={e => this.handleChangeTitle(e)}/> :
                     <Ellipsis key={`title-${i}`}>{title}</Ellipsis>,
                   i < titles.length - 1 &&
-                  <FontAwesomeIcon className={styles.nav_arrow} fixedWidth icon={faAngleRight} key={`arrow-${i}`} />,
+                  <FontAwesomeIcon className={styles.nav_arrow} fixedWidth icon={faAngleRight} key={`arrow-${i}`}/>,
                 ])
               }
               <FontAwesomeIcon className={styles.nav_caret} fixedWidth
-                               icon={navigatorOpened ? faCaretDown : faCaretRight} />
+                               icon={navigatorOpened ? faCaretDown : faCaretRight}/>
             </Button>
           </div>
           <div className={styles.section}>
@@ -156,7 +154,7 @@ class Header extends BaseComponent {
                 <Button className={styles.btn_dropdown} icon={user.avatar_url}>
                   {user.login}
                   <div className={styles.dropdown}>
-                    <ListItem label="Sign Out" href="/api/auth/destroy" rel="nofollow" />
+                    <ListItem label="Sign Out" href="/api/auth/destroy" rel="nofollow"/>
                   </div>
                 </Button> :
                 <Button icon={faGithub} primary href="/api/auth/request" rel="nofollow">
@@ -169,18 +167,22 @@ class Header extends BaseComponent {
                 {
                   languages.map(language => language.ext === ext ? null : (
                     <ListItem key={language.ext} onClick={() => this.props.setExt(language.ext)}
-                              label={language.name} />
+                              label={language.name}/>
                   ))
                 }
               </div>
             </Button>
           </div>
-          <Player className={styles.section} />
+          <Player className={styles.section}/>
         </div>
       </header>
     );
   }
 }
 
-export default Header;
+export default withRouter(
+  connect(({ current, env }) => ({ current, env }), actions)(
+    Header,
+  ),
+);
 

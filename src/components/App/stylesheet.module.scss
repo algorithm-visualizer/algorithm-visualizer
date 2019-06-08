@@ -1,0 +1,30 @@
+@import "~common/stylesheet/index";
+
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  height: 100%;
+  background-color: $theme-normal;
+
+  .header {
+  }
+
+  .workspace {
+    flex: 1;
+
+    .visualization_viewer {
+      background-color: $theme-dark;
+    }
+
+    .editor_tab_container {
+    }
+  }
+
+  .toast_container {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 99;
+  }
+}

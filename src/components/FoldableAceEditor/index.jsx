@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import AceEditor from 'react-ace';
 import 'brace/mode/plain_text';
@@ -9,9 +8,8 @@ import 'brace/mode/c_cpp';
 import 'brace/mode/java';
 import 'brace/theme/tomorrow_night_eighties';
 import 'brace/ext/searchbox';
-import { actions } from '/reducers';
+import { actions } from 'reducers';
 
-@connect(({ current }) => ({ current }), actions, null, { withRef: true })
 class FoldableAceEditor extends AceEditor {
   componentDidMount() {
     super.componentDidMount();
@@ -46,4 +44,6 @@ class FoldableAceEditor extends AceEditor {
   }
 }
 
-export default FoldableAceEditor;
+export default connect(({ current }) => ({ current }), actions, null, { forwardRef: true })(
+  FoldableAceEditor,
+);

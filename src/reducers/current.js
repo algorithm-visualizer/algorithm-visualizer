@@ -1,6 +1,6 @@
 import { combineActions, createAction, handleActions } from 'redux-actions';
-import { README_MD } from '/files';
-import { extension, isSaved } from '/common/util';
+import { README_MD } from 'files';
+import { extension, isSaved } from 'common/util';
 
 const prefix = 'CURRENT';
 

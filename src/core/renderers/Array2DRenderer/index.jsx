@@ -1,7 +1,7 @@
 import React from 'react';
-import { Array1DRenderer, Renderer } from '/core/renderers';
-import styles from './stylesheet.scss';
-import { classes } from '/common/util';
+import { Array1DRenderer, Renderer } from 'core/renderers';
+import styles from './stylesheet.module.scss';
+import { classes } from 'common/util';
 
 class Array2DRenderer extends Renderer {
   constructor(props) {
