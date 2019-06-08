@@ -1,5 +1,5 @@
-import { Tracer } from '/core/tracers';
-import { Array2DRenderer } from '/core/renderers';
+import { Tracer } from 'core/tracers';
+import { Array2DRenderer } from 'core/renderers';
 
 class Element {
   constructor(value) {

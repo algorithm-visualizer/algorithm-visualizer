@@ -3,12 +3,11 @@ import { connect } from 'react-redux';
 import AutosizeInput from 'react-input-autosize';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import faPlus from '@fortawesome/fontawesome-free-solid/faPlus';
-import { classes } from '/common/util';
-import { actions } from '/reducers';
-import { languages } from '/common/config';
-import styles from './stylesheet.scss';
+import { classes } from 'common/util';
+import { actions } from 'reducers';
+import { languages } from 'common/config';
+import styles from './stylesheet.module.scss';
 
-@connect(({ current, env }) => ({ current, env }), actions)
 class TabContainer extends React.Component {
   handleAddFile() {
     const { ext } = this.props.env;
@@ -27,14 +26,14 @@ class TabContainer extends React.Component {
     return (
       <div className={classes(styles.tab_container, className)}>
         <div className={styles.tab_bar}>
-          <div className={classes(styles.title, styles.fake)} />
+          <div className={classes(styles.title, styles.fake)}/>
           {
             files.map((file, i) => file === editingFile ? (
               <div className={classes(styles.title, styles.selected)} key={i}
                    onClick={() => this.props.setEditingFile(file)}>
                 <AutosizeInput className={styles.input_title} value={file.name}
                                onClick={e => e.stopPropagation()}
-                               onChange={e => this.props.renameFile(file, e.target.value)} />
+                               onChange={e => this.props.renameFile(file, e.target.value)}/>
               </div>
             ) : (
               <div className={styles.title} key={i} onClick={() => this.props.setEditingFile(file)}>
@@ -43,9 +42,9 @@ class TabContainer extends React.Component {
             ))
           }
           <div className={styles.title} onClick={() => this.handleAddFile()}>
-            <FontAwesomeIcon fixedWidth icon={faPlus} />
+            <FontAwesomeIcon fixedWidth icon={faPlus}/>
           </div>
-          <div className={classes(styles.title, styles.fake)} />
+          <div className={classes(styles.title, styles.fake)}/>
         </div>
         <div className={styles.content}>
           {children}
@@ -55,4 +54,6 @@ class TabContainer extends React.Component {
   }
 }
 
-export default TabContainer;
+export default connect(({ current, env }) => ({ current, env }), actions)(
+  TabContainer,
+);

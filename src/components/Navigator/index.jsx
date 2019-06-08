@@ -5,12 +5,11 @@ import faSearch from '@fortawesome/fontawesome-free-solid/faSearch';
 import faCode from '@fortawesome/fontawesome-free-solid/faCode';
 import faBook from '@fortawesome/fontawesome-free-solid/faBook';
 import faGithub from '@fortawesome/fontawesome-free-brands/faGithub';
-import { ExpandableListItem, ListItem } from '/components';
-import { classes } from '/common/util';
-import { actions } from '/reducers';
-import styles from './stylesheet.scss';
+import { ExpandableListItem, ListItem } from 'components';
+import { classes } from 'common/util';
+import { actions } from 'reducers';
+import styles from './stylesheet.module.scss';
 
-@connect(({ current, directory, env }) => ({ current, directory, env }), actions)
 class Navigator extends React.Component {
   constructor(props) {
     super(props);
@@ -53,7 +52,7 @@ class Navigator extends React.Component {
     const categoriesOpened = {};
     const query = e.target.value;
     categories.forEach(category => {
-      if (this.testQuery(name) || category.algorithms.find(algorithm => this.testQuery(algorithm.name))) {
+      if (this.testQuery(category.name) || category.algorithms.find(algorithm => this.testQuery(algorithm.name))) {
         categoriesOpened[category.key] = true;
       }
     });
@@ -82,9 +81,9 @@ class Navigator extends React.Component {
     return (
       <nav className={classes(styles.navigator, className)}>
         <div className={styles.search_bar_container}>
-          <FontAwesomeIcon fixedWidth icon={faSearch} className={styles.search_icon} />
+          <FontAwesomeIcon fixedWidth icon={faSearch} className={styles.search_icon}/>
           <input type="text" className={styles.search_bar} aria-label="Search" placeholder="Search ..." autoFocus
-                 value={query} onChange={e => this.handleChangeQuery(e)} />
+                 value={query} onChange={e => this.handleChangeQuery(e)}/>
         </div>
         <div className={styles.algorithm_list}>
           {
@@ -103,7 +102,7 @@ class Navigator extends React.Component {
                     algorithms.map(algorithm => (
                       <ListItem indent key={algorithm.key}
                                 selected={category.key === categoryKey && algorithm.key === algorithmKey}
-                                to={`/${category.key}/${algorithm.key}`} label={algorithm.name} />
+                                to={`/${category.key}/${algorithm.key}`} label={algorithm.name}/>
                     ))
                   }
                 </ExpandableListItem>
@@ -114,22 +113,24 @@ class Navigator extends React.Component {
         <div className={styles.footer}>
           <ExpandableListItem icon={faCode} label="Scratch Paper" onClick={() => this.toggleScratchPaper()}
                               opened={scratchPaperOpened}>
-            <ListItem indent label="New ..." to="/scratch-paper/new" />
+            <ListItem indent label="New ..." to="/scratch-paper/new"/>
             {
               scratchPapers.map(scratchPaper => (
                 <ListItem indent key={scratchPaper.key} selected={scratchPaper.key === gistId}
-                          to={`/scratch-paper/${scratchPaper.key}`} label={scratchPaper.name} />
+                          to={`/scratch-paper/${scratchPaper.key}`} label={scratchPaper.name}/>
               ))
             }
           </ExpandableListItem>
           <ListItem icon={faBook} label="API Reference"
-                    href="https://github.com/algorithm-visualizer/algorithm-visualizer/wiki" />
+                    href="https://github.com/algorithm-visualizer/algorithm-visualizer/wiki"/>
           <ListItem icon={faGithub} label="Fork me on GitHub"
-                    href="https://github.com/algorithm-visualizer/algorithm-visualizer" />
+                    href="https://github.com/algorithm-visualizer/algorithm-visualizer"/>
         </div>
       </nav>
     );
   }
 }
 
-export default Navigator;
+export default connect(({ current, directory, env }) => ({ current, directory, env }), actions)(
+  Navigator,
+);

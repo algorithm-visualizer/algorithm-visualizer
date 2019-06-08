@@ -1,7 +1,7 @@
 import React from 'react';
-import styles from './stylesheet.scss';
-import { classes } from '/common/util';
-import { Button, Ellipsis } from '/components';
+import styles from './stylesheet.module.scss';
+import { classes } from 'common/util';
+import { Button, Ellipsis } from 'components';
 
 class ListItem extends React.Component {
   render() {

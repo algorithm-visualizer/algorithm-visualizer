@@ -1,7 +1,7 @@
 import React from 'react';
-import styles from './stylesheet.scss';
-import { Ellipsis } from '/components';
-import { classes } from '/common/util';
+import styles from './stylesheet.module.scss';
+import { Ellipsis } from 'components';
+import { classes } from 'common/util';
 
 class Renderer extends React.Component {
   constructor(props) {

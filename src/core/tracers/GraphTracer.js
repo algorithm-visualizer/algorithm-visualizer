@@ -1,6 +1,6 @@
-import { Tracer } from '/core/tracers';
-import { distance } from '/common/util';
-import { GraphRenderer } from '/core/renderers';
+import { Tracer } from 'core/tracers';
+import { distance } from 'common/util';
+import { GraphRenderer } from 'core/renderers';
 
 class GraphTracer extends Tracer {
   getRendererClass() {
@@ -103,8 +103,8 @@ class GraphTracer extends Tracer {
       return this.edges.find(edge => edge.source === source && edge.target === target);
     } else {
       return this.edges.find(edge =>
-        edge.source === source && edge.target === target ||
-        edge.source === target && edge.target === source);
+        (edge.source === source && edge.target === target) ||
+        (edge.source === target && edge.target === source));
     }
   }
 

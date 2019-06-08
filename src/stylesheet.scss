@@ -1,7 +1,8 @@
-@import "~/common/stylesheet/index";
+@import "~common/stylesheet/index";
 
 html,
-body {
+body,
+#root {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -40,33 +41,4 @@ button {
   margin: 0;
   padding: 0;
   line-height: 1.15;
-}
-
-.app {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  height: 100%;
-  background-color: $theme-normal;
-
-  .header {
-  }
-
-  .workspace {
-    flex: 1;
-
-    .visualization_viewer {
-      background-color: $theme-dark;
-    }
-
-    .editor_tab_container {
-    }
-  }
-
-  .toast_container {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    z-index: 99;
-  }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
-import { ResizableContainer } from '/components';
-import { HorizontalLayout } from '/core/layouts';
+import { ResizableContainer } from 'components';
+import { HorizontalLayout } from 'core/layouts';
 
 class Layout {
   constructor(key, getObject, children) {

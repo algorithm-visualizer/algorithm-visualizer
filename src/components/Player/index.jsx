@@ -7,13 +7,12 @@ import faChevronLeft from '@fortawesome/fontawesome-free-solid/faChevronLeft';
 import faChevronRight from '@fortawesome/fontawesome-free-solid/faChevronRight';
 import faPause from '@fortawesome/fontawesome-free-solid/faPause';
 import faWrench from '@fortawesome/fontawesome-free-solid/faWrench';
-import { classes, extension } from '/common/util';
-import { TracerApi } from '/apis';
-import { actions } from '/reducers';
-import { BaseComponent, Button, ProgressBar } from '/components';
-import styles from './stylesheet.scss';
+import { classes, extension } from 'common/util';
+import { TracerApi } from 'apis';
+import { actions } from 'reducers';
+import { BaseComponent, Button, ProgressBar } from 'components';
+import styles from './stylesheet.module.scss';
 
-@connect(({ current, player }) => ({ current, player }), actions)
 class Player extends BaseComponent {
   constructor(props) {
     super(props);
@@ -110,7 +109,7 @@ class Player extends BaseComponent {
 
   resume(wrap = false) {
     this.pause();
-    if (this.next() || wrap && this.props.setCursor(1)) {
+    if (this.next() || (wrap && this.props.setCursor(1))) {
       const interval = 4000 / Math.pow(Math.E, this.state.speed);
       this.timer = window.setTimeout(() => this.resume(), interval);
       this.setState({ playing: true });
@@ -163,11 +162,11 @@ class Player extends BaseComponent {
             <Button icon={faPlay} primary onClick={() => this.resume(true)}>Play</Button>
           )
         }
-        <Button icon={faChevronLeft} primary disabled={!this.isValidCursor(cursor - 1)} onClick={() => this.prev()} />
+        <Button icon={faChevronLeft} primary disabled={!this.isValidCursor(cursor - 1)} onClick={() => this.prev()}/>
         <ProgressBar className={styles.progress_bar} current={cursor} total={chunks.length}
-                     onChangeProgress={progress => this.handleChangeProgress(progress)} />
+                     onChangeProgress={progress => this.handleChangeProgress(progress)}/>
         <Button icon={faChevronRight} reverse primary disabled={!this.isValidCursor(cursor + 1)}
-                onClick={() => this.next()} />
+                onClick={() => this.next()}/>
         <div className={styles.speed}>
           Speed
           <InputRange
@@ -177,11 +176,13 @@ class Player extends BaseComponent {
               slider: styles.range_slider,
               track: styles.range_track,
             }} minValue={0} maxValue={4} step={.5} value={speed}
-            onChange={speed => this.handleChangeSpeed(speed)} />
+            onChange={speed => this.handleChangeSpeed(speed)}/>
         </div>
       </div>
     );
   }
 }
 
-export default Player;
+export default connect(({ current, player }) => ({ current, player }), actions)(
+  Player,
+);

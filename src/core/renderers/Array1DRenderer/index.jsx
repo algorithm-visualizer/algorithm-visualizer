@@ -1,5 +1,4 @@
-import React from 'react';
-import { Array2DRenderer } from '/core/renderers';
+import { Array2DRenderer } from 'core/renderers';
 
 class Array1DRenderer extends Array2DRenderer {
 }

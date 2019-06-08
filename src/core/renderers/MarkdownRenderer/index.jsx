@@ -1,6 +1,6 @@
 import React from 'react';
-import { Renderer } from '/core/renderers';
-import styles from './stylesheet.scss';
+import { Renderer } from 'core/renderers';
+import styles from './stylesheet.module.scss';
 import ReactMarkdown from 'react-markdown';
 
 class MarkdownRenderer extends Renderer {
@@ -20,11 +20,12 @@ class MarkdownRenderer extends Renderer {
       const idfy = text => text.toLowerCase().trim().replace(/[^\w \-]/g, '').replace(/ /g, '-');
 
       const getText = children => {
-        return children ? children.filter(child => child).map(child => {
+        return React.Children.map(children, child => {
+          if (!child) return '';
           if (typeof child === 'string') return child;
           if ('props' in child) return getText(child.props.children);
           return '';
-        }).join('') : '';
+        }).join('');
       };
 
       const id = idfy(getText(children));
@@ -64,7 +65,7 @@ class MarkdownRenderer extends Renderer {
     return (
       <div className={styles.markdown}>
         <ReactMarkdown className={styles.content} source={markdown} renderers={{ heading, link, image }}
-                       escapeHtml={false} />
+                       escapeHtml={false}/>
       </div>
     );
   }

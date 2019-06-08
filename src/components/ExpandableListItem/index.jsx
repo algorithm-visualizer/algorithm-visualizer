@@ -2,9 +2,9 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import faCaretDown from '@fortawesome/fontawesome-free-solid/faCaretDown';
 import faCaretRight from '@fortawesome/fontawesome-free-solid/faCaretRight';
-import styles from './stylesheet.scss';
-import { ListItem } from '/components';
-import { classes } from '/common/util';
+import styles from './stylesheet.module.scss';
+import { ListItem } from 'components';
+import { classes } from 'common/util';
 
 class ExpandableListItem extends React.Component {
   render() {

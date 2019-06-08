@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { actions } from '/reducers';
-import { classes } from '/common/util';
-import styles from './stylesheet.scss';
+import { actions } from 'reducers';
+import { classes } from 'common/util';
+import styles from './stylesheet.module.scss';
 
-@connect(({ toast }) => ({ toast }), actions)
 class ToastContainer extends React.Component {
   componentWillReceiveProps(nextProps) {
     const newToasts = nextProps.toast.toasts.filter(toast => !this.props.toast.toasts.includes(toast));
@@ -31,5 +30,7 @@ class ToastContainer extends React.Component {
   }
 }
 
-export default ToastContainer;
+export default connect(({ toast }) => ({ toast }), actions)(
+  ToastContainer,
+);
 
