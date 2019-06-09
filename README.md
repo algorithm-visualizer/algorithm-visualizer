@@ -13,7 +13,7 @@ Learning an algorithm gets much easier with visualizing it. Don't get what we me
 
 We have multiple repositories under the hood that comprise the website. Take a look at the contributing guidelines in the repository you want to contribute to.
 
-- [**`algorithm-visualizer`**](https://github.com/algorithm-visualizer/algorithm-visualizer) is a web app written in React. It not only contains UI components but also interprets visualizing commands into actual visualizations.
+- [**`algorithm-visualizer`**](https://github.com/algorithm-visualizer/algorithm-visualizer) is a web app written in React. It not only contains UI components but also interprets visualizing commands into actual visualizations. Check out [the contributing guidelines](CONTRIBUTING.md).
 
 - [**`server`**](https://github.com/algorithm-visualizer/server) serves the web app and provides APIs that it needs on the fly. (e.g., GitHub sign in, compiling/running code, etc.)
 
