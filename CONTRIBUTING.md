@@ -15,8 +15,17 @@ Are you a first-timer in contributing to open source? [These guidelines](https:/
     ```bash
     git clone https://github.com/<your-username>/algorithm-visualizer.git    
     ```
+    
+3. Choose whether to run [`server`](https://github.com/algorithm-visualizer/server) on your machine or to use the remote server.
+    - If you choose to run the server locally as well, follow the instructions [here](https://github.com/algorithm-visualizer/server/blob/master/CONTRIBUTING.md#running-locally).
 
-3. Install dependencies, and run the web app.
+    - If you choose to use the remote server, **temporarily** (i.e., don't commit this change) modify `package.json` as follows:
+        ```diff
+        - "proxy": "http://localhost:8080",
+        + "proxy": "https://algorithm-visualizer.org",
+        ```
+
+4. Install dependencies, and run the web app.
 
     ```bash
     cd algorithm-visualizer
@@ -26,7 +35,7 @@ Are you a first-timer in contributing to open source? [These guidelines](https:/
     npm start
     ```
     
-4. Open [`http://localhost:3000/`](http://localhost:3000/) in a web browser.
+5. Open [`http://localhost:3000/`](http://localhost:3000/) in a web browser.
 
 ## Directory Structure
 
