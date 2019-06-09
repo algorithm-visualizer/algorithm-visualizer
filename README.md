@@ -17,6 +17,6 @@ We have multiple repositories under the hood that comprise the website. Take a l
 
 - [**`server`**](https://github.com/algorithm-visualizer/server) serves the web app and provides APIs that it needs on the fly. (e.g., GitHub sign in, compiling/running code, etc.)
 
-- [**`algorithms`**](https://github.com/algorithm-visualizer/algorithms) contains public algorithms shown on the side menu of the website.
+- [**`algorithms`**](https://github.com/algorithm-visualizer/algorithms) contains algorithm visualizations shown on the side menu of the website.
 
-- [**`tracers.*`**](https://github.com/search?q=org%3Aalgorithm-visualizer+tracers.&type=Repositories) are visualization libaries written in each supported language. The only thing they do is to extract visualizing commands from code.
+- [**`tracers.*`**](https://github.com/search?q=org%3Aalgorithm-visualizer+tracers.&type=Repositories) are visualization libraries written in each supported language. The only thing they do is to extract visualizing commands from code.

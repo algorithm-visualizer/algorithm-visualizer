@@ -2,7 +2,9 @@
 
 > #### Table of Contents
 > - [Running Locally](#running-locally)
-> - [Creating a Pull Request](#creating-a-pull-request)
+> - [Directory Structure](#directory-structure)
+
+Are you a first-timer in contributing to open source? [These guidelines](https://opensource.guide/how-to-contribute/#how-to-submit-a-contribution) from GitHub might help!
 
 ## Running Locally
 
@@ -14,38 +16,29 @@
     git clone https://github.com/<your-username>/algorithm-visualizer.git    
     ```
 
-3. Install [Docker](https://docs.docker.com/install/), if not already installed.
-
-4. Install dependencies, and run the server.
+3. Install dependencies, and run the web app.
 
     ```bash
     cd algorithm-visualizer
 
     npm install
     
-    npm run dev
+    npm start
     ```
     
-5. Open [`http://localhost:8080/`](http://localhost:8080/) in a web browser.
+4. Open [`http://localhost:3000/`](http://localhost:3000/) in a web browser.
 
-## Creating a Pull Request
-  
-6. Create a branch addressing the issue/improvement you'd like to tackle.
+## Directory Structure
 
-    ```bash
-    git checkout -b my-problem-fixer-branch
-    ```
-
-7. Write some awesome code.
-
-8. Commit the changes, and push them to `my-problem-fixer-branch` branch on your forked repo.
-
-    ```bash
-    git add .
-    
-    git commit -m "Explain my awesome changes"
-
-    git push origin my-problem-fixer-branch
-    ```
-
-9. Create a pull request from `my-problem-fixer-branch` branch on your forked repo to `master` branch on the main repo.
+- [**branding/**](branding) contains representative image files.
+- [**public/**](public) contains static files to be served.
+- [**src/**](src) contains source code. 
+    - [**apis/**](src/apis) defines outgoing API requests.
+    - [**common/**](src/common) contains commonly used files.
+    - [**components/**](src/components) contains UI components.
+    - [**core/**](src/core) processes visualization.
+        - [**layouts/**](src/core/layouts) layout tracers.
+        - [**renderers/**](src/core/renderers) renders visualization data.
+        - [**tracers/**](src/core/tracers) interprets visualizing commands into visualization data.
+    - [**files/**](src/files) contains markdown or skeleton files to be shown in the code editor.
+    - [**reducers/**](src/reducers) contains Redux reducers.
