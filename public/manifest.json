@@ -9,19 +9,14 @@
   "description": "Algorithm Visualizer is an interactive online platform that visualizes algorithms from code.",
   "icons": [
     {
-      "src": "favicon.png",
-      "sizes": "256x256",
+      "src": "icons/icon-192x192.png",
+      "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icon.png",
-      "sizes": "1024x1024",
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
       "type": "image/png"
-    }
-  ],
-  "related_applications": [
-    {
-      "platform": "web"
     }
   ]
 }
