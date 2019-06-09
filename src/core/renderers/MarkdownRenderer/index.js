@@ -1,6 +1,6 @@
 import React from 'react';
 import { Renderer } from 'core/renderers';
-import styles from './stylesheet.module.scss';
+import styles from './MarkdownRenderer.module.scss';
 import ReactMarkdown from 'react-markdown';
 
 class MarkdownRenderer extends Renderer {

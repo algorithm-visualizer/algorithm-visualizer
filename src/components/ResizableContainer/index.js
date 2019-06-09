@@ -1,7 +1,7 @@
 import React from 'react';
 import { classes } from 'common/util';
 import { Divider } from 'components';
-import styles from './stylesheet.module.scss';
+import styles from './ResizableContainer.module.scss';
 
 class ResizableContainer extends React.Component {
   handleResize(prevIndex, index, targetElement, clientX, clientY) {

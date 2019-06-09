@@ -19,7 +19,7 @@ import { actions } from 'reducers';
 import { createUserFile, extension, refineGist } from 'common/util';
 import { exts, languages } from 'common/config';
 import { CONTRIBUTING_MD } from 'files';
-import styles from './stylesheet.module.scss';
+import styles from './App.module.scss';
 
 class App extends BaseComponent {
   constructor(props) {

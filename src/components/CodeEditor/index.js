@@ -6,7 +6,7 @@ import { actions } from 'reducers';
 import { connect } from 'react-redux';
 import { languages } from 'common/config';
 import { Button, Ellipsis, FoldableAceEditor } from 'components';
-import styles from './stylesheet.module.scss';
+import styles from './CodeEditor.module.scss';
 
 class CodeEditor extends React.Component {
   constructor(props) {

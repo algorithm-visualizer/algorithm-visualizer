@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { actions } from 'reducers';
 import { classes } from 'common/util';
-import styles from './stylesheet.module.scss';
+import styles from './ToastContainer.module.scss';
 
 class ToastContainer extends React.Component {
   componentWillReceiveProps(nextProps) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Renderer } from 'core/renderers';
 import { classes, distance } from 'common/util';
-import styles from './stylesheet.module.scss';
+import styles from './GraphRenderer.module.scss';
 
 class GraphRenderer extends Renderer {
   constructor(props) {

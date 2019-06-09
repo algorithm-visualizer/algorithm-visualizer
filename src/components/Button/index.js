@@ -5,7 +5,7 @@ import faExclamationCircle from '@fortawesome/fontawesome-free-solid/faExclamati
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
 import { classes } from 'common/util';
 import { Ellipsis } from 'components';
-import styles from './stylesheet.module.scss';
+import styles from './Button.module.scss';
 
 class Button extends React.Component {
   constructor(props) {

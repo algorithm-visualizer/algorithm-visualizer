@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './stylesheet.module.scss';
+import styles from './Renderer.module.scss';
 import { Ellipsis } from 'components';
 import { classes } from 'common/util';
 

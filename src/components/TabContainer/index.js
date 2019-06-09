@@ -6,7 +6,7 @@ import faPlus from '@fortawesome/fontawesome-free-solid/faPlus';
 import { classes } from 'common/util';
 import { actions } from 'reducers';
 import { languages } from 'common/config';
-import styles from './stylesheet.module.scss';
+import styles from './TabContainer.module.scss';
 
 class TabContainer extends React.Component {
   handleAddFile() {

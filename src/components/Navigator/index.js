@@ -8,7 +8,7 @@ import faGithub from '@fortawesome/fontawesome-free-brands/faGithub';
 import { ExpandableListItem, ListItem } from 'components';
 import { classes } from 'common/util';
 import { actions } from 'reducers';
-import styles from './stylesheet.module.scss';
+import styles from './Navigator.module.scss';
 
 class Navigator extends React.Component {
   constructor(props) {

@@ -2,7 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import faCaretDown from '@fortawesome/fontawesome-free-solid/faCaretDown';
 import faCaretRight from '@fortawesome/fontawesome-free-solid/faCaretRight';
-import styles from './stylesheet.module.scss';
+import styles from './ExpandableListItem.module.scss';
 import { ListItem } from 'components';
 import { classes } from 'common/util';
 

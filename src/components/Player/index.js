@@ -11,7 +11,7 @@ import { classes, extension } from 'common/util';
 import { TracerApi } from 'apis';
 import { actions } from 'reducers';
 import { BaseComponent, Button, ProgressBar } from 'components';
-import styles from './stylesheet.module.scss';
+import styles from './Player.module.scss';
 
 class Player extends BaseComponent {
   constructor(props) {

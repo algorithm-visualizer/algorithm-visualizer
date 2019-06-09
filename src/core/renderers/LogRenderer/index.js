@@ -1,6 +1,6 @@
 import React from 'react';
 import { Renderer } from 'core/renderers';
-import styles from './stylesheet.module.scss';
+import styles from './LogRenderer.module.scss';
 
 class LogRenderer extends Renderer {
   constructor(props) {

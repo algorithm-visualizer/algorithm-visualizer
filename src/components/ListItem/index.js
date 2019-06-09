@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './stylesheet.module.scss';
+import styles from './ListItem.module.scss';
 import { classes } from 'common/util';
 import { Button, Ellipsis } from 'components';
 

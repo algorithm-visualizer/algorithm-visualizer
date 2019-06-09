@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './stylesheet.module.scss';
+import styles from './Ellipsis.module.scss';
 import { classes } from 'common/util';
 
 class Ellipsis extends React.Component {

@@ -20,7 +20,7 @@ import { classes, refineGist } from 'common/util';
 import { actions } from 'reducers';
 import { languages } from 'common/config';
 import { BaseComponent, Button, Ellipsis, ListItem, Player } from 'components';
-import styles from './stylesheet.module.scss';
+import styles from './Header.module.scss';
 
 class Header extends BaseComponent {
   handleClickFullScreen() {
