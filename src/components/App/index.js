@@ -206,7 +206,7 @@ class App extends BaseComponent {
 
   handleChangeWorkspaceWeights(workspaceWeights) {
     this.setState({ workspaceWeights });
-    this.codeEditorRef.current.getWrappedInstance().handleResize();
+    this.codeEditorRef.current.handleResize();
   }
 
   toggleNavigatorOpened(navigatorOpened = !this.state.workspaceVisibles[0]) {
