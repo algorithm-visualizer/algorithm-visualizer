@@ -1,0 +1,17 @@
+tasks:
+ - init: >
+     git clone https://github.com/algorithm-visualizer/server.git &&
+     cd server &&
+     npm install &&
+     echo -e "GITHUB_CLIENT_ID=dummy\nGITHUB_CLIENT_SECRET=dummy\nAWS_ACCESS_KEY_ID=dummy\nAWS_SECRET_ACCESS_KEY=dummy" > .env.local &&
+     cd ..
+   command: cd server && npm run watch
+ - init: >
+     npm install &&
+     echo 'DANGEROUSLY_DISABLE_HOST_CHECK=true' > .env.local
+   command: npm start
+ports:
+  - port: 3000
+    onOpen: notify
+  - port: 8080
+    onOpen: ignore
