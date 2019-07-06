@@ -2,6 +2,7 @@
 
 > #### Table of Contents
 > - [Running Locally](#running-locally)
+> - [Run in Gitpod](#run-in-gitpod)
 > - [Directory Structure](#directory-structure)
 
 Are you a first-timer in contributing to open source? [These guidelines](https://opensource.guide/how-to-contribute/#how-to-submit-a-contribution) from GitHub might help!
@@ -36,6 +37,12 @@ Are you a first-timer in contributing to open source? [These guidelines](https:/
     ```
     
 5. Open [`http://localhost:3000/`](http://localhost:3000/) in a web browser.
+
+## Run in Gitpod
+
+You can also run algorithm-visualizer in Gitpod, a free online dev environment for GitHub.
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/algorithm-visualizer/algorithm-visualizer)
 
 ## Directory Structure
 
