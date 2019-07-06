@@ -9,6 +9,11 @@
   "description": "Algorithm Visualizer is an interactive online platform that visualizes algorithms from code.",
   "icons": [
     {
+      "src": "icons/icon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
       "src": "icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
