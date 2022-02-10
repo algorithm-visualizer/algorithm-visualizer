@@ -37,7 +37,7 @@
     "brace": "latest",
     "chart.js": "^2.8.0",
     "js-cookie": "^2.2.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "query-string": "^6.7.0",
     "raw-loader": "^3.0.0",
     "react": "^16.8.6",
