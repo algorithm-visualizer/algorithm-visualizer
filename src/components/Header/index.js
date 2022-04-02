@@ -154,10 +154,10 @@ class Header extends BaseComponent {
                 <Button className={styles.btn_dropdown} icon={user.avatar_url}>
                   {user.login}
                   <div className={styles.dropdown}>
-                    <ListItem label="Sign Out" href="/api/auth/destroy" rel="nofollow"/>
+                    <ListItem label="Sign Out" href="/api/auth/destroy" rel="opener"/>
                   </div>
                 </Button> :
-                <Button icon={faGithub} primary href="/api/auth/request" rel="nofollow">
+                <Button icon={faGithub} primary href="/api/auth/request" rel="opener">
                   <Ellipsis>Sign In</Ellipsis>
                 </Button>
             }
