@@ -18,7 +18,7 @@ import { AlgorithmApi, GitHubApi, VisualizationApi } from 'apis';
 import { actions } from 'reducers';
 import { createUserFile, extension, refineGist } from 'common/util';
 import { exts, languages } from 'common/config';
-import { CONTRIBUTING_MD } from 'files';
+import { SCRATCH_PAPER_README_MD } from 'files';
 import styles from './App.module.scss';
 
 class App extends BaseComponent {
@@ -163,7 +163,7 @@ class App extends BaseComponent {
               login: undefined,
               gistId,
               title: 'Untitled',
-              files: [CONTRIBUTING_MD, createUserFile('visualization.json', JSON.stringify(content))],
+              files: [SCRATCH_PAPER_README_MD, createUserFile('visualization.json', JSON.stringify(content))],
             });
           });
       } else if (gistId === 'new') {
@@ -172,7 +172,7 @@ class App extends BaseComponent {
           login: undefined,
           gistId,
           title: 'Untitled',
-          files: [CONTRIBUTING_MD, language.skeleton],
+          files: [SCRATCH_PAPER_README_MD, language.skeleton],
         });
       } else if (gistId) {
         return GitHubApi.getGist(gistId, { timestamp: Date.now() })

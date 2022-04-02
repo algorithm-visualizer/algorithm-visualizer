@@ -1,5 +1,5 @@
 import { combineActions, createAction, handleActions } from 'redux-actions';
-import { README_MD } from 'files';
+import { ROOT_README_MD } from 'files';
 import { extension, isSaved } from 'common/util';
 
 const prefix = 'CURRENT';
@@ -37,7 +37,7 @@ export const actions = {
 };
 
 const homeTitles = ['Algorithm Visualizer'];
-const homeFiles = [README_MD];
+const homeFiles = [ROOT_README_MD];
 const homeDescription = 'Algorithm Visualizer is an interactive online platform that visualizes algorithms from code.';
 const defaultState = {
   algorithm: {
