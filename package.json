@@ -26,6 +26,9 @@
   },
   "proxy": "http://localhost:8080",
   "license": "MIT",
+  "engines": {
+    "node": ">=10.15.3"
+  },
   "dependencies": {
     "@fortawesome/fontawesome": "^1.1.8",
     "@fortawesome/fontawesome-free-brands": "^5.0.13",
