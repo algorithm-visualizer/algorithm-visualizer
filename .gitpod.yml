@@ -7,8 +7,8 @@ tasks:
      cd ..
    command: cd server && npm run watch
  - init: >
-     npm install &&
-     echo 'DANGEROUSLY_DISABLE_HOST_CHECK=true' > .env.local
+     echo 'DANGEROUSLY_DISABLE_HOST_CHECK=true' > .env.local &&
+     nvm install v12.22.12 && nvm use v12.22.12 && npm install 
    command: npm start
 ports:
   - port: 3000
