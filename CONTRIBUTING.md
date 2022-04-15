@@ -42,7 +42,7 @@ Are you a first-timer in contributing to open source? [These guidelines](https:/
 
 You can also run `algorithm-visualizer` in Gitpod, a free online dev environment for GitHub.
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/algorithm-visualizer/algorithm-visualizer)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/Soecka/algorithm-visualizer)
 
 ## Directory Structure
 
