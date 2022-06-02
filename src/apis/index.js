@@ -1,5 +1,6 @@
 import Promise from 'bluebird';
 import axios from 'axios';
+import * as AlgorithmVisualizer from '../common/AlgorithmVisualizer'
 
 axios.interceptors.response.use(response => response.data);
 
@@ -83,22 +84,12 @@ const TracerApi = {
   }]),
   json: ({ code }) => new Promise(resolve => resolve(JSON.parse(code))),
   js: ({ code }, params, cancelToken) => new Promise((resolve, reject) => {
-    const worker = new Worker('/api/tracers/js/worker');
-    if (cancelToken) {
-      cancelToken.promise.then(cancel => {
-        worker.terminate();
-        reject(cancel);
-      });
-    }
-    worker.onmessage = e => {
-      worker.terminate();
-      resolve(e.data);
-    };
-    worker.onerror = error => {
-      worker.terminate();
-      reject(error);
-    };
-    worker.postMessage(code);
+    const lines = code.split('\n').map((line, i) => line.replace(/(\.\s*delay\s*)\(\s*\)/g, `$1(${i})`));
+    code = lines.join('\n');
+    const process = { env: { ALGORITHM_VISUALIZER: '1' } };
+    const require = name => ({ 'algorithm-visualizer': AlgorithmVisualizer }[name]); // fake require
+    eval(code);
+    resolve(AlgorithmVisualizer.Commander.commands);
   }),
   cpp: POST('/tracers/cpp'),
   java: POST('/tracers/java'),
