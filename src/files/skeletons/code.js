@@ -1,20 +1,20 @@
 // import visualization libraries {
-const { Array2DTracer, Layout, LogTracer, Tracer, VerticalLayout } = require('algorithm-visualizer');
+const {
+  Array2DTracer,
+  Layout,
+  LogTracer,
+  Tracer,
+  VerticalLayout,
+} = require("algorithm-visualizer");
 // }
 
 // define tracer variables {
-const array2dTracer = new Array2DTracer('Grid');
-const logTracer = new LogTracer('Console');
+const array2dTracer = new Array2DTracer("Grid");
+const logTracer = new LogTracer("Console");
 // }
 
 // define input variables
-const messages = [
-  'Visualize',
-  'your',
-  'own',
-  'code',
-  'here!',
-];
+const messages = ["Visualize", "your", "own", "code", "here!"];
 
 // highlight each line of messages recursively
 function highlight(line) {

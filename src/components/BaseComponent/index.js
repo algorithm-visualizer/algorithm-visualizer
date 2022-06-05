@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 class BaseComponent extends React.Component {
   constructor(props) {
@@ -10,7 +10,11 @@ class BaseComponent extends React.Component {
   handleError(error) {
     if (error.response) {
       const { data, statusText } = error.response;
-      const message = data ? typeof data === 'string' ? data : JSON.stringify(data) : statusText;
+      const message = data
+        ? typeof data === "string"
+          ? data
+          : JSON.stringify(data)
+        : statusText;
       console.error(message);
       this.props.showErrorToast(message);
     } else {

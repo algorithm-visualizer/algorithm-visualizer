@@ -1,6 +1,6 @@
-import React from 'react';
-import { Renderer } from 'core/renderers';
-import styles from './LogRenderer.module.scss';
+import React from "react";
+import { Renderer } from "core/renderers";
+import styles from "./LogRenderer.module.scss";
 
 class LogRenderer extends Renderer {
   constructor(props) {
@@ -20,11 +20,13 @@ class LogRenderer extends Renderer {
 
     return (
       <div className={styles.log} ref={this.elementRef}>
-        <div className={styles.content} dangerouslySetInnerHTML={{ __html: log }} />
+        <div
+          className={styles.content}
+          dangerouslySetInnerHTML={{ __html: log }}
+        />
       </div>
     );
   }
 }
 
 export default LogRenderer;
-

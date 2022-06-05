@@ -1,6 +1,6 @@
-import React from 'react';
-import { classes } from 'common/util';
-import styles from './ProgressBar.module.scss';
+import React from "react";
+import { classes } from "common/util";
+import styles from "./ProgressBar.module.scss";
 
 class ProgressBar extends React.Component {
   constructor(props) {
@@ -14,8 +14,8 @@ class ProgressBar extends React.Component {
   handleMouseDown(e) {
     this.target = e.target;
     this.handleMouseMove(e);
-    document.addEventListener('mousemove', this.handleMouseMove);
-    document.addEventListener('mouseup', this.handleMouseUp);
+    document.addEventListener("mousemove", this.handleMouseMove);
+    document.addEventListener("mouseup", this.handleMouseUp);
   }
 
   handleMouseMove(e) {
@@ -27,16 +27,22 @@ class ProgressBar extends React.Component {
   }
 
   handleMouseUp(e) {
-    document.removeEventListener('mousemove', this.handleMouseMove);
-    document.removeEventListener('mouseup', this.handleMouseUp);
+    document.removeEventListener("mousemove", this.handleMouseMove);
+    document.removeEventListener("mouseup", this.handleMouseUp);
   }
 
   render() {
     const { className, total, current } = this.props;
 
     return (
-      <div className={classes(styles.progress_bar, className)} onMouseDown={this.handleMouseDown}>
-        <div className={styles.active} style={{ width: `${current / total * 100}%` }} />
+      <div
+        className={classes(styles.progress_bar, className)}
+        onMouseDown={this.handleMouseDown}
+      >
+        <div
+          className={styles.active}
+          style={{ width: `${(current / total) * 100}%` }}
+        />
         <div className={styles.label}>
           <span className={styles.current}>{current}</span> / {total}
         </div>

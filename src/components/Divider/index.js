@@ -1,6 +1,6 @@
-import React from 'react';
-import { classes } from 'common/util';
-import styles from './Divider.module.scss';
+import React from "react";
+import { classes } from "common/util";
+import styles from "./Divider.module.scss";
 
 class Divider extends React.Component {
   constructor(props) {
@@ -13,8 +13,8 @@ class Divider extends React.Component {
 
   handleMouseDown(e) {
     this.target = e.target;
-    document.addEventListener('mousemove', this.handleMouseMove);
-    document.addEventListener('mouseup', this.handleMouseUp);
+    document.addEventListener("mousemove", this.handleMouseMove);
+    document.addEventListener("mouseup", this.handleMouseUp);
   }
 
   handleMouseMove(e) {
@@ -23,16 +23,22 @@ class Divider extends React.Component {
   }
 
   handleMouseUp(e) {
-    document.removeEventListener('mousemove', this.handleMouseMove);
-    document.removeEventListener('mouseup', this.handleMouseUp);
+    document.removeEventListener("mousemove", this.handleMouseMove);
+    document.removeEventListener("mouseup", this.handleMouseUp);
   }
 
   render() {
     const { className, horizontal } = this.props;
 
     return (
-      <div className={classes(styles.divider, horizontal ? styles.horizontal : styles.vertical, className)}
-           onMouseDown={this.handleMouseDown} />
+      <div
+        className={classes(
+          styles.divider,
+          horizontal ? styles.horizontal : styles.vertical,
+          className
+        )}
+        onMouseDown={this.handleMouseDown}
+      />
     );
   }
 }

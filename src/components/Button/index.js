@@ -1,11 +1,11 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import faExclamationCircle from '@fortawesome/fontawesome-free-solid/faExclamationCircle';
-import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
-import { classes } from 'common/util';
-import { Ellipsis } from 'components';
-import styles from './Button.module.scss';
+import React from "react";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import faExclamationCircle from "@fortawesome/fontawesome-free-solid/faExclamationCircle";
+import faSpinner from "@fortawesome/fontawesome-free-solid/faSpinner";
+import { classes } from "common/util";
+import { Ellipsis } from "components";
+import styles from "./Button.module.scss";
 
 class Button extends React.Component {
   constructor(props) {
@@ -26,7 +26,22 @@ class Button extends React.Component {
   }
 
   render() {
-    let { className, children, to, href, onClick, icon, reverse, selected, disabled, primary, active, confirmNeeded, inProgress, ...rest } = this.props;
+    let {
+      className,
+      children,
+      to,
+      href,
+      onClick,
+      icon,
+      reverse,
+      selected,
+      disabled,
+      primary,
+      active,
+      confirmNeeded,
+      inProgress,
+      ...rest
+    } = this.props;
     const { confirming } = this.state;
 
     if (confirmNeeded) {
@@ -58,18 +73,36 @@ class Button extends React.Component {
 
     const iconOnly = !children;
     const props = {
-      className: classes(styles.button, reverse && styles.reverse, selected && styles.selected, disabled && styles.disabled, primary && styles.primary, active && styles.active, iconOnly && styles.icon_only, className),
+      className: classes(
+        styles.button,
+        reverse && styles.reverse,
+        selected && styles.selected,
+        disabled && styles.disabled,
+        primary && styles.primary,
+        active && styles.active,
+        iconOnly && styles.icon_only,
+        className
+      ),
       to: disabled ? null : to,
       href: disabled ? null : href,
       onClick: disabled ? null : onClick,
       children: [
-        icon && (
-          typeof icon === 'string' ?
-            <div className={classes(styles.icon, styles.image)} key="icon"
-                 style={{ backgroundImage: `url(${icon})` }} /> :
-            <FontAwesomeIcon className={styles.icon} fixedWidth icon={inProgress ? faSpinner : icon} spin={inProgress}
-                             key="icon" />
-        ),
+        icon &&
+          (typeof icon === "string" ? (
+            <div
+              className={classes(styles.icon, styles.image)}
+              key="icon"
+              style={{ backgroundImage: `url(${icon})` }}
+            />
+          ) : (
+            <FontAwesomeIcon
+              className={styles.icon}
+              fixedWidth
+              icon={inProgress ? faSpinner : icon}
+              spin={inProgress}
+              key="icon"
+            />
+          )),
         children,
       ],
       ...rest,
@@ -86,4 +119,3 @@ class Button extends React.Component {
 }
 
 export default Button;
-

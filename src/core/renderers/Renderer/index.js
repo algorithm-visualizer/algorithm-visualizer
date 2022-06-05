@@ -1,7 +1,7 @@
-import React from 'react';
-import styles from './Renderer.module.scss';
-import { Ellipsis } from 'components';
-import { classes } from 'common/util';
+import React from "react";
+import styles from "./Renderer.module.scss";
+import { Ellipsis } from "components";
+import { classes } from "common/util";
 
 class Renderer extends React.Component {
   constructor(props) {
@@ -27,8 +27,7 @@ class Renderer extends React.Component {
     this.zoomMin = 1 / 20;
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-  }
+  componentDidUpdate(prevProps, prevState, snapshot) {}
 
   togglePan(enable = !this.handleMouseDown) {
     this.handleMouseDown = enable ? this._handleMouseDown : undefined;
@@ -42,8 +41,8 @@ class Renderer extends React.Component {
     const { clientX, clientY } = e;
     this.lastX = clientX;
     this.lastY = clientY;
-    document.addEventListener('mousemove', this.handleMouseMove);
-    document.addEventListener('mouseup', this.handleMouseUp);
+    document.addEventListener("mousemove", this.handleMouseMove);
+    document.addEventListener("mouseup", this.handleMouseUp);
   }
 
   handleMouseMove(e) {
@@ -58,8 +57,8 @@ class Renderer extends React.Component {
   }
 
   handleMouseUp(e) {
-    document.removeEventListener('mousemove', this.handleMouseMove);
-    document.removeEventListener('mouseup', this.handleMouseUp);
+    document.removeEventListener("mousemove", this.handleMouseMove);
+    document.removeEventListener("mouseup", this.handleMouseUp);
   }
 
   handleWheel(e) {
@@ -71,14 +70,25 @@ class Renderer extends React.Component {
   }
 
   toString(value) {
-    switch (typeof(value)) {
-      case 'number':
-        return [Number.POSITIVE_INFINITY, Number.MAX_SAFE_INTEGER, 0x7fffffff].includes(value) ? '∞' :
-          [Number.NEGATIVE_INFINITY, Number.MIN_SAFE_INTEGER, -0x80000000].includes(value) ? '-∞' :
-            Number.isInteger(value) ? value.toString() :
-              value.toFixed(3);
-      case 'boolean':
-        return value ? 'T' : 'F';
+    switch (typeof value) {
+      case "number":
+        return [
+          Number.POSITIVE_INFINITY,
+          Number.MAX_SAFE_INTEGER,
+          0x7fffffff,
+        ].includes(value)
+          ? "∞"
+          : [
+              Number.NEGATIVE_INFINITY,
+              Number.MIN_SAFE_INTEGER,
+              -0x80000000,
+            ].includes(value)
+          ? "-∞"
+          : Number.isInteger(value)
+          ? value.toString()
+          : value.toFixed(3);
+      case "boolean":
+        return value ? "T" : "F";
       default:
         return value;
     }
@@ -96,16 +106,16 @@ class Renderer extends React.Component {
     const { className, title } = this.props;
 
     return (
-      <div className={classes(styles.renderer, className)} onMouseDown={this.handleMouseDown}
-           onWheel={this.handleWheel}>
+      <div
+        className={classes(styles.renderer, className)}
+        onMouseDown={this.handleMouseDown}
+        onWheel={this.handleWheel}
+      >
         <Ellipsis className={styles.title}>{title}</Ellipsis>
-        {
-          this.renderData()
-        }
+        {this.renderData()}
       </div>
     );
   }
 }
 
 export default Renderer;
-

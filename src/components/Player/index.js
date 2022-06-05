@@ -1,17 +1,17 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import InputRange from 'react-input-range';
-import axios from 'axios';
-import faPlay from '@fortawesome/fontawesome-free-solid/faPlay';
-import faChevronLeft from '@fortawesome/fontawesome-free-solid/faChevronLeft';
-import faChevronRight from '@fortawesome/fontawesome-free-solid/faChevronRight';
-import faPause from '@fortawesome/fontawesome-free-solid/faPause';
-import faWrench from '@fortawesome/fontawesome-free-solid/faWrench';
-import { classes, extension } from 'common/util';
-import { TracerApi } from 'apis';
-import { actions } from 'reducers';
-import { BaseComponent, Button, ProgressBar } from 'components';
-import styles from './Player.module.scss';
+import React from "react";
+import { connect } from "react-redux";
+import InputRange from "react-input-range";
+import axios from "axios";
+import faPlay from "@fortawesome/fontawesome-free-solid/faPlay";
+import faChevronLeft from "@fortawesome/fontawesome-free-solid/faChevronLeft";
+import faChevronRight from "@fortawesome/fontawesome-free-solid/faChevronRight";
+import faPause from "@fortawesome/fontawesome-free-solid/faPause";
+import faWrench from "@fortawesome/fontawesome-free-solid/faWrench";
+import { classes, extension } from "common/util";
+import { TracerApi } from "apis";
+import { actions } from "reducers";
+import { BaseComponent, Button, ProgressBar } from "components";
+import styles from "./Player.module.scss";
 
 class Player extends BaseComponent {
   constructor(props) {
@@ -41,14 +41,16 @@ class Player extends BaseComponent {
   }
 
   reset(commands = []) {
-    const chunks = [{
-      commands: [],
-      lineNumber: undefined,
-    }];
+    const chunks = [
+      {
+        commands: [],
+        lineNumber: undefined,
+      },
+    ];
     while (commands.length) {
       const command = commands.shift();
       const { key, method, args } = command;
-      if (key === null && method === 'delay') {
+      if (key === null && method === "delay") {
         const [lineNumber] = args;
         chunks[chunks.length - 1].lineNumber = lineNumber;
         chunks.push({
@@ -75,14 +77,18 @@ class Player extends BaseComponent {
 
     const ext = extension(file.name);
     if (ext in TracerApi) {
-      TracerApi[ext]({ code: file.content }, undefined, this.tracerApiSource.token)
-        .then(commands => {
+      TracerApi[ext](
+        { code: file.content },
+        undefined,
+        this.tracerApiSource.token
+      )
+        .then((commands) => {
           this.tracerApiSource = null;
           this.setState({ building: false });
           this.reset(commands);
           this.next();
         })
-        .catch(error => {
+        .catch((error) => {
           if (axios.isCancel(error)) return;
           this.tracerApiSource = null;
           this.setState({ building: false });
@@ -90,7 +96,7 @@ class Player extends BaseComponent {
         });
     } else {
       this.setState({ building: false });
-      this.handleError(new Error('Language Not Supported'));
+      this.handleError(new Error("Language Not Supported"));
     }
   }
 
@@ -138,7 +144,10 @@ class Player extends BaseComponent {
 
   handleChangeProgress(progress) {
     const { chunks } = this.props.player;
-    const cursor = Math.max(1, Math.min(chunks.length, Math.round(progress * chunks.length)));
+    const cursor = Math.max(
+      1,
+      Math.min(chunks.length, Math.round(progress * chunks.length))
+    );
     this.pause();
     this.props.setCursor(cursor);
   }
@@ -151,22 +160,43 @@ class Player extends BaseComponent {
 
     return (
       <div className={classes(styles.player, className)}>
-        <Button icon={faWrench} primary disabled={building} inProgress={building}
-                onClick={() => this.build(editingFile)}>
-          {building ? 'Building' : 'Build'}
+        <Button
+          icon={faWrench}
+          primary
+          disabled={building}
+          inProgress={building}
+          onClick={() => this.build(editingFile)}
+        >
+          {building ? "Building" : "Build"}
         </Button>
-        {
-          playing ? (
-            <Button icon={faPause} primary active onClick={() => this.pause()}>Pause</Button>
-          ) : (
-            <Button icon={faPlay} primary onClick={() => this.resume(true)}>Play</Button>
-          )
-        }
-        <Button icon={faChevronLeft} primary disabled={!this.isValidCursor(cursor - 1)} onClick={() => this.prev()}/>
-        <ProgressBar className={styles.progress_bar} current={cursor} total={chunks.length}
-                     onChangeProgress={progress => this.handleChangeProgress(progress)}/>
-        <Button icon={faChevronRight} reverse primary disabled={!this.isValidCursor(cursor + 1)}
-                onClick={() => this.next()}/>
+        {playing ? (
+          <Button icon={faPause} primary active onClick={() => this.pause()}>
+            Pause
+          </Button>
+        ) : (
+          <Button icon={faPlay} primary onClick={() => this.resume(true)}>
+            Play
+          </Button>
+        )}
+        <Button
+          icon={faChevronLeft}
+          primary
+          disabled={!this.isValidCursor(cursor - 1)}
+          onClick={() => this.prev()}
+        />
+        <ProgressBar
+          className={styles.progress_bar}
+          current={cursor}
+          total={chunks.length}
+          onChangeProgress={(progress) => this.handleChangeProgress(progress)}
+        />
+        <Button
+          icon={faChevronRight}
+          reverse
+          primary
+          disabled={!this.isValidCursor(cursor + 1)}
+          onClick={() => this.next()}
+        />
         <div className={styles.speed}>
           Speed
           <InputRange
@@ -175,14 +205,20 @@ class Player extends BaseComponent {
               labelContainer: styles.range_label_container,
               slider: styles.range_slider,
               track: styles.range_track,
-            }} minValue={0} maxValue={4} step={.5} value={speed}
-            onChange={speed => this.handleChangeSpeed(speed)}/>
+            }}
+            minValue={0}
+            maxValue={4}
+            step={0.5}
+            value={speed}
+            onChange={(speed) => this.handleChangeSpeed(speed)}
+          />
         </div>
       </div>
     );
   }
 }
 
-export default connect(({ current, player }) => ({ current, player }), actions)(
-  Player,
-);
+export default connect(
+  ({ current, player }) => ({ current, player }),
+  actions
+)(Player);

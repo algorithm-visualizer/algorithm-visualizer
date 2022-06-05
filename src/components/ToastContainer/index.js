@@ -1,13 +1,15 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { actions } from 'reducers';
-import { classes } from 'common/util';
-import styles from './ToastContainer.module.scss';
+import React from "react";
+import { connect } from "react-redux";
+import { actions } from "reducers";
+import { classes } from "common/util";
+import styles from "./ToastContainer.module.scss";
 
 class ToastContainer extends React.Component {
   componentWillReceiveProps(nextProps) {
-    const newToasts = nextProps.toast.toasts.filter(toast => !this.props.toast.toasts.includes(toast));
-    newToasts.forEach(toast => {
+    const newToasts = nextProps.toast.toasts.filter(
+      (toast) => !this.props.toast.toasts.includes(toast)
+    );
+    newToasts.forEach((toast) => {
       window.setTimeout(() => this.props.hideToast(toast.id), 3000);
     });
   }
@@ -18,19 +20,17 @@ class ToastContainer extends React.Component {
 
     return (
       <div className={classes(styles.toast_container, className)}>
-        {
-          toasts.map(toast => (
-            <div className={classes(styles.toast, styles[toast.type])} key={toast.id}>
-              {toast.message}
-            </div>
-          ))
-        }
+        {toasts.map((toast) => (
+          <div
+            className={classes(styles.toast, styles[toast.type])}
+            key={toast.id}
+          >
+            {toast.message}
+          </div>
+        ))}
       </div>
     );
   }
 }
 
-export default connect(({ toast }) => ({ toast }), actions)(
-  ToastContainer,
-);
-
+export default connect(({ toast }) => ({ toast }), actions)(ToastContainer);

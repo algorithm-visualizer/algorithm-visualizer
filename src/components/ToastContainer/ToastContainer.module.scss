@@ -19,11 +19,11 @@
 
   &.success {
     border-color: rgb(0, 150, 0);
-    background-color: rgba(0, 120, 0, .8);
+    background-color: rgba(0, 120, 0, 0.8);
   }
 
   &.error {
     border-color: rgb(150, 0, 0);
-    background-color: rgba(120, 0, 0, .8);
+    background-color: rgba(120, 0, 0, 0.8);
   }
 }

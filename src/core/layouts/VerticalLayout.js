@@ -1,6 +1,5 @@
-import { Layout } from 'core/layouts';
+import { Layout } from "core/layouts";
 
-class VerticalLayout extends Layout {
-}
+class VerticalLayout extends Layout {}
 
 export default VerticalLayout;

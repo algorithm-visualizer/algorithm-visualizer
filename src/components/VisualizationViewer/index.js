@@ -1,11 +1,11 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { BaseComponent } from 'components';
-import { actions } from 'reducers';
-import styles from './VisualizationViewer.module.scss';
-import * as TracerClasses from 'core/tracers';
-import * as LayoutClasses from 'core/layouts';
-import { classes } from 'common/util';
+import React from "react";
+import { connect } from "react-redux";
+import { BaseComponent } from "components";
+import { actions } from "reducers";
+import styles from "./VisualizationViewer.module.scss";
+import * as TracerClasses from "core/tracers";
+import * as LayoutClasses from "core/layouts";
+import { classes } from "common/util";
 
 class VisualizationViewer extends BaseComponent {
   constructor(props) {
@@ -40,7 +40,7 @@ class VisualizationViewer extends BaseComponent {
       this.reset();
       applyingChunks = chunks.slice(0, cursor);
     }
-    applyingChunks.forEach(chunk => this.applyChunk(chunk));
+    applyingChunks.forEach((chunk) => this.applyChunk(chunk));
 
     const lastChunk = applyingChunks[applyingChunks.length - 1];
     if (lastChunk && lastChunk.lineNumber !== undefined) {
@@ -53,20 +53,28 @@ class VisualizationViewer extends BaseComponent {
   applyCommand(command) {
     const { key, method, args } = command;
     try {
-      if (key === null && method === 'setRoot') {
+      if (key === null && method === "setRoot") {
         const [root] = args;
         this.root = this.objects[root];
-      } else if (method === 'destroy') {
+      } else if (method === "destroy") {
         delete this.objects[key];
       } else if (method in LayoutClasses) {
         const [children] = args;
         const LayoutClass = LayoutClasses[method];
-        this.objects[key] = new LayoutClass(key, key => this.objects[key], children);
+        this.objects[key] = new LayoutClass(
+          key,
+          (key) => this.objects[key],
+          children
+        );
       } else if (method in TracerClasses) {
         const className = method;
         const [title = className] = args;
         const TracerClass = TracerClasses[className];
-        this.objects[key] = new TracerClass(key, key => this.objects[key], title);
+        this.objects[key] = new TracerClass(
+          key,
+          (key) => this.objects[key],
+          title
+        );
       } else {
         this.objects[key][method](...args);
       }
@@ -76,7 +84,7 @@ class VisualizationViewer extends BaseComponent {
   }
 
   applyChunk(chunk) {
-    chunk.commands.forEach(command => this.applyCommand(command));
+    chunk.commands.forEach((command) => this.applyCommand(command));
   }
 
   render() {
@@ -84,14 +92,13 @@ class VisualizationViewer extends BaseComponent {
 
     return (
       <div className={classes(styles.visualization_viewer, className)}>
-        {
-          this.root && this.root.render()
-        }
+        {this.root && this.root.render()}
       </div>
     );
   }
 }
 
-export default connect(({ player }) => ({ player }), actions)(
-  VisualizationViewer,
-);
+export default connect(
+  ({ player }) => ({ player }),
+  actions
+)(VisualizationViewer);

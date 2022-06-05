@@ -1,13 +1,13 @@
-import { sprintf } from 'sprintf-js';
-import { Tracer } from 'core/tracers';
-import { LogRenderer } from 'core/renderers';
+import { sprintf } from "sprintf-js";
+import { Tracer } from "core/tracers";
+import { LogRenderer } from "core/renderers";
 
 class LogTracer extends Tracer {
   getRendererClass() {
     return LogRenderer;
   }
 
-  set(log = '') {
+  set(log = "") {
     this.log = log;
     super.set();
   }
@@ -17,7 +17,7 @@ class LogTracer extends Tracer {
   }
 
   println(message) {
-    this.print(message + '\n');
+    this.print(message + "\n");
   }
 
   printf(format, ...args) {

@@ -1,5 +1,5 @@
-import { Tracer } from 'core/tracers';
-import { Array2DRenderer } from 'core/renderers';
+import { Tracer } from "core/tracers";
+import { Array2DRenderer } from "core/renderers";
 
 class Element {
   constructor(value) {
@@ -15,7 +15,9 @@ class Array2DTracer extends Tracer {
   }
 
   set(array2d = []) {
-    this.data = array2d.map(array1d => [...array1d].map(value => new Element(value)));
+    this.data = array2d.map((array1d) =>
+      [...array1d].map((value) => new Element(value))
+    );
     super.set();
   }
 

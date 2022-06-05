@@ -1,12 +1,12 @@
-import React from 'react';
-import { ResizableContainer } from 'components';
-import { HorizontalLayout } from 'core/layouts';
+import React from "react";
+import { ResizableContainer } from "components";
+import { HorizontalLayout } from "core/layouts";
 
 class Layout {
   constructor(key, getObject, children) {
     this.key = key;
     this.getObject = getObject;
-    this.children = children.map(key => this.getObject(key));
+    this.children = children.map((key) => this.getObject(key));
     this.weights = children.map(() => 1);
     this.ref = React.createRef();
 
@@ -42,11 +42,14 @@ class Layout {
     const horizontal = this instanceof HorizontalLayout;
 
     return (
-      <ResizableContainer key={this.key} ref={this.ref} weights={this.weights} horizontal={horizontal}
-                          onChangeWeights={this.handleChangeWeights}>
-        {
-          this.children.map(tracer => tracer && tracer.render())
-        }
+      <ResizableContainer
+        key={this.key}
+        ref={this.ref}
+        weights={this.weights}
+        horizontal={horizontal}
+        onChangeWeights={this.handleChangeWeights}
+      >
+        {this.children.map((tracer) => tracer && tracer.render())}
       </ResizableContainer>
     );
   }
