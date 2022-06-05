@@ -721,7 +721,7 @@ export {
   HorizontalLayout,
   Layout,
   LogTracer,
-  Randomize$1,
+  Randomize,
   ScatterTracer,
   Tracer,
   VerticalLayout,

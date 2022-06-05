@@ -1,6 +1,5 @@
-import Promise from "bluebird";
 import axios from "axios";
-import * as AlgorithmVisualizer from "../common/AlgorithmVisualizer";
+import Promise from "bluebird";
 
 axios.interceptors.response.use((response) => response.data);
 
@@ -38,13 +37,6 @@ const POST = (URL) => {
   });
 };
 
-const PUT = (URL) => {
-  return request(URL, (mappedURL, args) => {
-    const [body, params, cancelToken] = args;
-    return axios.put(mappedURL, body, { params, cancelToken });
-  });
-};
-
 const PATCH = (URL) => {
   return request(URL, (mappedURL, args) => {
     const [body, params, cancelToken] = args;
@@ -76,40 +68,4 @@ const GitHubApi = {
   forkGist: POST("https://api.github.com/gists/:id/forks"),
 };
 
-const TracerApi = {
-  md: ({ code }) =>
-    Promise.resolve([
-      {
-        key: "markdown",
-        method: "MarkdownTracer",
-        args: ["Markdown"],
-      },
-      {
-        key: "markdown",
-        method: "set",
-        args: [code],
-      },
-      {
-        key: null,
-        method: "setRoot",
-        args: ["markdown"],
-      },
-    ]),
-  json: ({ code }) => new Promise((resolve) => resolve(JSON.parse(code))),
-  js: ({ code }, params, cancelToken) =>
-    new Promise((resolve, reject) => {
-      const lines = code
-        .split("\n")
-        .map((line, i) => line.replace(/(\.\s*delay\s*)\(\s*\)/g, `$1(${i})`));
-      code = lines.join("\n");
-      const process = { env: { ALGORITHM_VISUALIZER: "1" } };
-      const require = (name) =>
-        ({ "algorithm-visualizer": AlgorithmVisualizer }[name]); // fake require
-      eval(code);
-      resolve(AlgorithmVisualizer.Commander.commands);
-    }),
-  cpp: POST("/tracers/cpp"),
-  java: POST("/tracers/java"),
-};
-
-export { AlgorithmApi, VisualizationApi, GitHubApi, TracerApi };
+export { AlgorithmApi, VisualizationApi, GitHubApi };

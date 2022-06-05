@@ -1,16 +1,15 @@
-import React from "react";
-import { connect } from "react-redux";
-import InputRange from "react-input-range";
-import axios from "axios";
-import faPlay from "@fortawesome/fontawesome-free-solid/faPlay";
 import faChevronLeft from "@fortawesome/fontawesome-free-solid/faChevronLeft";
 import faChevronRight from "@fortawesome/fontawesome-free-solid/faChevronRight";
 import faPause from "@fortawesome/fontawesome-free-solid/faPause";
+import faPlay from "@fortawesome/fontawesome-free-solid/faPlay";
 import faWrench from "@fortawesome/fontawesome-free-solid/faWrench";
 import { classes, extension } from "common/util";
-import { TracerApi } from "apis";
-import { actions } from "reducers";
 import { BaseComponent, Button, ProgressBar } from "components";
+import React from "react";
+import InputRange from "react-input-range";
+import { connect } from "react-redux";
+import { actions } from "reducers";
+import * as AlgorithmVisualizer from "../../common/AlgorithmVisualizer";
 import styles from "./Player.module.scss";
 
 class Player extends BaseComponent {
@@ -22,8 +21,6 @@ class Player extends BaseComponent {
       playing: false,
       building: false,
     };
-
-    this.tracerApiSource = null;
 
     this.reset();
   }
@@ -67,37 +64,65 @@ class Player extends BaseComponent {
     this.props.setLineIndicator(undefined);
   }
 
+  getCommands(content, ext) {
+    switch (ext) {
+      case "md":
+        return [
+          {
+            key: "markdown",
+            method: "MarkdownTracer",
+            args: ["Markdown"],
+          },
+          {
+            key: "markdown",
+            method: "set",
+            args: [content],
+          },
+          {
+            key: null,
+            method: "setRoot",
+            args: ["markdown"],
+          },
+        ];
+      case "js":
+        const code = content
+          .split("\n")
+          .map((line, i) => line.replace(/(\.\s*delay\s*)\(\s*\)/g, `$1(${i})`))
+          .join("\n");
+        // eslint-disable-next-line no-unused-vars
+        const process = { env: { ALGORITHM_VISUALIZER: "1" } };
+        // eslint-disable-next-line no-unused-vars
+        const require = (name) =>
+          ({ "algorithm-visualizer": AlgorithmVisualizer }[name]); // fake require
+        // eslint-disable-next-line no-eval
+        eval(code);
+        return AlgorithmVisualizer.Commander.commands;
+      default:
+        return null;
+    }
+  }
+
   build(file) {
     this.reset();
     if (!file) return;
-
-    if (this.tracerApiSource) this.tracerApiSource.cancel();
-    this.tracerApiSource = axios.CancelToken.source();
     this.setState({ building: true });
 
-    const ext = extension(file.name);
-    if (ext in TracerApi) {
-      TracerApi[ext](
-        { code: file.content },
-        undefined,
-        this.tracerApiSource.token
-      )
-        .then((commands) => {
-          this.tracerApiSource = null;
-          this.setState({ building: false });
+    setTimeout(() => {
+      try {
+        const ext = extension(file.name);
+        if (ext === "md" || ext === "js") {
+          const commands = this.getCommands(file.content, ext);
           this.reset(commands);
           this.next();
-        })
-        .catch((error) => {
-          if (axios.isCancel(error)) return;
-          this.tracerApiSource = null;
-          this.setState({ building: false });
-          this.handleError(error);
-        });
-    } else {
-      this.setState({ building: false });
-      this.handleError(new Error("Language Not Supported"));
-    }
+        } else {
+          throw new Error("Language Not Supported");
+        }
+      } catch (error) {
+        this.handleError(error);
+      } finally {
+        this.setState({ building: false });
+      }
+    });
   }
 
   isValidCursor(cursor) {
