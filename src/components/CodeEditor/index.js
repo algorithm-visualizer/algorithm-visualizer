@@ -4,7 +4,6 @@ import faUser from "@fortawesome/fontawesome-free-solid/faUser";
 import { classes, extension } from "common/util";
 import { actions } from "reducers";
 import { connect } from "react-redux";
-import { languages } from "common/config";
 import { Button, Ellipsis, FoldableAceEditor } from "components";
 import styles from "./CodeEditor.module.scss";
 
@@ -28,14 +27,12 @@ class CodeEditor extends React.Component {
     if (!editingFile) return null;
 
     const fileExt = extension(editingFile.name);
-    const language = languages.find((language) => language.ext === fileExt);
-    const mode = language
-      ? language.mode
-      : fileExt === "md"
-      ? "markdown"
-      : fileExt === "json"
-      ? "json"
-      : "plain_text";
+    const mode =
+      fileExt === "js"
+        ? "javascript"
+        : fileExt === "md"
+        ? "markdown"
+        : "plain_text";
 
     return (
       <div className={classes(styles.code_editor, className)}>

@@ -17,8 +17,7 @@ import {
 import { AlgorithmApi, GitHubApi, VisualizationApi } from "apis";
 import { actions } from "reducers";
 import { createUserFile, extension, refineGist } from "common/util";
-import { exts, languages } from "common/config";
-import { SCRATCH_PAPER_README_MD } from "files";
+import { CODE_JS, SCRATCH_PAPER_README_MD } from "files";
 import styles from "./App.module.scss";
 
 class App extends BaseComponent {
@@ -186,12 +185,11 @@ class App extends BaseComponent {
           }
         );
       } else if (gistId === "new") {
-        const language = languages.find((language) => language.ext === ext);
         this.props.setScratchPaper({
           login: undefined,
           gistId,
           title: "Untitled",
-          files: [SCRATCH_PAPER_README_MD, language.skeleton],
+          files: [SCRATCH_PAPER_README_MD, CODE_JS],
         });
       } else if (gistId) {
         return GitHubApi.getGist(gistId, { timestamp: Date.now() })
@@ -214,12 +212,10 @@ class App extends BaseComponent {
   }
 
   selectDefaultTab() {
-    const { ext } = this.props.env;
     const { files } = this.props.current;
     const editingFile =
-      files.find((file) => extension(file.name) === "json") ||
-      files.find((file) => extension(file.name) === ext) ||
-      files.find((file) => exts.includes(extension(file.name))) ||
+      files.find((file) => extension(file.name) === "js") ||
+      files.find((file) => extension(file.name) === "md") ||
       files[files.length - 1];
     this.props.setEditingFile(editingFile);
   }

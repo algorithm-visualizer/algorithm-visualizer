@@ -1,25 +1,23 @@
-import React from "react";
-import { connect } from "react-redux";
-import { withRouter } from "react-router";
-import AutosizeInput from "react-input-autosize";
-import screenfull from "screenfull";
-import Promise from "bluebird";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import faFacebook from "@fortawesome/fontawesome-free-brands/faFacebook";
+import faGithub from "@fortawesome/fontawesome-free-brands/faGithub";
 import faAngleRight from "@fortawesome/fontawesome-free-solid/faAngleRight";
 import faCaretDown from "@fortawesome/fontawesome-free-solid/faCaretDown";
 import faCaretRight from "@fortawesome/fontawesome-free-solid/faCaretRight";
 import faCodeBranch from "@fortawesome/fontawesome-free-solid/faCodeBranch";
 import faExpandArrowsAlt from "@fortawesome/fontawesome-free-solid/faExpandArrowsAlt";
-import faGithub from "@fortawesome/fontawesome-free-brands/faGithub";
-import faTrashAlt from "@fortawesome/fontawesome-free-solid/faTrashAlt";
 import faSave from "@fortawesome/fontawesome-free-solid/faSave";
-import faFacebook from "@fortawesome/fontawesome-free-brands/faFacebook";
-import faStar from "@fortawesome/fontawesome-free-solid/faStar";
+import faTrashAlt from "@fortawesome/fontawesome-free-solid/faTrashAlt";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { GitHubApi } from "apis";
+import Promise from "bluebird";
 import { classes, refineGist } from "common/util";
-import { actions } from "reducers";
-import { languages } from "common/config";
 import { BaseComponent, Button, Ellipsis, ListItem, Player } from "components";
+import React from "react";
+import AutosizeInput from "react-input-autosize";
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
+import { actions } from "reducers";
+import screenfull from "screenfull";
 import styles from "./Header.module.scss";
 
 class Header extends BaseComponent {
@@ -213,20 +211,6 @@ class Header extends BaseComponent {
                 <Ellipsis>Sign In</Ellipsis>
               </Button>
             )}
-            <Button className={styles.btn_dropdown} icon={faStar}>
-              {languages.find((language) => language.ext === ext).name}
-              <div className={styles.dropdown}>
-                {languages.map((language) =>
-                  language.ext === ext ? null : (
-                    <ListItem
-                      key={language.ext}
-                      onClick={() => this.props.setExt(language.ext)}
-                      label={language.name}
-                    />
-                  )
-                )}
-              </div>
-            </Button>
           </div>
           <Player className={styles.section} />
         </div>

@@ -5,18 +5,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import faPlus from "@fortawesome/fontawesome-free-solid/faPlus";
 import { classes } from "common/util";
 import { actions } from "reducers";
-import { languages } from "common/config";
 import styles from "./TabContainer.module.scss";
+import { CODE_JS } from "files";
 
 class TabContainer extends React.Component {
   handleAddFile() {
-    const { ext } = this.props.env;
     const { files } = this.props.current;
-    const language = languages.find((language) => language.ext === ext);
-    const newFile = { ...language.skeleton };
+    const newFile = { CODE_JS };
     let count = 0;
-    while (files.some((file) => file.name === newFile.name))
-      newFile.name = `code-${++count}.${ext}`;
+    do newFile.name = `code-${++count}.js`;
+    while (files.some((file) => file.name === newFile.name));
     this.props.addFile(newFile);
   }
 
