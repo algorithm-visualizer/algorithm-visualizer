@@ -114,7 +114,7 @@ class Header extends BaseComponent {
   render() {
     const { className, onClickTitleBar, navigatorOpened } = this.props;
     const { scratchPaper, titles, saved } = this.props.current;
-    const { ext, user } = this.props.env;
+    const { user } = this.props.env;
 
     const permitted = this.hasPermission();
 

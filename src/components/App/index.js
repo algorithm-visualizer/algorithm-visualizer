@@ -42,16 +42,63 @@ class App extends BaseComponent {
     window.signIn = this.signIn.bind(this);
     window.signOut = this.signOut.bind(this);
 
-    const { params } = this.props.match;
-    const { search } = this.props.location;
-    this.loadAlgorithm(params, queryString.parse(search));
-
     const accessToken = Cookies.get("access_token");
     if (accessToken) this.signIn(accessToken);
 
-    AlgorithmApi.getCategories()
-      .then(({ categories }) => this.props.setCategories(categories))
-      .catch(this.handleError);
+    const categories = [];
+
+    const paths = require
+      .context("raw-loader!../../../public/algorithms", true)
+      .keys();
+    paths
+      .filter((path) => path.endsWith(".js") || path.endsWith(".md"))
+      .forEach((path) => {
+        const parts = path.split("/");
+        let category = categories.find((category) => category.key === parts[1]);
+        if (!category) {
+          category = { key: parts[1], name: parts[1], algorithms: [] };
+          categories.push(category);
+        }
+        const alg = category.algorithms.find((alg) => alg.key === parts[2]);
+        if (!alg) {
+          category.algorithms.push({
+            key: parts[2],
+            name: parts[2],
+            files: [parts[3]],
+          });
+        } else {
+          alg.files.push(parts[3]);
+        }
+      });
+
+    this.props.setCategories(categories);
+
+    const { params } = this.props.match;
+    const { search } = this.props.location;
+
+    let files = null;
+
+    const category = categories.find(
+      (category) => category.key === params.categoryKey
+    );
+
+    if (category) {
+      const alg = category.algorithms.find(
+        (alg) => alg.key === params.algorithmKey
+      );
+      if (alg) {
+        files = alg.files;
+      }
+    }
+
+    this.loadAlgorithm(
+      {
+        files: files ? files : [],
+        categoryKey: params.categoryKey,
+        algorithmKey: params.algorithmKey,
+      },
+      queryString.parse(search)
+    );
 
     this.toggleHistoryBlock(true);
   }
@@ -66,6 +113,11 @@ class App extends BaseComponent {
   componentWillReceiveProps(nextProps) {
     const { params } = nextProps.match;
     const { search } = nextProps.location;
+
+    const { categories } = nextProps.directory;
+
+    console.log(nextProps);
+
     if (
       params !== this.props.match.params ||
       search !== this.props.location.search
@@ -79,7 +131,19 @@ class App extends BaseComponent {
       )
         return;
       if (scratchPaper && scratchPaper.gistId === gistId) return;
-      this.loadAlgorithm(params, queryString.parse(search));
+      const files = categories
+        ? categories
+            .find((category) => category.key === params.categoryKey)
+            .algorithms.find((alg) => alg.key === params.algorithmKey).files
+        : [];
+      this.loadAlgorithm(
+        {
+          files: files,
+          categoryKey: params.categoryKey,
+          algorithmKey: params.algorithmKey,
+        },
+        queryString.parse(search)
+      );
     }
   }
 
@@ -157,8 +221,10 @@ class App extends BaseComponent {
       .catch(this.handleError);
   }
 
-  loadAlgorithm({ categoryKey, algorithmKey, gistId }, { visualizationId }) {
-    const { ext } = this.props.env;
+  loadAlgorithm(
+    { categoryKey, algorithmKey, files, gistId },
+    { visualizationId }
+  ) {
     const fetch = () => {
       if (window.__PRELOADED_ALGORITHM__) {
         this.props.setAlgorithm(window.__PRELOADED_ALGORITHM__);
@@ -167,7 +233,7 @@ class App extends BaseComponent {
         delete window.__PRELOADED_ALGORITHM__;
         return Promise.reject(new Error("Algorithm Not Found"));
       } else if (categoryKey && algorithmKey) {
-        return AlgorithmApi.getAlgorithm(categoryKey, algorithmKey).then(
+        return AlgorithmApi.getAlgorithm(categoryKey, algorithmKey, files).then(
           ({ algorithm }) => this.props.setAlgorithm(algorithm)
         );
       } else if (gistId === "new" && visualizationId) {
@@ -274,4 +340,7 @@ class App extends BaseComponent {
   }
 }
 
-export default connect(({ current, env }) => ({ current, env }), actions)(App);
+export default connect(
+  ({ current, env, directory }) => ({ current, env, directory }),
+  actions
+)(App);

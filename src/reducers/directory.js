@@ -1,4 +1,4 @@
-import { combineActions, createAction, handleActions } from "redux-actions";
+import { createAction, handleActions } from "redux-actions";
 
 const prefix = "DIRECTORY";
 
@@ -23,10 +23,14 @@ const defaultState = {
 
 export default handleActions(
   {
-    [combineActions(setCategories, setScratchPapers)]: (
-      state,
-      { payload }
-    ) => ({
+    [setCategories]: (state, { payload }) => {
+      const { categories } = payload;
+      return {
+        ...state,
+        categories,
+      };
+    },
+    [setScratchPapers]: (state, { payload }) => ({
       ...state,
       ...payload,
     }),

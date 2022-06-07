@@ -18,7 +18,7 @@ ReactDOM.render(
       <Switch>
         <Route exact path="/scratch-paper/:gistId" component={App} />
         <Route exact path="/:categoryKey/:algorithmKey" component={App} />
-        <Route path="/" component={App} />
+        <Route exact path="/" component={App} />
       </Switch>
     </BrowserRouter>
   </Provider>,

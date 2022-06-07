@@ -45,8 +45,27 @@ const PATCH = (URL) => {
 };
 
 const AlgorithmApi = {
-  getCategories: GET("/algorithms"),
-  getAlgorithm: GET("/algorithms/:categoryKey/:algorithmKey"),
+  getAlgorithm: async (categoryKey, algorithmKey, files) => {
+    const alg = {
+      categoryKey: categoryKey,
+      categoryName: categoryKey,
+      algorithmKey: algorithmKey,
+      algorithmName: algorithmKey,
+      description: "",
+      files: [],
+    };
+    for (const file of files) {
+      const site = await fetch(
+        `/algorithms/${categoryKey}/${algorithmKey}/${file}`
+      );
+      if (site.status !== 200) {
+        throw new Error("Network Error");
+      } else {
+        alg.files.push({ name: file, content: await site.text() });
+      }
+    }
+    return { algorithm: alg };
+  },
 };
 
 const VisualizationApi = {

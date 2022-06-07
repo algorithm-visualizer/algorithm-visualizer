@@ -24,7 +24,7 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:8080",
+  "proxy": "http://localhost:9000",
   "license": "MIT",
   "engines": {
     "node": ">=10.15.3"
@@ -42,7 +42,6 @@
     "js-cookie": "^2.2.0",
     "node-sass": "^4.12.0",
     "query-string": "^6.7.0",
-    "raw-loader": "^3.0.0",
     "react": "^16.8.6",
     "react-ace": "^7.0.2",
     "react-chartjs-2": "^2.7.6",
@@ -64,5 +63,8 @@
     "screenfull": "^4.2.0",
     "sprintf-js": "^1.1.2",
     "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "raw-loader": "^4.0.2"
   }
 }

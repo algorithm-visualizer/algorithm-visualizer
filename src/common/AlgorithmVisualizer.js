@@ -1,5 +1,3 @@
-"use strict";
-
 var Randomize;
 (function (Randomize) {
   function Integer(options) {
