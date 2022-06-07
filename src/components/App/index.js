@@ -113,10 +113,7 @@ class App extends BaseComponent {
   componentWillReceiveProps(nextProps) {
     const { params } = nextProps.match;
     const { search } = nextProps.location;
-
     const { categories } = nextProps.directory;
-
-    console.log(nextProps);
 
     if (
       params !== this.props.match.params ||
@@ -131,11 +128,12 @@ class App extends BaseComponent {
       )
         return;
       if (scratchPaper && scratchPaper.gistId === gistId) return;
-      const files = categories
-        ? categories
-            .find((category) => category.key === params.categoryKey)
-            .algorithms.find((alg) => alg.key === params.algorithmKey).files
-        : [];
+      let files = [];
+      if (categories && params.categoryKey && params.algorithmKey) {
+        files = categories
+          .find((category) => category.key === params.categoryKey)
+          .algorithms.find((alg) => alg.key === params.algorithmKey).files;
+      }
       this.loadAlgorithm(
         {
           files: files,
