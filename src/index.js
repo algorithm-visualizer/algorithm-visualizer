@@ -22,5 +22,5 @@ ReactDOM.render(
       </Switch>
     </BrowserRouter>
   </Provider>,
-  document.getElementById("root")
+  document.body.appendChild(document.createElement("DIV"))
 );

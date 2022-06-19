@@ -181,20 +181,6 @@ var Commander = /** @class */ (function () {
   Commander.objectCount = 0;
   return Commander;
 })();
-if (!process.env.ALGORITHM_VISUALIZER) {
-  var axios_1 = require("axios");
-  var opn_1 = require("opn");
-  process.once("beforeExit", function () {
-    axios_1
-      .post("https://algorithm-visualizer.org/api/visualizations", {
-        content: JSON.stringify(Commander.commands),
-      })
-      .then(function (response) {
-        return opn_1(response.data, { wait: false });
-      })
-      .catch(console.error);
-  });
-}
 
 /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.

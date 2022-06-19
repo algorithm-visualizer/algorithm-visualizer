@@ -9,15 +9,13 @@ import faSave from "@fortawesome/fontawesome-free-solid/faSave";
 import faTrashAlt from "@fortawesome/fontawesome-free-solid/faTrashAlt";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { GitHubApi } from "apis";
-import Promise from "bluebird";
 import { classes, refineGist } from "common/util";
 import { BaseComponent, Button, Ellipsis, ListItem, Player } from "components";
 import React from "react";
-import AutosizeInput from "react-input-autosize";
 import { connect } from "react-redux";
-import { withRouter } from "react-router";
 import { actions } from "reducers";
 import screenfull from "screenfull";
+import { withRouter } from "react-router";
 import styles from "./Header.module.scss";
 
 class Header extends BaseComponent {
@@ -124,15 +122,13 @@ class Header extends BaseComponent {
           <div className={styles.section}>
             <Button className={styles.title_bar} onClick={onClickTitleBar}>
               {titles.map((title, i) => [
-                scratchPaper && i === 1 ? (
-                  <AutosizeInput
+                scratchPaper && i === 1 /*                   <AutosizeInput
                     className={styles.input_title}
                     key={`title-${i}`}
                     value={title}
                     onClick={(e) => e.stopPropagation()}
                     onChange={(e) => this.handleChangeTitle(e)}
-                  />
-                ) : (
+                  /> */ ? null : (
                   <Ellipsis key={`title-${i}`}>{title}</Ellipsis>
                 ),
                 i < titles.length - 1 && (

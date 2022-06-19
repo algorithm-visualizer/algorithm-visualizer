@@ -1,5 +1,4 @@
 import axios from "axios";
-import Promise from "bluebird";
 
 axios.interceptors.response.use((response) => response.data);
 

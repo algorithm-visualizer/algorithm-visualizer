@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import AutosizeInput from "react-input-autosize";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import faPlus from "@fortawesome/fontawesome-free-solid/faPlus";
 import { classes } from "common/util";
@@ -33,12 +32,8 @@ class TabContainer extends React.Component {
                 key={i}
                 onClick={() => this.props.setEditingFile(file)}
               >
-                <AutosizeInput
-                  className={styles.input_title}
-                  value={file.name}
-                  onClick={(e) => e.stopPropagation()}
-                  onChange={(e) => this.props.renameFile(file, e.target.value)}
-                />
+                <div className={styles.input_title} />
+                {file.name}
               </div>
             ) : (
               <div

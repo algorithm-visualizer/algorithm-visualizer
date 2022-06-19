@@ -1,3 +1,4 @@
+@use "sass:math";
 @import "~common/stylesheet/index";
 
 .tab_container {
@@ -49,7 +50,7 @@
 
         &:first-child {
           flex-shrink: 0;
-          width: $line-height / 2;
+          width: math.div($line-height, 2);
         }
 
         &:last-child {

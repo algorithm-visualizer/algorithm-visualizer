@@ -1,7 +1,6 @@
 import React from "react";
 import Cookies from "js-cookie";
 import { connect } from "react-redux";
-import Promise from "bluebird";
 import { Helmet } from "react-helmet";
 import queryString from "query-string";
 import {
@@ -17,7 +16,8 @@ import {
 import { AlgorithmApi, GitHubApi, VisualizationApi } from "apis";
 import { actions } from "reducers";
 import { createUserFile, extension, refineGist } from "common/util";
-import { CODE_JS, SCRATCH_PAPER_README_MD } from "files";
+import { CODE_JS } from "files";
+import { SCRATCH_PAPER_README_MD } from "files";
 import styles from "./App.module.scss";
 
 class App extends BaseComponent {
@@ -47,9 +47,8 @@ class App extends BaseComponent {
 
     const categories = [];
 
-    const paths = require
-      .context("raw-loader!../../../public/algorithms", true)
-      .keys();
+    const paths = require.context("/public/algorithms?inline", true).keys();
+    console.log(paths);
     paths
       .filter((path) => path.endsWith(".js") || path.endsWith(".md"))
       .forEach((path) => {
@@ -267,7 +266,6 @@ class App extends BaseComponent {
     fetch()
       .then(() => {
         this.selectDefaultTab();
-        return null; // to suppress unnecessary bluebird warning
       })
       .catch((error) => {
         this.handleError(error);

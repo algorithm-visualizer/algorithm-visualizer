@@ -6,7 +6,6 @@ import faWrench from "@fortawesome/fontawesome-free-solid/faWrench";
 import { classes, extension } from "common/util";
 import { BaseComponent, Button, ProgressBar } from "components";
 import React from "react";
-import InputRange from "react-input-range";
 import { connect } from "react-redux";
 import { actions } from "reducers";
 import * as AlgorithmVisualizer from "../../common/AlgorithmVisualizer";
@@ -224,7 +223,7 @@ class Player extends BaseComponent {
         />
         <div className={styles.speed}>
           Speed
-          <InputRange
+          {/*           <InputRange
             classNames={{
               inputRange: styles.range,
               labelContainer: styles.range_label_container,
@@ -236,7 +235,7 @@ class Player extends BaseComponent {
             step={0.5}
             value={speed}
             onChange={(speed) => this.handleChangeSpeed(speed)}
-          />
+          /> */}
         </div>
       </div>
     );
