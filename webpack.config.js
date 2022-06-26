@@ -8,10 +8,9 @@ const isProduction = process.env.NODE_ENV == "production";
 const config = {
   entry: "./src/index.js",
   devServer: {
-    open: true,
-    host: "localhost",
+    historyApiFallback: true,
   },
-  plugins: [new HtmlWebpackPlugin()],
+  plugins: [new HtmlWebpackPlugin({ base: "/", template: "src/index.html" })],
   resolve: {
     alias: {
       apis: path.resolve(__dirname, "src/apis/"),

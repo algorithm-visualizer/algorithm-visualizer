@@ -221,9 +221,9 @@ class Player extends BaseComponent {
           disabled={!this.isValidCursor(cursor + 1)}
           onClick={() => this.next()}
         />
-        <div className={styles.speed}>
+        {/*         <div className={styles.speed}>
           Speed
-          {/*           <InputRange
+          {           <InputRange
             classNames={{
               inputRange: styles.range,
               labelContainer: styles.range_label_container,
@@ -235,8 +235,8 @@ class Player extends BaseComponent {
             step={0.5}
             value={speed}
             onChange={(speed) => this.handleChangeSpeed(speed)}
-          /> */}
-        </div>
+          /> }
+        </div> */}
       </div>
     );
   }

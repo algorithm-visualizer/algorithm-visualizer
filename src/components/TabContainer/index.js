@@ -10,7 +10,7 @@ import { CODE_JS } from "files";
 class TabContainer extends React.Component {
   handleAddFile() {
     const { files } = this.props.current;
-    const newFile = { CODE_JS };
+    const newFile = CODE_JS;
     let count = 0;
     do newFile.name = `code-${++count}.js`;
     while (files.some((file) => file.name === newFile.name));

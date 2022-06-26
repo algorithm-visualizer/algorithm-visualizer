@@ -40,7 +40,6 @@
     "react-toastify": "^9.0.4",
     "redux": "^4.2.0",
     "redux-actions": "^2.6.5",
-    "remove-markdown": "^0.5.0",
     "sass": "^1.52.3",
     "sass-loader": "^13.0.0",
     "screenfull": "^6.0.1",

@@ -1,5 +1,9 @@
 @import "~common/stylesheet/index";
 
+.root {
+  height: 100%;
+}
+
 .app {
   display: flex;
   flex-direction: column;

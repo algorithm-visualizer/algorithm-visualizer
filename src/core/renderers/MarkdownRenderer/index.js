@@ -7,50 +7,7 @@ class MarkdownRenderer extends Renderer {
   renderData() {
     const { markdown } = this.props.data;
 
-    const heading = ({ level, children, ...rest }) => {
-      const HeadingComponent = [
-        (props) => <h1 {...props} />,
-        (props) => <h2 {...props} />,
-        (props) => <h3 {...props} />,
-        (props) => <h4 {...props} />,
-        (props) => <h5 {...props} />,
-        (props) => <h6 {...props} />,
-      ][level - 1];
-
-      const idfy = (text) =>
-        text
-          .toLowerCase()
-          .trim()
-          .replace(/[^\w \-]/g, "")
-          .replace(/ /g, "-");
-
-      const getText = (children) => {
-        return React.Children.map(children, (child) => {
-          if (!child) return "";
-          if (typeof child === "string") return child;
-          if ("props" in child) return getText(child.props.children);
-          return "";
-        }).join("");
-      };
-
-      const id = idfy(getText(children));
-
-      return (
-        <HeadingComponent id={id} {...rest}>
-          {children}
-        </HeadingComponent>
-      );
-    };
-
-    const link = ({ href, ...rest }) => {
-      return /^#/.test(href) ? (
-        <a href={href} {...rest} />
-      ) : (
-        <a href={href} rel="noopener" target="_blank" {...rest} />
-      );
-    };
-
-    const image = ({ src, ...rest }) => {
+    const image = (src) => {
       let newSrc = src;
       let style = { maxWidth: "100%" };
       const CODECOGS = "https://latex.codecogs.com/svg.latex?";
@@ -65,16 +22,17 @@ class MarkdownRenderer extends Renderer {
       } else if (src.startsWith(WIKIMEDIA_MATH)) {
         style.filter = "invert(100%)";
       }
-      return <img src={newSrc} style={style} {...rest} />;
+      return <img src={newSrc} style={style} />;
     };
 
     return (
       <div className={styles.markdown}>
         <ReactMarkdown
           className={styles.content}
-          source={markdown}
-          renderers={{ heading, link, image }}
-          escapeHtml={false}
+          children={markdown}
+          components={{
+            img: ({ node, ...props }) => image(props.src),
+          }}
         />
       </div>
     );

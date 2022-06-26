@@ -128,7 +128,9 @@ class Header extends BaseComponent {
                     value={title}
                     onClick={(e) => e.stopPropagation()}
                     onChange={(e) => this.handleChangeTitle(e)}
-                  /> */ ? null : (
+                  /> */ ? (
+                  <div>`title-${i}`</div>
+                ) : (
                   <Ellipsis key={`title-${i}`}>{title}</Ellipsis>
                 ),
                 i < titles.length - 1 && (
@@ -185,29 +187,7 @@ class Header extends BaseComponent {
           </div>
         </div>
         <div className={styles.row}>
-          <div className={styles.section}>
-            {user ? (
-              <Button className={styles.btn_dropdown} icon={user.avatar_url}>
-                {user.login}
-                <div className={styles.dropdown}>
-                  <ListItem
-                    label="Sign Out"
-                    href="/api/auth/destroy"
-                    rel="opener"
-                  />
-                </div>
-              </Button>
-            ) : (
-              <Button
-                icon={faGithub}
-                primary
-                href="/api/auth/request"
-                rel="opener"
-              >
-                <Ellipsis>Sign In</Ellipsis>
-              </Button>
-            )}
-          </div>
+          <div />
           <Player className={styles.section} />
         </div>
       </header>

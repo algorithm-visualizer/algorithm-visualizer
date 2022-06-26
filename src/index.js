@@ -18,9 +18,9 @@ ReactDOM.render(
       <Switch>
         <Route exact path="/scratch-paper/:gistId" component={App} />
         <Route exact path="/:categoryKey/:algorithmKey" component={App} />
-        <Route exact path="/" component={App} />
+        <Route path="/" component={App} />
       </Switch>
     </BrowserRouter>
   </Provider>,
-  document.body.appendChild(document.createElement("DIV"))
+  document.getElementById("root")
 );

@@ -48,7 +48,6 @@ class App extends BaseComponent {
     const categories = [];
 
     const paths = require.context("/public/algorithms?inline", true).keys();
-    console.log(paths);
     paths
       .filter((path) => path.endsWith(".js") || path.endsWith(".md"))
       .forEach((path) => {
@@ -95,6 +94,7 @@ class App extends BaseComponent {
         files: files ? files : [],
         categoryKey: params.categoryKey,
         algorithmKey: params.algorithmKey,
+        gistId: params.gistId,
       },
       queryString.parse(search)
     );
@@ -124,8 +124,9 @@ class App extends BaseComponent {
         algorithm &&
         algorithm.categoryKey === categoryKey &&
         algorithm.algorithmKey === algorithmKey
-      )
+      ) {
         return;
+      }
       if (scratchPaper && scratchPaper.gistId === gistId) return;
       let files = [];
       if (categories && params.categoryKey && params.algorithmKey) {
@@ -138,6 +139,7 @@ class App extends BaseComponent {
           files: files,
           categoryKey: params.categoryKey,
           algorithmKey: params.algorithmKey,
+          gistId: params.gistId,
         },
         queryString.parse(search)
       );
@@ -223,13 +225,7 @@ class App extends BaseComponent {
     { visualizationId }
   ) {
     const fetch = () => {
-      if (window.__PRELOADED_ALGORITHM__) {
-        this.props.setAlgorithm(window.__PRELOADED_ALGORITHM__);
-        delete window.__PRELOADED_ALGORITHM__;
-      } else if (window.__PRELOADED_ALGORITHM__ === null) {
-        delete window.__PRELOADED_ALGORITHM__;
-        return Promise.reject(new Error("Algorithm Not Found"));
-      } else if (categoryKey && algorithmKey) {
+      if (categoryKey && algorithmKey) {
         return AlgorithmApi.getAlgorithm(categoryKey, algorithmKey, files).then(
           ({ algorithm }) => this.props.setAlgorithm(algorithm)
         );
