@@ -75,7 +75,9 @@ class Button extends React.Component {
       ...rest,
     };
 
-    console.log("CHANGES")
+    console.log("CHANGES");
+    console.log("header1");
+    console.log("header2");
 
     return to ? (
       <Link {...props} />
