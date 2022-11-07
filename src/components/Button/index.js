@@ -75,6 +75,8 @@ class Button extends React.Component {
       ...rest,
     };
 
+    console.log("CHANGES")
+
     return to ? (
       <Link {...props} />
     ) : href ? (
