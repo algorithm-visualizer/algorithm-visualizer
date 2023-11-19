@@ -1,0 +1,23 @@
+# Algorithm Visualizer
+
+> Algorithm Visualizer é uma plataforma online interativa que visualiza algoritmos.
+
+[![GitHub contributors](https://img.shields.io/github/contributors/algorithm-visualizer/algorithm-visualizer.svg?style=flat-square)](https://github.com/algorithm-visualizer/algorithm-visualizer/graphs/contributors)
+[![GitHub license](https://img.shields.io/github/license/algorithm-visualizer/algorithm-visualizer.svg?style=flat-square)](https://github.com/algorithm-visualizer/algorithm-visualizer/blob/master/LICENSE)
+
+Aprender um algoritmo fica muito mais fácil com a visualização. Não entendem o que queremos dizer? Confira:
+
+[**algorithm-visualizer.org**![Screenshot](https://raw.githubusercontent.com/algorithm-visualizer/algorithm-visualizer/master/branding/screenshot.png)](https://algorithm-visualizer.org/)
+
+## Contribuindo
+
+Temos vários repositórios que compõem o site. Dê uma olhada nas diretrizes de contribuição no repositório para o qual você deseja contribuir.
+
+- [**`algorithm-visualizer`**](https://github.com/algorithm-visualizer/algorithm-visualizer) é um aplicativo web escrito em React. Ele não apenas contém componentes de interface, mas também interpreta comandos de visualização em visualizações reais. Confira [o guia de contribuição](CONTRIBUTING.md).
+
+- [**`server`**](https://github.com/algorithm-visualizer/server) auxilia o aplicativo e fornece APIs que ele precisa na hora. (por exemplo, login do GitHub, código de compilação / execução etc.)
+
+- [**`algorithms`**](https://github.com/algorithm-visualizer/algorithms) contém visualizações de algoritmos mostradas no menu lateral do site.
+
+- [**`tracers.*`**](https://github.com/search?q=topic%3Avisualization-library+org%3Aalgorithm-visualizer&type=Repositories) são bibliotecas de visualização escritas em cada idioma suportado. A única coisa que eles fazem é extrair comandos de visualização do código.
+
