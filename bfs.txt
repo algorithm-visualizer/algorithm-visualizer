@@ -1,0 +1,72 @@
+// import visualization libraries {
+import org.algorithm_visualizer.*;
+import java.util.LinkedList;
+import java.util.Queue;
+// }
+
+class Main {
+    // 可视化组件
+    private GraphTracer graphTracer = new GraphTracer("BFS");
+    private LogTracer logTracer = new LogTracer("控制台");
+    private Array1DTracer visitedTracer = new Array1DTracer("访问状态");
+    
+    // 图结构定义
+    private int[][] adjMatrix = {
+        {0,1,1,0,0},
+        {1,0,0,0,1},
+        {1,0,0,1,0},
+        {0,0,1,0,1},
+        {0,1,0,1,0}
+    };
+    private boolean[] visited = new boolean[5];
+
+    void bfs(int start) {
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(start);
+        visited[start] = true;
+        
+        // 初始节点可视化
+        graphTracer.visit(start);
+        visitedTracer.patch(start, 1);
+        Tracer.delay(1000);
+
+        while (!queue.isEmpty()) {
+            int current = queue.poll();
+            
+            for (int neighbor=0; neighbor<adjMatrix.length; neighbor++) {
+                if (adjMatrix[current][neighbor] == 1 && !visited[neighbor]) {
+                    visited[neighbor] = true;
+                    queue.add(neighbor);
+                    
+                    // 可视化访问过程
+                    graphTracer.visit(neighbor);
+                    graphTracer.select(current, neighbor);
+                    visitedTracer.patch(neighbor, 1);
+                    Tracer.delay(800);
+                }
+            }
+        }
+    }
+
+    Main() {
+        // 初始化可视化布局
+        Layout.setRoot(new VerticalLayout(new Commander[]{
+            graphTracer,
+            visitedTracer,
+            logTracer
+        }));
+        
+        // 设置初始状态
+        graphTracer.set(adjMatrix);
+        visitedTracer.set(new int[5]);
+        logTracer.println("BFS 启动...");
+        Tracer.delay(1000);
+        
+        // 执行BFS
+        bfs(0);
+    }
+
+    public static void main(String[] args) {
+        new Main();
+    }
+}
