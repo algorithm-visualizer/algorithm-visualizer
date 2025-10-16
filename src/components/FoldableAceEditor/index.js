@@ -22,8 +22,10 @@ class FoldableAceEditor extends AceEditor {
     super.componentDidUpdate(prevProps, prevState, snapshot);
 
     const { editingFile, shouldBuild } = this.props.current;
-    if (editingFile !== prevProps.current.editingFile) {
-      if (shouldBuild) this.foldTracers();
+    const { editingFile: prevEditingFile } = prevProps.current;
+    
+    if (editingFile !== prevEditingFile && shouldBuild) {
+      this.foldTracers();
     }
   }
 

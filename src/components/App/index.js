@@ -54,6 +54,23 @@ class App extends BaseComponent {
       .catch(this.handleError);
 
     this.toggleHistoryBlock(true);
+
+    // Load saved workspace preferences
+    const savedNavigatorOpened = localStorage.getItem('navigatorOpened');
+    if (savedNavigatorOpened !== null) {
+      const isOpened = JSON.parse(savedNavigatorOpened);
+      this.toggleNavigatorOpened(isOpened);
+    }
+    
+    const savedWeights = localStorage.getItem('workspaceWeights');
+    if (savedWeights) {
+      try {
+        const weights = JSON.parse(savedWeights);
+        this.setState({ workspaceWeights: weights });
+      } catch (e) {
+        // Invalid saved data, ignore
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -63,15 +80,32 @@ class App extends BaseComponent {
     this.toggleHistoryBlock(false);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { params } = nextProps.match;
-    const { search } = nextProps.location;
-    if (params !== this.props.match.params || search !== this.props.location.search) {
+  componentDidUpdate(prevProps, prevState) {
+    const { params } = this.props.match;
+    const { search } = this.props.location;
+    const { params: prevParams } = prevProps.match;
+    const { search: prevSearch } = prevProps.location;
+    
+    if (params !== prevParams || search !== prevSearch) {
       const { categoryKey, algorithmKey, gistId } = params;
-      const { algorithm, scratchPaper } = nextProps.current;
+      const { algorithm, scratchPaper } = this.props.current;
       if (algorithm && algorithm.categoryKey === categoryKey && algorithm.algorithmKey === algorithmKey) return;
       if (scratchPaper && scratchPaper.gistId === gistId) return;
       this.loadAlgorithm(params, queryString.parse(search));
+    }
+
+    // Persist navigator state
+    const { workspaceVisibles } = this.state;
+    const { workspaceVisibles: prevVisibles } = prevState;
+    if (workspaceVisibles[0] !== prevVisibles[0]) {
+      localStorage.setItem('navigatorOpened', JSON.stringify(workspaceVisibles[0]));
+    }
+    
+    // Persist workspace weights
+    const { workspaceWeights } = this.state;
+    const { workspaceWeights: prevWeights } = prevState;
+    if (workspaceWeights !== prevWeights) {
+      localStorage.setItem('workspaceWeights', JSON.stringify(workspaceWeights));
     }
   }
 
