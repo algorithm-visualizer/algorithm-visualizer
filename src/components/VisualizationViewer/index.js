@@ -24,11 +24,11 @@ class VisualizationViewer extends BaseComponent {
     this.update(chunks, cursor);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { chunks, cursor } = nextProps.player;
-    const { chunks: oldChunks, cursor: oldCursor } = this.props.player;
-    if (chunks !== oldChunks || cursor !== oldCursor) {
-      this.update(chunks, cursor, oldChunks, oldCursor);
+  componentDidUpdate(prevProps) {
+    const { chunks, cursor } = this.props.player;
+    const { chunks: prevChunks, cursor: prevCursor } = prevProps.player;
+    if (chunks !== prevChunks || cursor !== prevCursor) {
+      this.update(chunks, cursor, prevChunks, prevCursor);
     }
   }
 

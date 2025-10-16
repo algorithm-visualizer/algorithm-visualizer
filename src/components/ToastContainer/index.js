@@ -5,11 +5,27 @@ import { classes } from 'common/util';
 import styles from './ToastContainer.module.scss';
 
 class ToastContainer extends React.Component {
-  componentWillReceiveProps(nextProps) {
-    const newToasts = nextProps.toast.toasts.filter(toast => !this.props.toast.toasts.includes(toast));
-    newToasts.forEach(toast => {
-      window.setTimeout(() => this.props.hideToast(toast.id), 3000);
-    });
+  constructor(props) {
+    super(props);
+    this.timeout = null;
+  }
+
+  componentDidUpdate(prevProps) {
+    const { toasts } = this.props.toast;
+    const { toasts: prevToasts } = prevProps.toast;
+    
+    if (toasts !== prevToasts) {
+      clearTimeout(this.timeout);
+      const newToasts = toasts.filter(toast => !prevToasts.includes(toast));
+      if (newToasts.length > 0) {
+        const latestToast = newToasts[newToasts.length - 1];
+        this.timeout = setTimeout(() => this.props.hideToast(latestToast.id), 3000);
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timeout);
   }
 
   render() {

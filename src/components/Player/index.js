@@ -31,12 +31,43 @@ class Player extends BaseComponent {
   componentDidMount() {
     const { editingFile, shouldBuild } = this.props.current;
     if (shouldBuild) this.build(editingFile);
+    window.addEventListener('resize', this.handleResize);
+    document.addEventListener('keydown', this.handleKeyDown);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { editingFile, shouldBuild } = nextProps.current;
-    if (editingFile !== this.props.current.editingFile) {
+  componentDidUpdate(prevProps) {
+    const { editingFile, shouldBuild } = this.props.current;
+    if (editingFile !== prevProps.current.editingFile) {
       if (shouldBuild) this.build(editingFile);
+    }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+    document.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  handleResize = () => {
+    // Implement resize logic if needed
+  }
+
+  handleKeyDown = (e) => {
+    const { playing } = this.state;
+    
+    // Space: play/pause
+    if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+      e.preventDefault();
+      playing ? this.pause() : this.resume(true);
+    }
+    // Arrow Left: previous
+    if (e.code === 'ArrowLeft' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+      e.preventDefault();
+      this.prev();
+    }
+    // Arrow Right: next
+    if (e.code === 'ArrowRight' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+      e.preventDefault();
+      this.next();
     }
   }
 
