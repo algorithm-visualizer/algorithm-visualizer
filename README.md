@@ -11,7 +11,7 @@ Welcome to Algorithm Visualizer, an interactive online platform designed to brin
 
 
 ## Key Features
-<ul> 
+<ul>
 <li>
 
 ### Visualize algorithms from code:
